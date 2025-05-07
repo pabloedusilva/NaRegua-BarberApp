@@ -209,6 +209,89 @@
       margin-bottom: 20px;
       color: var(--text-color);
     }
+
+    /* Novos estilos para os ícones sociais e endereço */
+    .social-icons-welcome {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 15px 0;
+    }
+    
+    .social-icon-welcome {
+      width: 40px;
+      height: 40px;
+      background-color: var(--blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icon-welcome:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .address-container {
+      text-align: center;
+      margin-top: 15px;
+    }
+    
+    .address-toggle {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .address-toggle:hover {
+      background-color: rgba(26, 75, 140, 0.1);
+    }
+    
+    .address-content {
+      display: none;
+      margin-top: 10px;
+      padding: 15px;
+      background-color: var(--light-gray);
+      border-radius: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .address-content p {
+      margin: 5px 0;
+      color: var(--text-color);
+    }
+    
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .map-link:hover {
+      color: var(--dark-blue);
+    }
+    
+    /* Dark mode adjustments */
+    .dark-mode .address-content {
+      background-color: var(--professional-card-bg);
+    }
     
     /* Services Section */
     .services-section {
@@ -809,36 +892,76 @@
       transform: scale(1.02);
     }
     
-    /* Footer */
+    /* Footer Moderno */
     footer {
       background-color: var(--footer-bg);
       color: var(--footer-text);
-      padding: 40px 0 20px;
-      margin-top: 40px;
+      padding: 50px 0 20px;
+      margin-top: 60px;
       transition: background-color 0.3s;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .footer-content {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
+      gap: 40px;
       margin-bottom: 30px;
     }
-    
-    .footer-column {
+
+    .footer-brand {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
     }
-    
+
+    .footer-brand .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-brand .logo-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--blue);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .footer-brand .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--footer-text);
+    }
+
+    .footer-brand .logo-text span {
+      color: var(--blue);
+    }
+
+    .footer-brand .logo-text .highlight {
+      color: var(--red);
+    }
+
+    .footer-slogan {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
     .footer-title {
       font-size: 18px;
       font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--white);
       position: relative;
       padding-bottom: 10px;
-      color: var(--footer-text);
     }
-    
+
     .footer-title::after {
       content: '';
       position: absolute;
@@ -848,33 +971,36 @@
       height: 2px;
       background-color: var(--red);
     }
-    
+
     .footer-links {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
-    
-    .footer-links a {
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.3s;
+
+    .footer-links li {
+      color: rgba(255, 255, 255, 0.7);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      font-size: 14px;
+      transition: color 0.3s;
     }
-    
-    .footer-links a:hover {
-      color: var(--white);
+
+    .footer-links i {
+      width: 20px;
+      text-align: center;
+      color: var(--blue);
     }
-    
+
     .social-links {
       display: flex;
       gap: 15px;
+      margin-top: 10px;
     }
-    
-    .social-icon {
+
+    .social-links a {
       width: 36px;
       height: 36px;
       background-color: rgba(255, 255, 255, 0.1);
@@ -882,20 +1008,61 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: all 0.3s;
+      color: var(--white);
     }
-    
-    .social-icon:hover {
+
+    .social-links a:hover {
       background-color: var(--blue);
       transform: translateY(-3px);
     }
-    
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
+    }
+
     .copyright {
       text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--gray);
-      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    /* Dark mode adjustments */
+    .dark-mode footer {
+      background-color: var(--footer-bg);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .footer-brand {
+        text-align: center;
+        align-items: center;
+      }
+      
+      .footer-title {
+        margin-bottom: 15px;
+      }
+      
+      .footer-links li {
+        font-size: 13px;
+      }
+
+      /* Ajustes para os novos elementos */
+      .social-icon-welcome {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      
+      .address-toggle {
+        font-size: 15px;
+      }
     }
     
     /* Animations */
@@ -1064,10 +1231,6 @@
         @media screen and (max-width: 360px) {
             .week-day-name {
                 font-size: 0.6rem;
-                /* Mostra apenas as três primeiras letras */
-                &::after {
-                    content: attr(data-short);
-                }
             }
 
             .day {
@@ -1137,6 +1300,32 @@
       </div>
       <div class="welcome-text">Seja bem vindo(a) ao</div>
       <h1 class="barbershop-name">Barbearia jhoninha do corte</h1>
+      
+      <!-- Ícones sociais adicionados -->
+      <div class="social-icons-welcome">
+        <a href="https://wa.me/5511999998888" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://instagram.com/barbeariajhoninha" target="_blank" class="social-icon-welcome" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      
+      <!-- Componente de endereço adicionado -->
+      <div class="address-container">
+        <button class="address-toggle" id="addressToggle">
+          <i class="fas fa-map-marker-alt"></i> Ver endereço
+        </button>
+        <div class="address-content" id="addressContent">
+          <p>Av. Principal, 123 - Centro</p>
+          <p>São Paulo - SP</p>
+          <a href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP" 
+             target="_blank" 
+             class="map-link">
+            <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+          </a>
+        </div>
+      </div>
     </section>
     
     <section class="services-section animate-slide-up">
@@ -1334,19 +1523,32 @@
       <button class="confirm-button animate-pulse">Confirmar Agendamento</button>
     </section>
   </main>
+
   <footer>
     <div class="container">
       <div class="footer-content">
-        <div class="footer-column">
-          <h3 class="footer-title">Barbearia jhoninha do corte</h3>
-          <p>Transformando visual e elevando autoestima desde 2015.</p>
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-icon">B</div>
+            <div class="logo-text">BARBER<span>SOFT</span><span class="highlight">.</span></div>
+          </div>
+          <p class="footer-slogan">Transformando visual e elevando autoestima desde 2015.</p>
           <div class="social-links">
-            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
         
-        <div class="footer-column">
+        <div class="footer-contact">
+          <h3 class="footer-title">Contato</h3>
+          <ul class="footer-links">
+            <li><i class="fas fa-map-marker-alt"></i> Av. Principal, 123</li>
+            <li><i class="fas fa-phone"></i> (11) 99999-8888</li>
+            <li><i class="fas fa-envelope"></i> contato@barbearia.com</li>
+          </ul>
+        </div>
+        
+        <div class="footer-hours">
           <h3 class="footer-title">Horário</h3>
           <ul class="footer-links">
             <li><i class="far fa-clock"></i> Seg-Sex: 9h às 19h</li>
@@ -1354,19 +1556,12 @@
             <li><i class="far fa-clock"></i> Domingo: 9h às 13h</li>
           </ul>
         </div>
-        
-        <div class="footer-column">
-          <h3 class="footer-title">Contato</h3>
-          <ul class="footer-links">
-            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Principal, 123</a></li>
-            <li><a href="#"><i class="fas fa-phone"></i> (11) 99999-8888</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i> contato@barbearia.com</a></li>
-          </ul>
-        </div>
       </div>
       
-      <div class="copyright">
-        &copy; 2025 Na Régua - Barber App. Todos os direitos reservados.
+      <div class="footer-bottom">
+        <div class="copyright">
+          &copy; 2025 Barbearia jhoninha do corte. Todos os direitos reservados.
+        </div>
       </div>
     </div>
   </footer>
@@ -1666,6 +1861,20 @@
           }, 2000);
         } else {
           alert('Por favor, complete todas as informações para agendar.');
+        }
+      });
+
+      // Novo código para o endereço
+      const addressToggle = document.getElementById('addressToggle');
+      const addressContent = document.getElementById('addressContent');
+      
+      addressToggle.addEventListener('click', function() {
+        if (addressContent.style.display === 'block') {
+          addressContent.style.display = 'none';
+          this.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
+        } else {
+          addressContent.style.display = 'block';
+          this.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
         }
       });
     });
