@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Barbearia Moderna - Agendamentos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -16,6 +16,7 @@
       --light-gray: #f5f5f5;
       --gray: #e0e0e0;
       --dark-gray: #333333;
+      --green: #28a745;
     }
     
     * {
@@ -234,6 +235,11 @@
       transform: scale(1.05);
     }
     
+    .book-button.selected {
+      background-color: var(--green);
+      color: white;
+    }
+    
     /* Professional Selection */
     .professionals-section {
       background-color: var(--white);
@@ -305,7 +311,6 @@
     }
     
     /* Calendar Section */
-    /* Calendar Section */
     .calendar-section {
       background-color: var(--white);
       border-radius: 10px;
@@ -313,32 +318,6 @@
       padding: 30px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       display: none;
-    }
-    
-    .calendar-toggle {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 10px;
-    }
-    
-    .calendar-toggle button {
-      background-color: var(--light-gray);
-      border: none;
-      padding: 8px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    
-    .calendar-toggle button.active {
-      background-color: var(--blue);
-      color: white;
-    }
-    
-    .calendar-toggle button:hover {
-      background-color: var(--gray);
     }
     
     .calendar-month {
@@ -371,35 +350,16 @@
       color: var(--blue);
     }
     
-    /* Full Calendar View */
-    .calendar-full {
+    .calendar-days {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
       text-align: center;
     }
     
-    /* Compact Calendar View (like the image) */
-    .calendar-compact {
-      display: none;
-    }
-    
-    .calendar-compact-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    
-    .calendar-compact-day {
-      width: calc(100% / 7);
-      text-align: center;
-      padding: 5px;
-    }
-    
     .day-header {
       font-weight: 600;
       color: var(--dark-gray);
-      padding: 5px;
     }
     
     .day {
@@ -410,7 +370,6 @@
       border-radius: 50%;
       cursor: pointer;
       transition: background-color 0.3s;
-      position: relative;
     }
     
     .day:hover {
@@ -428,27 +387,327 @@
     }
     
     .day.holiday {
-      color: var(--red);
+      color: orange !important; /* Altera para laranja */
       font-weight: 600;
     }
     
-    .day.today {
-      font-weight: bold;
-      position: relative;
+    .holiday-tooltip {
+      display: none !important;
     }
     
-    .day.today::after {
-      content: '';
-      position: absolute;
-      bottom: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 5px;
-      height: 5px;
-      background-color: var(--blue);
+    .calendar-toggle-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 18px;
+      transition: background 0.3s;
+    }
+    .calendar-toggle-btn:hover {
+      background: var(--dark-blue);
+    }
+    .calendar-compact .calendar-days {
+      display: flex !important;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .calendar-compact .day-header {
+      display: block;
+      width: 40px;
+      color: var(--dark-gray);
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+    .calendar-compact .day {
+      min-width: 40px;
+      max-width: 40px;
+      height: 60px;
+      flex-direction: column;
+      border-radius: 12px;
+      background: #f8f8f8;
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 2px;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .calendar-compact .day.selected {
+      background: #fffbe6;
+      color: var(--dark-gray);
+      border: 2px solid var(--blue);
+    }
+    .calendar-compact .day.holiday {
+      color: orange !important;
+      font-weight: 600;
+    }
+    .calendar-compact .day.disabled {
+      color: var(--gray);
+      background: #f5f5f5;
+      cursor: not-allowed;
+    }
+    
+    .week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 10px;
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .week-days {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .day-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .prev-week,
+    .next-week {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .prev-week:hover,
+    .next-week:hover {
+      color: var(--dark-blue);
+      transform: scale(1.1);
+    }
+
+    .day {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
     }
-    
+
+    .day:hover {
+      background-color: var(--light-gray);
+    }
+
+    .day.selected {
+      background-color: var(--blue);
+      color: var(--white);
+    }
+
+    .day.today {
+      border: 2px solid var(--blue);
+    }
+
+    .day-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+
+    /* Estilos para o calendário semanal */
+    .calendar-week-view {
+        background: linear-gradient(145deg, var(--white), #f8f9fa);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .week-navigation {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .week-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
+
+    .day-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 4px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .week-day-name {
+        font-weight: 600;
+        color: var(--blue);
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .day {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        position: relative;
+        background: var(--white);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .day:hover {
+        background: var(--light-blue);
+        color: var(--white);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 75, 140, 0.15);
+    }
+
+    .day.selected {
+        background: linear-gradient(145deg, var(--blue), var(--dark-blue));
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(26, 75, 140, 0.3);
+    }
+
+    .day.today {
+        border: 2px solid var(--blue);
+    }
+
+    .prev-week,
+    .next-week {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: var(--white);
+        color: var(--blue);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 2;
+    }
+
+    .prev-week:hover,
+    .next-week:hover {
+        background: var(--blue);
+        color: var(--white);
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Estilos responsivos */
+    @media screen and (max-width: 768px) {
+        .calendar-week-view {
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .week-days {
+            gap: 5px;
+        }
+
+        .day {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+
+        .week-day-name {
+            font-size: 0.75rem;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+            position: relative;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .calendar-week-view {
+            padding: 10px;
+        }
+
+        .week-navigation {
+            gap: 8px;
+        }
+
+        .week-days {
+            gap: 3px;
+        }
+
+        .day-column {
+            padding: 4px 2px;
+        }
+
+        .day {
+            width: 32px;
+            height: 32px;
+            font-size: 0.85rem;
+        }
+
+        .week-day-name {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            background: var(--white);
+            position: static;
+        }
+    }
+
     /* Time Slots */
     .time-slots {
       margin-top: 30px;
@@ -544,26 +803,26 @@
     footer {
       background-color: var(--dark-blue);
       color: var(--white);
-      padding: 30px 0;
+      padding: 40px 0 20px;
       margin-top: 40px;
     }
     
     .footer-content {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 30px;
+      margin-bottom: 30px;
     }
     
     .footer-column {
-      flex: 1;
-      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
     
     .footer-title {
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 15px;
       position: relative;
       padding-bottom: 10px;
     }
@@ -573,23 +832,25 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 50px;
+      width: 40px;
       height: 2px;
       background-color: var(--red);
     }
     
     .footer-links {
       list-style: none;
-    }
-    
-    .footer-links li {
-      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     
     .footer-links a {
       color: var(--gray);
       text-decoration: none;
       transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .footer-links a:hover {
@@ -599,12 +860,11 @@
     .social-links {
       display: flex;
       gap: 15px;
-      margin-top: 15px;
     }
     
     .social-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       background-color: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
       display: flex;
@@ -620,46 +880,10 @@
     
     .copyright {
       text-align: center;
-      margin-top: 30px;
       padding-top: 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--gray);
-    }
-    
-    /* Social Icons */
-    .social-icons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 15px;
-    }
-
-    .social-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background-color: var(--light-gray);
-      border-radius: 50%;
-      transition: background 0.3s, transform 0.2s;
-      margin: 0 5px;
-    }
-
-    .social-link:hover {
-      background-color: var(--blue);
-      transform: scale(1.08);
-    }
-
-    .social-img {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      transition: filter 0.3s;
-    }
-
-    .social-link:hover .social-img {
-      filter: brightness(0) invert(1);
+      font-size: 14px;
     }
     
     /* Animations */
@@ -725,10 +949,6 @@
       .slots-container {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       }
-      
-      .footer-content {
-        flex-direction: column;
-      }
     }
     
     @media screen and (max-width: 480px) {
@@ -749,6 +969,164 @@
         height: 30px;
         width: 30px;
       }
+    }
+
+    /* Estilos responsivos para o calendário */
+    @media screen and (max-width: 768px) {
+        .calendar-week-view {
+            padding: 15px;
+            margin: 10px;
+        }
+
+        .week-days {
+            gap: 8px;
+        }
+
+        .day-column {
+            padding: 5px;
+        }
+
+        .day {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+
+        .week-day-name {
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+            padding: 8px;
+        }
+
+        .calendar-toggle {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-toggle i {
+            font-size: 1rem;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .calendar-week-view {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .week-days {
+            gap: 4px;
+        }
+
+        .day-column {
+            padding: 3px;
+        }
+
+        .day {
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+        }
+
+        .week-day-name {
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+            padding: 6px;
+        }
+
+        /* Modo de visualização adaptativa para telas muito pequenas */
+        @media screen and (max-width: 360px) {
+            .week-day-name {
+                font-size: 0.6rem;
+                /* Mostra apenas as três primeiras letras */
+                &::after {
+                    content: attr(data-short);
+                }
+            }
+
+            .day {
+                width: 25px;
+                height: 25px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Ajustes para orientação paisagem em dispositivos móveis */
+        @media screen and (max-height: 480px) and (orientation: landscape) {
+            .calendar-week-view {
+                padding: 8px;
+            }
+
+            .week-navigation {
+                margin-bottom: 10px;
+            }
+
+            .day {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    }
+
+    /* Melhorias na acessibilidade e interação touch */
+    @media (hover: none) {
+        .day:hover,
+        .prev-week:hover,
+        .next-week:hover,
+        .calendar-toggle:hover {
+            transform: none;
+        }
+
+        .day:active,
+        .prev-week:active,
+        .next-week:active,
+        .calendar-toggle:active {
+            transform: scale(0.95);
+        }
+    }
+
+    /* Suporte para Dark Mode */
+    @media (prefers-color-scheme: dark) {
+        .calendar-week-view {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .day {
+            color: #fff;
+        }
+
+        .day.other-month {
+            color: #666;
+        }
+
+        .week-day-name {
+            color: var(--blue);
+        }
+
+        .day-column:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .prev-week,
+        .next-week {
+            background: #2a2a2a;
+            color: var(--blue);
+        }
     }
   </style>
 </head>
@@ -774,14 +1152,6 @@
       </div>
       <div class="welcome-text">Seja bem vindo(a) ao</div>
       <h1 class="barbershop-name">Barbearia jhoninha do corte</h1>
-      <div class="social-icons">
-        <a href="https://instagram.com/seu_usuario" target="_blank" class="social-link">
-          <img src="icons/instagram.png" alt="Instagram" class="social-img" />
-        </a>
-        <a href="https://wa.me/5511999999999" target="_blank" class="social-link">
-          <img src="icons/whatsapp.png" alt="WhatsApp" class="social-img" />
-        </a>
-      </div>
     </section>
     
     <section class="services-section animate-slide-up">
@@ -908,54 +1278,43 @@
     </section>
     
     <section class="calendar-section animate-fade-in" id="calendar-section">
-        <h2 class="section-title"><i class="far fa-calendar-alt"></i> Selecione o horário de início</h2>
-        
-        <div class="calendar-toggle">
-          <button class="view-toggle active" data-view="full">Calendário Completo</button>
-          <button class="view-toggle" data-view="compact">Visualização Compacta</button>
+      <h2 class="section-title"><i class="far fa-calendar-alt"></i> Selecione o horário de início</h2>
+      <button class="calendar-toggle-btn" id="calendarToggleBtn">Visualização semanal</button>
+      <div class="calendar-month">
+        <div class="month-name">Maio 2025</div>
+        <div class="calendar-nav">
+          <button class="prev-month"><i class="fas fa-chevron-left"></i></button>
+          <button class="next-month"><i class="fas fa-chevron-right"></i></button>
         </div>
-        
-        <div class="calendar-month">
-          <div class="month-name">Maio 2025</div>
-          <div class="calendar-nav">
-            <button class="prev-month"><i class="fas fa-chevron-left"></i></button>
-            <button class="next-month"><i class="fas fa-chevron-right"></i></button>
-          </div>
+      </div>
+      <div class="calendar-days">
+        <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+      </div>
+      <div class="time-slots">
+        <h3 class="time-slots-title">Horários disponíveis</h3>
+        <div class="slots-container">
+          <div class="time-slot">09:10</div>
+          <div class="time-slot">09:20</div>
+          <div class="time-slot">09:30</div>
+          <div class="time-slot">09:40</div>
+          <div class="time-slot">09:50</div>
+          <div class="time-slot">10:00</div>
+          <div class="time-slot">10:10</div>
+          <div class="time-slot">10:20</div>
+          <div class="time-slot">10:30</div>
+          <div class="time-slot">11:20</div>
+          <div class="time-slot">11:30</div>
+          <div class="time-slot">11:40</div>
+          <div class="time-slot">16:00</div>
+          <div class="time-slot">16:10</div>
+          <div class="time-slot">16:20</div>
+          <div class="time-slot">16:30</div>
+          <div class="time-slot">16:40</div>
+          <div class="time-slot">16:50</div>
+          <div class="time-slot">17:00</div>
         </div>
-        
-        <div class="calendar-full" id="calendar-full">
-          <!-- Dias serão gerados dinamicamente pelo JavaScript -->
-        </div>
-        
-        <div class="calendar-compact" id="calendar-compact">
-          <!-- Dias serão gerados dinamicamente pelo JavaScript -->
-        </div>
-        
-        <div class="time-slots">
-          <h3 class="time-slots-title">Horários disponíveis</h3>
-          <div class="slots-container">
-            <div class="time-slot">09:10</div>
-            <div class="time-slot">09:20</div>
-            <div class="time-slot">09:30</div>
-            <div class="time-slot">09:40</div>
-            <div class="time-slot">09:50</div>
-            <div class="time-slot">10:00</div>
-            <div class="time-slot">10:10</div>
-            <div class="time-slot">10:20</div>
-            <div class="time-slot">10:30</div>
-            <div class="time-slot">11:20</div>
-            <div class="time-slot">11:30</div>
-            <div class="time-slot">11:40</div>
-            <div class="time-slot">16:00</div>
-            <div class="time-slot">16:10</div>
-            <div class="time-slot">16:20</div>
-            <div class="time-slot">16:30</div>
-            <div class="time-slot">16:40</div>
-            <div class="time-slot">16:50</div>
-            <div class="time-slot">17:00</div>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
     
     <section class="confirmation-section animate-fade-in" id="confirmation-section">
       <h2 class="section-title"><i class="fas fa-check-circle"></i> Confirmar agendamento</h2>
@@ -995,183 +1354,100 @@
       <div class="footer-content">
         <div class="footer-column">
           <h3 class="footer-title">Barbearia jhoninha do corte</h3>
-          <p>Transformando visual, elevando a autoestima e destacando seu estilo desde 2015.</p>
+          <p>Transformando visual e elevando autoestima desde 2015.</p>
           <div class="social-links">
-            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
         
         <div class="footer-column">
-          <h3 class="footer-title">Links Rápidos</h3>
+          <h3 class="footer-title">Horário</h3>
           <ul class="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Serviços</a></li>
-            <li><a href="#">Profissionais</a></li>
-            <li><a href="#">Galeria</a></li>
-            <li><a href="#">Contato</a></li>
-          </ul>
-        </div>
-        
-        <div class="footer-column">
-          <h3 class="footer-title">Horário de Funcionamento</h3>
-          <ul class="footer-links">
-            <li>Segunda a Sexta: 9h às 19h</li>
-            <li>Sábados: 9h às 18h</li>
-            <li>Domingos: 9h às 13h</li>
+            <li><i class="far fa-clock"></i> Seg-Sex: 9h às 19h</li>
+            <li><i class="far fa-clock"></i> Sábado: 9h às 18h</li>
+            <li><i class="far fa-clock"></i> Domingo: 9h às 13h</li>
           </ul>
         </div>
         
         <div class="footer-column">
           <h3 class="footer-title">Contato</h3>
           <ul class="footer-links">
-            <li><i class="fas fa-map-marker-alt"></i> Av. Principal, 123 - Centro</li>
-            <li><i class="fas fa-phone"></i> (11) 99999-8888</li>
-            <li><i class="fas fa-envelope"></i> contato@barbeariamoderna.com</li>
+            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Principal, 123</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> (11) 99999-8888</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> contato@barbearia.com</a></li>
           </ul>
         </div>
       </div>
       
       <div class="copyright">
-        &copy; 2025 Barbearia jhoninha do corte. Todos os direitos reservados.
+        &copy; 2025 Na Régua - Barber App. Todos os direitos reservados.
       </div>
     </div>
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // (Manter todas as variáveis e configurações iniciais anteriores)
+      // Variáveis para armazenar as seleções
+      let selectedService = '';
+      let selectedServicePrice = '';
+      let selectedServiceTime = '';
+      let selectedProfessional = 'Jhonata barber';
+      let selectedDate = '';
+      let selectedTime = '';
+      let currentSelectedButton = null;
+      let calendarMode = 'month'; // Pode ser 'month' ou 'week'
+
+      // Elementos da página
+      const calendarSection = document.getElementById('calendar-section');
+      const confirmationSection = document.getElementById('confirmation-section');
+      const calendarDaysContainer = document.querySelector('.calendar-days');
+      const monthNameElement = document.querySelector('.month-name');
+      const calendarToggleBtn = document.getElementById('calendarToggleBtn');
       
-      // Elementos do calendário
-      const calendarFull = document.getElementById('calendar-full');
-      const calendarCompact = document.getElementById('calendar-compact');
-      const viewToggles = document.querySelectorAll('.view-toggle');
+      // Feriados (pode ser expandido)
+      const holidays = {
+        '1/1': 'Ano Novo',
+        '21/4': 'Tiradentes',
+        '1/5': 'Dia do Trabalho',
+        '7/9': 'Independência',
+        '12/10': 'Nossa Senhora Aparecida',
+        '2/11': 'Finados',
+        '15/11': 'Proclamação da República',
+        '25/12': 'Natal'
+      };
       
-      // Alternar entre visualizações
-      viewToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-          viewToggles.forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-          
-          if (this.dataset.view === 'full') {
-            calendarFull.style.display = 'grid';
-            calendarCompact.style.display = 'none';
-          } else {
-            calendarFull.style.display = 'none';
-            calendarCompact.style.display = 'block';
+      // Inicializar calendário
+      let currentDate = new Date();
+      renderCalendar(currentDate);
+
+      // Selecionar serviço
+      const bookButtons = document.querySelectorAll('.book-button');
+      bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remover seleção anterior
+          if (currentSelectedButton) {
+            currentSelectedButton.classList.remove('selected');
           }
+          
+          // Adicionar seleção atual
+          this.classList.add('selected');
+          currentSelectedButton = this;
+          
+          selectedService = this.getAttribute('data-service');
+          selectedServicePrice = this.getAttribute('data-price');
+          selectedServiceTime = this.getAttribute('data-time');
+          
+          // Mostrar a seção de calendário
+          calendarSection.style.display = 'block';
+          
+          // Scroll para o calendário
+          calendarSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Atualizar os campos de confirmação
+          updateConfirmationDetails();
         });
       });
-      
-      // Renderizar calendário
-      function renderCalendar(date) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        
-        // Nome do mês e ano
-        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-        monthNameElement.textContent = `${monthNames[month]} ${year}`;
-        
-        // Primeiro dia do mês
-        const firstDay = new Date(year, month, 1);
-        // Último dia do mês
-        const lastDay = new Date(year, month + 1, 0);
-        // Dias do mês anterior para preencher o calendário
-        const prevLastDay = new Date(year, month, 0).getDate();
-        // Dia da semana do primeiro dia (0-6)
-        const firstDayIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Ajuste para Segunda começar em 0
-        
-        // Dias do próximo mês para preencher o calendário
-        const lastDayIndex = lastDay.getDay() === 0 ? 6 : lastDay.getDay() - 1; // Ajuste para Segunda começar em 0
-        const nextDays = 7 - lastDayIndex - 1;
-        
-        let fullDays = '';
-        let compactDays = '';
-        let compactRow = '';
-        
-        // Cabeçalhos dos dias da semana
-        const dayNames = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
-        dayNames.forEach(day => {
-          fullDays += `<div class="day-header">${day}</div>`;
-        });
-        
-        // Dias do mês anterior (para alinhamento)
-        for (let i = firstDayIndex; i > 0; i--) {
-          fullDays += `<div class="day disabled">${prevLastDay - i + 1}</div>`;
-        }
-        
-        // Dias do mês atual
-        for (let i = 1; i <= lastDay.getDate(); i++) {
-          const dayDate = new Date(year, month, i);
-          const dayOfWeek = dayDate.getDay();
-          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-          const holidayKey = `${i}/${month + 1}`;
-          const isHoliday = holidays[holidayKey];
-          const isToday = i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-          
-          let dayClass = 'day';
-          if (isWeekend || isHoliday) dayClass += ' holiday';
-          if (isToday) dayClass += ' today';
-          
-          fullDays += `<div class="${dayClass}" data-day="${i}" data-month="${month + 1}" data-year="${year}">${i}</div>`;
-          
-          // Para a versão compacta
-          if (i <= 7) {
-            compactRow += `<div class="calendar-compact-day day-header">${dayNames[i-1]}</div>`;
-          }
-        }
-        
-        // Dias do próximo mês (para alinhamento)
-        for (let i = 1; i <= nextDays; i++) {
-          fullDays += `<div class="day disabled">${i}</div>`;
-        }
-        
-        // Versão compacta - apenas a primeira semana
-        compactDays += `<div class="calendar-compact-row">${compactRow}</div>`;
-        compactRow = '';
-        
-        for (let i = 1; i <= 7; i++) {
-          const dayDate = new Date(year, month, i);
-          const dayOfWeek = dayDate.getDay();
-          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-          const holidayKey = `${i}/${month + 1}`;
-          const isHoliday = holidays[holidayKey];
-          const isToday = i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-          
-          let dayClass = 'day';
-          if (isWeekend || isHoliday) dayClass += ' holiday';
-          if (isToday) dayClass += ' today';
-          
-          compactRow += `<div class="calendar-compact-day ${dayClass}" data-day="${i}" data-month="${month + 1}" data-year="${year}">${i}</div>`;
-        }
-        compactDays += `<div class="calendar-compact-row">${compactRow}</div>`;
-        
-        calendarFull.innerHTML = fullDays;
-        calendarCompact.innerHTML = compactDays;
-        
-        // Adicionar eventos aos dias (ambas as visualizações)
-        const calendarDays = document.querySelectorAll('.day:not(.disabled)');
-        calendarDays.forEach(day => {
-          day.addEventListener('click', function() {
-            // Remover seleção anterior
-            calendarDays.forEach(d => d.classList.remove('selected'));
-            
-            // Adicionar seleção atual
-            this.classList.add('selected');
-            
-            // Guardar a data selecionada
-            const day = this.getAttribute('data-day');
-            const month = this.getAttribute('data-month');
-            const year = this.getAttribute('data-year');
-            selectedDate = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
-            
-            // Atualizar os campos de confirmação
-            updateConfirmationDetails();
-          });
-        });
-      }
 
       // Selecionar profissional
       const professionalCards = document.querySelectorAll('.professional-card');
@@ -1191,69 +1467,152 @@
         });
       });
 
-      // Selecionar data no calendário
-      const calendarDays = document.querySelectorAll('.day:not(.disabled)');
-      calendarDays.forEach(day => {
-        day.addEventListener('click', function() {
-          // Remover seleção anterior
-          calendarDays.forEach(d => d.classList.remove('selected'));
-          
-          // Adicionar seleção atual
-          this.classList.add('selected');
-          
-          // Obter o dia selecionado
-          const selectedDay = this.textContent;
-          
-          // Formatar a data (para simplificar, vamos usar o mês atual)
-          selectedDate = `${selectedDay.padStart(2, '0')}/05/2025`;
-          
-          // Atualizar os campos de confirmação
-          updateConfirmationDetails();
-        });
-      });
-
       // Navegação do calendário
       const prevMonthButton = document.querySelector('.prev-month');
       const nextMonthButton = document.querySelector('.next-month');
-      const monthNameElement = document.querySelector('.month-name');
-      
-      let currentMonth = 4; // Maio (0-indexed)
-      let currentYear = 2025;
       
       prevMonthButton.addEventListener('click', function() {
-        currentMonth--;
-        if (currentMonth < 0) {
-          currentMonth = 11;
-          currentYear--;
-        }
-        updateCalendar();
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate);
       });
       
       nextMonthButton.addEventListener('click', function() {
-        currentMonth++;
-        if (currentMonth > 11) {
-          currentMonth = 0;
-          currentYear++;
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate);
+      });
+
+      // Alternar visualização do calendário
+      calendarToggleBtn.addEventListener('click', function() {
+        if (calendarMode === 'month') {
+          calendarMode = 'week';
+          calendarSection.classList.add('calendar-compact');
+          calendarToggleBtn.textContent = 'Visualização mensal';
+        } else {
+          calendarMode = 'month';
+          calendarSection.classList.remove('calendar-compact');
+          calendarToggleBtn.textContent = 'Visualização semanal';
         }
-        updateCalendar();
+        renderCalendar(currentDate);
       });
       
-      function updateCalendar() {
+      // Renderizar calendário
+      function renderCalendar(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const today = new Date();
+        
         const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         
-        monthNameElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        monthNameElement.textContent = `${monthNames[month]} ${year}`;
         
-        // Aqui você poderia adicionar código para atualizar os dias do calendário
-        // Esta é uma simplificação, apenas atualizando o nome do mês
-      }
+        let days = '';
+        const dayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
+        if (calendarMode === 'week') {
+            // Encontrar o início da semana (domingo)
+            let weekStart = new Date(date);
+            weekStart.setDate(date.getDate() - date.getDay());
+
+            // Cabeçalho dos dias da semana
+            days += '<div class="calendar-week-view">';
+            days += '<div class="week-navigation">';
+            days += '<button class="prev-week"><i class="fas fa-chevron-left"></i></button>';
+            days += '<div class="week-days">';
+
+            // Gerar os 7 dias da semana
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(weekStart);
+                currentDate.setDate(weekStart.getDate() + i);
+                
+                const isToday = currentDate.toDateString() === today.toDateString();
+                const isCurrentMonth = currentDate.getMonth() === month;
+                
+                const dayClass = `day${isToday ? ' today' : ''}${!isCurrentMonth ? ' other-month' : ''}`;
+                
+                days += `
+                    <div class="day-column">
+                        <div class="week-day-name">${dayNames[i]}</div>
+                        <div class="${dayClass}" data-date="${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}">
+                            <span class="date-number">${currentDate.getDate()}</span>
+                        </div>
+                    </div>`;
+            }
+
+            days += '</div>';
+            days += '<button class="next-week"><i class="fas fa-chevron-right"></i></button>';
+            days += '</div></div>';
+        } else {
+            // Código existente do calendário mensal
+            dayNames.forEach(day => {
+              days += `<div class="day-header">${day}</div>`;
+            });
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0).getDate();
+            const firstDayIndex = firstDay.getDay();
+            const lastDayIndex = lastDay.getDay();
+            const nextDays = 7 - lastDayIndex - 1;
+
+            for (let i = firstDayIndex; i > 0; i--) {
+              days += `<div class="day disabled">${prevLastDay - i + 1}</div>`;
+            }
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+              const dayDate = new Date(year, month, i);
+              const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+              let dayClass = 'day';
+              if (isToday) dayClass += ' today';
+              if (selectedDate) {
+                const [sd, sm, sy] = selectedDate.split('/');
+                if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
+                  dayClass += ' selected';
+                }
+              }
+              days += `<div class="${dayClass}" data-day="${i}" data-month="${month + 1}" data-year="${year}">${i}</div>`;
+            }
+            for (let i = 1; i <= nextDays; i++) {
+              days += `<div class="day disabled">${i}</div>`;
+            }
+        }
+
+        calendarDaysContainer.innerHTML = days;
+
+        // Adicionar event listeners para os botões de navegação semanal
+        if (calendarMode === 'week') {
+            document.querySelector('.prev-week').addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() - 7);
+                renderCalendar(currentDate);
+            });
+
+            document.querySelector('.next-week').addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() + 7);
+                renderCalendar(currentDate);
+            });
+        }
+
+        // Adicionar event listeners para os dias
+        const dayElements = document.querySelectorAll('.day');
+        dayElements.forEach(day => {
+            day.addEventListener('click', function() {
+                dayElements.forEach(d => d.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const dateStr = this.getAttribute('data-date');
+                const [d, m, y] = dateStr.split('/');
+                selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+                
+                updateConfirmationDetails();
+                confirmationSection.style.display = 'block';
+            });
+        });
+      }
+      
       // Selecionar horário
       const timeSlots = document.querySelectorAll('.time-slot');
       timeSlots.forEach(slot => {
         slot.addEventListener('click', function() {
           // Remover seleção anterior
-          timeSlots.forEach(t => t.classList.remove('selected'));
+          timeSlots.forEach(s => s.classList.remove('selected'));
           
           // Adicionar seleção atual
           this.classList.add('selected');
@@ -1264,52 +1623,40 @@
           // Mostrar a seção de confirmação
           confirmationSection.style.display = 'block';
           
-          // Scroll para a confirmação
-          confirmationSection.scrollIntoView({ behavior: 'smooth' });
-          
           // Atualizar os campos de confirmação
           updateConfirmationDetails();
+          
+          // Scroll para a confirmação
+          confirmationSection.scrollIntoView({ behavior: 'smooth' });
         });
       });
-
+      
       // Atualizar detalhes de confirmação
       function updateConfirmationDetails() {
-        document.getElementById('confirm-service').textContent = selectedService;
-        document.getElementById('confirm-professional').textContent = selectedProfessional;
-        document.getElementById('confirm-date').textContent = selectedDate;
+        document.getElementById('confirm-service').textContent = selectedService || '-';
+        document.getElementById('confirm-professional').textContent = selectedProfessional || '-';
+        document.getElementById('confirm-date').textContent = selectedDate || '-';
         document.getElementById('confirm-time').textContent = selectedTime || '-';
-        document.getElementById('confirm-price').textContent = `R$ ${parseFloat(selectedServicePrice).toFixed(2).replace('.', ',')}`;
+        document.getElementById('confirm-price').textContent = selectedServicePrice ? `R$ ${selectedServicePrice}` : '-';
       }
-
-      // Confirmar agendamento
+      
+      // Botão de confirmação final
       const confirmButton = document.querySelector('.confirm-button');
       confirmButton.addEventListener('click', function() {
-        if (!selectedTime) {
-          alert('Por favor, selecione um horário para continuar.');
-          return;
+        if (selectedService && selectedProfessional && selectedDate && selectedTime) {
+          alert(`Agendamento confirmado!\n\nServiço: ${selectedService}\nProfissional: ${selectedProfessional}\nData: ${selectedDate}\nHorário: ${selectedTime}\nValor: R$ ${selectedServicePrice}`);
+          
+          // Aqui você poderia enviar os dados para um servidor ou API
+          
+          // Resetar a página após 2 segundos
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        } else {
+          alert('Por favor, complete todas as informações para agendar.');
         }
-        
-        // Simulação de confirmação
-        alert(`Agendamento confirmado para ${selectedDate} às ${selectedTime} com ${selectedProfessional}.\nServiço: ${selectedService}\nValor: R$ ${parseFloat(selectedServicePrice).toFixed(2).replace('.', ',')}`);
-        
-        // Aqui você adicionaria código para enviar essas informações para o servidor
-        // Por exemplo, usando fetch() para uma API
-        
-        // Reseta seleções ou redireciona para confirmação final
-        // window.location.href = 'confirmacao.html'; // Exemplo de redirecionamento
       });
-
-      // Meus agendamentos - link do cabeçalho
-      const myAppointmentsLink = document.querySelector('.my-appointments');
-      myAppointmentsLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Funcionalidade de Meus Agendamentos em desenvolvimento!');
-      });
-
-      // Inicializar os detalhes de confirmação
-      updateConfirmationDetails();
     });
   </script>
 </body>
 </html>
-``` 
