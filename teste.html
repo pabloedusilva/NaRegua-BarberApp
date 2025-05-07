@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Barbearia Moderna - Agendamentos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -531,66 +531,67 @@
     .calendar-week-view {
         background: linear-gradient(145deg, var(--white), #f8f9fa);
         border-radius: 15px;
-        padding: 25px;
+        padding: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 0.3s ease;
     }
 
     .week-navigation {
-        display: flex;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
         align-items: center;
-        justify-content: space-between;
-        gap: 20px;
+        gap: 15px;
         margin-bottom: 20px;
+        width: 100%;
     }
 
     .week-days {
-        display: flex;
-        justify-content: space-between;
-        flex: 1;
-        gap: 15px;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        width: 100%;
     }
 
     .day-column {
-        flex: 1;
-        text-align: center;
-        padding: 10px;
-        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 4px;
+        border-radius: 10px;
         transition: all 0.3s ease;
-    }
-
-    .day-column:hover {
-        background-color: rgba(26, 75, 140, 0.05);
     }
 
     .week-day-name {
         font-weight: 600;
         color: var(--blue);
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         font-size: 0.9rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
     }
 
     .day {
-        width: 45px;
-        height: 45px;
-        margin: 0 auto;
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
         transition: all 0.3s ease;
-        position: relative;
-        font-size: 1.1rem;
         font-weight: 500;
+        position: relative;
+        background: var(--white);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
     .day:hover {
-        background-color: var(--light-blue);
+        background: var(--light-blue);
         color: var(--white);
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 75, 140, 0.15);
     }
 
     .day.selected {
@@ -601,79 +602,112 @@
 
     .day.today {
         border: 2px solid var(--blue);
-        font-weight: 600;
-    }
-
-    .day.today::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 4px;
-        background-color: var(--blue);
-        border-radius: 50%;
-    }
-
-    .day.other-month {
-        color: #adb5bd;
-        opacity: 0.7;
     }
 
     .prev-week,
     .next-week {
-        background: var(--white);
+        width: 40px;
+        height: 40px;
         border: none;
-        font-size: 1.2rem;
+        border-radius: 50%;
+        background: var(--white);
         color: var(--blue);
         cursor: pointer;
-        padding: 12px;
-        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 2;
     }
 
     .prev-week:hover,
     .next-week:hover {
-        background-color: var(--blue);
+        background: var(--blue);
         color: var(--white);
         transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(26, 75, 140, 0.2);
     }
 
-    /* Botão de alternância do calendário */
-    .calendar-toggle {
-        background: linear-gradient(145deg, var(--blue), var(--dark-blue));
-        color: var(--white);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        margin-bottom: 20px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: 0 4px 15px rgba(26, 75, 140, 0.2);
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .calendar-toggle:hover {
-        background: linear-gradient(145deg, var(--dark-blue), var(--blue));
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(26, 75, 140, 0.3);
+    /* Estilos responsivos */
+    @media screen and (max-width: 768px) {
+        .calendar-week-view {
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .week-days {
+            gap: 5px;
+        }
+
+        .day {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+
+        .week-day-name {
+            font-size: 0.75rem;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+            position: relative;
+        }
     }
 
-    .calendar-toggle i {
-        font-size: 1.1rem;
+    @media screen and (max-width: 480px) {
+        .calendar-week-view {
+            padding: 10px;
+        }
+
+        .week-navigation {
+            gap: 8px;
+        }
+
+        .week-days {
+            gap: 3px;
+        }
+
+        .day-column {
+            padding: 4px 2px;
+        }
+
+        .day {
+            width: 32px;
+            height: 32px;
+            font-size: 0.85rem;
+        }
+
+        .week-day-name {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            background: var(--white);
+            position: static;
+        }
     }
-    
+
     /* Time Slots */
     .time-slots {
       margin-top: 30px;
@@ -935,6 +969,164 @@
         height: 30px;
         width: 30px;
       }
+    }
+
+    /* Estilos responsivos para o calendário */
+    @media screen and (max-width: 768px) {
+        .calendar-week-view {
+            padding: 15px;
+            margin: 10px;
+        }
+
+        .week-days {
+            gap: 8px;
+        }
+
+        .day-column {
+            padding: 5px;
+        }
+
+        .day {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+
+        .week-day-name {
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+            padding: 8px;
+        }
+
+        .calendar-toggle {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-toggle i {
+            font-size: 1rem;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .calendar-week-view {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .week-days {
+            gap: 4px;
+        }
+
+        .day-column {
+            padding: 3px;
+        }
+
+        .day {
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+        }
+
+        .week-day-name {
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+        }
+
+        .prev-week,
+        .next-week {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+            padding: 6px;
+        }
+
+        /* Modo de visualização adaptativa para telas muito pequenas */
+        @media screen and (max-width: 360px) {
+            .week-day-name {
+                font-size: 0.6rem;
+                /* Mostra apenas as três primeiras letras */
+                &::after {
+                    content: attr(data-short);
+                }
+            }
+
+            .day {
+                width: 25px;
+                height: 25px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Ajustes para orientação paisagem em dispositivos móveis */
+        @media screen and (max-height: 480px) and (orientation: landscape) {
+            .calendar-week-view {
+                padding: 8px;
+            }
+
+            .week-navigation {
+                margin-bottom: 10px;
+            }
+
+            .day {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    }
+
+    /* Melhorias na acessibilidade e interação touch */
+    @media (hover: none) {
+        .day:hover,
+        .prev-week:hover,
+        .next-week:hover,
+        .calendar-toggle:hover {
+            transform: none;
+        }
+
+        .day:active,
+        .prev-week:active,
+        .next-week:active,
+        .calendar-toggle:active {
+            transform: scale(0.95);
+        }
+    }
+
+    /* Suporte para Dark Mode */
+    @media (prefers-color-scheme: dark) {
+        .calendar-week-view {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .day {
+            color: #fff;
+        }
+
+        .day.other-month {
+            color: #666;
+        }
+
+        .week-day-name {
+            color: var(--blue);
+        }
+
+        .day-column:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .prev-week,
+        .next-week {
+            background: #2a2a2a;
+            color: var(--blue);
+        }
     }
   </style>
 </head>
@@ -1468,4 +1660,3 @@
   </script>
 </body>
 </html>
-``` 
