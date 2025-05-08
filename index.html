@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Barbearia Moderna - Agendamentos</title>
+    <title>NaRégua - Agendamentos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
@@ -1102,6 +1102,51 @@
         .dark-mode footer {
             background-color: var(--footer-bg);
         }
+        
+        .footer-admin-link-modern {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 0;
+            background: none;
+            color: var(--blue);
+            font-size: 1rem;
+            font-weight: 400;
+            text-decoration: none;
+            border: none;
+            box-shadow: none;
+            margin-top: 6px;
+            letter-spacing: 0;
+            cursor: pointer;
+            transition: color 0.18s;
+        }
+        
+        .footer-admin-link-modern i {
+            font-size: 0.98em;
+            margin-left: 1px;
+            transition: transform 0.15s, color 0.18s;
+            color: inherit;
+        }
+        
+        .footer-admin-link-modern:hover,
+        .footer-admin-link-modern:focus {
+            color: var(--dark-blue);
+            text-decoration: underline;
+        }
+        
+        .footer-admin-link-modern:hover i,
+        .footer-admin-link-modern:focus i {
+            transform: translateX(2px);
+        }
+        
+        body.dark-mode .footer-admin-link-modern {
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .footer-admin-link-modern:hover,
+        body.dark-mode .footer-admin-link-modern:focus {
+            color: var(--blue);
+        }
         /* Responsive */
         
         @media (max-width: 768px) {
@@ -1606,19 +1651,23 @@
                     </ul>
                 </div>
 
-                <div class="footer-hours">
-                    <h3 class="footer-title">Horário</h3>
+                <div class="footer-barber">
+                    <h3 class="footer-title">Barbeiro</h3>
                     <ul class="footer-links">
-                        <li><i class="far fa-clock"></i> Seg-Sex: 9h às 19h</li>
-                        <li><i class="far fa-clock"></i> Sábado: 9h às 18h</li>
-                        <li><i class="far fa-clock"></i> Domingo: 9h às 13h</li>
+                        <li>
+                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
+                        </li>
                     </ul>
+                    <a href="/barbeiro" class="footer-admin-link-modern">
+                        <span>Área do barbeiro</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; 2025 Barbearia jhoninha do corte. Todos os direitos reservados.
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
                 </div>
             </div>
         </div>
@@ -2014,4 +2063,3 @@
 </body>
 
 </html>
-```
