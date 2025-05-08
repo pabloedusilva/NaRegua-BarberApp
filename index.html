@@ -1220,6 +1220,25 @@
             animation: slideUp 0.4s;
             font-size: 1.08rem;
         }
+        /* Modal de "Meus agendamentos" */
+        
+        .custom-modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 6px;
+            outline: none;
+            transition: border 0.2s;
+            box-sizing: border-box;
+        }
+        
+        .custom-modal-input:focus {
+            border-color: var(--blue);
+        }
         /* Telas grandes */
         
         @media (min-width: 900px) {
@@ -1285,6 +1304,7 @@
             margin-bottom: 22px;
             color: var(--text-color);
             word-break: break-word;
+            text-align: left !important;
         }
         
         .custom-modal-btn {
@@ -1821,6 +1841,22 @@
             <button class="custom-modal-btn" id="customModalBtn">OK</button>
         </div>
     </div>
+    <!-- Modal de "Meus agendamentos" -->
+    <div id="appointmentsModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="appointmentsModalClose">&times;</span>
+            <div class="custom-modal-icon">
+                <i class="fas fa-user-check" style="color:var(--blue);"></i>
+            </div>
+            <div class="custom-modal-message" style="margin-bottom:18px;">
+                <label for="appointmentsName" style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
+                <input id="appointmentsName" type="text" class="custom-modal-input" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:16px;">
+                <label for="appointmentsPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                <input id="appointmentsPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+            </div>
+            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver meus agendamentos</button>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
@@ -2292,6 +2328,62 @@
                     }, 10);
                 }, 450); // Tempo igual ao transition do CSS
             }
+
+            // Código para o modal de "Meus agendamentos"
+            const myAppointmentsBtn = document.querySelector('.my-appointments');
+            const appointmentsModal = document.getElementById('appointmentsModal');
+            const appointmentsModalClose = document.getElementById('appointmentsModalClose');
+            const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
+            const appointmentsName = document.getElementById('appointmentsName');
+            const appointmentsPhone = document.getElementById('appointmentsPhone');
+
+            // Abrir modal ao clicar em "Meus agendamentos"
+            myAppointmentsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                appointmentsModal.classList.add('active');
+                appointmentsName.value = '';
+                appointmentsPhone.value = '';
+                appointmentsName.focus();
+            });
+
+            // Fechar modal
+            appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
+
+            // Fechar ao clicar fora do conteúdo
+            appointmentsModal.onclick = function(e) {
+                if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
+            };
+
+            // Ação do botão do modal
+            appointmentsModalBtn.onclick = function() {
+                const nome = appointmentsName.value.trim();
+                const tel = appointmentsPhone.value.trim();
+
+                // Remove borda vermelha antes de validar
+                appointmentsName.style.borderColor = '';
+                appointmentsPhone.style.borderColor = '';
+
+                let erro = false;
+                if (!nome) {
+                    appointmentsName.style.borderColor = 'var(--red)';
+                    erro = true;
+                }
+                if (!tel) {
+                    appointmentsPhone.style.borderColor = 'var(--red)';
+                    erro = true;
+                }
+                if (erro) {
+                    // Não exibe modal de aviso, apenas borda vermelha
+                    return;
+                }
+                // Aqui você pode buscar/exibir os agendamentos do usuário
+                appointmentsModal.classList.remove('active');
+                showCustomModal({
+                    message: `<b>Olá, ${nome}!</b><br>Em breve você poderá visualizar seus agendamentos aqui.`,
+                    icon: '<i class="fas fa-calendar-check" style="color:var(--blue);"></i>',
+                    btnText: 'Fechar'
+                });
+            };
         });
 
         document.addEventListener('click', function(e) {
