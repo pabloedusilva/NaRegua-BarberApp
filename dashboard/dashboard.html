@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Dashboard do Barbeiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --blue: #1a4b8c;
+            --red: #c41e3a;
+            --light-blue: #2980b9;
+            --dark-blue: #0c2b51;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --gray: #e0e0e0;
+            --dark-gray: #333333;
+            --green: #28a745;
+            --orange: #fd7e14;
+            --purple: #6f42c1;
+            /* Cores do tema escuro */
+            --bg-color: var(--white);
+            --text-color: var(--dark-gray);
+            --card-bg: var(--white);
+            --header-bg: var(--white);
+            --footer-bg: var(--dark-blue);
+            --footer-text: var(--white);
+            --border-color: var(--gray);
+            --hover-bg: var(--gray);
+            --selected-bg: var(--blue);
+            --disabled-color: var(--gray);
+            --time-slot-bg: var(--light-gray);
+            --professional-card-bg: var(--light-gray);
+        }
+        /* Tema escuro */
+        
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --header-bg: #1e1e1e;
+            --footer-bg: #0a0a0a;
+            --footer-text: #e0e0e0;
+            --border-color: #333;
+            --hover-bg: #333;
+            --selected-bg: var(--blue);
+            --disabled-color: #444;
+            --time-slot-bg: #2a2a2a;
+            --professional-card-bg: #2a2a2a;
+            --light-gray: #2a2a2a;
+            --gray: #444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        /* Header Styles */
+        
+        header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .logo-text span {
+            color: var(--blue);
+        }
+        
+        .logo-text .highlight {
+            color: var(--red);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+        
+        .dashboard-link {
+            background-color: var(--light-gray);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            color: var(--text-color);
+        }
+        
+        .dashboard-link:hover {
+            background-color: var(--hover-bg);
+        }
+        /* Botão de alternância de tema */
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: transform 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
+            transform: rotate(30deg);
+        }
+        /* Main Content */
+        
+        .dashboard-section {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--red);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .dashboard-card {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--text-color);
+        }
+        
+        .card-description {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .edit-btn {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .edit-btn:hover {
+            background-color: var(--dark-blue);
+            transform: scale(1.05);
+        }
+        
+        .appointments-list {
+            margin-top: 20px;
+        }
+        
+        .appointment-item {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .appointment-item:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .appointment-info {
+            flex: 1;
+        }
+        
+        .appointment-client {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .appointment-details {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .appointment-status {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--green);
+        }
+        
+        .status-pending {
+            background-color: rgba(253, 126, 20, 0.2);
+            color: var(--orange);
+        }
+        
+        .status-canceled {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        .confirm-btn {
+            color: var(--green);
+        }
+        
+        .cancel-btn {
+            color: #dc3545;
+        }
+        
+        .delete-btn {
+            color: var(--red);
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .service-card {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .service-card-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .service-card-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--green);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .professionals-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .professional-card {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .professional-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .professional-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .professional-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .professional-name {
+            font-weight: 600;
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .professional-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .working-hours {
+            margin-top: 20px;
+        }
+        
+        .day-schedule {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .day-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .time-slot {
+            background-color: var(--time-slot-bg);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .add-time-btn {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .day-off-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .day-off-label {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        /* Modal Styles */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray);
+            color: var(--text-color);
+            border: none;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .btn-danger {
+            background-color: var(--red);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-upload-btn {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .time-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .time-input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .remove-time-btn {
+            background-color: var(--red);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .add-another-btn {
+            background-color: var(--green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .tab-container {
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--blue);
+            color: var(--blue);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        /* Footer Moderno */
+        
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 50px 0 20px;
+            margin-top: 60px;
+            transition: background-color 0.3s;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-brand .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-brand .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .footer-brand .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--footer-text);
+        }
+        
+        .footer-brand .logo-text span {
+            color: var(--blue);
+        }
+        
+        .footer-brand .logo-text .highlight {
+            color: var(--red);
+        }
+        
+        .footer-slogan {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--red);
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links li {
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links i {
+            width: 20px;
+            text-align: center;
+            color: var(--blue);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--white);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--blue);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+        
+        .copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+        }
+        /* Dark mode adjustments */
+        
+        .dark-mode footer {
+            background-color: var(--footer-bg);
+        }
+        
+        .footer-admin-link-modern {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 0;
+            background: none;
+            color: var(--white);
+            font-size: 0.80rem;
+            font-weight: 400;
+            text-decoration: none;
+            border: none;
+            box-shadow: none;
+            margin-top: 6px;
+            letter-spacing: 0;
+            cursor: pointer;
+            transition: color 0.18s;
+        }
+        
+        .footer-admin-link-modern i {
+            font-size: 0.68em;
+            margin-left: 1.5px;
+            transition: transform 0.15s, color 0.18s;
+            color: inherit;
+        }
+        
+        .footer-admin-link-modern:hover,
+        .footer-admin-link-modern:focus {
+            color: var(--blue);
+            text-decoration: underline;
+        }
+        
+        .footer-admin-link-modern:hover i,
+        .footer-admin-link-modern:focus i {
+            transform: translateX(2px);
+        }
+        
+        body.dark-mode .footer-admin-link-modern {
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .footer-admin-link-modern:hover,
+        body.dark-mode .footer-admin-link-modern:focus {
+            color: var(--blue);
+        }
+        /* Responsive Design */
+        
+        @media screen and (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-container,
+            .professionals-container,
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .appointment-details {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua"
+                            style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                    </div>
+                    <div class="logo-text">NA<span>RÉGUA</span><span
+                            class="highlight">.</span></div>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="dashboard-link">Voltar para o site</a>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="dashboard-section animate-fade-in">
+            <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="today-appointments">5</div>
+                    <div class="stat-label">Agendamentos hoje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-appointments">24</div>
+                    <div class="stat-label">Agendamentos totais</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="month-revenue">R$ 1.280</div>
+                    <div class="stat-label">Faturamento mensal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-rating">4.8</div>
+                    <div class="stat-label">Avaliação média</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos</h2>
+                <button class="edit-btn" id="viewAllAppointments">
+                    <i class="fas fa-list"></i> Ver todos
+                </button>
+            </div>
+            
+            <div class="appointments-list">
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-client">João Silva</div>
+                        <div class="appointment-details">
+                            <span><i class="far fa-clock"></i> 09:30</span>
+                            <span><i class="fas fa-cut"></i> Corte + Barba</span>
+                            <span class="appointment-status status-confirmed">Confirmado</span>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn cancel-btn" title="Cancelar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-client">Maria Oliveira</div>
+                        <div class="appointment-details">
+                            <span><i class="far fa-clock"></i> 10:30</span>
+                            <span><i class="fas fa-cut"></i> Corte feminino</span>
+                            <span class="appointment-status status-confirmed">Confirmado</span>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn cancel-btn" title="Cancelar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-client">Carlos Souza</div>
+                        <div class="appointment-details">
+                            <span><i class="far fa-clock"></i> 11:30</span>
+                            <span><i class="fas fa-cut"></i> Barba</span>
+                            <span class="appointment-status status-pending">Pendente</span>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn confirm-btn" title="Confirmar">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="action-btn cancel-btn" title="Cancelar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
+                <button class="edit-btn" id="editServicesBtn">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+            
+            <div class="services-container">
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-name">Barba</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="service-card-details">
+                        <span><i class="far fa-clock"></i> 15min</span>
+                        <span><i class="fas fa-dollar-sign"></i> R$ 20,00</span>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-name">Corte de Cabelo</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="service-card-details">
+                        <span><i class="far fa-clock"></i> 30min</span>
+                        <span><i class="fas fa-dollar-sign"></i> R$ 35,00</span>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-name">Corte + Barba</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="service-card-details">
+                        <span><i class="far fa-clock"></i> 45min</span>
+                        <span><i class="fas fa-dollar-sign"></i> R$ 50,00</span>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-name">Bigodinho</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="service-card-details">
+                        <span><i class="far fa-clock"></i> 5min</span>
+                        <span><i class="fas fa-dollar-sign"></i> R$ 7,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i> Profissionais</h2>
+                <button class="edit-btn" id="addProfessionalBtn">
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
+            </div>
+            
+            <div class="professionals-container">
+                <div class="professional-card">
+                    <div class="professional-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Jhonata Barber">
+                    </div>
+                    <div class="professional-name">Jhonata Barber</div>
+                    <div class="professional-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" title="Remover">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="professional-card">
+                    <div class="professional-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Oliveira">
+                    </div>
+                    <div class="professional-name">Maria Oliveira</div>
+                    <div class="professional-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" title="Remover">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
+                <button class="edit-btn" id="editWorkingHoursBtn">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+            
+            <div class="working-hours">
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Segunda-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 12:00</span>
+                        <span class="time-slot">14:00 - 18:00</span>
+                    </div>
+                </div>
+                
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Terça-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 12:00</span>
+                        <span class="time-slot">14:00 - 18:00</span>
+                    </div>
+                </div>
+                
+                <!-- Os outros dias da semana seguiriam o mesmo padrão -->
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
+                <button class="edit-btn" id="editBarbershopInfoBtn">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+            
+            <div class="barbershop-info">
+                <div class="info-item">
+                    <strong>Nome:</strong> Barbearia Jhoninha do Corte
+                </div>
+                <div class="info-item">
+                    <strong>Endereço:</strong> Av. Principal, 123 - Centro, São Paulo - SP
+                </div>
+                <div class="info-item">
+                    <strong>WhatsApp:</strong> (11) 99999-8888
+                </div>
+                <div class="info-item">
+                    <strong>Instagram:</strong> @barbeariajhoninha
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Modal de Edição de Serviços -->
+    <div id="editServicesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Serviços</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="existing">Serviços Existentes</div>
+                        <div class="tab" data-tab="new">Adicionar Novo</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="existing-tab">
+                        <div class="form-group">
+                            <label class="form-label">Selecione os serviços que deseja oferecer:</label>
+                            
+                            <div class="service-option">
+                                <div class="service-option-header">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span class="service-name">Barba</span>
+                                </div>
+                                <div class="time-price-inputs">
+                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="15">
+                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="20.00">
+                                </div>
+                            </div>
+                            
+                            <div class="service-option">
+                                <div class="service-option-header">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span class="service-name">Corte de Cabelo</span>
+                                </div>
+                                <div class="time-price-inputs">
+                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="30">
+                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="35.00">
+                                </div>
+                            </div>
+                            
+                            <div class="service-option">
+                                <div class="service-option-header">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span class="service-name">Corte + Barba</span>
+                                </div>
+                                <div class="time-price-inputs">
+                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="45">
+                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="50.00">
+                                </div>
+                            </div>
+                            
+                            <div class="service-option">
+                                <div class="service-option-header">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span class="service-name">Bigodinho</span>
+                                </div>
+                                <div class="time-price-inputs">
+                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="5">
+                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="7.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="new-tab">
+                        <div class="form-group">
+                            <label class="form-label">Nome do Serviço</label>
+                            <input type="text" class="form-control" placeholder="Ex: Colorimetria">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tempo Estimado (minutos)</label>
+                            <input type="number" class="form-control" placeholder="Ex: 30">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preço (R$)</label>
+                            <input type="text" class="form-control" placeholder="Ex: 45.00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Profissional -->
+    <div id="addProfessionalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar Profissional</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-upload">
+                    <div class="avatar-preview">
+                        <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
+                    </div>
+                    <button class="avatar-upload-btn">
+                        <i class="fas fa-camera"></i> Adicionar Foto
+                    </button>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nome do Profissional</label>
+                    <input type="text" class="form-control" placeholder="Ex: João Silva">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Especialidades</label>
+                    <div class="specialties-list">
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Corte de Cabelo
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Barba
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Colorimetria
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Corte Infantil
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-primary">Adicionar Profissional</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Horários -->
+    <div id="editWorkingHoursModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Horários de Atendimento</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="day-schedule-edit">
+                    <div class="day-header">
+                        <div class="day-title">Segunda-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="time-slots-edit">
+                        <div class="time-input-group">
+                            <input type="time" class="time-input" value="09:00">
+                            <span>às</span>
+                            <input type="time" class="time-input" value="12:00">
+                            <button class="remove-time-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="time-input-group">
+                            <input type="time" class="time-input" value="14:00">
+                            <span>às</span>
+                            <input type="time" class="time-input" value="18:00">
+                            <button class="remove-time-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-another-btn">
+                        <i class="fas fa-plus"></i> Adicionar outro horário
+                    </button>
+                </div>
+                
+                <!-- Os outros dias da semana seguiriam o mesmo padrão -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar Horários</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Informações da Barbearia -->
+    <div id="editBarbershopInfoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Informações da Barbearia</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome da Barbearia</label>
+                    <input type="text" class="form-control" value="Barbearia Jhoninha do Corte">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Endereço</label>
+                    <input type="text" class="form-control" value="Av. Principal, 123 - Centro">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Cidade/Estado</label>
+                    <input type="text" class="form-control" value="São Paulo - SP">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Número do WhatsApp</label>
+                    <input type="text" class="form-control" value="(11) 99999-8888">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Perfil do Instagram</label>
+                    <input type="text" class="form-control" value="@barbeariajhoninha">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Foto do Estabelecimento</label>
+                    <input type="file" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Todos os Agendamentos -->
+    <div id="allAppointmentsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Todos os Agendamentos</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="today">Hoje</div>
+                        <div class="tab" data-tab="week">Esta Semana</div>
+                        <div class="tab" data-tab="month">Este Mês</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="today-tab">
+                        <div class="appointments-list">
+                            <!-- Agendamentos de hoje seriam listados aqui -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="week-tab">
+                        <div class="appointments-list">
+                            <!-- Agendamentos da semana seriam listados aqui -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="month-tab">
+                        <div class="appointments-list">
+                            <!-- Agendamentos do mês seriam listados aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img src="img/sua-logo.png" alt="Logo NaRégua"
+                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                        </div>
+                        <div class="logo-text">NA<span>RÉGUA</span><span
+                                class="highlight">.</span></div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-contact">
+                    <h3 class="footer-title">Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> (31)
+                            98507-9718</li>
+                        <li><i class="fas fa-envelope"></i>
+                            pablo.silva.edu@gmail.com</li>
+                    </ul>
+                </div>
+
+                <div class="footer-barber">
+                    <h3 class="footer-title">Barbeiro</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <i class="fas fa-user-shield"></i> Gerencie
+                            agendamentos, profissionais e horários.
+                        </li>
+                    </ul>
+                    <a href="/barbeiro" class="footer-admin-link-modern">
+                        <span>Área do barbeiro</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle theme
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            
+            // Verificar preferência de tema no localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+
+            // Alternar tema
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+
+                if (document.body.classList.contains('dark-mode')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Modal functionality
+            const modals = document.querySelectorAll('.modal');
+            const modalTriggers = {
+                'editServicesBtn': 'editServicesModal',
+                'addProfessionalBtn': 'addProfessionalModal',
+                'editWorkingHoursBtn': 'editWorkingHoursModal',
+                'editBarbershopInfoBtn': 'editBarbershopInfoModal',
+                'viewAllAppointments': 'allAppointmentsModal'
+            };
+
+            // Open modals
+            Object.keys(modalTriggers).forEach(triggerId => {
+                const trigger = document.getElementById(triggerId);
+                const modalId = modalTriggers[triggerId];
+                const modal = document.getElementById(modalId);
+
+                if (trigger && modal) {
+                    trigger.addEventListener('click', () => {
+                        modal.style.display = 'flex';
+                    });
+                }
+            });
+
+            // Close modals
+            document.querySelectorAll('.close-modal').forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.style.display = 'none';
+                });
+            });
+
+            // Close when clicking outside modal content
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+
+            // Tab functionality
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabContainer = this.closest('.tab-container');
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Avatar upload preview
+            const avatarInput = document.getElementById('avatarInput');
+            const avatarPreview = document.querySelector('.avatar-preview');
+            
+            if (avatarInput && avatarPreview) {
+                document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
+                    avatarInput.click();
+                });
+                
+                avatarInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Add another time slot
+            document.querySelector('.add-another-btn')?.addEventListener('click', function() {
+                const timeSlotsEdit = this.previousElementSibling;
+                const newTimeInputGroup = document.createElement('div');
+                newTimeInputGroup.className = 'time-input-group';
+                newTimeInputGroup.innerHTML = `
+                    <input type="time" class="time-input" value="09:00">
+                    <span>às</span>
+                    <input type="time" class="time-input" value="12:00">
+                    <button class="remove-time-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                timeSlotsEdit.appendChild(newTimeInputGroup);
+                
+                // Add event listener to new remove button
+                newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+
+            // Remove time slot
+            document.querySelectorAll('.remove-time-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+
+            // Appointment actions
+            document.querySelectorAll('.confirm-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const appointmentItem = this.closest('.appointment-item');
+                    const statusBadge = appointmentItem.querySelector('.appointment-status');
+                    
+                    statusBadge.classList.remove('status-pending', 'status-canceled');
+                    statusBadge.classList.add('status-confirmed');
+                    statusBadge.textContent = 'Confirmado';
+                    
+                    // Remove confirm button after confirmation
+                    this.remove();
+                });
+            });
+
+            document.querySelectorAll('.cancel-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const appointmentItem = this.closest('.appointment-item');
+                    const statusBadge = appointmentItem.querySelector('.appointment-status');
+                    
+                    statusBadge.classList.remove('status-pending', 'status-confirmed');
+                    statusBadge.classList.add('status-canceled');
+                    statusBadge.textContent = 'Cancelado';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

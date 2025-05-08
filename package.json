@@ -1,0 +1,23 @@
+{
+  "name": "naregua-barberapp",
+  "version": "1.0.0",
+  "description": "Sistema de agendamento para barbearia",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pabloedusilva/NaRegua-BarberApp.git"
+  },
+  "keywords": [],
+  "author": "Pablo Eduardo Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pabloedusilva/NaRegua-BarberApp/issues"
+  },
+  "homepage": "https://github.com/pabloedusilva/NaRegua-BarberApp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
