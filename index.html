@@ -1109,8 +1109,8 @@
             gap: 3px;
             padding: 0;
             background: none;
-            color: var(--blue);
-            font-size: 1rem;
+            color: var(--white);
+            font-size: 0.80rem;
             font-weight: 400;
             text-decoration: none;
             border: none;
@@ -1122,15 +1122,15 @@
         }
         
         .footer-admin-link-modern i {
-            font-size: 0.98em;
-            margin-left: 1px;
+            font-size: 0.68em;
+            margin-left: 1.5px;
             transition: transform 0.15s, color 0.18s;
             color: inherit;
         }
         
         .footer-admin-link-modern:hover,
         .footer-admin-link-modern:focus {
-            color: var(--dark-blue);
+            color: var(--blue);
             text-decoration: underline;
         }
         
@@ -1635,7 +1635,6 @@
                         <div class="logo-icon">B</div>
                         <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                     </div>
-                    <p class="footer-slogan">Transformando visual e elevando autoestima desde 2015.</p>
                     <div class="social-links">
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
@@ -1645,9 +1644,8 @@
                 <div class="footer-contact">
                     <h3 class="footer-title">Contato</h3>
                     <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt"></i> Av. Principal, 123</li>
-                        <li><i class="fas fa-phone"></i> (11) 99999-8888</li>
-                        <li><i class="fas fa-envelope"></i> contato@barbearia.com</li>
+                        <li><i class="fas fa-phone"></i> (31) 98507-9718</li>
+                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com</li>
                     </ul>
                 </div>
 
@@ -1841,6 +1839,7 @@
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
 
+                    const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
                     for (let i = 0; i < 7; i++) {
                         const weekDay = new Date(weekStart);
                         weekDay.setDate(weekStart.getDate() + i);
@@ -1850,7 +1849,6 @@
                         if (weekDay < today) {
                             dayClass += ' past-day';
                         }
-                        // ADICIONE ESTE BLOCO PARA O DIA ATUAL
                         if (
                             weekDay.getDate() === today.getDate() &&
                             weekDay.getMonth() === today.getMonth() &&
@@ -1859,7 +1857,11 @@
                             dayClass += ' today';
                         }
 
-                        days += `<div class="${dayClass}" data-date="${weekDay.toLocaleDateString('pt-BR')}">${weekDay.getDate()}</div>`;
+                        // Adicione o nome do dia acima do número
+                        days += `<div class="day-column">
+                                    <div class="week-day-name">${weekDayNames[i]}</div>
+                                    <div class="${dayClass}" data-date="${weekDay.toLocaleDateString('pt-BR')}">${weekDay.getDate()}</div>
+                                </div>`;
                     }
 
                     days += '</div>';
