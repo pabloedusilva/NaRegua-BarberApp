@@ -371,7 +371,7 @@
         
         .book-button {
             background-color: var(--light-gray);
-            border: none;
+            border: 0.5px var(--dark-gray) solid;
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
@@ -759,6 +759,29 @@
             max-width: 800px;
             margin: 0 auto;
             animation: fadeIn 0.3s ease;
+            position: relative;
+        }
+        
+        .week-days,
+        .week-days.slide-left,
+        .week-days.slide-right {
+            transition: transform 0.45s cubic-bezier(.77, 0, .18, 1), opacity 0.45s;
+            will-change: transform, opacity;
+        }
+        
+        .week-days.slide-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        
+        .week-days.slide-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .week-days.active {
+            transform: translateX(0);
+            opacity: 1;
         }
         
         .week-navigation {
@@ -1918,14 +1941,24 @@
                 // Adicionar event listeners para os botões de navegação semanal
                 if (calendarMode === 'week') {
                     document.querySelector('.prev-week').addEventListener('click', () => {
-                        currentDate.setDate(currentDate.getDate() - 7);
-                        renderCalendar(currentDate);
+                        animateWeekTransition('right', () => {
+                            currentDate.setDate(currentDate.getDate() - 7);
+                            renderCalendar(currentDate);
+                        });
                     });
 
                     document.querySelector('.next-week').addEventListener('click', () => {
-                        currentDate.setDate(currentDate.getDate() + 7);
-                        renderCalendar(currentDate);
+                        animateWeekTransition('left', () => {
+                            currentDate.setDate(currentDate.getDate() + 7);
+                            renderCalendar(currentDate);
+                        });
                     });
+
+                    // Após renderizar, marque a semana como ativa para a transição inicial
+                    setTimeout(() => {
+                        const weekDays = document.querySelector('.week-days');
+                        if (weekDays) weekDays.classList.add('active');
+                    }, 10);
                 }
 
                 // Adicionar event listeners para os dias
@@ -2052,6 +2085,27 @@
                 selectedDate = dateStr;
                 // Atualize horários ou detalhes conforme necessário
                 // Exemplo: updateConfirmationDetails();
+            }
+
+            function animateWeekTransition(direction, callback) {
+                const weekDays = document.querySelector('.week-days');
+                if (!weekDays) {
+                    callback();
+                    return;
+                }
+                weekDays.classList.remove('active', 'slide-left', 'slide-right');
+                void weekDays.offsetWidth; // Força reflow
+
+                weekDays.classList.add(direction === 'left' ? 'slide-left' : 'slide-right');
+                setTimeout(() => {
+                    callback();
+                    setTimeout(() => {
+                        const newWeekDays = document.querySelector('.week-days');
+                        if (newWeekDays) {
+                            newWeekDays.classList.add('active');
+                        }
+                    }, 10);
+                }, 450); // Tempo igual ao transition do CSS
             }
         });
 
