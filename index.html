@@ -1170,6 +1170,150 @@
         body.dark-mode .footer-admin-link-modern:focus {
             color: var(--blue);
         }
+        
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(26, 75, 140, 0.18);
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        
+        .custom-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+        
+        .custom-modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
+            padding: 38px 28px 28px 28px;
+            min-width: 320px;
+            max-width: 90vw;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.4s;
+            font-size: 1.08rem;
+        }
+        /* Telas grandes */
+        
+        @media (min-width: 900px) {
+            .custom-modal-content {
+                min-width: 420px;
+                max-width: 420px;
+                padding: 48px 38px 38px 38px;
+                font-size: 1.18rem;
+            }
+            .custom-modal-message {
+                font-size: 1.08rem;
+            }
+            .custom-modal-btn {
+                font-size: 1.08rem;
+                padding: 12px 38px;
+            }
+        }
+        /* Telas médias */
+        
+        @media (max-width: 899px) and (min-width: 481px) {
+            .custom-modal-content {
+                min-width: 280px;
+                max-width: 360px;
+                padding: 32px 18px 22px 18px;
+                font-size: 1rem;
+            }
+            .custom-modal-message {
+                font-size: 0.98rem;
+            }
+            .custom-modal-btn {
+                font-size: 1rem;
+                padding: 10px 28px;
+            }
+        }
+        /* Telas pequenas */
+        
+        @media (max-width: 480px) {
+            .custom-modal-content {
+                min-width: 0;
+                max-width: 96vw;
+                padding: 18px 4vw 14px 4vw;
+                font-size: 0.95rem;
+            }
+            .custom-modal-message {
+                font-size: 0.93rem;
+            }
+            .custom-modal-btn {
+                font-size: 0.95rem;
+                padding: 8px 18px;
+            }
+        }
+        
+        .custom-modal-icon {
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+            color: var(--blue);
+            display: flex;
+            justify-content: center;
+        }
+        
+        .custom-modal-message {
+            font-size: 1.08rem;
+            margin-bottom: 22px;
+            color: var(--text-color);
+            word-break: break-word;
+        }
+        
+        .custom-modal-btn {
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            padding: 10px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.18s;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .custom-modal-btn:hover {
+            background: var(--dark-blue);
+            transform: scale(1.04);
+        }
+        
+        .custom-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 1.3rem;
+            color: var(--blue);
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        
+        .custom-modal-close:hover {
+            color: var(--red);
+        }
+        
+        @media (max-width: 480px) {
+            .custom-modal-content {
+                min-width: 0;
+                padding: 22px 8vw 18px 8vw;
+            }
+            .custom-modal-message {
+                font-size: 0.98rem;
+            }
+        }
         /* Responsive */
         
         @media (max-width: 768px) {
@@ -1650,6 +1794,16 @@
         </section>
     </main>
 
+    <!-- Modais -->
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="customModalClose">&times;</span>
+            <div class="custom-modal-icon" id="customModalIcon"></div>
+            <div class="custom-modal-message" id="customModalMessage"></div>
+            <button class="custom-modal-btn" id="customModalBtn">OK</button>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -2049,16 +2203,27 @@
             const confirmButton = document.querySelector('.confirm-button');
             confirmButton.addEventListener('click', function() {
                 if (selectedService && selectedProfessional && selectedDate && selectedTime) {
-                    alert(`Agendamento confirmado!\n\nServiço: ${selectedService}\nProfissional: ${selectedProfessional}\nData: ${selectedDate}\nHorário: ${selectedTime}\nValor: R$ ${selectedServicePrice}`);
-
-                    // Aqui você poderia enviar os dados para um servidor ou API
-
-                    // Resetar a página após 2 segundos
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    showCustomModal({
+                        message: `<strong>Agendamento confirmado!</strong><br><br>
+                        <b>Serviço:</b> ${selectedService}<br>
+                        <b>Profissional:</b> ${selectedProfessional}<br>
+                        <b>Data:</b> ${selectedDate}<br>
+                        <b>Horário:</b> ${selectedTime}<br>
+                        <b>Valor:</b> R$ ${selectedServicePrice}`,
+                        icon: '<i class="fas fa-check-circle" style="color:var(--green);"></i>',
+                        btnText: 'Fechar',
+                        onClose: function() {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 300);
+                        }
+                    });
                 } else {
-                    alert('Por favor, complete todas as informações para agendar.');
+                    showCustomModal({
+                        message: 'Por favor, complete todas as informações para agendar.',
+                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--red);"></i>',
+                        btnText: 'OK'
+                    });
                 }
             });
 
@@ -2115,7 +2280,36 @@
                 updateSelectedDay(dateStr);
             }
         });
+
+        // Substitua os alerts por esta função e use-a nos lugares dos alerts
+        function showCustomModal({
+            message,
+            icon = '',
+            btnText = 'OK',
+            onClose = null
+        }) {
+            const modal = document.getElementById('customModal');
+            const modalMsg = document.getElementById('customModalMessage');
+            const modalIcon = document.getElementById('customModalIcon');
+            const modalBtn = document.getElementById('customModalBtn');
+            const modalClose = document.getElementById('customModalClose');
+
+            modalMsg.innerHTML = message;
+            modalIcon.innerHTML = icon;
+            modalBtn.textContent = btnText;
+
+            function closeModal() {
+                modal.classList.remove('active');
+                if (onClose) onClose();
+            }
+
+            modalBtn.onclick = closeModal;
+            modalClose.onclick = closeModal;
+
+            modal.classList.add('active');
+        }
     </script>
 </body>
 
 </html>
+```
