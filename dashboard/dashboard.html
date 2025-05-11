@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        :root {
+         :root {
             --blue: #1a4b8c;
             --red: #c41e3a;
             --light-blue: #2980b9;
@@ -316,41 +316,6 @@
             color: var(--green);
         }
         
-        .status-pending {
-            background-color: rgba(253, 126, 20, 0.2);
-            color: var(--orange);
-        }
-        
-        .status-canceled {
-            background-color: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-        
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
-            transition: all 0.3s;
-        }
-        
-        .confirm-btn {
-            color: var(--green);
-        }
-        
-        .cancel-btn {
-            color: #dc3545;
-        }
-        
-        .delete-btn {
-            color: var(--red);
-        }
-        
-        .action-btn:hover {
-            transform: scale(1.2);
-        }
-        
         .services-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -429,11 +394,11 @@
             border-radius: 50%;
         }
         
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: var(--green);
         }
         
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(26px);
         }
         
@@ -489,6 +454,38 @@
             display: flex;
             gap: 10px;
             margin-top: 10px;
+        }
+        
+        .professional-actions .action-btn {
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2px;
+            font-size: 1.15rem;
+            color: var(--blue);
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+        }
+        
+        .professional-actions .action-btn.delete-btn {
+            color: var(--red);
+        }
+        
+        .professional-actions .action-btn:hover {
+            background: var(--blue);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .professional-actions .action-btn.delete-btn:hover {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(196, 30, 58, 0.10);
         }
         
         .working-hours {
@@ -989,29 +986,101 @@
         body.dark-mode .footer-admin-link-modern:focus {
             color: var(--blue);
         }
+        /* Organização visual do modal de editar serviços */
+        
+        #editServicesModal .form-group {
+            margin-bottom: 0;
+        }
+        
+        #editServicesModal .service-option {
+            border-radius: 8px;
+            background: var(--gray);
+            padding: 16px 14px 12px 14px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        }
+        
+        #editServicesModal .service-option-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        
+        #editServicesModal .service-name {
+            font-weight: 600;
+            font-size: 1.08rem;
+            color: var(--text-color);
+        }
+        
+        #editServicesModal .time-price-inputs {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        
+        #editServicesModal .time-price-inputs input.form-control {
+            width: 70px;
+            padding-left: 28px;
+            font-size: 1em;
+        }
+        
+        #editServicesModal .time-price-inputs {
+            position: relative;
+        }
+        
+        #editServicesModal .time-price-inputs input[placeholder*="Tempo"] {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm0-368c-92.6 0-168 75.4-168 168s75.4 168 168 168 168-75.4 168-168-75.4-168-168-168zm12 88v76h68c6.6 0 12 5.4 12 12s-5.4 12-12 12h-80c-6.6 0-12-5.4-12-12V136c0-6.6 5.4-12 12-12s12 5.4 12 12z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 6px 50%;
+            background-size: 16px 16px;
+        }
+        
+        #editServicesModal .time-price-inputs input[placeholder*="Preço"] {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512"><path d="M209.3 233.3l-80-32A16 16 0 0 1 112 186V152a24 24 0 0 1 24-24h16a24 24 0 0 1 24 24v8a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-8a56 56 0 0 0-56-56V56a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v40a56 56 0 0 0-56 56v34a48 48 0 0 0 30.7 44.7l80 32A16 16 0 0 1 176 326v34a24 24 0 0 1-24 24h-16a24 24 0 0 1-24-24v-8a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v8a56 56 0 0 0 56 56v40a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-40a56 56 0 0 0 56-56v-34a48 48 0 0 0-30.7-44.7z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 6px 50%;
+            background-size: 16px 16px;
+        }
+        
+        #editServicesModal .time-price-inputs input.form-control {
+            padding-left: 28px;
+        }
+        
+        #editServicesModal .time-price-inputs input.form-control:focus {
+            border-color: var(--blue);
+        }
+        
+        #editServicesModal .tab-content {
+            margin-top: 10px;
+        }
+        
+        #editWorkingHoursModal .day-schedule-edit {
+            background: var(--gray, #f3f3f3);
+            border-radius: 10px;
+            padding: 18px 16px 14px 16px;
+            margin-bottom: 18px;
+        }
+        /* Fim do bloco de organização visual do modal de editar serviços */
         /* Responsive Design */
         
         @media screen and (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
-            
             .services-container,
             .professionals-container,
             .stats-container {
                 grid-template-columns: 1fr;
             }
-            
             .navbar {
                 flex-direction: column;
                 gap: 15px;
             }
-            
             .nav-links {
                 width: 100%;
                 justify-content: center;
             }
-            
             .modal-content {
                 width: 95%;
                 padding: 20px;
@@ -1023,11 +1092,9 @@
                 flex-direction: column;
                 gap: 5px;
             }
-            
             .modal-footer {
                 flex-direction: column;
             }
-            
             .btn {
                 width: 100%;
                 margin-bottom: 10px;
@@ -1042,11 +1109,9 @@
             <nav class="navbar">
                 <div class="logo">
                     <div class="logo-icon">
-                        <img src="img/sua-logo.png" alt="Logo NaRégua"
-                            style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                     </div>
-                    <div class="logo-text">NA<span>RÉGUA</span><span
-                            class="highlight">.</span></div>
+                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                 </div>
                 <div class="nav-links">
                     <a href="index.html" class="dashboard-link">Voltar para o site</a>
@@ -1061,7 +1126,7 @@
     <main class="container">
         <section class="dashboard-section animate-fade-in">
             <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-            
+
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-value" id="today-appointments">5</div>
@@ -1070,14 +1135,6 @@
                 <div class="stat-card">
                     <div class="stat-value" id="total-appointments">24</div>
                     <div class="stat-label">Agendamentos totais</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="month-revenue">R$ 1.280</div>
-                    <div class="stat-label">Faturamento mensal</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avg-rating">4.8</div>
-                    <div class="stat-label">Avaliação média</div>
                 </div>
             </div>
         </section>
@@ -1089,7 +1146,7 @@
                     <i class="fas fa-list"></i> Ver todos
                 </button>
             </div>
-            
+
             <div class="appointments-list">
                 <div class="appointment-item">
                     <div class="appointment-info">
@@ -1100,13 +1157,8 @@
                             <span class="appointment-status status-confirmed">Confirmado</span>
                         </div>
                     </div>
-                    <div class="appointment-actions">
-                        <button class="action-btn cancel-btn" title="Cancelar">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
                 </div>
-                
+
                 <div class="appointment-item">
                     <div class="appointment-info">
                         <div class="appointment-client">Maria Oliveira</div>
@@ -1116,29 +1168,16 @@
                             <span class="appointment-status status-confirmed">Confirmado</span>
                         </div>
                     </div>
-                    <div class="appointment-actions">
-                        <button class="action-btn cancel-btn" title="Cancelar">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
                 </div>
-                
+
                 <div class="appointment-item">
                     <div class="appointment-info">
                         <div class="appointment-client">Carlos Souza</div>
                         <div class="appointment-details">
                             <span><i class="far fa-clock"></i> 11:30</span>
                             <span><i class="fas fa-cut"></i> Barba</span>
-                            <span class="appointment-status status-pending">Pendente</span>
+                            <span class="appointment-status status-confirmed">Confirmado</span>
                         </div>
-                    </div>
-                    <div class="appointment-actions">
-                        <button class="action-btn confirm-btn" title="Confirmar">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="action-btn cancel-btn" title="Cancelar">
-                            <i class="fas fa-times"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -1151,7 +1190,7 @@
                     <i class="fas fa-edit"></i> Editar
                 </button>
             </div>
-            
+
             <div class="services-container">
                 <div class="service-card">
                     <div class="service-card-header">
@@ -1166,7 +1205,7 @@
                         <span><i class="fas fa-dollar-sign"></i> R$ 20,00</span>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-card-header">
                         <div class="service-card-name">Corte de Cabelo</div>
@@ -1180,7 +1219,7 @@
                         <span><i class="fas fa-dollar-sign"></i> R$ 35,00</span>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-card-header">
                         <div class="service-card-name">Corte + Barba</div>
@@ -1194,7 +1233,7 @@
                         <span><i class="fas fa-dollar-sign"></i> R$ 50,00</span>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-card-header">
                         <div class="service-card-name">Bigodinho</div>
@@ -1218,7 +1257,7 @@
                     <i class="fas fa-plus"></i> Adicionar
                 </button>
             </div>
-            
+
             <div class="professionals-container">
                 <div class="professional-card">
                     <div class="professional-avatar">
@@ -1234,7 +1273,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="professional-card">
                     <div class="professional-avatar">
                         <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Oliveira">
@@ -1259,7 +1298,7 @@
                     <i class="fas fa-edit"></i> Editar
                 </button>
             </div>
-            
+
             <div class="working-hours">
                 <div class="day-schedule">
                     <div class="day-header">
@@ -1277,7 +1316,6 @@
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                
                 <div class="day-schedule">
                     <div class="day-header">
                         <div class="day-title">Terça-feira</div>
@@ -1294,8 +1332,84 @@
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                
-                <!-- Os outros dias da semana seguiriam o mesmo padrão -->
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Quarta-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 12:00</span>
+                        <span class="time-slot">14:00 - 18:00</span>
+                    </div>
+                </div>
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Quinta-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 12:00</span>
+                        <span class="time-slot">14:00 - 18:00</span>
+                    </div>
+                </div>
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Sexta-feira</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 12:00</span>
+                        <span class="time-slot">14:00 - 18:00</span>
+                    </div>
+                </div>
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Sábado</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <span class="time-slot">09:00 - 13:00</span>
+                    </div>
+                </div>
+                <div class="day-schedule">
+                    <div class="day-header">
+                        <div class="day-title">Domingo</div>
+                        <div class="day-off-toggle">
+                            <span class="day-off-label">Dia de folga:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="time-slots">
+                        <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1306,7 +1420,7 @@
                     <i class="fas fa-edit"></i> Editar
                 </button>
             </div>
-            
+
             <div class="barbershop-info">
                 <div class="info-item">
                     <strong>Nome:</strong> Barbearia Jhoninha do Corte
@@ -1338,11 +1452,11 @@
                         <div class="tab active" data-tab="existing">Serviços Existentes</div>
                         <div class="tab" data-tab="new">Adicionar Novo</div>
                     </div>
-                    
+
                     <div class="tab-content active" id="existing-tab">
                         <div class="form-group">
                             <label class="form-label">Selecione os serviços que deseja oferecer:</label>
-                            
+
                             <div class="service-option">
                                 <div class="service-option-header">
                                     <label class="toggle-switch">
@@ -1356,7 +1470,7 @@
                                     <input type="text" class="form-control" placeholder="Preço (R$)" value="20.00">
                                 </div>
                             </div>
-                            
+
                             <div class="service-option">
                                 <div class="service-option-header">
                                     <label class="toggle-switch">
@@ -1370,7 +1484,7 @@
                                     <input type="text" class="form-control" placeholder="Preço (R$)" value="35.00">
                                 </div>
                             </div>
-                            
+
                             <div class="service-option">
                                 <div class="service-option-header">
                                     <label class="toggle-switch">
@@ -1384,7 +1498,7 @@
                                     <input type="text" class="form-control" placeholder="Preço (R$)" value="50.00">
                                 </div>
                             </div>
-                            
+
                             <div class="service-option">
                                 <div class="service-option-header">
                                     <label class="toggle-switch">
@@ -1400,7 +1514,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tab-content" id="new-tab">
                         <div class="form-group">
                             <label class="form-label">Nome do Serviço</label>
@@ -1441,28 +1555,10 @@
                     </button>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Nome do Profissional</label>
                     <input type="text" class="form-control" placeholder="Ex: João Silva">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Especialidades</label>
-                    <div class="specialties-list">
-                        <label class="checkbox-label">
-                            <input type="checkbox" checked> Corte de Cabelo
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" checked> Barba
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox"> Colorimetria
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox"> Corte Infantil
-                        </label>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1480,44 +1576,224 @@
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="day-schedule-edit">
-                    <div class="day-header">
-                        <div class="day-title">Segunda-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
+                <!-- Container para todos os dias da semana -->
+                <div class="working-hours-edit">
+                    <!-- Segunda-feira -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Segunda-feira</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="12:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="14:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="18:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
                     </div>
-                    
-                    <div class="time-slots-edit">
-                        <div class="time-input-group">
-                            <input type="time" class="time-input" value="09:00">
-                            <span>às</span>
-                            <input type="time" class="time-input" value="12:00">
-                            <button class="remove-time-btn">
-                                <i class="fas fa-times"></i>
-                            </button>
+                    <!-- Terça-feira -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Terça-feira</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
-                        
-                        <div class="time-input-group">
-                            <input type="time" class="time-input" value="14:00">
-                            <span>às</span>
-                            <input type="time" class="time-input" value="18:00">
-                            <button class="remove-time-btn">
-                                <i class="fas fa-times"></i>
-                            </button>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="12:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="14:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="18:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
                     </div>
-                    
-                    <button class="add-another-btn">
-                        <i class="fas fa-plus"></i> Adicionar outro horário
-                    </button>
+                    <!-- Quarta-feira -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Quarta-feira</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="12:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="14:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="18:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
+                    </div>
+                    <!-- Quinta-feira -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Quinta-feira</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="12:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="14:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="18:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
+                    </div>
+                    <!-- Sexta-feira -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Sexta-feira</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="12:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="14:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="18:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
+                    </div>
+                    <!-- Sábado -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Sábado</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="time-slots-edit">
+                            <div class="time-input-group">
+                                <input type="time" class="time-input" value="09:00">
+                                <span>às</span>
+                                <input type="time" class="time-input" value="13:00">
+                                <button class="remove-time-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
+                    </div>
+                    <!-- Domingo -->
+                    <div class="day-schedule-edit">
+                        <div class="day-header">
+                            <div class="day-title">Domingo</div>
+                            <div class="day-off-toggle">
+                                <span class="day-off-label">Dia de folga:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="time-slots-edit">
+                            <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
+                        </div>
+                        <button class="add-another-btn">
+                            <i class="fas fa-plus"></i> Adicionar outro horário
+                        </button>
+                    </div>
                 </div>
-                
-                <!-- Os outros dias da semana seguiriam o mesmo padrão -->
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary close-modal">Cancelar</button>
@@ -1534,34 +1810,40 @@
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
+                <!-- Avatar upload para foto do estabelecimento -->
+                <div class="avatar-upload" id="barbershop-photo-upload">
+                    <div class="avatar-preview" id="barbershop-photo-preview">
+                        <i class="fas fa-store" style="font-size: 40px; color: #aaa;"></i>
+                    </div>
+                    <button type="button" class="avatar-upload-btn" id="barbershop-photo-btn">
+                        <i class="fas fa-camera"></i> Adicionar Foto
+                    </button>
+                    <input type="file" id="barbershopPhotoInput" accept="image/*" style="display: none;">
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">Nome da Barbearia</label>
                     <input type="text" class="form-control" value="Barbearia Jhoninha do Corte">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Endereço</label>
                     <input type="text" class="form-control" value="Av. Principal, 123 - Centro">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Cidade/Estado</label>
                     <input type="text" class="form-control" value="São Paulo - SP">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Número do WhatsApp</label>
                     <input type="text" class="form-control" value="(11) 99999-8888">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Perfil do Instagram</label>
                     <input type="text" class="form-control" value="@barbeariajhoninha">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Foto do Estabelecimento</label>
-                    <input type="file" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
@@ -1585,19 +1867,19 @@
                         <div class="tab" data-tab="week">Esta Semana</div>
                         <div class="tab" data-tab="month">Este Mês</div>
                     </div>
-                    
+
                     <div class="tab-content active" id="today-tab">
                         <div class="appointments-list">
                             <!-- Agendamentos de hoje seriam listados aqui -->
                         </div>
                     </div>
-                    
+
                     <div class="tab-content" id="week-tab">
                         <div class="appointments-list">
                             <!-- Agendamentos da semana seriam listados aqui -->
                         </div>
                     </div>
-                    
+
                     <div class="tab-content" id="month-tab">
                         <div class="appointments-list">
                             <!-- Agendamentos do mês seriam listados aqui -->
@@ -1618,11 +1900,9 @@
                 <div class="footer-brand">
                     <div class="logo">
                         <div class="logo-icon">
-                            <img src="img/sua-logo.png" alt="Logo NaRégua"
-                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                            <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                         </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span
-                                class="highlight">.</span></div>
+                        <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                     </div>
                     <div class="social-links">
                         <a href="#" aria-label="Instagram"><i
@@ -1635,10 +1915,10 @@
                 <div class="footer-contact">
                     <h3 class="footer-title">Contato</h3>
                     <ul class="footer-links">
-                        <li><i class="fas fa-phone"></i> (31)
-                            98507-9718</li>
-                        <li><i class="fas fa-envelope"></i>
-                            pablo.silva.edu@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> (31) 98507-9718
+                        </li>
+                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com
+                        </li>
                     </ul>
                 </div>
 
@@ -1646,8 +1926,7 @@
                     <h3 class="footer-title">Barbeiro</h3>
                     <ul class="footer-links">
                         <li>
-                            <i class="fas fa-user-shield"></i> Gerencie
-                            agendamentos, profissionais e horários.
+                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
                         </li>
                     </ul>
                     <a href="/barbeiro" class="footer-admin-link-modern">
@@ -1670,7 +1949,7 @@
             // Toggle theme
             const themeToggle = document.getElementById('themeToggle');
             const themeIcon = themeToggle.querySelector('i');
-            
+
             // Verificar preferência de tema no localStorage
             const currentTheme = localStorage.getItem('theme') || 'light';
             if (currentTheme === 'dark') {
@@ -1739,11 +2018,11 @@
                 tab.addEventListener('click', function() {
                     const tabContainer = this.closest('.tab-container');
                     const tabId = this.getAttribute('data-tab');
-                    
+
                     // Remove active class from all tabs and contents
                     tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    
+
                     // Add active class to clicked tab and corresponding content
                     this.classList.add('active');
                     document.getElementById(`${tabId}-tab`).classList.add('active');
@@ -1753,12 +2032,12 @@
             // Avatar upload preview
             const avatarInput = document.getElementById('avatarInput');
             const avatarPreview = document.querySelector('.avatar-preview');
-            
+
             if (avatarInput && avatarPreview) {
                 document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
                     avatarInput.click();
                 });
-                
+
                 avatarInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
                     if (file) {
@@ -1771,24 +2050,48 @@
                 });
             }
 
+            // Avatar upload preview para foto do estabelecimento
+            const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
+            const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
+            const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
+
+            if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
+                barbershopPhotoBtn.addEventListener('click', function() {
+                    barbershopPhotoInput.click();
+                });
+
+                barbershopPhotoInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
             // Add another time slot
-            document.querySelector('.add-another-btn')?.addEventListener('click', function() {
-                const timeSlotsEdit = this.previousElementSibling;
-                const newTimeInputGroup = document.createElement('div');
-                newTimeInputGroup.className = 'time-input-group';
-                newTimeInputGroup.innerHTML = `
-                    <input type="time" class="time-input" value="09:00">
-                    <span>às</span>
-                    <input type="time" class="time-input" value="12:00">
-                    <button class="remove-time-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                timeSlotsEdit.appendChild(newTimeInputGroup);
-                
-                // Add event listener to new remove button
-                newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
-                    this.parentElement.remove();
+            document.querySelectorAll('.add-another-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const timeSlotsEdit = this.previousElementSibling;
+                    const newTimeInputGroup = document.createElement('div');
+                    newTimeInputGroup.className = 'time-input-group';
+                    newTimeInputGroup.innerHTML = `
+                        <input type="time" class="time-input" value="09:00">
+                        <span>às</span>
+                        <input type="time" class="time-input" value="12:00">
+                        <button class="remove-time-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    timeSlotsEdit.appendChild(newTimeInputGroup);
+
+                    // Add event listener to new remove button
+                    newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                        this.parentElement.remove();
+                    });
                 });
             });
 
@@ -1796,32 +2099,6 @@
             document.querySelectorAll('.remove-time-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.parentElement.remove();
-                });
-            });
-
-            // Appointment actions
-            document.querySelectorAll('.confirm-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const appointmentItem = this.closest('.appointment-item');
-                    const statusBadge = appointmentItem.querySelector('.appointment-status');
-                    
-                    statusBadge.classList.remove('status-pending', 'status-canceled');
-                    statusBadge.classList.add('status-confirmed');
-                    statusBadge.textContent = 'Confirmado';
-                    
-                    // Remove confirm button after confirmation
-                    this.remove();
-                });
-            });
-
-            document.querySelectorAll('.cancel-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const appointmentItem = this.closest('.appointment-item');
-                    const statusBadge = appointmentItem.querySelector('.appointment-status');
-                    
-                    statusBadge.classList.remove('status-pending', 'status-confirmed');
-                    statusBadge.classList.add('status-canceled');
-                    statusBadge.textContent = 'Cancelado';
                 });
             });
         });

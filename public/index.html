@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>NaRégua - Agendamentos</title>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Agendamentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
          :root {
             --blue: #1a4b8c;
             --red: #c41e3a;
@@ -1578,442 +1575,386 @@
                 transform: scale(0.95);
             }
         }
-
+        
         .prev-month-day {
             opacity: 0.5;
             cursor: pointer !important;
         }
-
+        
         .prev-month-day:hover {
             opacity: 0.8;
             background-color: var(--hover-bg);
         }
-
+        
         .next-month-day {
             opacity: 0.5;
             cursor: pointer !important;
         }
-
+        
         .next-month-day:hover {
             opacity: 0.8;
             background-color: var(--hover-bg);
         }
     </style>
-    </head>
+</head>
 
-    <body>
-        <header>
-            <div class="container">
-                <nav class="navbar">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <img src="img/sua-logo.png" alt="Logo NaRégua"
-                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
-                        </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span
-                                class="highlight">.</span></div>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                     </div>
-                    <div class="nav-links">
-                        <a href="#" class="my-appointments">Meus
+                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="my-appointments">Meus
                             agendamentos</a>
-                        <button class="theme-toggle" id="themeToggle">
+                    <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
-                    </div>
-                </nav>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="welcome-section animate-fade-in">
+            <div class="profile-pic">
+                <i class="fas fa-user-alt" style="font-size: 32px; color: #aaa;"></i>
             </div>
-        </header>
+            <div class="welcome-text">Seja bem vindo(a) ao</div>
+            <h1 class="barbershop-name">Barbearia jhoninha do corte</h1>
 
-        <main class="container">
-            <section class="welcome-section animate-fade-in">
-                <div class="profile-pic">
-                    <i class="fas fa-user-alt"
-                        style="font-size: 32px; color: #aaa;"></i>
-                </div>
-                <div class="welcome-text">Seja bem vindo(a) ao</div>
-                <h1 class="barbershop-name">Barbearia jhoninha do corte</h1>
+            <!-- Ícones sociais adicionados -->
+            <div class="social-icons-welcome">
+                <a href="https://wa.me/5511999998888" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://instagram.com/barbeariajhoninha" target="_blank" class="social-icon-welcome" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
 
-                <!-- Ícones sociais adicionados -->
-                <div class="social-icons-welcome">
-                    <a href="https://wa.me/5511999998888" target="_blank"
-                        class="social-icon-welcome" aria-label="WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="https://instagram.com/barbeariajhoninha"
-                        target="_blank" class="social-icon-welcome"
-                        aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-
-                <!-- Componente de endereço adicionado -->
-                <div class="address-container">
-                    <button class="address-toggle" id="addressToggle">
+            <!-- Componente de endereço adicionado -->
+            <div class="address-container">
+                <button class="address-toggle" id="addressToggle">
                         <i class="fas fa-map-marker-alt"></i> Ver endereço
                     </button>
-                    <div class="address-content" id="addressContent">
-                        <p>Av. Principal, 123 - Centro</p>
-                        <p>São Paulo - SP</p>
-                        <a
-                            href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP"
-                            target="_blank" class="map-link">
-                            <i class="fas fa-external-link-alt"></i> Abrir no
-                            Google Maps
-                        </a>
-                    </div>
+                <div class="address-content" id="addressContent">
+                    <p>Av. Principal, 123 - Centro</p>
+                    <p>São Paulo - SP</p>
+                    <a href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP" target="_blank" class="map-link">
+                        <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                    </a>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="services-section animate-slide-up">
-                <h2 class="section-title"><i class="fas fa-cut"></i>
-                    Serviços</h2>
-                <div class="service-list">
-                    <div class="service-item">
-                        <img class="service-image"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1uXel9QPzoDEVy9rxwb3UNwbYvCvCf-uCmoPke0RQQpaBXX8_p0tzJ962C3cffNdz7QA&usqp=CAU"
-                            alt="Barba">
-                        <div class="service-info">
-                            <div class="service-name">Barba</div>
-                            <div class="service-details">
-                                <div class="service-time">
-                                    <i class="far fa-clock"></i> 15min
-                                </div>
-                                <div class="service-price">
-                                    <i class="fas fa-dollar-sign"></i> a partir
-                                    de R$ 20,00
-                                </div>
+        <section class="services-section animate-slide-up">
+            <h2 class="section-title"><i class="fas fa-cut"></i> Serviços
+            </h2>
+            <div class="service-list">
+                <div class="service-item">
+                    <img class="service-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1uXel9QPzoDEVy9rxwb3UNwbYvCvCf-uCmoPke0RQQpaBXX8_p0tzJ962C3cffNdz7QA&usqp=CAU" alt="Barba">
+                    <div class="service-info">
+                        <div class="service-name">Barba</div>
+                        <div class="service-details">
+                            <div class="service-time">
+                                <i class="far fa-clock"></i> 15min
+                            </div>
+                            <div class="service-price">
+                                <i class="fas fa-dollar-sign"></i> a partir de R$ 20,00
                             </div>
                         </div>
-                        <button class="book-button" data-service="Barba"
-                            data-price="20.00" data-time="15min">
+                    </div>
+                    <button class="book-button" data-service="Barba" data-price="20.00" data-time="15min">
                             <i class="far fa-calendar-alt"></i> Reservar
                         </button>
-                    </div>
-
-                    <div class="service-item">
-                        <img class="service-image" src="IMAGEM_MAQUINA.jpg"
-                            alt="Barba raspada na máquina">
-                        <div class="service-info">
-                            <div class="service-name">Barba raspada na
-                                máquina</div>
-                            <div class="service-details">
-                                <div class="service-time">
-                                    <i class="far fa-clock"></i> 05min
-                                </div>
-                                <div class="service-price">
-                                    <i class="fas fa-dollar-sign"></i> a partir
-                                    de R$ 10,00
-                                </div>
-                            </div>
-                        </div>
-                        <button class="book-button"
-                            data-service="Barba raspada na máquina"
-                            data-price="10.00" data-time="05min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                    </div>
-
-                    <div class="service-item">
-                        <img class="service-image" src="IMAGEM_BIGODINHO.jpg"
-                            alt="Bigodinho">
-                        <div class="service-info">
-                            <div class="service-name">Bigodinho</div>
-                            <div class="service-details">
-                                <div class="service-time">
-                                    <i class="far fa-clock"></i> 05min
-                                </div>
-                                <div class="service-price">
-                                    <i class="fas fa-dollar-sign"></i> a partir
-                                    de R$ 7,00
-                                </div>
-                            </div>
-                        </div>
-                        <button class="book-button" data-service="Bigodinho"
-                            data-price="7.00" data-time="05min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                    </div>
-
-                    <div class="service-item">
-                        <img class="service-image" src="IMAGEM_COLORIMETRIA.jpg"
-                            alt="Colorimetria + corte">
-                        <div class="service-info">
-                            <div class="service-name">Colorimetria + corte</div>
-                            <div class="service-details">
-                                <div class="service-time">
-                                    <i class="far fa-clock"></i> 1h:30min
-                                </div>
-                                <div class="service-price">
-                                    <i class="fas fa-dollar-sign"></i> a partir
-                                    de R$ 65,00
-                                </div>
-                            </div>
-                        </div>
-                        <button class="book-button"
-                            data-service="Colorimetria + corte"
-                            data-price="65.00" data-time="1h:30min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                    </div>
-
-                    <div class="service-item">
-                        <img class="service-image" src="IMAGEM_INFANTIL.jpg"
-                            alt="Corte infantil">
-                        <div class="service-info">
-                            <div class="service-name">Corte infantil</div>
-                            <div class="service-details">
-                                <div class="service-time">
-                                    <i class="far fa-clock"></i> 30min
-                                </div>
-                                <div class="service-price">
-                                    <i class="fas fa-dollar-sign"></i> a partir
-                                    de R$ 25,00
-                                </div>
-                            </div>
-                        </div>
-                        <button class="book-button"
-                            data-service="Corte infantil" data-price="25.00"
-                            data-time="30min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                    </div>
                 </div>
-            </section>
 
-            <section class="professionals-section animate-slide-up">
-                <h2 class="section-title"><i class="fas fa-user-tie"></i>
-                    Selecione o profissional</h2>
-                <div class="professional-list">
-                    <div class="professional-card selected"
-                        data-professional="Jhonata barber">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
+                <div class="service-item">
+                    <img class="service-image" src="IMAGEM_MAQUINA.jpg" alt="Barba raspada na máquina">
+                    <div class="service-info">
+                        <div class="service-name">Barba raspada na máquina
                         </div>
-                        <div class="professional-name">Jhonata barber</div>
-                    </div>
-
-                    <div class="professional-card"
-                        data-professional="Felipe silva">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
+                        <div class="service-details">
+                            <div class="service-time">
+                                <i class="far fa-clock"></i> 05min
+                            </div>
+                            <div class="service-price">
+                                <i class="fas fa-dollar-sign"></i> a partir de R$ 10,00
+                            </div>
                         </div>
-                        <div class="professional-name">Felipe silva</div>
                     </div>
-
-                    <div class="professional-card"
-                        data-professional="Maria oliveira">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Maria oliveira</div>
-                    </div>
-
-                    <div class="professional-card"
-                        data-professional="Carlos santos">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Carlos santos</div>
-                    </div>
+                    <button class="book-button" data-service="Barba raspada na máquina" data-price="10.00" data-time="05min">
+                            <i class="far fa-calendar-alt"></i> Reservar
+                        </button>
                 </div>
-            </section>
 
-            <section class="calendar-section animate-fade-in"
-                id="calendar-section">
-                <h2 class="section-title"><i class="far fa-calendar-alt"></i>
-                    Selecione o horário de início</h2>
-                <button class="calendar-toggle-btn"
-                    id="calendarToggleBtn">Visualização semanal</button>
-                <div class="calendar-month">
-                    <div class="month-name">Maio 2025</div>
-                    <div class="calendar-nav">
-                        <button class="prev-month"><i
+                <div class="service-item">
+                    <img class="service-image" src="IMAGEM_BIGODINHO.jpg" alt="Bigodinho">
+                    <div class="service-info">
+                        <div class="service-name">Bigodinho</div>
+                        <div class="service-details">
+                            <div class="service-time">
+                                <i class="far fa-clock"></i> 05min
+                            </div>
+                            <div class="service-price">
+                                <i class="fas fa-dollar-sign"></i> a partir de R$ 7,00
+                            </div>
+                        </div>
+                    </div>
+                    <button class="book-button" data-service="Bigodinho" data-price="7.00" data-time="05min">
+                            <i class="far fa-calendar-alt"></i> Reservar
+                        </button>
+                </div>
+
+                <div class="service-item">
+                    <img class="service-image" src="IMAGEM_COLORIMETRIA.jpg" alt="Colorimetria + corte">
+                    <div class="service-info">
+                        <div class="service-name">Colorimetria + corte</div>
+                        <div class="service-details">
+                            <div class="service-time">
+                                <i class="far fa-clock"></i> 1h:30min
+                            </div>
+                            <div class="service-price">
+                                <i class="fas fa-dollar-sign"></i> a partir de R$ 65,00
+                            </div>
+                        </div>
+                    </div>
+                    <button class="book-button" data-service="Colorimetria + corte" data-price="65.00" data-time="1h:30min">
+                            <i class="far fa-calendar-alt"></i> Reservar
+                        </button>
+                </div>
+
+                <div class="service-item">
+                    <img class="service-image" src="IMAGEM_INFANTIL.jpg" alt="Corte infantil">
+                    <div class="service-info">
+                        <div class="service-name">Corte infantil</div>
+                        <div class="service-details">
+                            <div class="service-time">
+                                <i class="far fa-clock"></i> 30min
+                            </div>
+                            <div class="service-price">
+                                <i class="fas fa-dollar-sign"></i> a partir de R$ 25,00
+                            </div>
+                        </div>
+                    </div>
+                    <button class="book-button" data-service="Corte infantil" data-price="25.00" data-time="30min">
+                            <i class="far fa-calendar-alt"></i> Reservar
+                        </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="professionals-section animate-slide-up">
+            <h2 class="section-title"><i class="fas fa-user-tie"></i> Selecione o profissional</h2>
+            <div class="professional-list">
+                <div class="professional-card selected" data-professional="Jhonata barber">
+                    <div class="professional-avatar">
+                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    </div>
+                    <div class="professional-name">Jhonata barber</div>
+                </div>
+
+                <div class="professional-card" data-professional="Felipe silva">
+                    <div class="professional-avatar">
+                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    </div>
+                    <div class="professional-name">Felipe silva</div>
+                </div>
+
+                <div class="professional-card" data-professional="Maria oliveira">
+                    <div class="professional-avatar">
+                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    </div>
+                    <div class="professional-name">Maria oliveira</div>
+                </div>
+
+                <div class="professional-card" data-professional="Carlos santos">
+                    <div class="professional-avatar">
+                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    </div>
+                    <div class="professional-name">Carlos santos</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calendar-section animate-fade-in" id="calendar-section">
+            <h2 class="section-title"><i class="far fa-calendar-alt"></i> Selecione o horário de início</h2>
+            <button class="calendar-toggle-btn" id="calendarToggleBtn">Visualização semanal</button>
+            <div class="calendar-month">
+                <div class="month-name">Maio 2025</div>
+                <div class="calendar-nav">
+                    <button class="prev-month"><i
                                 class="fas fa-chevron-left"></i></button>
-                        <button class="next-month"><i
+                    <button class="next-month"><i
                                 class="fas fa-chevron-right"></i></button>
-                    </div>
                 </div>
-                <div class="calendar-days">
-                    <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+            </div>
+            <div class="calendar-days">
+                <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+            </div>
+            <div class="time-slots">
+                <h3 class="time-slots-title">Horários disponíveis</h3>
+                <div class="slots-container">
+                    <div class="time-slot">09:10</div>
+                    <div class="time-slot">09:20</div>
+                    <div class="time-slot">09:30</div>
+                    <div class="time-slot">09:40</div>
+                    <div class="time-slot">09:50</div>
+                    <div class="time-slot">10:00</div>
+                    <div class="time-slot">10:10</div>
+                    <div class="time-slot">10:20</div>
+                    <div class="time-slot">10:30</div>
+                    <div class="time-slot">11:20</div>
+                    <div class="time-slot">11:30</div>
+                    <div class="time-slot">11:40</div>
+                    <div class="time-slot">16:00</div>
+                    <div class="time-slot">16:10</div>
+                    <div class="time-slot">16:20</div>
+                    <div class="time-slot">16:30</div>
+                    <div class="time-slot">16:40</div>
+                    <div class="time-slot">16:50</div>
+                    <div class="time-slot">17:00</div>
                 </div>
-                <div class="time-slots">
-                    <h3 class="time-slots-title">Horários disponíveis</h3>
-                    <div class="slots-container">
-                        <div class="time-slot">09:10</div>
-                        <div class="time-slot">09:20</div>
-                        <div class="time-slot">09:30</div>
-                        <div class="time-slot">09:40</div>
-                        <div class="time-slot">09:50</div>
-                        <div class="time-slot">10:00</div>
-                        <div class="time-slot">10:10</div>
-                        <div class="time-slot">10:20</div>
-                        <div class="time-slot">10:30</div>
-                        <div class="time-slot">11:20</div>
-                        <div class="time-slot">11:30</div>
-                        <div class="time-slot">11:40</div>
-                        <div class="time-slot">16:00</div>
-                        <div class="time-slot">16:10</div>
-                        <div class="time-slot">16:20</div>
-                        <div class="time-slot">16:30</div>
-                        <div class="time-slot">16:40</div>
-                        <div class="time-slot">16:50</div>
-                        <div class="time-slot">17:00</div>
-                    </div>
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="confirmation-section animate-fade-in"
-                id="confirmation-section">
-                <h2 class="section-title"><i class="fas fa-check-circle"></i>
-                    Confirmar agendamento</h2>
+        <section class="confirmation-section animate-fade-in" id="confirmation-section">
+            <h2 class="section-title"><i class="fas fa-check-circle"></i> Confirmar agendamento</h2>
 
-                <div class="confirmation-details">
-                    <div class="detail-row">
-                        <div class="detail-label">Serviço:</div>
-                        <div class="detail-value"
-                            id="confirm-service">Barba</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Profissional:</div>
-                        <div class="detail-value"
-                            id="confirm-professional">Jhonata barber</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Data:</div>
-                        <div class="detail-value"
-                            id="confirm-date">07/05/2025</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Horário:</div>
-                        <div class="detail-value" id="confirm-time">09:30</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Valor:</div>
-                        <div class="detail-value" id="confirm-price">R$
-                            20,00</div>
-                    </div>
+            <div class="confirmation-details">
+                <div class="detail-row">
+                    <div class="detail-label">Serviço:</div>
+                    <div class="detail-value" id="confirm-service">Barba</div>
                 </div>
 
-                <button class="confirm-button animate-pulse">Confirmar
+                <div class="detail-row">
+                    <div class="detail-label">Profissional:</div>
+                    <div class="detail-value" id="confirm-professional">Jhonata barber</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Data:</div>
+                    <div class="detail-value" id="confirm-date">07/05/2025</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Horário:</div>
+                    <div class="detail-value" id="confirm-time">09:30</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Valor:</div>
+                    <div class="detail-value" id="confirm-price">R$ 20,00
+                    </div>
+                </div>
+            </div>
+
+            <button class="confirm-button animate-pulse">Confirmar
                     Agendamento</button>
-            </section>
-        </main>
+        </section>
+    </main>
 
-        <!-- Modais -->
-        <div id="customModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close"
-                    id="customModalClose">&times;</span>
-                <div class="custom-modal-icon" id="customModalIcon"></div>
-                <div class="custom-modal-message" id="customModalMessage"></div>
-                <button class="custom-modal-btn" id="customModalBtn">OK</button>
-            </div>
+    <!-- Modais -->
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="customModalClose">&times;</span>
+            <div class="custom-modal-icon" id="customModalIcon"></div>
+            <div class="custom-modal-message" id="customModalMessage"></div>
+            <button class="custom-modal-btn" id="customModalBtn">OK</button>
         </div>
-        <!-- Modal de "Meus agendamentos" -->
-        <div id="appointmentsModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close"
-                    id="appointmentsModalClose">&times;</span>
-                <div class="custom-modal-icon">
-                    <i class="fas fa-user-check" style="color:var(--blue);"></i>
-                </div>
-                <div class="custom-modal-message" style="margin-bottom:18px;">
-                    <label for="appointmentsName"
-                        style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
-                    <input id="appointmentsName" type="text"
-                        class="custom-modal-input" placeholder="Digite seu nome"
-                        autocomplete="off" style="margin-bottom:16px;">
-                    <label for="appointmentsPhone"
-                        style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                    <input id="appointmentsPhone" type="tel"
-                        class="custom-modal-input" placeholder="(99) 99999-9999"
-                        autocomplete="off">
-                </div>
-                <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
+    </div>
+    <!-- Modal de "Meus agendamentos" -->
+    <div id="appointmentsModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="appointmentsModalClose">&times;</span>
+            <div class="custom-modal-icon">
+                <i class="fas fa-user-check" style="color:var(--blue);"></i>
+            </div>
+            <div class="custom-modal-message" style="margin-bottom:18px;">
+                <label for="appointmentsName" style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
+                <input id="appointmentsName" type="text" class="custom-modal-input" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:16px;">
+                <label for="appointmentsPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                <input id="appointmentsPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+            </div>
+            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
                     meus agendamentos</button>
-            </div>
         </div>
-        <!-- Modal de Login para Confirmação -->
-        <div id="phoneModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close" id="phoneModalClose">&times;</span>
-                <div class="custom-modal-icon">
-                    <i class="fas fa-phone" style="color:var(--blue);"></i>
-                </div>
-                <p style="text-align: center; margin: 15px 0; color: var(--text-color); font-size: 16px;">
-                    Digite o número de telefone para continuar
-                </p>
-                <div class="custom-modal-message" style="margin-bottom:18px;">
-                    <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                    <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
-                </div>
-                <button class="custom-modal-btn" id="phoneModalBtn">Continuar</button>
+    </div>
+    <!-- Modal de Login para Confirmação -->
+    <div id="phoneModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="phoneModalClose">&times;</span>
+            <div class="custom-modal-icon">
+                <i class="fas fa-phone" style="color:var(--blue);"></i>
             </div>
+            <p style="text-align: center; margin: 15px 0; color: var(--text-color); font-size: 16px;">
+                Digite o número de telefone para continuar
+            </p>
+            <div class="custom-modal-message" style="margin-bottom:18px;">
+                <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+            </div>
+            <button class="custom-modal-btn" id="phoneModalBtn">Continuar</button>
         </div>
+    </div>
 
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-brand">
-                        <div class="logo">
-                            <div class="logo-icon">
-                                <img src="img/sua-logo.png" alt="Logo NaRégua"
-                                    style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
-                            </div>
-                            <div class="logo-text">NA<span>RÉGUA</span><span
-                                    class="highlight">.</span></div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                         </div>
-                        <div class="social-links">
-                            <a href="#" aria-label="Instagram"><i
+                        <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><i
                                     class="fab fa-instagram"></i></a>
-                            <a href="#" aria-label="WhatsApp"><i
+                        <a href="#" aria-label="WhatsApp"><i
                                     class="fab fa-whatsapp"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="footer-contact">
-                        <h3 class="footer-title">Contato</h3>
-                        <ul class="footer-links">
-                            <li><i class="fas fa-phone"></i> (31)
-                                98507-9718</li>
-                            <li><i class="fas fa-envelope"></i>
-                                pablo.silva.edu@gmail.com</li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-barber">
-                        <h3 class="footer-title">Barbeiro</h3>
-                        <ul class="footer-links">
-                            <li>
-                                <i class="fas fa-user-shield"></i> Gerencie
-                                agendamentos, profissionais e horários.
-                            </li>
-                        </ul>
-                        <a href="/dashboard/dashboard.html" class="footer-admin-link-modern">
-                            <span>Área do barbeiro</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
                     </div>
                 </div>
 
-                <div class="footer-bottom">
-                    <div class="copyright">
-                        &copy; 2025 NaRégua. Todos os direitos reservados.
-                    </div>
+                <div class="footer-contact">
+                    <h3 class="footer-title">Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> (31) 98507-9718
+                        </li>
+                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-barber">
+                    <h3 class="footer-title">Barbeiro</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
+                        </li>
+                    </ul>
+                    <a href="/dashboard/dashboard.html" class="footer-admin-link-modern">
+                        <span>Área do barbeiro</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-        </footer>
 
-        <script>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Variáveis para armazenar as seleções
             let selectedService = '';
@@ -2302,32 +2243,38 @@
                         if (this.classList.contains('prev-month-day')) {
                             currentDate.setMonth(currentDate.getMonth() - 1);
                             renderCalendar(currentDate);
-                            
+
                             setTimeout(() => {
                                 const dayToSelect = this.textContent.trim();
                                 const newDays = document.querySelectorAll('.day:not(.disabled)');
                                 newDays.forEach(newDay => {
                                     if (newDay.textContent.trim() === dayToSelect) {
                                         newDay.click();
-                                        newDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        newDay.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
                                     }
                                 });
                             }, 100);
                             return;
                         }
-                        
+
                         // Se for um dia do próximo mês
                         if (this.classList.contains('next-month-day')) {
                             currentDate.setMonth(currentDate.getMonth() + 1);
                             renderCalendar(currentDate);
-                            
+
                             setTimeout(() => {
                                 const dayToSelect = this.textContent.trim();
                                 const newDays = document.querySelectorAll('.day:not(.disabled)');
                                 newDays.forEach(newDay => {
                                     if (newDay.textContent.trim() === dayToSelect) {
                                         newDay.click();
-                                        newDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        newDay.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
                                     }
                                 });
                             }, 100);
@@ -2615,6 +2562,6 @@
             modal.classList.add('active');
         }
     </script>
-    </body>
+</body>
 
 </html>
