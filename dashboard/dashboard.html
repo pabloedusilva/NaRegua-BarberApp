@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NaRégua - Dashboard do Barbeiro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>NaRégua - Dashboard do Barbeiro</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <style>
          :root {
             --blue: #1a4b8c;
             --red: #c41e3a;
@@ -100,6 +103,15 @@
             width: 40px;
             height: 40px;
         }
+        .logo-icon img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    background: none;
+    display: block;
+
+}
         
         .logo-text {
             font-size: 24px;
@@ -149,12 +161,12 @@
         .theme-toggle {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 17px;
             cursor: pointer;
             color: var(--text-color);
             transition: transform 0.3s;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1382,541 +1394,322 @@
                 top: 16px;
             }
         }
+        .push-notification-form {
+    background: var(--light-gray);
+    border-radius: 10px;
+    padding: 24px 18px 18px 18px;
+    box-shadow: 0 2px 8px rgba(26,75,140,0.04);
+    margin-top: 18px;
+    max-width: 540px;
+}
+.push-notification-form .form-group {
+    margin-bottom: 18px;
+}
+.push-notification-form .form-label {
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 7px;
+    display: block;
+}
+.push-notification-form .form-control {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 1.08rem;
+    color: var(--text-color);
+    transition: border 0.2s;
+}
+.push-notification-form .form-control:focus {
+    border-color: var(--blue);
+}
+.push-recipients {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+.push-recipients label {
+    font-size: 1rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+.char-count {
+    font-size: 0.93rem;
+    color: var(--gray);
+    margin-top: 4px;
+    text-align: right;
+}
+#pushNotificationStatus {
+    font-weight: 600;
+    margin-left: 10px;
+}
+.push-history-item {
+    background: var(--light-gray);
+    border-radius: 8px;
+    padding: 13px 14px 10px 14px;
+    margin-bottom: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    font-size: 1rem;
+    color: var(--text-color);
+    position: relative;
+}
+.push-history-item .push-history-title {
+    font-weight: 600;
+    color: var (--blue);
+    margin-bottom: 2px;
+}
+.push-history-item .push-history-message {
+    margin-bottom: 4px;
+}
+.push-history-item .push-history-meta {
+    font-size: 0.93rem;
+    color: var(--gray);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.push-history-item .push-history-link {
+    color: var(--blue);
+    text-decoration: underline;
+    font-size: 0.97rem;
+    margin-left: 6px;
+}
+.push-history-item .push-history-date {
+    font-size: 0.92rem;
+    color: var(--gray);
+    margin-left: auto;
+}
+@media (max-width: 600px) {
+    .push-notification-form {
+        padding: 12px 4px 10px 4px;
+        max-width: 100%;
+    }
+}
     </style>
-</head>
+    </head>
 
-<body>
-    <div id="globalCopySuccessMsg" class="global-copy-success" style="display:none;">
-        <i class="fas fa-check-circle"></i> Link copiado!
-    </div>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
-                    </div>
-                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
-                </div>
-                <div class="nav-links">
-                    <button class="theme-toggle" id="logoutBtn" title="Sair">
-    <i class="fas fa-sign-out-alt"></i>
-</button>
-                    <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
-    <i class="fas fa-key"></i>
-</button>
-                    <button class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </nav>
+    <body>
+        <div id="globalCopySuccessMsg" class="global-copy-success"
+            style="display:none;">
+            <i class="fas fa-check-circle"></i> Link copiado!
         </div>
-    </header>
-
-    <main class="container">
-        <section class="dashboard-section animate-fade-in">
-            <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Painel</h2>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-value" id="today-appointments">5</div>
-                    <div class="stat-label">Agendamentos de hoje</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="total-appointments">24</div>
-                    <div class="stat-label">Agendamentos do mês</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="total-appointments">48</div>
-                    <div class="stat-label">Agendamentos totais</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos</h2>
-                <button class="edit-btn" id="viewAllAppointments">
-                    <i class="fas fa-list"></i> Ver todos
-                </button>
-            </div>
-
-            <div class="appointments-list">
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">João Silva</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 09:30</span>
-                            <span><i class="fas fa-cut"></i> Corte + Barba</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
+        <header>
+            <div class="container">
+                <nav class="navbar">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img
+                                src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg"
+                                alt="Logo NaRégua"
+                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                         </div>
+                        <div class="logo-text">NA<span>RÉGUA</span><span
+                                class="highlight">.</span></div>
                     </div>
-                </div>
-
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">Maria Oliveira</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 10:30</span>
-                            <span><i class="fas fa-cut"></i> Corte feminino</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">Carlos Souza</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 11:30</span>
-                            <span><i class="fas fa-cut"></i> Barba</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
-                <button class="edit-btn" id="editServicesBtn">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-            </div>
-
-            <div class="services-container">
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Barba</div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 15min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$ 20,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte de Cabelo</div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 30min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$ 35,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte + Barba</div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 45min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$ 50,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Bigodinho</div>
-                        <label class="toggle-switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 5min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$ 7,00</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-share-alt"></i> Compartilhar Link de Agendamento</h2>
-            </div>
-            <div class="share-link-container-modern">
-                <div class="share-link-info">
-                    <div class="share-link-label">
-                        <i class="fas fa-link"></i> Link para agendamento online
-                    </div>
-                    <div class="share-link-field">
-                        <input type="text" id="bookingLink" class="share-link-input-modern" readonly value="https://seusite.com/agendar" />
-                        <button class="btn-copy-modern" id="copyBookingLinkBtn" title="Copiar link">
-                            <i class="fas fa-copy"></i>
+                    <div class="nav-links">
+                        <button class="theme-toggle" id="logoutBtn"
+                            title="Sair">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button class="theme-toggle" id="changePasswordBtn"
+                            title="Alterar senha">
+                            <i class="fas fa-key"></i>
+                        </button>
+                        <button class="theme-toggle" id="themeToggle">
+                            <i class="fas fa-moon"></i>
                         </button>
                     </div>
-                </div>
-                <span class="copy-success-modern" id="copySuccessMsg" style="display:none;">
-                    <i class="fas fa-check-circle"></i> Link copiado!
-                </span>
+                </nav>
             </div>
-        </section>
+        </header>
 
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
-                <button class="edit-btn" id="editWorkingHoursBtn">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-            </div>
+        <main class="container">
+            <section class="dashboard-section animate-fade-in">
+                <h2 class="section-title"><i class="fas fa-tachometer-alt"></i>
+                    Painel</h2>
 
-            <div class="working-hours">
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Segunda-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="today-appointments">5</div>
+                        <div class="stat-label">Agendamentos de hoje</div>
                     </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-appointments">24</div>
+                        <div class="stat-label">Agendamentos do mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-appointments">48</div>
+                        <div class="stat-label">Agendamentos totais</div>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Terça-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
+            </section>
+
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i
+                            class="fas fa-calendar-alt"></i> Próximos
+                        Agendamentos</h2>
+                    <button class="edit-btn" id="viewAllAppointments">
+                        <i class="fas fa-list"></i> Ver todos
+                    </button>
+                </div>
+
+                <div class="appointments-list">
+                    <div class="appointment-item">
+                        <div class="appointment-info">
+                            <div class="appointment-client">João Silva</div>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> 09:30</span>
+                                <span><i class="fas fa-cut"></i> Corte +
+                                    Barba</span>
+                                <span
+                                    class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
-                    </div>
-                </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quarta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
+
+                    <div class="appointment-item">
+                        <div class="appointment-info">
+                            <div class="appointment-client">Maria Oliveira</div>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> 10:30</span>
+                                <span><i class="fas fa-cut"></i> Corte
+                                    feminino</span>
+                                <span
+                                    class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
-                    </div>
-                </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quinta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
+
+                    <div class="appointment-item">
+                        <div class="appointment-info">
+                            <div class="appointment-client">Carlos Souza</div>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> 11:30</span>
+                                <span><i class="fas fa-cut"></i> Barba</span>
+                                <span
+                                    class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
-                    </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sexta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
-                    </div>
+            </section>
+
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i class="fas fa-cut"></i>
+                        Serviços Oferecidos</h2>
+                    <button class="edit-btn" id="editServicesBtn">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sábado</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="time-slots">
-                        <span class="time-slot">09:00 - 13:00</span>
-                    </div>
-                </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Domingo</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
+
+                <div class="services-container">
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div class="service-card-name">Barba</div>
                             <label class="toggle-switch">
                                 <input type="checkbox" checked>
                                 <span class="slider"></span>
                             </label>
                         </div>
-                    </div>
-                    <div class="time-slots">
-                        <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga</h2>
-                <button class="edit-btn" id="addDayOffBtn">
-                    <i class="fas fa-plus"></i> Adicionar
-                </button>
-            </div>
-            <div class="special-days-off-list" id="specialDaysOffList">
-                <!-- Dias de folga adicionados aparecerão aqui -->
-                <div class="special-day-off-empty" id="specialDayOffEmpty">
-                    Nenhum dia de folga especial cadastrado.
-                </div>
-            </div>
-        </section>
-
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
-                <button class="edit-btn" id="editBarbershopInfoBtn">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-            </div>
-
-            <div class="barbershop-info">
-                <div class="info-item">
-                    <strong>Nome:</strong> Barbearia Jhoninha do Corte
-                </div>
-                <div class="info-item">
-                    <strong>Endereço:</strong> Av. Principal, 123 - Centro, São Paulo - SP
-                </div>
-                <div class="info-item">
-                    <strong>WhatsApp:</strong> (11) 99999-8888
-                </div>
-                <div class="info-item">
-                    <strong>Instagram:</strong> @barbeariajhoninha
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Modals -->
-    <!-- Modal de Edição de Serviços -->
-    <div id="editServicesModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Serviços</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="tab-container">
-                    <div class="tabs">
-                        <div class="tab active" data-tab="existing">Serviços Existentes</div>
-                        <div class="tab" data-tab="new">Adicionar Novo</div>
-                    </div>
-
-                    <div class="tab-content active" id="existing-tab">
-                        <div class="form-group">
-                            <label class="form-label">Selecione os serviços que deseja oferecer:</label>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span class="service-name">Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="15">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="20.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span class="service-name">Corte de Cabelo</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="30">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="35.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span class="service-name">Corte + Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="45">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="50.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span class="service-name">Bigodinho</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="5">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="7.00">
-                                </div>
-                            </div>
+                        <div class="service-card-details">
+                            <span><i class="far fa-clock"></i> 15min</span>
+                            <span><i class="fas fa-dollar-sign"></i> R$
+                                20,00</span>
                         </div>
                     </div>
 
-                    <div class="tab-content" id="new-tab">
-                        <div class="form-group">
-                            <label class="form-label">Nome do Serviço</label>
-                            <input type="text" class="form-control" placeholder="Ex: Colorimetria">
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div class="service-card-name">Corte de Cabelo</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Tempo Estimado (minutos)</label>
-                            <input type="number" class="form-control" placeholder="Ex: 30">
+                        <div class="service-card-details">
+                            <span><i class="far fa-clock"></i> 30min</span>
+                            <span><i class="fas fa-dollar-sign"></i> R$
+                                35,00</span>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Preço (R$)</label>
-                            <input type="text" class="form-control" placeholder="Ex: 45.00">
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div class="service-card-name">Corte + Barba</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Escolha uma imagem para o serviço</label>
-                            <div class="service-gallery">
-                                <div class="gallery-option selected" data-img="none" title="Nenhuma imagem">
-                                    <div class="gallery-none-img">
-                                        <i class="fas fa-ban"></i>
-                                    </div>
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/corte-masculino.jpg">
-                                    <img src="img/servicos/corte-masculino.jpg" alt="Corte Masculino">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/barba.jpg">
-                                    <img src="img/servicos/barba.jpg" alt="Barba">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/colorimetria.jpg">
-                                    <img src="img/servicos/colorimetria.jpg" alt="Colorimetria">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/sobrancelha.jpg">
-                                    <img src="img/servicos/sobrancelha.jpg" alt="Sobrancelha">
-                                </div>
-                                <!-- Adicione mais imagens conforme desejar -->
-                            </div>
+                        <div class="service-card-details">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="fas fa-dollar-sign"></i> R$
+                                50,00</span>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div class="service-card-name">Bigodinho</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="service-card-details">
+                            <span><i class="far fa-clock"></i> 5min</span>
+                            <span><i class="fas fa-dollar-sign"></i> R$
+                                7,00</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Alterações</button>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- Modal para adicionar dia de folga especial -->
-    <div id="addDayOffModal" class="modal">
-        <div class="modal-content" style="max-width: 370px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-calendar-plus"></i> Adicionar Dia de Folga</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label" for="dayOffDate">Selecione o dia:</label>
-                    <input type="date" class="form-control" id="dayOffDate" min="">
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i class="fas fa-share-alt"></i>
+                        Compartilhar Link de Agendamento</h2>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="dayOffReason">Motivo (opcional):</label>
-                    <input type="text" class="form-control" id="dayOffReason" placeholder="Ex: Feriado, evento, etc.">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary" id="saveDayOffBtn">Adicionar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Adicionar Profissional -->
-    <div id="addProfessionalModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Adicionar Profissional</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="avatar-upload">
-                    <div class="avatar-preview">
-                        <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
+                <div class="share-link-container-modern">
+                    <div class="share-link-info">
+                        <div class="share-link-label">
+                            <i class="fas fa-link"></i> Link para agendamento
+                            online
+                        </div>
+                        <div class="share-link-field">
+                            <input type="text" id="bookingLink"
+                                class="share-link-input-modern" readonly
+                                value="https://seusite.com/agendar" />
+                            <button class="btn-copy-modern"
+                                id="copyBookingLinkBtn" title="Copiar link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
                     </div>
-                    <button class="avatar-upload-btn">
-                        <i class="fas fa-camera"></i> Adicionar Foto
+                    <span class="copy-success-modern" id="copySuccessMsg"
+                        style="display:none;">
+                        <i class="fas fa-check-circle"></i> Link copiado!
+                    </span>
+                </div>
+            </section>
+
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i class="fas fa-clock"></i>
+                        Horários de Atendimento</h2>
+                    <button class="edit-btn" id="editWorkingHoursBtn">
+                        <i class="fas fa-edit"></i> Editar
                     </button>
-                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Nome do Profissional</label>
-                    <input type="text" class="form-control" placeholder="Ex: João Silva">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Adicionar Profissional</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Edição de Horários -->
-    <div id="editWorkingHoursModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Horários de Atendimento</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Container para todos os dias da semana -->
-                <div class="working-hours-edit">
-                    <!-- Segunda-feira -->
-                    <div class="day-schedule-edit">
+                <div class="working-hours">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Segunda-feira</div>
                             <div class="day-off-toggle">
@@ -1927,30 +1720,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 12:00</span>
+                            <span class="time-slot">14:00 - 18:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Terça-feira -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Terça-feira</div>
                             <div class="day-off-toggle">
@@ -1961,30 +1736,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 12:00</span>
+                            <span class="time-slot">14:00 - 18:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Quarta-feira -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Quarta-feira</div>
                             <div class="day-off-toggle">
@@ -1995,30 +1752,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 12:00</span>
+                            <span class="time-slot">14:00 - 18:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Quinta-feira -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Quinta-feira</div>
                             <div class="day-off-toggle">
@@ -2029,30 +1768,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 12:00</span>
+                            <span class="time-slot">14:00 - 18:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Sexta-feira -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Sexta-feira</div>
                             <div class="day-off-toggle">
@@ -2063,30 +1784,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 12:00</span>
+                            <span class="time-slot">14:00 - 18:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Sábado -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Sábado</div>
                             <div class="day-off-toggle">
@@ -2097,22 +1800,11 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="13:00">
-                                <button class="remove-time-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                        <div class="time-slots">
+                            <span class="time-slot">09:00 - 13:00</span>
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
-                    <!-- Domingo -->
-                    <div class="day-schedule-edit">
+                    <div class="day-schedule">
                         <div class="day-header">
                             <div class="day-title">Domingo</div>
                             <div class="day-off-toggle">
@@ -2123,184 +1815,809 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="time-slots-edit">
+                        <div class="time-slots">
                             <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
                         </div>
-                        <button class="add-another-btn">
-                            <i class="fas fa-plus"></i> Adicionar outro horário
-                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Horários</button>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- Modal de Edição de Informações da Barbearia -->
-    <div id="editBarbershopInfoModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Informações da Barbearia</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Avatar upload para foto do estabelecimento -->
-                <div class="avatar-upload" id="barbershop-photo-upload">
-                    <div class="avatar-preview" id="barbershop-photo-preview">
-                        <i class="fas fa-store" style="font-size: 40px; color: #aaa;"></i>
-                    </div>
-                    <button type="button" class="avatar-upload-btn" id="barbershop-photo-btn">
-                        <i class="fas fa-camera"></i> Adicionar Foto
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i
+                            class="fas fa-calendar-times"></i> Dias Especiais de
+                        Folga</h2>
+                    <button class="edit-btn" id="addDayOffBtn">
+                        <i class="fas fa-plus"></i> Adicionar
                     </button>
-                    <input type="file" id="barbershopPhotoInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="special-days-off-list" id="specialDaysOffList">
+                    <!-- Dias de folga adicionados aparecerão aqui -->
+                    <div class="special-day-off-empty" id="specialDayOffEmpty">
+                        Nenhum dia de folga especial cadastrado.
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-section animate-slide-up">
+                <div class="card-header">
+                    <h2 class="section-title"><i class="fas fa-store"></i>
+                        Informações da Barbearia</h2>
+                    <button class="edit-btn" id="editBarbershopInfoBtn">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Nome da Barbearia</label>
-                    <input type="text" class="form-control" value="Barbearia Jhoninha do Corte">
+                <div class="barbershop-info">
+                    <div class="info-item">
+                        <strong>Nome:</strong> Barbearia Jhoninha do Corte
+                    </div>
+                    <div class="info-item">
+                        <strong>Endereço:</strong> Av. Principal, 123 - Centro,
+                        São Paulo - SP
+                    </div>
+                    <div class="info-item">
+                        <strong>WhatsApp:</strong> (11) 99999-8888
+                    </div>
+                    <div class="info-item">
+                        <strong>Instagram:</strong> @barbeariajhoninha
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">Endereço</label>
-                    <input type="text" class="form-control" value="Av. Principal, 123 - Centro">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Cidade/Estado</label>
-                    <input type="text" class="form-control" value="São Paulo - SP">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Número do WhatsApp</label>
-                    <input type="text" class="form-control" value="(11) 99999-8888">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Perfil do Instagram</label>
-                    <input type="text" class="form-control" value="@barbeariajhoninha">
-                </div>
+            </section>
+            <section class="dashboard-section animate-slide-up">
+    <div class="card-header">
+        <h2 class="section-title">
+            <i class="fas fa-bell"></i> Enviar Notificação Push
+        </h2>
+        <button class="edit-btn" id="viewPushHistoryBtn">
+            <i class="fas fa-history"></i> Histórico
+        </button>
+    </div>
+    <form id="pushNotificationForm" class="push-notification-form" autocomplete="off">
+        <div class="form-group">
+            <label class="form-label" for="pushTitle">
+                Título da Notificação <span style="color:var(--red);">*</span>
+            </label>
+            <input type="text" class="form-control" id="pushTitle" maxlength="60" required placeholder="Ex: Promoção especial de hoje!">
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="pushMessage">
+                Mensagem <span style="color:var(--red);">*</span>
+            </label>
+            <textarea class="form-control" id="pushMessage" maxlength="180" required rows="3" placeholder="Digite a mensagem da notificação"></textarea>
+            <div class="char-count" id="pushMessageCount">0/180</div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Destinatários</label>
+            <div class="push-recipients">
+                <label><input type="checkbox" id="recipientAll" checked> Todos os clientes</label>
+                <label><input type="checkbox" id="recipientToday"> Clientes com agendamento hoje</label>
+                <label><input type="checkbox" id="recipientWeek"> Clientes com agendamento nesta semana</label>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Alterações</button>
-            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="pushUrl">
+                Link de Ação (opcional)
+            </label>
+            <input type="url" class="form-control" id="pushUrl" placeholder="https://...">
+        </div>
+        <div class="modal-footer" style="justify-content: flex-start; gap: 14px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Enviar Notificação
+            </button>
+            <span id="pushNotificationStatus" style="display:none;font-size:1rem;"></span>
+        </div>
+    </form>
+</section>
+
+<!-- Modal de Histórico de Notificações Push -->
+<div id="pushHistoryModal" class="modal">
+    <div class="modal-content" style="max-width: 480px;">
+        <div class="modal-header">
+            <h3 class="modal-title"><i class="fas fa-history"></i> Histórico de Notificações</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body" id="pushHistoryList" style="max-height: 340px; overflow-y: auto;">
+            <!-- Histórico será preenchido via JS -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary close-modal">Fechar</button>
         </div>
     </div>
+</div>
 
-    <!-- Modal de Todos os Agendamentos -->
-    <div id="allAppointmentsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Todos os Agendamentos</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="tab-container">
-                    <div class="tabs">
-                        <div class="tab active" data-tab="today">Hoje</div>
-                        <div class="tab" data-tab="week">Esta Semana</div>
-                        <div class="tab" data-tab="month">Este Mês</div>
-                    </div>
+        </main>
 
-                    <div class="tab-content active" id="today-tab">
-                        <div class="appointments-list">
-                            <!-- Agendamentos de hoje seriam listados aqui -->
+        <!-- Modals -->
+        <!-- Modal de Edição de Serviços -->
+        <div id="editServicesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Editar Serviços</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="existing">Serviços
+                                Existentes</div>
+                            <div class="tab" data-tab="new">Adicionar Novo</div>
                         </div>
-                    </div>
 
-                    <div class="tab-content" id="week-tab">
-                        <div class="appointments-list">
-                            <!-- Agendamentos da semana seriam listados aqui -->
+                        <div class="tab-content active" id="existing-tab">
+                            <div class="form-group">
+                                <label class="form-label">Selecione os serviços
+                                    que deseja oferecer:</label>
+
+                                <div class="service-option">
+                                    <div class="service-option-header">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="service-name">Barba</span>
+                                    </div>
+                                    <div class="time-price-inputs">
+                                        <input type="text" class="form-control"
+                                            placeholder="Tempo (min)"
+                                            value="15">
+                                        <input type="text" class="form-control"
+                                            placeholder="Preço (R$)"
+                                            value="20.00">
+                                    </div>
+                                </div>
+
+                                <div class="service-option">
+                                    <div class="service-option-header">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="service-name">Corte de
+                                            Cabelo</span>
+                                    </div>
+                                    <div class="time-price-inputs">
+                                        <input type="text" class="form-control"
+                                            placeholder="Tempo (min)"
+                                            value="30">
+                                        <input type="text" class="form-control"
+                                            placeholder="Preço (R$)"
+                                            value="35.00">
+                                    </div>
+                                </div>
+
+                                <div class="service-option">
+                                    <div class="service-option-header">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="service-name">Corte +
+                                            Barba</span>
+                                    </div>
+                                    <div class="time-price-inputs">
+                                        <input type="text" class="form-control"
+                                            placeholder="Tempo (min)"
+                                            value="45">
+                                        <input type="text" class="form-control"
+                                            placeholder="Preço (R$)"
+                                            value="50.00">
+                                    </div>
+                                </div>
+
+                                <div class="service-option">
+                                    <div class="service-option-header">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span
+                                            class="service-name">Bigodinho</span>
+                                    </div>
+                                    <div class="time-price-inputs">
+                                        <input type="text" class="form-control"
+                                            placeholder="Tempo (min)" value="5">
+                                        <input type="text" class="form-control"
+                                            placeholder="Preço (R$)"
+                                            value="7.00">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="tab-content" id="month-tab">
-                        <div class="appointments-list">
-                            <!-- Agendamentos do mês seriam listados aqui -->
+                        <div class="tab-content" id="new-tab">
+                            <div class="form-group">
+                                <label class="form-label">Nome do
+                                    Serviço</label>
+                                <input type="text" class="form-control"
+                                    placeholder="Ex: Colorimetria">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tempo Estimado
+                                    (minutos)</label>
+                                <input type="number" class="form-control"
+                                    placeholder="Ex: 30">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Preço (R$)</label>
+                                <input type="text" class="form-control"
+                                    placeholder="Ex: 45.00">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Escolha uma imagem
+                                    para o serviço</label>
+                                <div class="service-gallery">
+                                    <div class="gallery-option selected"
+                                        data-img="none" title="Nenhuma imagem">
+                                        <div class="gallery-none-img">
+                                            <i class="fas fa-ban"></i>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-option"
+                                        data-img="img/servicos/corte-masculino.jpg">
+                                        <img
+                                            src="img/servicos/corte-masculino.jpg"
+                                            alt="Corte Masculino">
+                                    </div>
+                                    <div class="gallery-option"
+                                        data-img="img/servicos/barba.jpg">
+                                        <img src="img/servicos/barba.jpg"
+                                            alt="Barba">
+                                    </div>
+                                    <div class="gallery-option"
+                                        data-img="img/servicos/colorimetria.jpg">
+                                        <img src="img/servicos/colorimetria.jpg"
+                                            alt="Colorimetria">
+                                    </div>
+                                    <div class="gallery-option"
+                                        data-img="img/servicos/sobrancelha.jpg">
+                                        <img src="img/servicos/sobrancelha.jpg"
+                                            alt="Sobrancelha">
+                                    </div>
+                                    <!-- Adicione mais imagens conforme desejar -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Fechar</button>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Cancelar</button>
+                    <button class="btn btn-primary">Salvar Alterações</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal de Alterar Senha -->
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha</h3>
-                <button class="close-modal" aria-label="Fechar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" autocomplete="off">
+        <!-- Modal para adicionar dia de folga especial -->
+        <div id="addDayOffModal" class="modal">
+            <div class="modal-content" style="max-width: 370px;">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-calendar-plus"></i>
+                        Adicionar Dia de Folga</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label" for="currentPassword">Senha atual</label>
-                        <input type="password" class="form-control" id="currentPassword" required placeholder="Digite sua senha atual">
+                        <label class="form-label" for="dayOffDate">Selecione o
+                            dia:</label>
+                        <input type="date" class="form-control" id="dayOffDate"
+                            min>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="newPassword">Nova senha</label>
-                        <input type="password" class="form-control" id="newPassword" required minlength="6" placeholder="Nova senha (mín. 6 caracteres)">
+                        <label class="form-label" for="dayOffReason">Motivo
+                            (opcional):</label>
+                        <input type="text" class="form-control"
+                            id="dayOffReason"
+                            placeholder="Ex: Feriado, evento, etc.">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="confirmPassword">Confirmar nova senha</label>
-                        <input type="password" class="form-control" id="confirmPassword" required minlength="6" placeholder="Confirme a nova senha">
-                    </div>
-                </form>
-                <div id="changePasswordError" style="color:var(--red);margin-top:8px;display:none;font-size:0.98rem;"></div>
-                <div id="changePasswordSuccess" style="color:var(--green);margin-top:8px;display:none;font-size:0.98rem;"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
-                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Cancelar</button>
+                    <button class="btn btn-primary"
+                        id="saveDayOffBtn">Adicionar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+        <!-- Modal de Adicionar Profissional -->
+        <div id="addProfessionalModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Adicionar Profissional</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="avatar-upload">
+                        <div class="avatar-preview">
+                            <i class="fas fa-user"
+                                style="font-size: 40px; color: #aaa;"></i>
                         </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                        <button class="avatar-upload-btn">
+                            <i class="fas fa-camera"></i> Adicionar Foto
+                        </button>
+                        <input type="file" id="avatarInput" accept="image/*"
+                            style="display: none;">
                     </div>
-                    <div class="social-links">
-                        <a href="#" aria-label="Instagram"><i
-                                class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="WhatsApp"><i
-                                class="fab fa-whatsapp"></i></a>
+
+                    <div class="form-group">
+                        <label class="form-label">Nome do Profissional</label>
+                        <input type="text" class="form-control"
+                            placeholder="Ex: João Silva">
                     </div>
                 </div>
-
-                <div class="footer-contact">
-                    <h3 class="footer-title">Contato</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-phone"></i> (31) 98507-9718
-                        </li>
-                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div class="copyright">
-                    &copy; 2025 NaRégua. Todos os direitos reservados.
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Cancelar</button>
+                    <button class="btn btn-primary">Adicionar
+                        Profissional</button>
                 </div>
             </div>
         </div>
-    </footer>
 
-    <script>
+        <!-- Modal de Edição de Horários -->
+        <div id="editWorkingHoursModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Editar Horários de Atendimento</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Container para todos os dias da semana -->
+                    <div class="working-hours-edit">
+                        <!-- Segunda-feira -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Segunda-feira</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="12:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="14:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="18:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Terça-feira -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Terça-feira</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="12:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="14:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="18:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Quarta-feira -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Quarta-feira</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="12:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="14:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="18:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Quinta-feira -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Quinta-feira</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="12:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="14:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="18:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Sexta-feira -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Sexta-feira</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="12:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="14:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="18:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Sábado -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Sábado</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <div class="time-input-group">
+                                    <input type="time" class="time-input"
+                                        value="09:00">
+                                    <span>às</span>
+                                    <input type="time" class="time-input"
+                                        value="13:00">
+                                    <button class="remove-time-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                        <!-- Domingo -->
+                        <div class="day-schedule-edit">
+                            <div class="day-header">
+                                <div class="day-title">Domingo</div>
+                                <div class="day-off-toggle">
+                                    <span class="day-off-label">Dia de
+                                        folga:</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-slots-edit">
+                                <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
+                            </div>
+                            <button class="add-another-btn">
+                                <i class="fas fa-plus"></i> Adicionar outro
+                                horário
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Cancelar</button>
+                    <button class="btn btn-primary">Salvar Horários</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Edição de Informações da Barbearia -->
+        <div id="editBarbershopInfoModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Editar Informações da Barbearia</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Avatar upload para foto do estabelecimento -->
+                    <div class="avatar-upload" id="barbershop-photo-upload">
+                        <div class="avatar-preview"
+                            id="barbershop-photo-preview">
+                            <i class="fas fa-store"
+                                style="font-size: 40px; color: #aaa;"></i>
+                        </div>
+                        <button type="button" class="avatar-upload-btn"
+                            id="barbershop-photo-btn">
+                            <i class="fas fa-camera"></i> Adicionar Foto
+                        </button>
+                        <input type="file" id="barbershopPhotoInput"
+                            accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nome da Barbearia</label>
+                        <input type="text" class="form-control"
+                            value="Barbearia Jhoninha do Corte">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" class="form-control"
+                            value="Av. Principal, 123 - Centro">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Cidade/Estado</label>
+                        <input type="text" class="form-control"
+                            value="São Paulo - SP">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Número do WhatsApp</label>
+                        <input type="text" class="form-control"
+                            value="(11) 99999-8888">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Perfil do Instagram</label>
+                        <input type="text" class="form-control"
+                            value="@barbeariajhoninha">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Cancelar</button>
+                    <button class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Todos os Agendamentos -->
+        <div id="allAppointmentsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Todos os Agendamentos</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="today">Hoje</div>
+                            <div class="tab" data-tab="week">Esta Semana</div>
+                            <div class="tab" data-tab="month">Este Mês</div>
+                        </div>
+
+                        <div class="tab-content active" id="today-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos de hoje seriam listados aqui -->
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="week-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos da semana seriam listados aqui -->
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="month-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos do mês seriam listados aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-secondary close-modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Alterar Senha -->
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-key"></i> Alterar
+                        Senha</h3>
+                    <button class="close-modal"
+                        aria-label="Fechar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm" autocomplete="off">
+                        <div class="form-group">
+                            <label class="form-label"
+                                for="currentPassword">Senha atual</label>
+                            <input type="password" class="form-control"
+                                id="currentPassword" required
+                                placeholder="Digite sua senha atual">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newPassword">Nova
+                                senha</label>
+                            <input type="password" class="form-control"
+                                id="newPassword" required minlength="6"
+                                placeholder="Nova senha (mín. 6 caracteres)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"
+                                for="confirmPassword">Confirmar nova
+                                senha</label>
+                            <input type="password" class="form-control"
+                                id="confirmPassword" required minlength="6"
+                                placeholder="Confirme a nova senha">
+                        </div>
+                    </form>
+                    <div id="changePasswordError"
+                        style="color:var(--red);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                    <div id="changePasswordSuccess"
+                        style="color:var(--green);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal"
+                        type="button">Cancelar</button>
+                    <button class="btn btn-primary" type="submit"
+                        form="changePasswordForm">Salvar Nova Senha</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="logo">
+                            <div class="logo-icon">
+                                <img src="img/sua-logo.png" alt="Logo NaRégua"
+                                    style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                            </div>
+                            <div class="logo-text">NA<span>RÉGUA</span><span
+                                    class="highlight">.</span></div>
+                        </div>
+                        <div class="social-links">
+                            <a href="#" aria-label="Instagram"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i
+                                    class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-contact">
+                        <h3 class="footer-title">Contato</h3>
+                        <ul class="footer-links">
+                            <li><i class="fas fa-phone"></i> (31) 98507-9718
+                            </li>
+                            <li><i class="fas fa-envelope"></i>
+                                pablo.silva.edu@gmail.com
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        &copy; 2025 NaRégua. Todos os direitos reservados.
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
                     // Toggle theme
                     const themeToggle = document.getElementById('themeToggle');
@@ -2338,7 +2655,8 @@
                         'editBarbershopInfoBtn': 'editBarbershopInfoModal',
                         'viewAllAppointments': 'allAppointmentsModal',
                         'addDayOffBtn': 'addDayOffModal',
-                        'changePasswordBtn': 'changePasswordModal'
+                        'changePasswordBtn': 'changePasswordModal',
+                        'viewPushHistoryBtn': 'pushHistoryModal'
                     };
 
                     // Open modals
@@ -2603,9 +2921,138 @@
                     document.getElementById('changePasswordModal').style.display = 'none';
                 }, 1200);
             });
+            // Push Notification Form
+const pushForm = document.getElementById('pushNotificationForm');
+const pushTitle = document.getElementById('pushTitle');
+const pushMessage = document.getElementById('pushMessage');
+const pushMessageCount = document.getElementById('pushMessageCount');
+const pushUrl = document.getElementById('pushUrl');
+const pushStatus = document.getElementById('pushNotificationStatus');
+const recipientAll = document.getElementById('recipientAll');
+const recipientToday = document.getElementById('recipientToday');
+const recipientWeek = document.getElementById('recipientWeek');
+
+// Atualiza contador de caracteres da mensagem
+if (pushMessage && pushMessageCount) {
+    pushMessage.addEventListener('input', function() {
+        pushMessageCount.textContent = `${this.value.length}/180`;
+    });
+}
+
+// Lógica de seleção de destinatários (ao menos um)
+if (recipientAll && recipientToday && recipientWeek) {
+    function ensureAtLeastOneRecipient(e) {
+        if (!recipientAll.checked && !recipientToday.checked && !recipientWeek.checked) {
+            e.target.checked = true;
+        }
+    }
+    recipientAll.addEventListener('change', ensureAtLeastOneRecipient);
+    recipientToday.addEventListener('change', ensureAtLeastOneRecipient);
+    recipientWeek.addEventListener('change', ensureAtLeastOneRecipient);
+}
+
+// Histórico de notificações (simulado localStorage)
+function getPushHistory() {
+    return JSON.parse(localStorage.getItem('pushHistory') || '[]');
+}
+function savePushHistory(history) {
+    localStorage.setItem('pushHistory', JSON.stringify(history));
+}
+
+// Envio do formulário de notificação
+if (pushForm) {
+    pushForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        pushStatus.style.display = 'none';
+
+        // Validação simples
+        if (!pushTitle.value.trim() || !pushMessage.value.trim()) {
+            pushStatus.textContent = 'Preencha título e mensagem.';
+            pushStatus.style.color = 'var(--red)';
+            pushStatus.style.display = 'inline';
+            return;
+        }
+
+        // Simulação de envio (aqui você integraria com backend/push real)
+        pushStatus.textContent = 'Enviando...';
+        pushStatus.style.color = 'var(--blue)';
+        pushStatus.style.display = 'inline';
+
+        setTimeout(() => {
+            // Salva no histórico local
+            const history = getPushHistory();
+            history.unshift({
+                title: pushTitle.value.trim(),
+                message: pushMessage.value.trim(),
+                url: pushUrl.value.trim(),
+                recipients: [
+                    recipientAll.checked ? 'Todos' : null,
+                    recipientToday.checked ? 'Hoje' : null,
+                    recipientWeek.checked ? 'Semana' : null
+                ].filter(Boolean).join(', '),
+                date: new Date().toLocaleString('pt-BR')
+            });
+            savePushHistory(history);
+
+            pushStatus.textContent = 'Notificação enviada!';
+            pushStatus.style.color = 'var(--green)';
+            pushStatus.style.display = 'inline';
+
+            // Limpa campos
+            pushForm.reset();
+            pushMessageCount.textContent = '0/180';
+
+            setTimeout(() => {
+                pushStatus.style.display = 'none';
+            }, 1800);
+        }, 900);
+    });
+}
+
+// Modal de histórico de notificações
+const pushHistoryBtn = document.getElementById('viewPushHistoryBtn');
+const pushHistoryModal = document.getElementById('pushHistoryModal');
+const pushHistoryList = document.getElementById('pushHistoryList');
+
+if (pushHistoryBtn && pushHistoryModal && pushHistoryList) {
+    pushHistoryBtn.addEventListener('click', function() {
+        // Preenche histórico
+        const history = getPushHistory();
+        pushHistoryList.innerHTML = '';
+        if (history.length === 0) {
+            pushHistoryList.innerHTML = '<div style="color:var(--gray);text-align:center;padding:18px 0;">Nenhuma notificação enviada ainda.</div>';
+        } else {
+            history.forEach(item => {
+                pushHistoryList.innerHTML += `
+                    <div class="push-history-item">
+                        <div class="push-history-title">${item.title}</div>
+                        <div class="push-history-message">${item.message}</div>
+                        <div class="push-history-meta">
+                            <span><i class="fas fa-users"></i> ${item.recipients}</span>
+                            ${item.url ? `<a href="${item.url}" class="push-history-link" target="_blank"><i class="fas fa-link"></i> Link</a>` : ''}
+                            <span class="push-history-date"><i class="far fa-clock"></i> ${item.date}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        pushHistoryModal.style.display = 'flex';
+    });
+}
+
+// Fecha modal de histórico
+if (pushHistoryModal) {
+    pushHistoryModal.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+            pushHistoryModal.style.display = 'none';
+        });
+    });
+    pushHistoryModal.addEventListener('click', function(e) {
+        if (e.target === pushHistoryModal) pushHistoryModal.style.display = 'none';
+    });
+}
         });
     </script>
-</body>
+    </body>
 
 </html>
-```

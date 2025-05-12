@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NaRégua - Login/Cadastro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>NaRégua - Login/Cadastro</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <style>
          :root {
             --blue: #1a4b8c;
             --red: #c41e3a;
@@ -72,14 +75,7 @@
         }
         /* Header Styles */
         
-        header {
-            background-color: var(--header-bg);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background-color 0.3s;
-        }
+        /* Removido o header */
         
         .navbar {
             display: flex;
@@ -258,20 +254,6 @@
             transform: translateY(-2px);
         }
         
-        .btn-google {
-            background-color: white;
-            color: #333;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .btn-google:hover {
-            background-color: var(--light-gray);
-        }
-        
         .divider {
             display: flex;
             align-items: center;
@@ -408,27 +390,25 @@
         
         .footer-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             flex-wrap: wrap;
         }
         
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .footer-links a {
+        .logo-text-footer {
+            font-size: 24px;
+            font-weight: 600;
             color: var(--footer-text);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
+            text-align: center;
+            margin: 0 auto;
+            display: inline-block;
         }
-        
-        .footer-links a:hover {
-            color: var(--light-blue);
+        .logo-text-footer span {
+            color: var(--blue);
         }
-        
+        .logo-text-footer .highlight {
+            color: var(--red);
+        }
         .copyright {
             font-size: 14px;
             opacity: 0.8;
@@ -437,7 +417,6 @@
             width: 100%;
         }
         /* Responsive */
-        
         @media (max-width: 768px) {
             .auth-card {
                 max-width: 100%;
@@ -453,12 +432,7 @@
                 text-align: center;
                 gap: 15px;
             }
-            .footer-links {
-                flex-direction: column;
-                gap: 10px;
-            }
         }
-        
         @media (max-width: 480px) {
             .auth-header h2 {
                 font-size: 20px;
@@ -467,169 +441,187 @@
                 padding: 12px;
                 font-size: 14px;
             }
+            .logo-text-footer {
+                font-size: 20px;
+            }
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+    <body>
+        <main class="container">
+            <div class="auth-container">
+                <div class="auth-card animate__animated animate__fadeIn">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active"
+                            data-tab="login">Entrar</div>
+                        <div class="auth-tab" data-tab="register">Criar
+                            conta</div>
                     </div>
-                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
-                </div>
-                <div class="nav-links">
-                    <button class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </nav>
-        </div>
-    </header>
 
-    <main class="container">
-        <div class="auth-container">
-            <div class="auth-card animate__animated animate__fadeIn">
-                <div class="auth-tabs">
-                    <div class="auth-tab active" data-tab="login">Entrar</div>
-                    <div class="auth-tab" data-tab="register">Criar conta</div>
-                </div>
-
-                <!-- Login Form -->
-                <div class="auth-content active" id="login-content">
-                    <div class="auth-body">
-                        <form id="loginForm">
-                            <div class="form-group">
-                                <label class="form-label" for="login-email">E-mail</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-envelope"></i>
-                                    <input type="email" class="form-control" id="login-email" placeholder="seu@email.com" required>
+                    <!-- Login Form -->
+                    <div class="auth-content active" id="login-content">
+                        <div class="auth-body">
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="login-email">E-mail</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" class="form-control"
+                                            id="login-email"
+                                            placeholder="seu@email.com"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="login-password">Senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="login-password" placeholder="Sua senha" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="login-password">Senha</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="login-password"
+                                            placeholder="Sua senha" required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="remember-me">
-                                <label for="remember-me">Lembrar de mim</label>
-                            </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="remember-me">
+                                    <label for="remember-me">Lembrar de
+                                        mim</label>
+                                </div>
 
-                            <button type="submit" class="btn btn-primary">Entrar</button>
+                                <button type="submit"
+                                    class="btn btn-primary">Entrar</button>
 
-                            <div class="auth-footer">
-                                <a href="#">Esqueceu sua senha?</a>
-                            </div>
-
-                            <div class="divider">ou</div>
-
-                            <button type="button" class="btn btn-google">
-                                <i class="fab fa-google"></i> Entrar com Google
-                            </button>
-                        </form>
+                                <div class="auth-footer">
+                                    <a href="#">Esqueceu sua senha?</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Register Form -->
-                <div class="auth-content" id="register-content">
-                    <div class="auth-body">
-                        <form id="registerForm">
-                            <div class="form-group">
-                                <label class="form-label" for="register-name">Nome completo</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" class="form-control" id="register-name" placeholder="Seu nome completo" required>
+                    <!-- Register Form -->
+                    <div class="auth-content" id="register-content">
+                        <div class="auth-body">
+                            <form id="registerForm">
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-name">Nome
+                                        completo</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" class="form-control"
+                                            id="register-name"
+                                            placeholder="Seu nome completo"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-email">E-mail</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-envelope"></i>
-                                    <input type="email" class="form-control" id="register-email" placeholder="seu@email.com" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-email">E-mail</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" class="form-control"
+                                            id="register-email"
+                                            placeholder="seu@email.com"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-phone">Telefone</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-phone"></i>
-                                    <input type="tel" class="form-control" id="register-phone" placeholder="(00) 00000-0000" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-phone">Telefone</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" class="form-control"
+                                            id="register-phone"
+                                            placeholder="(00) 00000-0000"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-password">Senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="register-password" placeholder="Crie uma senha forte" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-password">Senha</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="register-password"
+                                            placeholder="Crie uma senha forte"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-confirm-password">Confirmar senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="register-confirm-password" placeholder="Digite a senha novamente" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-confirm-password">Confirmar
+                                        senha</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="register-confirm-password"
+                                            placeholder="Digite a senha novamente"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="terms" required>
-                                <label for="terms">Eu concordo com os <a href="#">Termos de Serviço</a> e <a href="#">Política de Privacidade</a></label>
-                            </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="terms" required>
+                                    <label for="terms">Eu concordo com os <a
+                                            href="#">Termos de Serviço</a> e <a
+                                            href="#">Política de
+                                            Privacidade</a></label>
+                                </div>
 
-                            <button type="submit" class="btn btn-primary">Criar conta</button>
+                                <button type="submit"
+                                    class="btn btn-primary">Criar conta</button>
 
-                            <div class="divider">ou</div>
-
-                            <button type="button" class="btn btn-google">
-                                <i class="fab fa-google"></i> Cadastrar com Google
-                            </button>
-                        </form>
+                                <div class="divider">ou</div>
+                                <!-- REMOVIDO: Botão Cadastrar com Google -->
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 30px; height: 30px; object-fit: contain; background: none; display: block;">
-                    </div>
-                    <div class="logo-text" style="color: var(--footer-text);">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="logo-text-footer">NA<span>RÉGUA</span><span
+                            class="highlight">.</span></div>
                 </div>
-
-                <div class="footer-links">
-                    <a href="#">Termos de Serviço</a>
-                    <a href="#">Política de Privacidade</a>
-                    <a href="#">Ajuda</a>
-                    <a href="#">Contato</a>
+                <div class="copyright">
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
                 </div>
             </div>
+        </footer>
 
-            <div class="copyright">
-                &copy; 2025 NaRégua. Todos os direitos reservados.
-            </div>
-        </div>
-    </footer>
-
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Toggle theme
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = themeToggle.querySelector('i');
+            let themeToggle = document.getElementById('themeToggle');
+            let themeIcon;
+
+            if (!themeToggle) {
+                themeToggle = document.createElement('button');
+                themeToggle.className = 'theme-toggle';
+                themeToggle.id = 'themeToggle';
+                themeToggle.title = 'Alternar tema';
+                themeToggle.style.position = 'fixed';
+                themeToggle.style.top = '18px';
+                themeToggle.style.right = '18px';
+                themeToggle.style.zIndex = '9999';
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                document.body.appendChild(themeToggle);
+            }
+            themeIcon = themeToggle.querySelector('i');
 
             // Verificar preferência de tema no localStorage
             const currentTheme = localStorage.getItem('theme') || 'light';
@@ -721,6 +713,6 @@
             }
         });
     </script>
-</body>
+    </body>
 
 </html>
