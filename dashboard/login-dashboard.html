@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Login/Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+         :root {
+            --blue: #1a4b8c;
+            --red: #c41e3a;
+            --light-blue: #2980b9;
+            --dark-blue: #0c2b51;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --gray: #e0e0e0;
+            --dark-gray: #333333;
+            --green: #28a745;
+            --orange: #fd7e14;
+            --purple: #6f42c1;
+            /* Cores do tema escuro */
+            --bg-color: var(--white);
+            --text-color: var(--dark-gray);
+            --card-bg: var(--white);
+            --header-bg: var(--white);
+            --footer-bg: var(--dark-blue);
+            --footer-text: var(--white);
+            --border-color: var(--gray);
+            --hover-bg: var(--gray);
+            --selected-bg: var(--blue);
+            --disabled-color: var(--gray);
+        }
+        /* Tema escuro */
+        
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --header-bg: #1e1e1e;
+            --footer-bg: #0a0a0a;
+            --footer-text: #e0e0e0;
+            --border-color: #333;
+            --hover-bg: #333;
+            --selected-bg: var(--blue);
+            --disabled-color: #444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            flex: 1;
+        }
+        /* Header Styles */
+        
+        header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .logo-text span {
+            color: var(--blue);
+        }
+        
+        .logo-text .highlight {
+            color: var(--red);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: transform 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
+            transform: rotate(30deg);
+        }
+        /* Main Content - Auth Forms */
+        
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 150px);
+            padding: 40px 0;
+        }
+        
+        .auth-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-header {
+            background-color: var(--blue);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .auth-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .auth-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .auth-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(26, 75, 140, 0.2);
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--blue);
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--blue);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        .btn-google {
+            background-color: white;
+            color: #333;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-google:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .divider::before {
+            margin-right: 10px;
+        }
+        
+        .divider::after {
+            margin-left: 10px;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .auth-footer a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-switch {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .auth-switch a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+        /* Tabs */
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .auth-tab.active {
+            color: var(--blue);
+        }
+        
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--blue);
+        }
+        
+        .auth-content {
+            display: none;
+        }
+        
+        .auth-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Checkbox */
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .checkbox-group label {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        /* Footer */
+        
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 30px 0;
+            margin-top: auto;
+            transition: background-color 0.3s;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: var(--footer-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light-blue);
+        }
+        
+        .copyright {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        /* Responsive */
+        
+        @media (max-width: 768px) {
+            .auth-card {
+                max-width: 100%;
+            }
+            .auth-header {
+                padding: 20px;
+            }
+            .auth-body {
+                padding: 20px;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-header h2 {
+                font-size: 20px;
+            }
+            .auth-tab {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                    </div>
+                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                </div>
+                <div class="nav-links">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth-container">
+            <div class="auth-card animate__animated animate__fadeIn">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Entrar</div>
+                    <div class="auth-tab" data-tab="register">Criar conta</div>
+                </div>
+
+                <!-- Login Form -->
+                <div class="auth-content active" id="login-content">
+                    <div class="auth-body">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label class="form-label" for="login-email">E-mail</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" class="form-control" id="login-email" placeholder="seu@email.com" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="login-password">Senha</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="login-password" placeholder="Sua senha" required>
+                                </div>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="remember-me">
+                                <label for="remember-me">Lembrar de mim</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+
+                            <div class="auth-footer">
+                                <a href="#">Esqueceu sua senha?</a>
+                            </div>
+
+                            <div class="divider">ou</div>
+
+                            <button type="button" class="btn btn-google">
+                                <i class="fab fa-google"></i> Entrar com Google
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div class="auth-content" id="register-content">
+                    <div class="auth-body">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label class="form-label" for="register-name">Nome completo</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" class="form-control" id="register-name" placeholder="Seu nome completo" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="register-email">E-mail</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" class="form-control" id="register-email" placeholder="seu@email.com" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="register-phone">Telefone</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" class="form-control" id="register-phone" placeholder="(00) 00000-0000" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="register-password">Senha</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="register-password" placeholder="Crie uma senha forte" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="register-confirm-password">Confirmar senha</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="register-confirm-password" placeholder="Digite a senha novamente" required>
+                                </div>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">Eu concordo com os <a href="#">Termos de Serviço</a> e <a href="#">Política de Privacidade</a></label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Criar conta</button>
+
+                            <div class="divider">ou</div>
+
+                            <button type="button" class="btn btn-google">
+                                <i class="fab fa-google"></i> Cadastrar com Google
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 30px; height: 30px; object-fit: contain; background: none; display: block;">
+                    </div>
+                    <div class="logo-text" style="color: var(--footer-text);">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                </div>
+
+                <div class="footer-links">
+                    <a href="#">Termos de Serviço</a>
+                    <a href="#">Política de Privacidade</a>
+                    <a href="#">Ajuda</a>
+                    <a href="#">Contato</a>
+                </div>
+            </div>
+
+            <div class="copyright">
+                &copy; 2025 NaRégua. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle theme
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+
+            // Verificar preferência de tema no localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+
+            // Alternar tema
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+
+                if (document.body.classList.contains('dark-mode')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Tabs functionality
+            const tabs = document.querySelectorAll('.auth-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.auth-content').forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Aqui você adicionaria a lógica de login
+                console.log('Login submitted');
+                // Simulação de redirecionamento após login
+                // window.location.href = 'dashboard.html';
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Aqui você adicionaria a lógica de cadastro
+                console.log('Register submitted');
+
+                // Verificar se as senhas coincidem
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert('As senhas não coincidem!');
+                    return;
+                }
+
+                // Simulação de cadastro bem-sucedido
+                alert('Cadastro realizado com sucesso! Redirecionando para o login...');
+
+                // Mudar para a aba de login após cadastro
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+            });
+
+            // Máscara para telefone
+            const phoneInput = document.getElementById('register-phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 11) value = value.substring(0, 11);
+
+                    if (value.length > 0) {
+                        value = value.replace(/^(\d{0,2})(\d{0,5})(\d{0,4})$/, function(match, g1, g2, g3) {
+                            let result = '';
+                            if (g1) result = `(${g1}`;
+                            if (g2) result += `) ${g2}`;
+                            if (g3) result += `-${g3}`;
+                            return result;
+                        });
+                    }
+
+                    e.target.value = value;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
