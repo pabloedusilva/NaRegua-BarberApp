@@ -1399,7 +1399,12 @@
                     <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                 </div>
                 <div class="nav-links">
-                    <a href="index.html" class="dashboard-link">Voltar para o site</a>
+                    <button class="theme-toggle" id="logoutBtn" title="Sair">
+    <i class="fas fa-sign-out-alt"></i>
+</button>
+                    <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
+    <i class="fas fa-key"></i>
+</button>
                     <button class="theme-toggle" id="themeToggle">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -2225,6 +2230,38 @@
         </div>
     </div>
 
+    <!-- Modal de Alterar Senha -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha</h3>
+                <button class="close-modal" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label" for="currentPassword">Senha atual</label>
+                        <input type="password" class="form-control" id="currentPassword" required placeholder="Digite sua senha atual">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="newPassword">Nova senha</label>
+                        <input type="password" class="form-control" id="newPassword" required minlength="6" placeholder="Nova senha (mín. 6 caracteres)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirmar nova senha</label>
+                        <input type="password" class="form-control" id="confirmPassword" required minlength="6" placeholder="Confirme a nova senha">
+                    </div>
+                </form>
+                <div id="changePasswordError" style="color:var(--red);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                <div id="changePasswordSuccess" style="color:var(--green);margin-top:8px;display:none;font-size:0.98rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
+                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -2300,7 +2337,8 @@
                         'editWorkingHoursBtn': 'editWorkingHoursModal',
                         'editBarbershopInfoBtn': 'editBarbershopInfoModal',
                         'viewAllAppointments': 'allAppointmentsModal',
-                        'addDayOffBtn': 'addDayOffModal'
+                        'addDayOffBtn': 'addDayOffModal',
+                        'changePasswordBtn': 'changePasswordModal'
                     };
 
                     // Open modals
@@ -2511,8 +2549,63 @@
                     }
                 });
             });
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+
+            // Abrir modal de alterar senha
+            document.getElementById('changePasswordBtn').addEventListener('click', function() {
+                document.getElementById('changePasswordModal').style.display = 'flex';
+                // Limpa campos e mensagens
+                document.getElementById('changePasswordForm').reset();
+                document.getElementById('changePasswordError').style.display = 'none';
+                document.getElementById('changePasswordSuccess').style.display = 'none';
+            });
+
+            // Fechar modal de alterar senha (usando já o padrão dos outros modais)
+            document.querySelectorAll('#changePasswordModal .close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('changePasswordModal').style.display = 'none';
+                });
+            });
+            document.getElementById('changePasswordModal').addEventListener('click', function(e) {
+                if (e.target === this) this.style.display = 'none';
+            });
+
+            // Validação e feedback do formulário
+            document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const current = document.getElementById('currentPassword').value.trim();
+                const nova = document.getElementById('newPassword').value.trim();
+                const confirma = document.getElementById('confirmPassword').value.trim();
+                const error = document.getElementById('changePasswordError');
+                const success = document.getElementById('changePasswordSuccess');
+                error.style.display = 'none';
+                success.style.display = 'none';
+
+                if (nova.length < 6) {
+                    error.textContent = 'A nova senha deve ter pelo menos 6 caracteres.';
+                    error.style.display = 'block';
+                    return;
+                }
+                if (nova !== confirma) {
+                    error.textContent = 'As senhas não coincidem.';
+                    error.style.display = 'block';
+                    return;
+                }
+                // Aqui você faria a chamada para API/backend para alterar a senha
+                // Simulação de sucesso:
+                success.textContent = 'Senha alterada com sucesso!';
+                success.style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('changePasswordModal').style.display = 'none';
+                }, 1200);
+            });
         });
     </script>
 </body>
 
 </html>
+```
