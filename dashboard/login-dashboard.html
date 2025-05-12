@@ -445,6 +445,78 @@
                 font-size: 20px;
             }
         }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.45);
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 12px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+            padding: 32px 24px 24px 24px;
+            max-width: 350px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.4s;
+        }
+        .close-modal {
+            position: absolute;
+            top: 14px; right: 18px;
+            font-size: 22px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-modal:hover {
+            color: var(--red);
+        }
+        .modal-content h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: var(--blue);
+        }
+        .modal-content p {
+            margin-bottom: 22px;
+            font-size: 15px;
+        }
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .btn.btn-whatsapp {
+            background: #25d366;
+            color: #fff;
+        }
+        .btn.btn-whatsapp:hover {
+            background: #1ebe57;
+        }
+        .btn.btn-email {
+            background: var(--blue);
+            color: #fff;
+        }
+        .btn.btn-email:hover {
+            background: var(--dark-blue);
+        }
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 20px 8px 16px 8px;
+                max-width: 95vw;
+            }
+        }
     </style>
     </head>
 
@@ -465,12 +537,13 @@
                             <form id="loginForm">
                                 <div class="form-group">
                                     <label class="form-label"
-                                        for="login-email">E-mail</label>
+                                        for="login-username">Nome de
+                                        usuário</label>
                                     <div class="input-icon">
-                                        <i class="fas fa-envelope"></i>
-                                        <input type="email" class="form-control"
-                                            id="login-email"
-                                            placeholder="seu@email.com"
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" class="form-control"
+                                            id="login-username"
+                                            placeholder="Seu nome de usuário"
                                             required>
                                     </div>
                                 </div>
@@ -485,12 +558,6 @@
                                             id="login-password"
                                             placeholder="Sua senha" required>
                                     </div>
-                                </div>
-
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="remember-me">
-                                    <label for="remember-me">Lembrar de
-                                        mim</label>
                                 </div>
 
                                 <button type="submit"
@@ -571,19 +638,8 @@
                                     </div>
                                 </div>
 
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="terms" required>
-                                    <label for="terms">Eu concordo com os <a
-                                            href="#">Termos de Serviço</a> e <a
-                                            href="#">Política de
-                                            Privacidade</a></label>
-                                </div>
-
                                 <button type="submit"
                                     class="btn btn-primary">Criar conta</button>
-
-                                <div class="divider">ou</div>
-                                <!-- REMOVIDO: Botão Cadastrar com Google -->
                             </form>
                         </div>
                     </div>
@@ -602,6 +658,24 @@
                 </div>
             </div>
         </footer>
+
+        <div id="forgotModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeForgotModal">&times;</span>
+                <h3>Recuperar acesso</h3>
+                <p>Entre em contato com o administrador para recuperar sua
+                    senha:</p>
+                <div class="modal-actions">
+                    <a href="https://wa.me/5599999999999" target="_blank"
+                        class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="mailto:admin@naregua.com" class="btn btn-email">
+                        <i class="fas fa-envelope"></i> E-mail
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -711,6 +785,24 @@
                     e.target.value = value;
                 });
             }
+
+            // Modal "Esqueceu sua senha?"
+            const forgotLink = document.querySelector('.auth-footer a');
+            const forgotModal = document.getElementById('forgotModal');
+            const closeForgotModal = document.getElementById('closeForgotModal');
+
+            forgotLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                forgotModal.classList.add('active');
+            });
+            closeForgotModal.addEventListener('click', function() {
+                forgotModal.classList.remove('active');
+            });
+            window.addEventListener('click', function(e) {
+                if (e.target === forgotModal) {
+                    forgotModal.classList.remove('active');
+                }
+            });
         });
     </script>
     </body>
