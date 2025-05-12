@@ -1100,6 +1100,132 @@
                 margin-bottom: 10px;
             }
         }
+        
+        .share-link-container-modern {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--gray);
+            border-radius: 16px;
+            padding: 28px 32px 22px 32px;
+            margin: 26px 0 0 0;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+            position: relative;
+            max-width: 540px;
+        }
+        
+        .share-link-label {
+            font-size: 1.08rem;
+            color: var(--light-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            letter-spacing: 0.01em;
+        }
+        
+        .share-link-field {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 0;
+            position: relative;
+        }
+        
+        .share-link-input-modern {
+            border: none;
+            border-radius: 10px 0 0 10px;
+            padding: 14px 16px;
+            font-size: 1.12rem;
+            background: var(--light-gray);
+            color: var(--light-blue);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            outline: none;
+            width: 100%;
+            font-family: 'Inter', Arial, sans-serif;
+            letter-spacing: 0.01em;
+            transition: box-shadow 0.2s;
+        }
+        
+        .share-link-input-modern:focus {
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+        }
+        
+        .btn-copy-modern {
+            background: linear-gradient(135deg, #2563eb 60%, #1e40af 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            width: 54px;
+            height: 48px;
+            font-size: 1.45rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            margin-left: -2px;
+        }
+        
+        .btn-copy-modern:hover,
+        .btn-copy-modern:focus {
+            background: linear-gradient(135deg, #1e40af 80%, #2563eb 100%);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
+            transform: scale(1.07);
+        }
+        
+        .copy-success-modern {
+            position: absolute;
+            right: 38px;
+            bottom: 10px;
+            background: #e6f9ed;
+            color: #22c55e;
+            font-size: 1rem;
+            border-radius: 8px;
+            padding: 7px 16px 7px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 6px rgba(34, 197, 94, 0.07);
+            animation: fadeInCopySuccess 0.3s;
+            z-index: 2;
+            font-weight: 500;
+        }
+        
+        @keyframes fadeInCopySuccess {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .share-link-container-modern {
+                max-width: 100%;
+                padding: 16px 8px 14px 8px;
+            }
+            .copy-success-modern {
+                right: 12px;
+                bottom: 4px;
+                font-size: 0.97rem;
+            }
+            .btn-copy-modern {
+                width: 46px;
+                height: 42px;
+                font-size: 1.18rem;
+            }
+            .share-link-input-modern {
+                font-size: 1rem;
+                padding: 10px 10px;
+            }
+        }
     </style>
 </head>
 
@@ -1252,42 +1378,23 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-user-tie"></i> Profissionais</h2>
-                <button class="edit-btn" id="addProfessionalBtn">
-                    <i class="fas fa-plus"></i> Adicionar
-                </button>
+                <h2 class="section-title"><i class="fas fa-share-alt"></i> Compartilhar Link de Agendamento</h2>
             </div>
-
-            <div class="professionals-container">
-                <div class="professional-card">
-                    <div class="professional-avatar">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Jhonata Barber">
+            <div class="share-link-container-modern">
+                <div class="share-link-info">
+                    <div class="share-link-label">
+                        <i class="fas fa-link"></i> Link para agendamento online
                     </div>
-                    <div class="professional-name">Jhonata Barber</div>
-                    <div class="professional-actions">
-                        <button class="action-btn" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" title="Remover">
-                            <i class="fas fa-trash"></i>
+                    <div class="share-link-field">
+                        <input type="text" id="bookingLink" class="share-link-input-modern" readonly value="https://seusite.com/agendar" />
+                        <button class="btn-copy-modern" id="copyBookingLinkBtn" title="Copiar link">
+                            <i class="fas fa-copy"></i>
                         </button>
                     </div>
                 </div>
-
-                <div class="professional-card">
-                    <div class="professional-avatar">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Oliveira">
-                    </div>
-                    <div class="professional-name">Maria Oliveira</div>
-                    <div class="professional-actions">
-                        <button class="action-btn" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" title="Remover">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
+                <span class="copy-success-modern" id="copySuccessMsg" style="display:none;">
+                    <i class="fas fa-check-circle"></i> Link copiado!
+                </span>
             </div>
         </section>
 
@@ -2101,8 +2208,26 @@
                     this.parentElement.remove();
                 });
             });
+
+            // Compartilhar link de agendamento moderno melhorado
+            const copyBtn = document.getElementById('copyBookingLinkBtn');
+            const bookingLink = document.getElementById('bookingLink');
+            const copyMsg = document.getElementById('copySuccessMsg');
+
+            if (copyBtn && bookingLink && copyMsg) {
+                copyBtn.addEventListener('click', function() {
+                    bookingLink.select();
+                    bookingLink.setSelectionRange(0, 99999); // Para mobile
+                    document.execCommand('copy');
+                    copyMsg.style.display = 'flex';
+                    setTimeout(() => {
+                        copyMsg.style.display = 'none';
+                    }, 1800);
+                });
+            }
         });
     </script>
 </body>
 
 </html>
+```
