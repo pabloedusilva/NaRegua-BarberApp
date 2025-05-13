@@ -1,0 +1,48 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../db/mysql');
+const { requireLogin } = require('../middleware/auth');
+const path = require('path');
+
+// Login (POST)
+router.post('/login', async(req, res) => {
+    const { username, password } = req.body;
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM usuarios WHERE username = ? AND password = ? LIMIT 1', [username, password]
+        );
+        if (rows.length > 0) {
+            if (rows[0].role !== 'admin') {
+                return res.status(403).json({ success: false, message: 'Acesso restrito a administradores.' });
+            }
+            req.session.user = { id: rows[0].id, username: rows[0].username, role: rows[0].role };
+            return res.json({ success: true });
+        } else {
+            return res.status(401).json({ success: false, message: 'Usuário ou senha inválidos' });
+        }
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Erro no servidor' });
+    }
+});
+
+// Logout
+router.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/dashboard/login');
+    });
+});
+
+// Dashboard protegido (apenas admin)
+router.get('/dashboard', requireLogin, (req, res) => {
+    if (req.session.user.role !== 'admin') {
+        return res.status(403).send('Acesso restrito a administradores.');
+    }
+    res.sendFile(path.join(__dirname, '..', 'dashboard', 'dashboard.html'));
+});
+
+// Login page (não protegido)
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dashboard', 'login-dashboard.html'));
+});
+
+module.exports = router;

@@ -1,18 +1,36 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
+const dashboardRoutes = require('./routes/dashboard');
+
 const app = express();
 const port = 3000;
 
-// Servir arquivos estáticos da pasta public
-app.use(express.static(path.join(__dirname, 'public')));
+// Sessão
+app.use(session({
+    secret: 'um-segredo-bem-forte-aqui',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: false }
+}));
 
-// Rota principal
-app.get('/', (req, res) => {
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Rota para index sem extensão
+app.get(['/', '/index'], (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Iniciar o servidor
+// Rotas da dashboard (login e dashboard sem extensão)
+app.use('/dashboard', dashboardRoutes);
+
+// Servir arquivos estáticos (exceto dashboard)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-    console.log(`Pressione Ctrl+C para encerrar o servidor`);
+    console.log(`Página inicial:        http://localhost:${port}/index`);
+    console.log(`Dashboard:             http://localhost:${port}/dashboard/dashboard`);
 });

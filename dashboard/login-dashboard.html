@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>NaRégua - Login/Cadastro</title>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Login/Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
          :root {
             --blue: #1a4b8c;
             --red: #c41e3a;
@@ -74,7 +71,6 @@
             flex: 1;
         }
         /* Header Styles */
-        
         /* Removido o header */
         
         .navbar {
@@ -403,12 +399,15 @@
             margin: 0 auto;
             display: inline-block;
         }
+        
         .logo-text-footer span {
             color: var(--blue);
         }
+        
         .logo-text-footer .highlight {
             color: var(--red);
         }
+        
         .copyright {
             font-size: 14px;
             opacity: 0.8;
@@ -417,6 +416,7 @@
             width: 100%;
         }
         /* Responsive */
+        
         @media (max-width: 768px) {
             .auth-card {
                 max-width: 100%;
@@ -433,6 +433,7 @@
                 gap: 15px;
             }
         }
+        
         @media (max-width: 480px) {
             .auth-header h2 {
                 font-size: 20px;
@@ -446,25 +447,30 @@
             }
         }
         /* Modal Styles */
+        
         .modal {
             display: none;
             position: fixed;
             z-index: 10000;
-            left: 0; top: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.45);
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.45);
             justify-content: center;
             align-items: center;
             transition: background 0.3s;
         }
+        
         .modal.active {
             display: flex;
         }
+        
         .modal-content {
             background: var(--card-bg);
             color: var(--text-color);
             border-radius: 12px;
-            box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+            box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
             padding: 32px 24px 24px 24px;
             max-width: 350px;
             width: 100%;
@@ -472,45 +478,56 @@
             position: relative;
             animation: fadeIn 0.4s;
         }
+        
         .close-modal {
             position: absolute;
-            top: 14px; right: 18px;
+            top: 14px;
+            right: 18px;
             font-size: 22px;
             color: var(--text-color);
             cursor: pointer;
             transition: color 0.2s;
         }
+        
         .close-modal:hover {
             color: var(--red);
         }
+        
         .modal-content h3 {
             margin-bottom: 10px;
             font-size: 22px;
             color: var(--blue);
         }
+        
         .modal-content p {
             margin-bottom: 22px;
             font-size: 15px;
         }
+        
         .modal-actions {
             display: flex;
             flex-direction: column;
             gap: 14px;
         }
+        
         .btn.btn-whatsapp {
             background: #25d366;
             color: #fff;
         }
+        
         .btn.btn-whatsapp:hover {
             background: #1ebe57;
         }
+        
         .btn.btn-email {
             background: var(--blue);
             color: #fff;
         }
+        
         .btn.btn-email:hover {
             background: var(--dark-blue);
         }
+        
         @media (max-width: 480px) {
             .modal-content {
                 padding: 20px 8px 16px 8px;
@@ -518,166 +535,131 @@
             }
         }
     </style>
-    </head>
+</head>
 
-    <body>
-        <main class="container">
-            <div class="auth-container">
-                <div class="auth-card animate__animated animate__fadeIn">
-                    <div class="auth-tabs">
-                        <div class="auth-tab active"
-                            data-tab="login">Entrar</div>
-                        <div class="auth-tab" data-tab="register">Criar
-                            conta</div>
+<body>
+    <main class="container">
+        <div class="auth-container">
+            <div class="auth-card animate__animated animate__fadeIn">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Entrar</div>
+                    <div class="auth-tab" data-tab="register">Criar conta
                     </div>
+                </div>
 
-                    <!-- Login Form -->
-                    <div class="auth-content active" id="login-content">
-                        <div class="auth-body">
-                            <form id="loginForm">
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="login-username">Nome de
+                <!-- Login Form -->
+                <div class="auth-content active" id="login-content">
+                    <div class="auth-body">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label class="form-label" for="login-username">Nome de
                                         usuário</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-user"></i>
-                                        <input type="text" class="form-control"
-                                            id="login-username"
-                                            placeholder="Seu nome de usuário"
-                                            required>
-                                    </div>
+                                <div class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" class="form-control" id="login-username" placeholder="Seu nome de usuário" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="login-password">Senha</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-lock"></i>
-                                        <input type="password"
-                                            class="form-control"
-                                            id="login-password"
-                                            placeholder="Sua senha" required>
-                                    </div>
+                            <div class="form-group">
+                                <label class="form-label" for="login-password">Senha</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="login-password" placeholder="Sua senha" required>
                                 </div>
+                            </div>
 
-                                <button type="submit"
-                                    class="btn btn-primary">Entrar</button>
+                            <button type="submit" class="btn btn-primary">Entrar</button>
 
-                                <div class="auth-footer">
-                                    <a href="#">Esqueceu sua senha?</a>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="auth-footer">
+                                <a href="#">Esqueceu sua senha?</a>
+                            </div>
+                        </form>
                     </div>
+                </div>
 
-                    <!-- Register Form -->
-                    <div class="auth-content" id="register-content">
-                        <div class="auth-body">
-                            <form id="registerForm">
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="register-name">Nome
+                <!-- Register Form -->
+                <div class="auth-content" id="register-content">
+                    <div class="auth-body">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label class="form-label" for="register-name">Nome
                                         completo</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-user"></i>
-                                        <input type="text" class="form-control"
-                                            id="register-name"
-                                            placeholder="Seu nome completo"
-                                            required>
-                                    </div>
+                                <div class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" class="form-control" id="register-name" placeholder="Seu nome completo" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="register-email">E-mail</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-envelope"></i>
-                                        <input type="email" class="form-control"
-                                            id="register-email"
-                                            placeholder="seu@email.com"
-                                            required>
-                                    </div>
+                            <div class="form-group">
+                                <label class="form-label" for="register-email">E-mail</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" class="form-control" id="register-email" placeholder="seu@email.com" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="register-phone">Telefone</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-phone"></i>
-                                        <input type="tel" class="form-control"
-                                            id="register-phone"
-                                            placeholder="(00) 00000-0000"
-                                            required>
-                                    </div>
+                            <div class="form-group">
+                                <label class="form-label" for="register-phone">Telefone</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" class="form-control" id="register-phone" placeholder="(00) 00000-0000" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="register-password">Senha</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-lock"></i>
-                                        <input type="password"
-                                            class="form-control"
-                                            id="register-password"
-                                            placeholder="Crie uma senha forte"
-                                            required>
-                                    </div>
+                            <div class="form-group">
+                                <label class="form-label" for="register-password">Senha</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="register-password" placeholder="Crie uma senha forte" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="form-label"
-                                        for="register-confirm-password">Confirmar
+                            <div class="form-group">
+                                <label class="form-label" for="register-confirm-password">Confirmar
                                         senha</label>
-                                    <div class="input-icon">
-                                        <i class="fas fa-lock"></i>
-                                        <input type="password"
-                                            class="form-control"
-                                            id="register-confirm-password"
-                                            placeholder="Digite a senha novamente"
-                                            required>
-                                    </div>
+                                <div class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-control" id="register-confirm-password" placeholder="Digite a senha novamente" required>
                                 </div>
+                            </div>
 
-                                <button type="submit"
-                                    class="btn btn-primary">Criar conta</button>
-                            </form>
-                        </div>
+                            <button type="submit" class="btn btn-primary">Criar conta</button>
+                        </form>
                     </div>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="logo-text-footer">NA<span>RÉGUA</span><span
-                            class="highlight">.</span></div>
-                </div>
-                <div class="copyright">
-                    &copy; 2025 NaRégua. Todos os direitos reservados.
-                </div>
-            </div>
-        </footer>
-
-        <div id="forgotModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal" id="closeForgotModal">&times;</span>
-                <h3>Recuperar acesso</h3>
-                <p>Entre em contato com o administrador para recuperar sua
-                    senha:</p>
-                <div class="modal-actions">
-                    <a href="https://wa.me/5599999999999" target="_blank"
-                        class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                    <a href="mailto:admin@naregua.com" class="btn btn-email">
-                        <i class="fas fa-envelope"></i> E-mail
-                    </a>
                 </div>
             </div>
         </div>
+    </main>
 
-        <script>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo-text-footer">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 NaRégua. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeForgotModal">&times;</span>
+            <h3>Recuperar acesso</h3>
+            <p>Entre em contato com o administrador para recuperar sua senha:
+            </p>
+            <div class="modal-actions">
+                <a href="https://wa.me/5599999999999" target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="mailto:admin@naregua.com" class="btn btn-email">
+                    <i class="fas fa-envelope"></i> E-mail
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Toggle theme
             let themeToggle = document.getElementById('themeToggle');
@@ -736,12 +718,33 @@
             });
 
             // Form submission
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                // Aqui você adicionaria a lógica de login
-                console.log('Login submitted');
-                // Simulação de redirecionamento após login
-                // window.location.href = 'dashboard.html';
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+
+                try {
+                    const res = await fetch('/dashboard/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    });
+
+                    if (res.ok) {
+                        // Login bem-sucedido, redireciona para a dashboard
+                        window.location.href = '/dashboard/dashboard';
+                    } else {
+                        const data = await res.json();
+                        alert(data.message || 'Usuário ou senha inválidos');
+                    }
+                } catch (err) {
+                    alert('Erro ao conectar ao servidor.');
+                }
             });
 
             document.getElementById('registerForm').addEventListener('submit', function(e) {
@@ -805,6 +808,6 @@
             });
         });
     </script>
-    </body>
+</body>
 
 </html>
