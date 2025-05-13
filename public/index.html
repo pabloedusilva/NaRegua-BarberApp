@@ -1206,6 +1206,20 @@
             animation: fadeIn 0.3s;
         }
         
+        @media (min-width: 600px) {
+            .custom-modal {
+                max-width: 420px;
+                padding: 36px 32px;
+            }
+        }
+        
+        @media (min-width: 900px) {
+            .custom-modal {
+                max-width: 520px;
+                padding: 48px 40px;
+            }
+        }
+        
         .custom-modal-content {
             background: var(--card-bg);
             color: var(--text-color);
@@ -2551,27 +2565,48 @@
                             <div style="
                                 border: 1px solid var(--border-color);
                                 border-radius: 12px;
-                                padding: 18px;
+                                padding: 12px 18px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 6px;
                                 background: var(--card-bg);
-                                box-shadow: 0 2px 8px var(--shadow-color);
-                                ">
-                                <div style="font-size: 1.15em; font-weight: bold; color: var(--primary); margin-bottom: 8px;">
-                                    ${ag.servico}
+                                margin-bottom: 8px;
+                                position: relative;
+                            ">
+                                <div>
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Serviço:</span>
+                                    <span style="color:var(--text-main);">${ag.servico}</span>
                                 </div>
-                                <div style="margin-bottom: 6px;">
+                                <div>
                                     <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
                                     <span style="color:var(--text-main);">${ag.profissional}</span>
                                 </div>
-                                <div style="margin-bottom: 6px;">
+                                <div>
                                     <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
-                                    <span style="color:var(--text-main);">${new Date(ag.data).toLocaleDateString('pt-BR')}</span>
-                                    <span style="margin-left: 16px; font-weight: 500; color: var(--text-secondary);">Horário:</span>
+                                    <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
                                     <span style="color:var(--text-main);">${ag.hora}</span>
                                 </div>
                                 <div>
                                     <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
                                     <span style="color:var(--green); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
                                 </div>
+                                <button class="delete-appointment-btn" data-id="${ag.id}" style="
+                                    margin-top: 8px;
+                                    align-self: flex-end;
+                                    background: var(--red);
+                                    color: #fff;
+                                    border: none;
+                                    border-radius: 6px;
+                                    padding: 6px 16px;
+                                    font-size: 0.98rem;
+                                    cursor: pointer;
+                                    transition: background 0.2s;
+                                ">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
                             </div>
                             `;
                         });
@@ -2582,6 +2617,41 @@
                             icon: `<i class="fas fa-calendar-check" style="color:var(--primary);"></i>`,
                             btnText: 'Fechar'
                         });
+
+                        // Ativar botões de exclusão
+                        setTimeout(() => {
+                            document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+                                btn.onclick = async function() {
+                                    const id = this.getAttribute('data-id');
+                                    try {
+                                        const res = await fetch(`/agendamento/excluir/${id}`, {
+                                            method: 'DELETE'
+                                        });
+                                        const result = await res.json();
+                                        if (result.success) {
+                                            this.closest('div').remove();
+                                            showCustomModal({
+                                                message: 'Agendamento excluído com sucesso!',
+                                                icon: '<i class="fas fa-check-circle" style="color:var(--green);"></i>',
+                                                btnText: 'Fechar'
+                                            });
+                                        } else {
+                                            showCustomModal({
+                                                message: 'Erro ao excluir agendamento.',
+                                                icon: '<i class="fas fa-exclamation-triangle" style="color:var(--red);"></i>',
+                                                btnText: 'Fechar'
+                                            });
+                                        }
+                                    } catch (err) {
+                                        showCustomModal({
+                                            message: 'Erro ao conectar ao servidor.',
+                                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--red);"></i>',
+                                            btnText: 'Fechar'
+                                        });
+                                    }
+                                };
+                            });
+                        }, 100);
                     } else {
                         appointmentsModal.classList.remove('active');
                         showCustomModal({

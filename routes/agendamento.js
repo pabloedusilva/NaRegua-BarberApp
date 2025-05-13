@@ -28,4 +28,15 @@ router.get('/meus', async(req, res) => {
     }
 });
 
+// Excluir agendamento por ID
+router.delete('/excluir/:id', async(req, res) => {
+    const { id } = req.params;
+    try {
+        await db.query('DELETE FROM agendamentos WHERE id = ?', [id]);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao excluir agendamento.' });
+    }
+});
+
 module.exports = router;
