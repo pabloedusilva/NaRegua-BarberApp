@@ -2369,7 +2369,7 @@
             const phoneModalBtn = document.getElementById('phoneModalBtn');
             const userPhone = document.getElementById('userPhone');
 
-            confirmButton.addEventListener('click', function() {
+            confirmButton.addEventListener('click', async function() {
                 if (selectedService && selectedProfessional && selectedDate && selectedTime) {
                     // Abre o modal de telefone
                     phoneModal.classList.add('active');
@@ -2393,7 +2393,7 @@
             };
 
             // Ação do botão do modal de telefone
-            phoneModalBtn.onclick = function() {
+            phoneModalBtn.onclick = async function() {
                 const tel = userPhone.value.trim();
                 userPhone.style.borderColor = '';
 
@@ -2402,26 +2402,48 @@
                     return;
                 }
 
-                // Fecha o modal de telefone
-                phoneModal.classList.remove('active');
-
-                // Mostra o modal de confirmação
-                showCustomModal({
-                    message: `<strong>Agendamento confirmado!</strong><br><br>
-                    <b>Serviço:</b> ${selectedService}<br>
-                    <b>Profissional:</b> ${selectedProfessional}<br>
-                    <b>Data:</b> ${selectedDate}<br>
-                    <b>Horário:</b> ${selectedTime}<br>
-                    <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                    <b>Telefone:</b> ${tel}`,
-                    icon: '<i class="fas fa-check-circle" style="color:var(--green);"></i>',
-                    btnText: 'Fechar',
-                    onClose: function() {
-                        setTimeout(() => {
-                            location.reload();
-                        }, 300);
+                // Salvar no banco via API
+                try {
+                    const res = await fetch('/agendamento/novo', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nome: '', // Você pode pedir o nome do usuário se quiser
+                            telefone: tel,
+                            servico: selectedService,
+                            profissional: selectedProfessional,
+                            data: selectedDate.split('/').reverse().join('-'), // dd/mm/yyyy -> yyyy-mm-dd
+                            hora: selectedTime,
+                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
+                        })
+                    });
+                    if (res.ok) {
+                        // Fecha o modal de telefone
+                        phoneModal.classList.remove('active');
+                        showCustomModal({
+                            message: `<strong>Agendamento confirmado!</strong><br><br>
+                            <b>Serviço:</b> ${selectedService}<br>
+                            <b>Profissional:</b> ${selectedProfessional}<br>
+                            <b>Data:</b> ${selectedDate}<br>
+                            <b>Horário:</b> ${selectedTime}<br>
+                            <b>Valor:</b> R$ ${selectedServicePrice}<br>
+                            <b>Telefone:</b> ${tel}`,
+                            icon: '<i class="fas fa-check-circle" style="color:var(--green);"></i>',
+                            btnText: 'Fechar',
+                            onClose: function() {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 300);
+                            }
+                        });
+                    } else {
+                        alert('Erro ao salvar agendamento!');
                     }
-                });
+                } catch (err) {
+                    alert('Erro ao conectar ao servidor.');
+                }
             };
 
             // Novo código para o endereço
@@ -2496,11 +2518,10 @@
             };
 
             // Ação do botão do modal
-            appointmentsModalBtn.onclick = function() {
+            appointmentsModalBtn.onclick = async function() {
                 const nome = appointmentsName.value.trim();
                 const tel = appointmentsPhone.value.trim();
 
-                // Remove borda vermelha antes de validar
                 appointmentsName.style.borderColor = '';
                 appointmentsPhone.style.borderColor = '';
 
@@ -2517,13 +2538,45 @@
                     // Não exibe modal de aviso, apenas borda vermelha
                     return;
                 }
-                // Aqui você pode buscar/exibir os agendamentos do usuário
-                appointmentsModal.classList.remove('active');
-                showCustomModal({
-                    message: `<b>Olá, ${nome}!</b><br>Em breve você poderá visualizar seus agendamentos aqui.`,
-                    icon: '<i class="fas fa-calendar-check" style="color:var(--blue);"></i>',
-                    btnText: 'Fechar'
-                });
+
+                // Buscar agendamentos do usuário
+                try {
+                    const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                    const data = await res.json();
+                    if (data.success && data.agendamentos.length > 0) {
+                        let html = `<b>Olá, ${nome}!</b><br>Seus agendamentos:<br><ul style="text-align:left;">`;
+                        data.agendamentos.forEach(ag => {
+                            html += `<li>
+                                <b>Serviço:</b> ${ag.servico}<br>
+                                <b>Profissional:</b> ${ag.profissional}<br>
+                                <b>Data:</b> ${new Date(ag.data).toLocaleDateString('pt-BR')}<br>
+                                <b>Horário:</b> ${ag.hora}<br>
+                                <b>Valor:</b> R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}
+                            </li><hr>`;
+                        });
+                        html += '</ul>';
+                        appointmentsModal.classList.remove('active');
+                        showCustomModal({
+                            message: html,
+                            icon: '<i class="fas fa-calendar-check" style="color:var(--blue);"></i>',
+                            btnText: 'Fechar'
+                        });
+                    } else {
+                        appointmentsModal.classList.remove('active');
+                        showCustomModal({
+                            message: `<b>Olá, ${nome}!</b><br>Você ainda não possui agendamentos.`,
+                            icon: '<i class="fas fa-calendar-check" style="color:var(--blue);"></i>',
+                            btnText: 'Fechar'
+                        });
+                    }
+                } catch (err) {
+                    appointmentsModal.classList.remove('active');
+                    showCustomModal({
+                        message: 'Erro ao buscar agendamentos.',
+                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--red);"></i>',
+                        btnText: 'Fechar'
+                    });
+                }
             };
         });
 
