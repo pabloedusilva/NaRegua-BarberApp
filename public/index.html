@@ -2544,21 +2544,42 @@
                     const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                     const data = await res.json();
                     if (data.success && data.agendamentos.length > 0) {
-                        let html = `<b>Olá, ${nome}!</b><br>Seus agendamentos:<br><ul style="text-align:left;">`;
+                        let html = `<b style="color:var(--text-main);">Olá, ${nome}!</b><br><br>
+                        <div style="display: flex; flex-direction: column; gap: 18px;">`;
                         data.agendamentos.forEach(ag => {
-                            html += `<li>
-                                <b>Serviço:</b> ${ag.servico}<br>
-                                <b>Profissional:</b> ${ag.profissional}<br>
-                                <b>Data:</b> ${new Date(ag.data).toLocaleDateString('pt-BR')}<br>
-                                <b>Horário:</b> ${ag.hora}<br>
-                                <b>Valor:</b> R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}
-                            </li><hr>`;
+                            html += `
+                            <div style="
+                                border: 1px solid var(--border-color);
+                                border-radius: 12px;
+                                padding: 18px;
+                                background: var(--card-bg);
+                                box-shadow: 0 2px 8px var(--shadow-color);
+                                ">
+                                <div style="font-size: 1.15em; font-weight: bold; color: var(--primary); margin-bottom: 8px;">
+                                    ${ag.servico}
+                                </div>
+                                <div style="margin-bottom: 6px;">
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
+                                    <span style="color:var(--text-main);">${ag.profissional}</span>
+                                </div>
+                                <div style="margin-bottom: 6px;">
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
+                                    <span style="color:var(--text-main);">${new Date(ag.data).toLocaleDateString('pt-BR')}</span>
+                                    <span style="margin-left: 16px; font-weight: 500; color: var(--text-secondary);">Horário:</span>
+                                    <span style="color:var(--text-main);">${ag.hora}</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
+                                    <span style="color:var(--green); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
+                                </div>
+                            </div>
+                            `;
                         });
-                        html += '</ul>';
+                        html += '</div>';
                         appointmentsModal.classList.remove('active');
                         showCustomModal({
                             message: html,
-                            icon: '<i class="fas fa-calendar-check" style="color:var(--blue);"></i>',
+                            icon: `<i class="fas fa-calendar-check" style="color:var(--primary);"></i>`,
                             btnText: 'Fechar'
                         });
                     } else {
