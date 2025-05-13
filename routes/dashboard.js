@@ -72,4 +72,14 @@ router.get('/agendamentos-hoje', requireLogin, async(req, res) => {
     }
 });
 
+// Rota pública para buscar serviços (para o frontend)
+router.get('/servicos', async(req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM servicos WHERE ativo = 1 ORDER BY id ASC');
+        res.json({ success: true, servicos: rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar serviços.' });
+    }
+});
+
 module.exports = router;

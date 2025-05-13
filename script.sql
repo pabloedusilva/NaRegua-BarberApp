@@ -28,3 +28,23 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     preco DECIMAL(10,2) NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Criação da tabela de serviços
+CREATE TABLE IF NOT EXISTS servicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    tempo VARCHAR(30) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    imagem VARCHAR(255) DEFAULT NULL,
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+-- Exemplo de inserção inicial
+INSERT INTO servicos (nome, tempo, preco, imagem, ativo) VALUES
+('Barba', '15min', 20.00, 'img/servicos/barba.jpg', 1),
+('Corte de Cabelo', '30min', 35.00, 'img/servicos/corte-masculino.jpg', 1),
+('Corte + Barba', '45min', 50.00, 'img/servicos/corte-barba.jpg', 1),
+('Bigodinho', '5min', 7.00, 'img/servicos/bigodinho.jpg', 1),
+('Colorimetria + corte', '1h:30min', 65.00, 'img/servicos/colorimetria.jpg', 1),
+('Corte infantil', '30min', 25.00, 'img/servicos/infantil.jpg', 1),
+('Barba raspada na máquina', '05min', 10.00, 'img/servicos/maquina.jpg', 1);

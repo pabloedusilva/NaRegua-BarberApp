@@ -1667,100 +1667,6 @@
         </section>
 
         <section class="services-section animate-slide-up">
-            <h2 class="section-title"><i class="fas fa-cut"></i> Serviços
-            </h2>
-            <div class="service-list">
-                <div class="service-item">
-                    <img class="service-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1uXel9QPzoDEVy9rxwb3UNwbYvCvCf-uCmoPke0RQQpaBXX8_p0tzJ962C3cffNdz7QA&usqp=CAU" alt="Barba">
-                    <div class="service-info">
-                        <div class="service-name">Barba</div>
-                        <div class="service-details">
-                            <div class="service-time">
-                                <i class="far fa-clock"></i> 15min
-                            </div>
-                            <div class="service-price">
-                                <i class="fas fa-dollar-sign"></i> a partir de R$ 20,00
-                            </div>
-                        </div>
-                    </div>
-                    <button class="book-button" data-service="Barba" data-price="20.00" data-time="15min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                </div>
-
-                <div class="service-item">
-                    <img class="service-image" src="IMAGEM_MAQUINA.jpg" alt="Barba raspada na máquina">
-                    <div class="service-info">
-                        <div class="service-name">Barba raspada na máquina
-                        </div>
-                        <div class="service-details">
-                            <div class="service-time">
-                                <i class="far fa-clock"></i> 05min
-                            </div>
-                            <div class="service-price">
-                                <i class="fas fa-dollar-sign"></i> a partir de R$ 10,00
-                            </div>
-                        </div>
-                    </div>
-                    <button class="book-button" data-service="Barba raspada na máquina" data-price="10.00" data-time="05min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                </div>
-
-                <div class="service-item">
-                    <img class="service-image" src="IMAGEM_BIGODINHO.jpg" alt="Bigodinho">
-                    <div class="service-info">
-                        <div class="service-name">Bigodinho</div>
-                        <div class="service-details">
-                            <div class="service-time">
-                                <i class="far fa-clock"></i> 05min
-                            </div>
-                            <div class="service-price">
-                                <i class="fas fa-dollar-sign"></i> a partir de R$ 7,00
-                            </div>
-                        </div>
-                    </div>
-                    <button class="book-button" data-service="Bigodinho" data-price="7.00" data-time="05min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                </div>
-
-                <div class="service-item">
-                    <img class="service-image" src="IMAGEM_COLORIMETRIA.jpg" alt="Colorimetria + corte">
-                    <div class="service-info">
-                        <div class="service-name">Colorimetria + corte</div>
-                        <div class="service-details">
-                            <div class="service-time">
-                                <i class="far fa-clock"></i> 1h:30min
-                            </div>
-                            <div class="service-price">
-                                <i class="fas fa-dollar-sign"></i> a partir de R$ 65,00
-                            </div>
-                        </div>
-                    </div>
-                    <button class="book-button" data-service="Colorimetria + corte" data-price="65.00" data-time="1h:30min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                </div>
-
-                <div class="service-item">
-                    <img class="service-image" src="IMAGEM_INFANTIL.jpg" alt="Corte infantil">
-                    <div class="service-info">
-                        <div class="service-name">Corte infantil</div>
-                        <div class="service-details">
-                            <div class="service-time">
-                                <i class="far fa-clock"></i> 30min
-                            </div>
-                            <div class="service-price">
-                                <i class="fas fa-dollar-sign"></i> a partir de R$ 25,00
-                            </div>
-                        </div>
-                    </div>
-                    <button class="book-button" data-service="Corte infantil" data-price="25.00" data-time="30min">
-                            <i class="far fa-calendar-alt"></i> Reservar
-                        </button>
-                </div>
-            </div>
         </section>
 
         <section class="professionals-section animate-slide-up">
@@ -1969,7 +1875,47 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Carregar serviços do backend
+            const servicesSection = document.querySelector('.services-section');
+            if (servicesSection) {
+                try {
+                    const res = await fetch('/dashboard/servicos');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.servicos)) {
+                        let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
+                        <div class="service-list">`;
+                        data.servicos.forEach(servico => {
+                            html += `
+                            <div class="service-item">
+                                <img class="service-image" src="${servico.imagem || 'img/servicos/default.jpg'}" alt="${servico.nome}">
+                                <div class="service-info">
+                                    <div class="service-name">${servico.nome}</div>
+                                    <div class="service-details">
+                                        <div class="service-time">
+                                            <i class="far fa-clock"></i> ${servico.tempo}
+                                        </div>
+                                        <div class="service-price">
+                                            <i class="fas fa-dollar-sign"></i> a partir de R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="book-button" data-service="${servico.nome}" data-price="${Number(servico.preco).toFixed(2)}" data-time="${servico.tempo}">
+                                    <i class="far fa-calendar-alt"></i> Reservar
+                                </button>
+                            </div>
+                            `;
+                        });
+                        html += `</div>`;
+                        servicesSection.innerHTML = html;
+                    } else {
+                        servicesSection.innerHTML = '<div style="color:var(--red);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+                    }
+                } catch (err) {
+                    servicesSection.innerHTML = '<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+                }
+            }
+
             // Variáveis para armazenar as seleções
             let selectedService = '';
             let selectedServicePrice = '';
