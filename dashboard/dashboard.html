@@ -1554,50 +1554,16 @@
             </div>
         </section>
 
+        <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos
-                </h2>
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos</h2>
                 <button class="edit-btn" id="viewAllAppointments">
-                        <i class="fas fa-list"></i> Ver todos
-                    </button>
+                    <i class="fas fa-list"></i> Ver todos
+                </button>
             </div>
-
-            <div class="appointments-list">
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">João Silva</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 09:30</span>
-                            <span><i class="fas fa-cut"></i> Corte +
-                                    Barba</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">Maria Oliveira</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 10:30</span>
-                            <span><i class="fas fa-cut"></i> Corte
-                                    feminino</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="appointment-client">Carlos Souza</div>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> 11:30</span>
-                            <span><i class="fas fa-cut"></i> Barba</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="appointments-list" id="todayAppointmentsList">
+                <!-- Agendamentos do dia serão inseridos aqui via JS -->
             </div>
         </section>
 
@@ -2965,23 +2931,46 @@ function atualizarTotalAgendamentos() {
         });
 }
 atualizarTotalAgendamentos();
-        });
 
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/dashboard/total-agendamentos')
+// Carregar agendamentos do dia
+function carregarAgendamentosHoje() {
+    fetch('/dashboard/agendamentos-hoje')
         .then(res => res.json())
         .then(data => {
-            const el = document.getElementById('total-appointments');
-            if (el && data.total !== undefined) {
-                el.textContent = data.total;
+            const container = document.getElementById('todayAppointmentsList');
+            if (!container) return;
+            container.innerHTML = '';
+            if (data.agendamentos && data.agendamentos.length > 0) {
+                data.agendamentos.forEach(ag => {
+                    const item = document.createElement('div');
+                    item.className = 'appointment-item';
+                    item.innerHTML = `
+                        <div class="appointment-info">
+                            <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> ${ag.hora}</span>
+                                <span><i class="fas fa-cut"></i> ${ag.servico}</span>
+                                <span><i class="fas fa-user"></i> ${ag.profissional}</span>
+                                <span class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            } else {
+                container.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento para hoje.</div>`;
             }
         })
         .catch(() => {
-            // Em caso de erro, pode exibir um aviso ou manter o valor anterior
+            const container = document.getElementById('todayAppointmentsList');
+            if (container) {
+                container.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
+            }
         });
-});
+}
+carregarAgendamentosHoje();
+        });
     </script>
 </body>
 
 </html>
-```

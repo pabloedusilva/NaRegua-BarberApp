@@ -55,4 +55,21 @@ router.get('/total-agendamentos', requireLogin, async(req, res) => {
     }
 });
 
+// Rota para buscar agendamentos do dia atual
+router.get('/agendamentos-hoje', requireLogin, async(req, res) => {
+    try {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        const dataHoje = `${ano}-${mes}-${dia}`;
+        const [rows] = await db.query(
+            'SELECT * FROM agendamentos WHERE data = ? ORDER BY hora ASC', [dataHoje]
+        );
+        res.json({ agendamentos: rows });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar agendamentos de hoje.' });
+    }
+});
+
 module.exports = router;
