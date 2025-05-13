@@ -45,4 +45,14 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dashboard', 'login-dashboard.html'));
 });
 
+// Rota para buscar total de agendamentos
+router.get('/total-agendamentos', requireLogin, async(req, res) => {
+    try {
+        const [rows] = await db.query('SELECT COUNT(*) AS total FROM agendamentos');
+        res.json({ total: rows[0].total });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar total de agendamentos.' });
+    }
+});
+
 module.exports = router;

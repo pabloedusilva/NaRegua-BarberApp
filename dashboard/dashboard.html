@@ -1548,7 +1548,7 @@
                     <div class="stat-label">Agendamentos do mês</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="total-appointments">48</div>
+                    <div class="stat-value" id="total-appointments">0</div>
                     <div class="stat-label">Agendamentos totais</div>
                 </div>
             </div>
@@ -2952,8 +2952,36 @@ if (pushHistoryModal) {
         if (e.target === pushHistoryModal) pushHistoryModal.style.display = 'none';
     });
 }
+
+// Atualiza o contador de agendamentos totais
+function atualizarTotalAgendamentos() {
+    fetch('/dashboard/total-agendamentos')
+        .then(res => res.json())
+        .then(data => {
+            const totalEl = document.querySelectorAll('#total-appointments');
+            totalEl.forEach(el => {
+                el.textContent = data.total;
+            });
         });
+}
+atualizarTotalAgendamentos();
+        });
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/dashboard/total-agendamentos')
+        .then(res => res.json())
+        .then(data => {
+            const el = document.getElementById('total-appointments');
+            if (el && data.total !== undefined) {
+                el.textContent = data.total;
+            }
+        })
+        .catch(() => {
+            // Em caso de erro, pode exibir um aviso ou manter o valor anterior
+        });
+});
     </script>
 </body>
 
 </html>
+```
