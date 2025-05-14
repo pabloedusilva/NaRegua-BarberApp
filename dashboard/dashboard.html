@@ -888,15 +888,25 @@
         }
         /* Footer Moderno */
         
-        footer {
-            background-color: var(--footer);
-            color: var(--footer-text);
-            padding: 50px 0 20px;
-            margin-top: 60px;
-            transition: background-color 0.3s;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
-        }
+footer {
+    background-color: var(--footer);
+    padding: 18px 1px;
+    margin-top: 25px;
+    transition: background-color 0.3s, color 0.3s;
+    flex-shrink: 0;
+    font-size: 0.98rem;
+}
+
+footer, 
+footer * {
+    color: var(--footer-text);
+}
+
+.dark-mode footer,
+.dark-mode footer * {
+    background-color: var(--footer) !important;
+    color: var(--footer-text) !important;
+}
         
         .footer-content {
             display: grid;
@@ -1020,6 +1030,8 @@
         
         .dark-mode footer {
             background-color: var(--footer);
+            color: var(--footer-text);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .footer-admin-link-modern {
@@ -2048,7 +2060,8 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="pushMessage">
-                            Mensagem <span style="color:var(--primary-dark);">*</span>
+                            Mensagem <span
+                                style="color:var(--primary-dark);">*</span>
                         </label>
                         <textarea class="form-control" id="pushMessage"
                             maxlength="180" required rows="3"
