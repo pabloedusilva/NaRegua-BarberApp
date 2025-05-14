@@ -65,6 +65,13 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
+            padding-left: 74px !important;
+        }
+        
+        @media (max-width: 900px) {
+            body {
+                padding-left: 56px !important;
+            }
         }
         
         .container {
@@ -1502,6 +1509,94 @@
                 max-width: 100%;
             }
         }
+        /* Barra lateral estilo Mac */
+        
+        .mac-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 74px;
+            height: 100vh;
+            background: var(--header-bg, #fff);
+            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2000;
+            padding: 18px 0 12px 0;
+            transition: background 0.3s;
+        }
+        
+        .mac-sidebar-logo {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 18px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mac-sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .mac-sidebar-btn {
+            background: none;
+            border: none;
+            width: 48px;
+            height: 48px;
+            margin: 6px 0;
+            border-radius: 16px;
+            color: var(--text-color, #222);
+            font-size: 1.45rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+        }
+        
+        .mac-sidebar-btn.active,
+        .mac-sidebar-btn:focus {
+            background: var(--blue, #1a4b8c);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(26, 75, 140, 0.10);
+        }
+        
+        .mac-sidebar-btn:hover:not(.active) {
+            background: var(--hover-bg, #e0e0e0);
+            color: var(--blue, #1a4b8c);
+        }
+        
+        .mac-sidebar-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        @media (max-width: 900px) {
+            .mac-sidebar {
+                width: 56px;
+            }
+            .mac-sidebar-logo {
+                width: 36px;
+                height: 36px;
+            }
+            .mac-sidebar-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
@@ -1533,6 +1628,23 @@
         </div>
     </header>
 
+    <!-- Adicione logo após <body> -->
+    <div class="mac-sidebar">
+        <div class="mac-sidebar-logo">
+            <img src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg" alt="Logo">
+        </div>
+        <button class="mac-sidebar-btn active" data-section="painel" title="Painel"><i class="fas fa-tachometer-alt"></i></button>
+        <button class="mac-sidebar-btn" data-section="agendamentos" title="Agendamentos"><i class="fas fa-calendar-alt"></i></button>
+        <button class="mac-sidebar-btn" data-section="servicos" title="Serviços"><i class="fas fa-cut"></i></button>
+        <button class="mac-sidebar-btn" data-section="horarios" title="Horários"><i class="fas fa-clock"></i></button>
+        <button class="mac-sidebar-btn" data-section="folgas" title="Folgas"><i class="fas fa-calendar-times"></i></button>
+        <button class="mac-sidebar-btn" data-section="barbearia" title="Barbearia"><i class="fas fa-store"></i></button>
+        <button class="mac-sidebar-btn" data-section="notificacoes" title="Notificações"><i class="fas fa-bell"></i></button>
+        <div class="mac-sidebar-bottom">
+            <button class="mac-sidebar-btn" id="logoutBtn" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
+            <button class="mac-sidebar-btn" id="themeToggle" title="Tema"><i class="fas fa-moon"></i></button>
+        </div>
+    </div>
     <main class="container">
         <section class="dashboard-section animate-fade-in">
             <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Painel
@@ -2969,6 +3081,41 @@ function carregarAgendamentosHoje() {
         });
 }
 carregarAgendamentosHoje();
+
+// Sidebar navigation
+const sidebarBtns = document.querySelectorAll('.mac-sidebar-btn[data-section]');
+const sections = [
+    {section: 'painel', selector: '.stats-container, .dashboard-section:nth-of-type(1)'},
+    {section: 'agendamentos', selector: '.dashboard-section:nth-of-type(2), .dashboard-section:nth-of-type(10)'},
+    {section: 'servicos', selector: '.dashboard-section:nth-of-type(3)'},
+    {section: 'horarios', selector: '.dashboard-section:nth-of-type(4)'},
+    {section: 'folgas', selector: '.dashboard-section:nth-of-type(5)'},
+    {section: 'barbearia', selector: '.dashboard-section:nth-of-type(6)'},
+    {section: 'notificacoes', selector: '.dashboard-section:nth-of-type(7)'}
+];
+function showSection(sectionName) {
+    // Esconde todas as seções
+    document.querySelectorAll('.dashboard-section').forEach(sec => sec.style.display = 'none');
+    // Mostra apenas a(s) seção(ões) correspondente(s)
+    const sec = sections.find(s => s.section === sectionName);
+    if (sec) {
+        sec.selector.split(',').forEach(sel => {
+            const el = document.querySelector(sel.trim());
+            if (el) el.style.display = '';
+        });
+    }
+    // Ativa o botão correto
+    sidebarBtns.forEach(btn => btn.classList.remove('active'));
+    const btn = document.querySelector(`.mac-sidebar-btn[data-section="${sectionName}"]`);
+    if (btn) btn.classList.add('active');
+}
+sidebarBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        showSection(this.getAttribute('data-section'));
+    });
+});
+// Inicializa mostrando o painel
+showSection('painel');
         });
     </script>
 </body>
