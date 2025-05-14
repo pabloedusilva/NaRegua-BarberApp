@@ -9,42 +9,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
          :root {
-            --blue: #1a4b8c;
-            --red: #c41e3a;
-            --light-blue: #2980b9;
-            --dark-blue: #0c2b51;
+            --primary: #dac02d;           /* Dourado principal */
+            --primary-dark: #816a02;      /* Dourado escuro */
+            --primary-light: #b99729;     /* Dourado claro */
+            --accent: #ca9a41;            /* Dourado de destaque */
             --white: #ffffff;
-            --light-gray: #f5f5f5;
+            --gray-light: #f5f5f5;
             --gray: #e0e0e0;
-            --dark-gray: #333333;
-            --green: #28a745;
-            --orange: #fd7e14;
+            --gray-dark: #333333;
+            --success: #28a745;
+            --warning: #fd7e14;
             --purple: #6f42c1;
-            /* Cores do tema escuro */
-            --bg-color: var(--white);
-            --text-color: var(--dark-gray);
-            --card-bg: var(--white);
-            --header-bg: var(--white);
-            --footer-bg: var(--dark-blue);
+
+            /* Tema claro */
+            --background: var(--white);
+            --text: var(--gray-dark);
+            --card: var(--white);
+            --header: var(--white);
+            --footer: var(--accent);
             --footer-text: var(--white);
-            --border-color: var(--gray);
-            --hover-bg: var(--gray);
-            --selected-bg: var(--blue);
-            --disabled-color: var(--gray);
+            --border: var(--gray);
+            --hover: var(--gray);
+            --selected: var(--primary);
+            --disabled: var(--gray);
+            --slot-bg: var(--gray-light);
+            --professional-card: var(--gray-light);
         }
         /* Tema escuro */
-        
         .dark-mode {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --card-bg: #1e1e1e;
-            --header-bg: #1e1e1e;
-            --footer-bg: #0a0a0a;
+            --background: #121212;
+            --text: #e0e0e0;
+            --card: #1e1e1e;
+            --header: #1e1e1e;
+            --footer: #0a0a0a;
             --footer-text: #e0e0e0;
-            --border-color: #333;
-            --hover-bg: #333;
-            --selected-bg: var(--blue);
-            --disabled-color: #444;
+            --border: #333;
+            --hover: #333;
+            --selected: var(--primary);
+            --disabled: #444;
+            --slot-bg: #2a2a2a;
+            --professional-card: #2a2a2a;
+            --gray-light: #2a2a2a;
+            --gray: #444;
         }
         
         * {
@@ -55,8 +61,8 @@
         }
         
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
             min-height: 100vh;
@@ -94,15 +100,15 @@
         .logo-text {
             font-size: 24px;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--text);
         }
         
         .logo-text span {
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .logo-text .highlight {
-            color: var(--red);
+            color: var(--primary-dark);
         }
         
         .nav-links {
@@ -113,13 +119,13 @@
         
         .nav-links a {
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--text);
             font-weight: 500;
             transition: color 0.3s;
         }
         
         .nav-links a:hover {
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .theme-toggle {
@@ -127,7 +133,7 @@
             border: none;
             font-size: 20px;
             cursor: pointer;
-            color: var(--text-color);
+            color: var(--text);
             transition: transform 0.3s;
             width: 40px;
             height: 40px;
@@ -138,7 +144,7 @@
         }
         
         .theme-toggle:hover {
-            background-color: var(--hover-bg);
+            background-color: var(--hover);
             transform: rotate(30deg);
         }
         /* Main Content - Auth Forms */
@@ -152,7 +158,7 @@
         }
         
         .auth-card {
-            background-color: var(--card-bg);
+            background-color: var(--card);
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -162,8 +168,8 @@
         }
         
         .auth-header {
-            background-color: var(--blue);
-            color: white;
+            background-color: var(--primary);
+            color: var(--white);
             padding: 25px;
             text-align: center;
             position: relative;
@@ -191,24 +197,24 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--text);
         }
         
         .form-control {
             width: 100%;
             padding: 12px 15px;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            border: 1px solid var(--border);
+            background-color: var(--background);
+            color: var(--text);
             font-size: 16px;
             transition: border-color 0.3s;
         }
         
         .form-control:focus {
             outline: none;
-            border-color: var(--blue);
-            box-shadow: 0 0 0 2px rgba(26, 75, 140, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(218, 192, 45, 0.2);
         }
         
         .input-icon {
@@ -220,7 +226,7 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .input-icon input {
@@ -241,12 +247,12 @@
         }
         
         .btn-primary {
-            background-color: var(--blue);
-            color: white;
+            background-color: var(--primary);
+            color: var(--white);
         }
         
         .btn-primary:hover {
-            background-color: var(--dark-blue);
+            background-color: var(--accent);
             transform: translateY(-2px);
         }
         
@@ -254,7 +260,7 @@
             display: flex;
             align-items: center;
             margin: 20px 0;
-            color: var(--text-color);
+            color: var(--text);
             opacity: 0.7;
         }
         
@@ -262,7 +268,7 @@
         .divider::after {
             content: "";
             flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
         }
         
         .divider::before {
@@ -280,7 +286,7 @@
         }
         
         .auth-footer a {
-            color: var(--blue);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
@@ -293,11 +299,11 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
         }
         
         .auth-switch a {
-            color: var(--blue);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
@@ -309,7 +315,7 @@
         
         .auth-tabs {
             display: flex;
-            border-bottom: 2px solid var(--light-gray);
+            border-bottom: 2px solid var(--gray-light);
         }
         
         .auth-tab {
@@ -318,13 +324,13 @@
             text-align: center;
             cursor: pointer;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--text);
             transition: all 0.3s;
             position: relative;
         }
         
         .auth-tab.active {
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .auth-tab.active::after {
@@ -334,7 +340,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background-color: var(--blue);
+            background-color: var(--primary);
         }
         
         .auth-content {
@@ -372,12 +378,12 @@
         
         .checkbox-group label {
             font-size: 14px;
-            color: var(--text-color);
+            color: var(--text);
         }
         /* Footer */
         
         footer {
-            background-color: var(--footer-bg);
+            background-color: var(--footer);
             color: var(--footer-text);
             padding: 30px 0;
             margin-top: auto;
@@ -401,11 +407,11 @@
         }
         
         .logo-text-footer span {
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .logo-text-footer .highlight {
-            color: var(--red);
+            color: var(--primary-dark);
         }
         
         .copyright {
@@ -467,8 +473,8 @@
         }
         
         .modal-content {
-            background: var(--card-bg);
-            color: var(--text-color);
+            background: var(--card);
+            color: var(--text);
             border-radius: 12px;
             box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
             padding: 32px 24px 24px 24px;
@@ -484,19 +490,19 @@
             top: 14px;
             right: 18px;
             font-size: 22px;
-            color: var(--text-color);
+            color: var(--text);
             cursor: pointer;
             transition: color 0.2s;
         }
         
         .close-modal:hover {
-            color: var(--red);
+            color: var(--primary-dark);
         }
         
         .modal-content h3 {
             margin-bottom: 10px;
             font-size: 22px;
-            color: var(--blue);
+            color: var(--primary);
         }
         
         .modal-content p {
@@ -520,12 +526,12 @@
         }
         
         .btn.btn-email {
-            background: var(--blue);
-            color: #fff;
+            background: var(--primary);
+            color: var(--white);
         }
         
         .btn.btn-email:hover {
-            background: var(--dark-blue);
+            background: var(--accent);
         }
         
         @media (max-width: 480px) {
