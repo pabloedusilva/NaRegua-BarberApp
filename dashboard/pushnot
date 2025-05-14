@@ -1,0 +1,61 @@
+<section class="dashboard-section animate-slide-up">
+    <div class="card-header">
+        <h2 class="section-title">
+            <i class="fas fa-bell"></i> Enviar Notificação Push
+        </h2>
+        <button class="edit-btn" id="viewPushHistoryBtn">
+            <i class="fas fa-history"></i> Histórico
+        </button>
+    </div>
+    <form id="pushNotificationForm" class="push-notification-form" autocomplete="off">
+        <div class="form-group">
+            <label class="form-label" for="pushTitle">
+                Título da Notificação <span style="color:var(--red);">*</span>
+            </label>
+            <input type="text" class="form-control" id="pushTitle" maxlength="60" required placeholder="Ex: Promoção especial de hoje!">
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="pushMessage">
+                Mensagem <span style="color:var(--red);">*</span>
+            </label>
+            <textarea class="form-control" id="pushMessage" maxlength="180" required rows="3" placeholder="Digite a mensagem da notificação"></textarea>
+            <div class="char-count" id="pushMessageCount">0/180</div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Destinatários</label>
+            <div class="push-recipients">
+                <label><input type="checkbox" id="recipientAll" checked> Todos os clientes</label>
+                <label><input type="checkbox" id="recipientToday"> Clientes com agendamento hoje</label>
+                <label><input type="checkbox" id="recipientWeek"> Clientes com agendamento nesta semana</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="pushUrl">
+                Link de Ação (opcional)
+            </label>
+            <input type="url" class="form-control" id="pushUrl" placeholder="https://...">
+        </div>
+        <div class="modal-footer" style="justify-content: flex-start; gap: 14px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Enviar Notificação
+            </button>
+            <span id="pushNotificationStatus" style="display:none;font-size:1rem;"></span>
+        </div>
+    </form>
+</section>
+
+<!-- Modal de Histórico de Notificações Push -->
+<div id="pushHistoryModal" class="modal">
+    <div class="modal-content" style="max-width: 480px;">
+        <div class="modal-header">
+            <h3 class="modal-title"><i class="fas fa-history"></i> Histórico de Notificações</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body" id="pushHistoryList" style="max-height: 340px; overflow-y: auto;">
+            <!-- Histórico será preenchido via JS -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary close-modal">Fechar</button>
+        </div>
+    </div>
+</div>
