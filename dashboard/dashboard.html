@@ -358,47 +358,98 @@
         }
         
         .appointment-item {
-            background-color: var(--gray-light);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+            background: var(--gray-light);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+        
+        .appointment-item .appointment-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
             align-items: center;
-            transition: all 0.3s;
+            font-size: 1.02rem;
         }
         
-        .appointment-item:hover {
-            background-color: var(--hover);
-        }
-        
-        .appointment-info {
-            flex: 1;
-        }
-        
-        .appointment-client {
+        .appointment-item .appointment-client {
             font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .appointment-item .appointment-details {
+            display: flex;
+            gap: 12px;
+            font-size: 0.98rem;
             color: var(--text);
         }
         
-        .appointment-details {
-            display: flex;
-            gap: 15px;
-            margin-top: 5px;
-            font-size: 14px;
-            color: var (--text);
-        }
-        
         .appointment-status {
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.92rem;
             font-weight: 600;
+            background: rgba(40, 167, 69, 0.13);
+            color: var(--success);
+            margin-left: 8px;
         }
         
-        .status-confirmed {
-            background-color: rgba(40, 167, 69, 0.2);
-            color: var(--success);
+        @media (max-width: 600px) {
+            .appointment-item .appointment-info {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+        }
+        
+        .appointments-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--gray-light);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 18px;
+            padding: 7px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+        
+        .filter-btn.active,
+        .filter-btn:focus {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background: var(--accent);
+            color: #fff;
+        }
+        
+        @media (max-width: 600px) {
+            .appointments-filter {
+                gap: 5px;
+            }
+            .filter-btn {
+                font-size: 0.95rem;
+                padding: 6px 10px;
+            }
         }
         
         .services-container {
@@ -1827,14 +1878,15 @@
         <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos
-                </h2>
-                <button class="edit-btn" id="viewAllAppointments">
-                        <i class="fas fa-list"></i> Ver todos
-                    </button>
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos</h2>
+                <div class="appointments-filter">
+                    <button class="filter-btn active" data-filter="today"><i class="fas fa-calendar-day"></i> Hoje</button>
+                    <button class="filter-btn" data-filter="week"><i class="fas fa-calendar-week"></i> Semana</button>
+                    <button class="filter-btn" data-filter="month"><i class="fas fa-calendar"></i> Mês</button>
+                </div>
             </div>
-            <div class="appointments-list" id="todayAppointmentsList">
-                <!-- Agendamentos do dia serão inseridos aqui via JS -->
+            <div class="appointments-list" id="filteredAppointmentsList">
+                <!-- Agendamentos filtrados aparecerão aqui -->
             </div>
         </section>
 
@@ -3314,6 +3366,61 @@ document.querySelectorAll('.password-eye-btn').forEach(btn => {
             this.firstElementChild.classList.remove('fa-eye-slash');
             this.firstElementChild.classList.add('fa-eye');
         }
+    });
+});
+
+const filterBtns = document.querySelectorAll('.filter-btn');
+const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
+
+function fetchAppointments(filter) {
+    let url = '';
+    if (filter === 'today') url = '/dashboard/agendamentos-hoje';
+    else if (filter === 'week') url = '/dashboard/agendamentos-semana';
+    else if (filter === 'month') url = '/dashboard/agendamentos-mes';
+
+    filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            let ags = data.agendamentos || [];
+            if (ags.length === 0) {
+                filteredAppointmentsList.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                return;
+            }
+            filteredAppointmentsList.innerHTML = '';
+            ags.forEach(ag => {
+                const item = document.createElement('div');
+                item.className = 'appointment-item';
+                item.innerHTML = `
+                    <div class="appointment-info">
+                        <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
+                        <div class="appointment-details">
+                            <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                            <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                            <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                            <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                            <span class="appointment-status status-confirmed">Confirmado</span>
+                        </div>
+                    </div>
+                `;
+                filteredAppointmentsList.appendChild(item);
+            });
+        })
+        .catch(() => {
+            filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
+        });
+}
+
+// Filtro inicial: hoje
+fetchAppointments('today');
+
+// Troca de filtro
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        fetchAppointments(this.dataset.filter);
     });
 });
 

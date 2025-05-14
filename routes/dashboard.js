@@ -143,4 +143,43 @@ router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
     }
 });
 
+// Agendamentos da semana atual
+router.get('/agendamentos-semana', requireLogin, async(req, res) => {
+    try {
+        const hoje = new Date();
+        const diaSemana = hoje.getDay();
+        const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
+        const inicioSemana = new Date(hoje.setDate(diff));
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+
+        const dataInicio = inicioSemana.toISOString().slice(0, 10);
+        const dataFim = fimSemana.toISOString().slice(0, 10);
+
+        const [rows] = await db.query(
+            'SELECT * FROM agendamentos WHERE data >= ? AND data <= ? ORDER BY data ASC, hora ASC', [dataInicio, dataFim]
+        );
+        res.json({ agendamentos: rows });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar agendamentos da semana.' });
+    }
+});
+
+// Agendamentos do mês atual
+router.get('/agendamentos-mes', requireLogin, async(req, res) => {
+    try {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dataInicio = `${ano}-${mes}-01`;
+        const dataFim = `${ano}-${mes}-31`;
+        const [rows] = await db.query(
+            'SELECT * FROM agendamentos WHERE data >= ? AND data <= ? ORDER BY data ASC, hora ASC', [dataInicio, dataFim]
+        );
+        res.json({ agendamentos: rows });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar agendamentos do mês.' });
+    }
+});
+
 module.exports = router;
