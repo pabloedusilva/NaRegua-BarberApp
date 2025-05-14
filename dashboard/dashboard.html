@@ -245,6 +245,57 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
+            gap: 12px; /* Adicionado para espaçamento entre título e botão */
+            flex-wrap: wrap; /* Permite quebra em telas pequenas */
+        }
+
+        .card-header .section-title {
+            margin-bottom: 0;
+            font-size: 1.18rem;
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .card-header .edit-btn,
+        .card-header .edit-btn#viewAllAppointments,
+        .card-header .edit-btn#editServicesBtn,
+        .card-header .edit-btn#editWorkingHoursBtn,
+        .card-header .edit-btn#addDayOffBtn,
+        .card-header .edit-btn#editBarbershopInfoBtn,
+        .card-header .edit-btn#viewPushHistoryBtn {
+            padding: 6px 12px !important;   /* Menor altura e largura */
+            font-size: 13px !important;     /* Fonte menor */
+            border-radius: 16px !important; /* Mais arredondado */
+            min-width: 0;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .card-header .edit-btn {
+                align-self: flex-end;
+                margin-left: 0;
+                margin-top: 2px;
+                width: auto;
+                min-width: 0;
+                font-size: 12px !important;
+                padding: 5px 10px !important;
+                height: 28px;
+            }
         }
         
         .card-icon {
