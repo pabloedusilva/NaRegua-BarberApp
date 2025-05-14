@@ -55,6 +55,23 @@ router.get('/total-agendamentos', requireLogin, async(req, res) => {
     }
 });
 
+// Rota para buscar total de agendamentos do mês atual
+router.get('/total-agendamentos-mes', requireLogin, async(req, res) => {
+    try {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dataInicio = `${ano}-${mes}-01`;
+        const dataFim = `${ano}-${mes}-31`;
+        const [rows] = await db.query(
+            'SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ? AND data <= ?', [dataInicio, dataFim]
+        );
+        res.json({ total: rows[0].total });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar total de agendamentos do mês.' });
+    }
+});
+
 // Rota para buscar agendamentos do dia atual
 router.get('/agendamentos-hoje', requireLogin, async(req, res) => {
     try {
@@ -79,6 +96,50 @@ router.get('/servicos', async(req, res) => {
         res.json({ success: true, servicos: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar serviços.' });
+    }
+});
+
+// Rota para alterar senha do usuário logado
+router.post('/alterar-senha', requireLogin, async(req, res) => {
+    const { atual, nova } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+        // Verifica se a senha atual está correta
+        const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ? AND password = ?', [userId, atual]);
+        if (rows.length === 0) {
+            return res.status(400).json({ success: false, message: 'Senha atual incorreta.' });
+        }
+
+        // Atualiza a senha
+        await db.query('UPDATE usuarios SET password = ? WHERE id = ?', [nova, userId]);
+        return res.json({ success: true, message: 'Senha alterada com sucesso!' });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao alterar senha.' });
+    }
+});
+
+// Rota para buscar total de agendamentos da semana atual
+router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
+    try {
+        const hoje = new Date();
+        // Pega o dia da semana (0=domingo, 1=segunda, ...)
+        const diaSemana = hoje.getDay();
+        // Calcula o primeiro dia da semana (segunda-feira)
+        const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
+        const inicioSemana = new Date(hoje.setDate(diff));
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+
+        const dataInicio = inicioSemana.toISOString().slice(0, 10);
+        const dataFim = fimSemana.toISOString().slice(0, 10);
+
+        const [rows] = await db.query(
+            'SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ? AND data <= ?', [dataInicio, dataFim]
+        );
+        res.json({ total: rows[0].total });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar total de agendamentos da semana.' });
     }
 });
 
