@@ -1804,6 +1804,16 @@
                 height: 24px;
             }
         }
+        
+        .dia-header h3 {
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
     </style>
 </head>
 
@@ -1888,6 +1898,7 @@
             <div class="appointments-list" id="filteredAppointmentsList">
                 <!-- Agendamentos filtrados aparecerão aqui -->
             </div>
+            <div id="lista-agendamentos"></div>
         </section>
 
         <section class="dashboard-section animate-slide-up">
@@ -3289,16 +3300,17 @@ function carregarAgendamentosHoje() {
                     data.agendamentos.forEach(ag => {
                         const item = document.createElement('div');
                         item.className = 'appointment-item';
-                        item.innerHTML = `
-                            <div class="appointment-info">
-                                <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
-                                <div class="appointment-details">
-                                    <span><i class="far fa-clock"></i> ${ag.hora}</span>
-                                    <span><i class="fas fa-cut"></i> ${ag.servico}</span>
-                                    <span><i class="fas fa-user"></i> ${ag.profissional}</span>
-                                    <span class="appointment-status status-confirmed">Confirmado</span>
-                                </div>
-                            </div>
+item.innerHTML = `
+    <div class="appointment-info">
+        <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
+        <div class="appointment-details">
+            <span><i class="far fa-calendar-alt"></i> ${ag.data ? new Date(ag.data).toLocaleDateString('pt-BR') : '-'}</span>
+            <span><i class="far fa-clock"></i> ${ag.hora}</span>
+            <span><i class="fas fa-cut"></i> ${ag.servico}</span>
+            <span><i class="fas fa-user"></i> ${ag.profissional}</span>
+            <span class="appointment-status status-confirmed">Confirmado</span>
+        </div>
+    </div>
                         `;
                         container.appendChild(item);
                     });
@@ -3410,6 +3422,58 @@ function fetchAppointments(filter) {
         .catch(() => {
             filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
+}
+
+// Função para obter o nome do dia da semana em português
+function diaSemanaExtenso(dataStr) {
+    const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const data = new Date(dataStr);
+    return dias[data.getDay()];
+}
+
+// Função para agrupar agendamentos por data
+function agruparPorData(agendamentos) {
+    const grupos = {};
+    agendamentos.forEach(ag => {
+        const data = ag.data;
+        if (!grupos[data]) grupos[data] = [];
+        grupos[data].push(ag);
+    });
+    return grupos;
+}
+
+// Função para renderizar os agendamentos agrupados por dia
+function renderAgendamentosAgrupados(agendamentos) {
+    const container = document.getElementById('lista-agendamentos');
+    container.innerHTML = '';
+    const grupos = agruparPorData(agendamentos);
+    const datasOrdenadas = Object.keys(grupos).sort();
+
+    datasOrdenadas.forEach(dataStr => {
+        // Cabeçalho do dia
+        const header = document.createElement('div');
+        header.className = 'dia-header';
+        header.innerHTML = `<h3>${diaSemanaExtenso(dataStr)}, ${new Date(dataStr).toLocaleDateString('pt-BR')}</h3>`;
+        container.appendChild(header);
+
+        // Lista de agendamentos do dia
+        grupos[dataStr].forEach(ag => {
+            const item = document.createElement('div');
+            item.className = 'appointment-item';
+            item.innerHTML = `
+                <div class="appointment-info">
+                    <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
+                    <div class="appointment-details">
+                        <span><i class="far fa-clock"></i> ${ag.hora}</span>
+                        <span><i class="fas fa-cut"></i> ${ag.servico}</span>
+                        <span><i class="fas fa-user"></i> ${ag.profissional}</span>
+                        <span class="appointment-status status-confirmed">Confirmado</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    });
 }
 
 // Filtro inicial: hoje
