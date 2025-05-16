@@ -1967,71 +1967,10 @@
             <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
                 <button class="edit-btn" id="editServicesBtn">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
+            <i class="fas fa-edit"></i> Editar
+        </button>
             </div>
-
-            <div class="services-container">
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Barba</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 15min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                20,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte de Cabelo</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 30min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                35,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte + Barba</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 45min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                50,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Bigodinho</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 5min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                7,00</span>
-                    </div>
-                </div>
-            </div>
+            <div class="services-container" id="servicesContainer"></div>
         </section>
 
         <section class="dashboard-section animate-slide-up">
@@ -3572,6 +3511,64 @@ filterBtns.forEach(btn => {
         fetchAppointments(this.dataset.filter);
     });
 });
+
+// Função para renderizar os serviços na dashboard
+    async function renderDashboardServices() {
+        const container = document.getElementById('servicesContainer');
+        if (!container) return;
+        container.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+        try {
+            const res = await fetch('/dashboard/servicos-admin');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.servicos)) {
+                if (data.servicos.length === 0) {
+                    container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+                    return;
+                }
+                let html = '';
+                data.servicos.forEach(servico => {
+                    html += `
+                    <div class="service-card" data-id="${servico.id}">
+                        <div class="service-card-header">
+                            <div class="service-card-name">${servico.nome}</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="service-card-details">
+                            <span><i class="far fa-clock"></i> ${servico.tempo}</span>
+                            <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+                // Adiciona evento aos switches
+                container.querySelectorAll('.service-switch').forEach(switchEl => {
+                    switchEl.addEventListener('change', async function() {
+                        const id = this.getAttribute('data-id');
+                        const ativo = this.checked ? 1 : 0;
+                        // Atualiza no banco
+                        await fetch(`/dashboard/servicos/${id}/ativo`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ativo })
+                        });
+                        // Opcional: feedback visual
+                    });
+                });
+            } else {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+            }
+        } catch (err) {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+        }
+    }
+
+    // Chama ao carregar a página
+    renderDashboardServices();
 
         });
     </script>

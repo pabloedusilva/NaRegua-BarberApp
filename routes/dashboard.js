@@ -182,4 +182,26 @@ router.get('/agendamentos-mes', requireLogin, async(req, res) => {
     }
 });
 
+// Rota para listar todos os serviços (inclusive inativos) para a dashboard
+router.get('/servicos-admin', requireLogin, async(req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM servicos ORDER BY id ASC');
+        res.json({ success: true, servicos: rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar serviços.' });
+    }
+});
+
+// Rota para ativar/desativar serviço
+router.post('/servicos/:id/ativo', requireLogin, async(req, res) => {
+    const { ativo } = req.body;
+    const { id } = req.params;
+    try {
+        await db.query('UPDATE servicos SET ativo = ? WHERE id = ?', [ativo ? 1 : 0, id]);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao atualizar serviço.' });
+    }
+});
+
 module.exports = router;
