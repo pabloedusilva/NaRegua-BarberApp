@@ -1805,14 +1805,70 @@
             }
         }
         
+        .dia-header {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 28px 0 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            display: flex;
+            align-items: center;
+        }
+        
         .dia-header h3 {
-            margin-top: 24px;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 4px;
+            color: #fff !important;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+        }
+        
+        .appointment-item {
+            background: var(--card);
+            border: 1.5px solid var(--primary-light);
+            border-radius: 7px;
+            margin: 10px 0 10px 0;
+            padding: 14px 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .appointment-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+            border-color: var(--primary);
+        }
+        
+        .appointment-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .appointment-client {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1.05em;
+        }
+        
+        .appointment-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            font-size: 0.98em;
+            color: var(--gray-dark);
+        }
+        
+        .appointment-status {
+            background: var(--success);
+            color: #fff;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.93em;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -3384,12 +3440,14 @@ document.querySelectorAll('.password-eye-btn').forEach(btn => {
 const filterBtns = document.querySelectorAll('.filter-btn');
 const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
 
+// ...existing code...
 function fetchAppointments(filter) {
     let url = '';
     if (filter === 'today') url = '/dashboard/agendamentos-hoje';
     else if (filter === 'week') url = '/dashboard/agendamentos-semana';
     else if (filter === 'month') url = '/dashboard/agendamentos-mes';
 
+    const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
     filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
 
     fetch(url)
@@ -3397,32 +3455,53 @@ function fetchAppointments(filter) {
         .then(data => {
             let ags = data.agendamentos || [];
             if (ags.length === 0) {
-                filteredAppointmentsList.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
                 return;
             }
-            filteredAppointmentsList.innerHTML = '';
+            // Agrupa por data
+            const grupos = {};
             ags.forEach(ag => {
-                const item = document.createElement('div');
-                item.className = 'appointment-item';
-                item.innerHTML = `
-                    <div class="appointment-info">
-                        <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                            <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                            <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                            <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
+                const dataStr = ag.data;
+                if (!grupos[dataStr]) grupos[dataStr] = [];
+                grupos[dataStr].push(ag);
+            });
+            const datasOrdenadas = Object.keys(grupos).sort();
+
+            filteredAppointmentsList.innerHTML = '';
+            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            datasOrdenadas.forEach(dataStr => {
+                // Cabeçalho do dia
+                const dataObj = new Date(dataStr);
+                const header = document.createElement('div');
+                header.className = 'dia-header';
+                header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
+                filteredAppointmentsList.appendChild(header);
+
+                // Lista de agendamentos do dia
+                grupos[dataStr].forEach(ag => {
+                    const item = document.createElement('div');
+                    item.className = 'appointment-item';
+                    item.innerHTML = `
+                        <div class="appointment-info">
+                            <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                <span class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
                         </div>
-                    </div>
-                `;
-                filteredAppointmentsList.appendChild(item);
+                    `;
+                    filteredAppointmentsList.appendChild(item);
+                });
             });
         })
         .catch(() => {
             filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
 }
+// ...existing code...
 
 // Função para obter o nome do dia da semana em português
 function diaSemanaExtenso(dataStr) {
