@@ -265,7 +265,6 @@
         .edit-btn,
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
-        .card-header .edit-btn#editWorkingHoursBtn,
         .card-header .edit-btn#addDayOffBtn,
         .card-header .edit-btn#editBarbershopInfoBtn,
         .card-header .edit-btn#viewPushHistoryBtn {
@@ -745,8 +744,11 @@
         }
         
         .day-title {
-            font-weight: 600;
-            color: var(--text);
+            color: var(--primary-dark);
+            /* dourado */
+            font-weight: bold;
+            font-size: 1.13rem;
+            letter-spacing: 0.5px;
         }
         
         .time-slots {
@@ -2045,7 +2047,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
                 <h2 class="section-title"><i class="fas fa-cut"></i> Serviços oferecidos</h2>
                 <button id="addServiceBtn" class="edit-btn" style="margin-left:12px;">
-            <i class="fas fa-plus"></i> Adicionar
+            <i class="fas fa-plus"></i>
         </button>
             </div>
             <div id="servicesContainer" class="services-container"></div>
@@ -2073,120 +2075,152 @@
             </div>
         </section>
 
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
+        <section class="dashboard-section animate-slide-up" id="horarios-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
                 <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
-                <button class="edit-btn" id="editWorkingHoursBtn">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
+                <!-- (Se quiser adicionar botão de ação, coloque aqui) -->
             </div>
-
-            <div class="working-hours">
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Segunda-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+            <div class="working-hours" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Segunda-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 12:00</span>
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Terça-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Terça-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 12:00</span>
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quarta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Quarta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 12:00</span>
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quinta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Quinta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 12:00</span>
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sexta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Sexta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 12:00</span>
                         <span class="time-slot">14:00 - 18:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sábado</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Sábado</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <span class="time-slot">09:00 - 13:00</span>
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Domingo</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                    <input type="checkbox" checked>
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Domingo</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
                         <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
@@ -2317,9 +2351,7 @@
                 <form id="changePasswordForm" autocomplete="off">
                     <div class="form-group senha-group">
                         <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                        <i class="fas fa-eye"></i>
-                    </button>
+                        </button>
                     </div>
                     <div class="form-group senha-group">
                         <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
@@ -2338,8 +2370,8 @@
                 <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
                 <button class="btn btn-secondary" type="button">Cancelar</button>
+                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
             </div>
         </div>
     </div>
@@ -2459,254 +2491,6 @@
                 <button class="btn btn-secondary close-modal">Cancelar</button>
                 <button class="btn btn-primary">Adicionar
                         Profissional</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Edição de Horários -->
-    <div id="editWorkingHoursModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Horários de Atendimento</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Container para todos os dias da semana -->
-                <div class="working-hours-edit">
-                    <!-- Segunda-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Segunda-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Terça-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Terça-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Quarta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Quarta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Quinta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Quinta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Sexta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Sexta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Sábado -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Sábado</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="13:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Domingo -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Domingo</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Horários</button>
             </div>
         </div>
     </div>
@@ -2841,7 +2625,6 @@
                         const modals = document.querySelectorAll('.modal');
                         const modalTriggers = {
                             'addProfessionalBtn': 'addProfessionalModal',
-                            'editWorkingHoursBtn': 'editWorkingHoursModal',
                             'editBarbershopInfoBtn': 'editBarbershopInfoModal',
                             'viewAllAppointments': 'allAppointmentsModal',
                             'addDayOffBtn': 'addDayOffModal',
