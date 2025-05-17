@@ -204,13 +204,13 @@ router.post('/servicos/:id/ativo', requireLogin, async(req, res) => {
     }
 });
 
-// Editar serviço
+// Atualizar serviço
 router.put('/servicos/:id', async(req, res) => {
     const { id } = req.params;
     const { nome, tempo, preco, imagem } = req.body;
     if (!nome || !tempo || !preco) return res.status(400).json({ success: false, message: 'Campos obrigatórios.' });
     try {
-        await db.promise().query(
+        await db.query(
             'UPDATE servicos SET nome=?, tempo=?, preco=?, imagem=? WHERE id=?', [nome, tempo, preco, imagem, id]
         );
         res.json({ success: true });
@@ -223,7 +223,7 @@ router.put('/servicos/:id', async(req, res) => {
 router.delete('/servicos/:id', async(req, res) => {
     const { id } = req.params;
     try {
-        await db.promise().query('DELETE FROM servicos WHERE id=?', [id]);
+        await db.query('DELETE FROM servicos WHERE id=?', [id]);
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao excluir serviço.' });

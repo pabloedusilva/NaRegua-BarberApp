@@ -2640,6 +2640,7 @@
     <!-- Modal de Edição de Informações da Barbearia -->
     <div id="editBarbershopInfoModal" class="modal">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h3 class="modal-title">Editar Informações da Barbearia</h3>
                 <button class="close-modal">&times;</button>
@@ -3533,9 +3534,13 @@ filterBtns.forEach(btn => {
             // Eventos dos botões de editar e deletar
             container.querySelectorAll('.service-action-btn.edit-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    // Aqui você pode abrir um modal de edição, ex: openEditServiceModal(id);
-                    alert('Função de editar serviço (ID: ' + id + ')');
+                    openEditServiceModal({
+                        id: btn.dataset.id,
+                        nome: btn.dataset.nome,
+                        tempo: btn.dataset.tempo,
+                        preco: btn.dataset.preco,
+                        imagem: btn.dataset.imagem
+                    });
                 });
             });
             container.querySelectorAll('.service-action-btn.delete-btn').forEach(btn => {
@@ -3614,11 +3619,11 @@ filterBtns.forEach(btn => {
             return;
         }
         try {
-            const res = await fetch(`/dashboard/servicos/${id}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ nome, tempo, preco, imagem })
-            });
+const res = await fetch(`/dashboard/servicos/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, tempo, preco, imagem })
+});
             const data = await res.json();
             if (res.ok && data.success) {
                 editServiceMsg.style.color = 'var(--success)';
@@ -3643,9 +3648,7 @@ filterBtns.forEach(btn => {
             const btn = e.target.closest('.service-action-btn.delete-btn');
             const id = btn.dataset.id;
             if (confirm('Tem certeza que deseja excluir este serviço?')) {
-                fetch(`/dashboard/servicos/${id}`, {
-                    method: 'DELETE'
-                })
+fetch(`/dashboard/servicos/${id}`, { method: 'DELETE' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {

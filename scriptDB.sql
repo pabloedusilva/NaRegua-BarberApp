@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS servicos (
     nome VARCHAR(100) NOT NULL,
     tempo VARCHAR(30) NOT NULL,
     preco DECIMAL(10,2) NOT NULL,
-    imagem VARCHAR(255) DEFAULT NULL,
-    ativo BOOLEAN DEFAULT TRUE
+    imagem VARCHAR(255),
+    ativo TINYINT(1) DEFAULT 1
 );
 
 -- Exemplo de inserção inicial
