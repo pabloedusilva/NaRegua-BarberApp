@@ -566,6 +566,33 @@
             min-width: 0;
             flex: 1 1 0;
         }
+        /* Modal Editar Serviços */
+        
+        #editServiceModal .modal-content {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
+            padding: 32px 24px 18px 24px;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        #editServiceModal .modal-header {
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+        
+        #editServiceModal .modal-title {
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #editServiceMsg {
+            color: var(--primary-dark);
+            text-align: center;
+        }
         
         .toggle-switch {
             position: relative;
@@ -2271,6 +2298,40 @@
 
     <!-- Modals -->
 
+    <!-- Modal de edição de serviço -->
+    <div id="editServiceModal" class="modal">
+        <div class="modal-content" style="max-width: 410px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-pen"></i> Editar Serviço</h3>
+                <button class="close-modal" id="closeEditServiceModal">&times;</button>
+            </div>
+            <form id="editServiceForm" autocomplete="off">
+                <input type="hidden" id="editServiceId">
+                <div class="form-group">
+                    <label class="form-label" for="editServiceName">Nome do serviço</label>
+                    <input type="text" class="form-control" id="editServiceName" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServiceTime">Tempo estimado</label>
+                    <input type="text" class="form-control" id="editServiceTime" required maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServicePrice">Preço (R$)</label>
+                    <input type="number" class="form-control" id="editServicePrice" required min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServiceImage">Imagem (URL ou caminho)</label>
+                    <input type="text" class="form-control" id="editServiceImage" maxlength="255">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelEditService">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+            <div id="editServiceMsg" style="margin-top:10px;font-size:0.98rem;"></div>
+        </div>
+    </div>
+
     <!-- Modal para adicionar dia de folga especial -->
     <div id="addDayOffModal" class="modal">
         <div class="modal-content" style="max-width: 370px;">
@@ -3430,28 +3491,28 @@ filterBtns.forEach(btn => {
             data.servicos.forEach(servico => {
                 html += `
                 <div class="service-card" data-id="${servico.id}">
-                   <div class="service-card-header">
-    <div class="service-switch-title">
-        <label class="toggle-switch" style="margin-right:10px;">
-            <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
-            <span class="slider"></span>
-        </label>
-        <span class="service-card-name">${servico.nome}</span>
+    <div class="service-card-header">
+        <div class="service-switch-title">
+            <label class="toggle-switch" style="margin-right:10px;">
+                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+                <span class="slider"></span>
+            </label>
+            <span class="service-card-name">${servico.nome}</span>
+        </div>
+        <div class="service-actions">
+            <button class="service-action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
+                <i class="fas fa-pen"></i>
+            </button>
+            <button class="service-action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
     </div>
-    <div class="service-actions">
-        <button class="service-action-btn edit-btn" title="Editar serviço" data-id="${servico.id}">
-            <i class="fas fa-pen"></i>
-        </button>
-        <button class="service-action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
-            <i class="fas fa-trash"></i>
-        </button>
+    <div class="service-card-details">
+        <span><i class="far fa-clock"></i> ${servico.tempo}</span>
+        <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
     </div>
 </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> ${servico.tempo}</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
-                    </div>
-                </div>
                 `;
             });
             container.innerHTML = html;
@@ -3498,6 +3559,105 @@ filterBtns.forEach(btn => {
 
     // Chama ao carregar a página
     renderDashboardServices();
+
+    // MODAL DE EDIÇÃO DE SERVIÇO
+    const editServiceModal = document.getElementById('editServiceModal');
+    const closeEditServiceModal = document.getElementById('closeEditServiceModal');
+    const cancelEditService = document.getElementById('cancelEditService');
+    const editServiceForm = document.getElementById('editServiceForm');
+    const editServiceMsg = document.getElementById('editServiceMsg');
+
+    function openEditServiceModal(servico) {
+        document.getElementById('editServiceId').value = servico.id;
+        document.getElementById('editServiceName').value = servico.nome;
+        document.getElementById('editServiceTime').value = servico.tempo;
+        document.getElementById('editServicePrice').value = servico.preco;
+        document.getElementById('editServiceImage').value = servico.imagem || '';
+        editServiceMsg.textContent = '';
+        editServiceModal.style.display = 'flex';
+    }
+    function closeEditModal() {
+        editServiceModal.style.display = 'none';
+    }
+    closeEditServiceModal.onclick = closeEditModal;
+    cancelEditService.onclick = closeEditModal;
+    editServiceModal.onclick = function(e) {
+        if (e.target === editServiceModal) closeEditModal();
+    };
+
+    // Evento do botão de editar
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.service-action-btn.edit-btn')) {
+            const btn = e.target.closest('.service-action-btn.edit-btn');
+            openEditServiceModal({
+                id: btn.dataset.id,
+                nome: btn.dataset.nome,
+                tempo: btn.dataset.tempo,
+                preco: btn.dataset.preco,
+                imagem: btn.dataset.imagem
+            });
+        }
+    });
+
+    // Submissão do formulário de edição
+    editServiceForm.onsubmit = async function(e) {
+        e.preventDefault();
+        editServiceMsg.textContent = '';
+        const id = document.getElementById('editServiceId').value;
+        const nome = document.getElementById('editServiceName').value.trim();
+        const tempo = document.getElementById('editServiceTime').value.trim();
+        const preco = document.getElementById('editServicePrice').value;
+        const imagem = document.getElementById('editServiceImage').value.trim();
+
+        if (!nome || !tempo || !preco) {
+            editServiceMsg.textContent = 'Preencha todos os campos obrigatórios.';
+            return;
+        }
+        try {
+            const res = await fetch(`/dashboard/servicos/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ nome, tempo, preco, imagem })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                editServiceMsg.style.color = 'var(--success)';
+                editServiceMsg.textContent = 'Serviço atualizado com sucesso!';
+                setTimeout(() => {
+                    closeEditModal();
+                    renderDashboardServices();
+                }, 900);
+            } else {
+                editServiceMsg.style.color = 'var(--primary-dark)';
+                editServiceMsg.textContent = data.message || 'Erro ao atualizar serviço.';
+            }
+        } catch (err) {
+            editServiceMsg.style.color = 'var(--primary-dark)';
+            editServiceMsg.textContent = 'Erro ao conectar ao servidor.';
+        }
+    };
+
+    // Evento do botão de excluir
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.service-action-btn.delete-btn')) {
+            const btn = e.target.closest('.service-action-btn.delete-btn');
+            const id = btn.dataset.id;
+            if (confirm('Tem certeza que deseja excluir este serviço?')) {
+                fetch(`/dashboard/servicos/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        renderDashboardServices();
+                    } else {
+                        alert(data.message || 'Erro ao excluir serviço.');
+                    }
+                })
+                .catch(() => alert('Erro ao conectar ao servidor.'));
+            }
+        }
+    });
 
         });
         </script>
