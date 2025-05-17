@@ -1968,6 +1968,9 @@
                     <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                 </div>
                 <div class="nav-links">
+                    <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
+                            <i class="fas fa-key"></i>
+                        </button>
                     <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
@@ -2302,6 +2305,45 @@
     </main>
 
     <!-- Modals -->
+    <!-- Modal de Alterar Senha -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <!-- Botão X no topo direito -->
+            <button class="close-modal" aria-label="Fechar" type="button" style="position:absolute;top:12px;right:18px;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
+            <div class="modal-header" style="padding-right:32px;">
+                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha</h3>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" autocomplete="off">
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    </div>
+                </form>
+                <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+                <button class="btn btn-secondary" type="button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de adicionar serviços -->
     <div id="addServiceModal" class="modal">
         <div class="modal-content" style="max-width:410px;">
@@ -3655,6 +3697,108 @@ fetch(`/dashboard/servicos/${id}`, { method: 'DELETE' })
             }
         };
     }
+    // Modal de alterar senha
+const changePasswordBtn = document.getElementById('changePasswordBtn');
+const changePasswordModal = document.getElementById('changePasswordModal');
+const cancelBtn = document.querySelector('#changePasswordModal .btn.btn-secondary[type="button"]');
+const closeChangePasswordBtns = changePasswordModal ? changePasswordModal.querySelectorAll('.close-modal') : [];
+const changePasswordForm = document.getElementById('changePasswordForm');
+const changePasswordError = document.getElementById('changePasswordError');
+const changePasswordSuccess = document.getElementById('changePasswordSuccess');
+
+if (cancelBtn && changePasswordModal) {
+    cancelBtn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'none';
+    });
+}
+
+// Abrir modal
+if (changePasswordBtn && changePasswordModal) {
+    changePasswordBtn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'flex';
+        changePasswordForm.reset();
+        changePasswordError.style.display = 'none';
+        changePasswordSuccess.style.display = 'none';
+    });
+}
+
+// Fechar modal
+closeChangePasswordBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'none';
+    });
+});
+if (changePasswordModal) {
+    changePasswordModal.addEventListener('click', function(e) {
+        if (e.target === changePasswordModal) changePasswordModal.style.display = 'none';
+    });
+}
+
+// Mostrar/ocultar senha
+changePasswordModal?.querySelectorAll('.password-eye-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const input = this.parentNode.querySelector('input');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.firstElementChild.classList.remove('fa-eye');
+            this.firstElementChild.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            this.firstElementChild.classList.remove('fa-eye-slash');
+            this.firstElementChild.classList.add('fa-eye');
+        }
+    });
+});
+
+// Submissão do formulário de alteração de senha
+if (changePasswordForm) {
+    changePasswordForm.onsubmit = async function(e) {
+        e.preventDefault();
+        changePasswordError.style.display = 'none';
+        changePasswordSuccess.style.display = 'none';
+
+        const atual = document.getElementById('currentPassword').value.trim();
+        const nova = document.getElementById('newPassword').value.trim();
+        const confirmar = document.getElementById('confirmPassword').value.trim();
+
+        if (!atual || !nova || !confirmar) {
+            changePasswordError.textContent = 'Preencha todos os campos.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        if (nova !== confirmar) {
+            changePasswordError.textContent = 'As senhas não coincidem.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        if (nova.length < 4) {
+            changePasswordError.textContent = 'A senha deve ter pelo menos 4 caracteres.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        try {
+            const res = await fetch('/dashboard/alterar-senha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ atual, nova })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                changePasswordSuccess.textContent = data.message || 'Senha alterada com sucesso!';
+                changePasswordSuccess.style.display = 'block';
+                setTimeout(() => {
+                    changePasswordModal.style.display = 'none';
+                }, 1200);
+            } else {
+                changePasswordError.textContent = data.message || 'Erro ao alterar senha.';
+                changePasswordError.style.display = 'block';
+            }
+        } catch (err) {
+            changePasswordError.textContent = 'Erro ao conectar ao servidor.';
+            changePasswordError.style.display = 'block';
+        }
+    };
+}
 
         });
         </script>
