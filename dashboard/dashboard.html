@@ -569,6 +569,7 @@
         /* Modal Editar Serviços */
         
         #editServiceModal .modal-content {
+            position: relative;
             background: var(--card);
             border-radius: 14px;
             box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
@@ -841,6 +842,13 @@
             font-size: 24px;
             cursor: pointer;
             color: var(--text);
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.5rem;
+            color: #888;
+            cursor: pointer;
+            z-index: 2;
         }
         
         .form-group {
@@ -1960,9 +1968,6 @@
                     <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                 </div>
                 <div class="nav-links">
-                    <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
-                            <i class="fas fa-key"></i>
-                        </button>
                     <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
@@ -2033,14 +2038,14 @@
             <div id="lista-agendamentos"></div>
         </section>
 
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
-            </div>
-            <button class="edit-btn" id="editServicesBtn">
-            <i class="fas fa-add"></i> Adicionar
+        <section class="dashboard-section animate-slide-up" id="services-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços oferecidos</h2>
+                <button id="addServiceBtn" class="edit-btn" style="margin-left:12px;">
+            <i class="fas fa-plus"></i> Adicionar
         </button>
-            <div class="services-container" id="servicesContainer"></div>
+            </div>
+            <div id="servicesContainer" class="services-container"></div>
         </section>
 
         <section class="dashboard-section animate-slide-up">
@@ -2297,6 +2302,33 @@
     </main>
 
     <!-- Modals -->
+    <!-- Modal de adicionar serviços -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content" style="max-width:410px;">
+            <span class="close-modal" id="closeAddServiceModal">&times;</span>
+            <h3>Adicionar novo serviço</h3>
+            <form id="addServiceForm">
+                <div class="form-group">
+                    <label class="form-label" for="addServiceName">Nome do serviço</label>
+                    <input type="text" class="form-control" id="addServiceName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServiceTime">Tempo estimado</label>
+                    <input type="text" class="form-control" id="addServiceTime" placeholder="Ex: 30min" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServicePrice">Preço (R$)</label>
+                    <input type="number" step="0.01" min="0" class="form-control" id="addServicePrice" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServiceImage">URL da imagem (opcional)</label>
+                    <input type="text" class="form-control" id="addServiceImage">
+                </div>
+                <div id="addServiceMsg" style="margin-bottom:10px;font-size:0.98rem;"></div>
+                <button type="submit" class="btn btn-primary">Salvar serviço</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Modal de edição de serviço -->
     <div id="editServiceModal" class="modal">
@@ -2728,45 +2760,6 @@
             </div>
         </div>
 
-        <!-- Modal de Alterar Senha -->
-        <div id="changePasswordModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
-                    </h3>
-                    <button class="close-modal" aria-label="Fechar">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="changePasswordForm" autocomplete="off">
-                        <div class="form-group senha-group">
-                            <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
-                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        </div>
-                        <div class="form-group senha-group">
-                            <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
-                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        </div>
-                        <div class="form-group senha-group">
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
-                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        </div>
-                    </form>
-                    <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
-                    <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
-                    <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         <footer>
             <div class="copyright">
@@ -3014,70 +3007,6 @@
             // Logout functionality
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 window.location.href = '/dashboard/logout';
-            });
-
-            // Abrir modal de alterar senha
-            document.getElementById('changePasswordBtn').addEventListener('click', function() {
-                document.getElementById('changePasswordModal').style.display = 'flex';
-                // Limpa campos e mensagens
-                document.getElementById('changePasswordForm').reset();
-                document.getElementById('changePasswordError').style.display = 'none';
-            });
-
-            // Fechar modal de alterar senha (usando já o padrão dos outros modais)
-            document.querySelectorAll('#changePasswordModal .close-modal').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.getElementById('changePasswordModal').style.display = 'none';
-                });
-            });
-            document.getElementById('changePasswordModal').addEventListener('click', function(e) {
-                if (e.target === this) this.style.display = 'none';
-            });
-
-            // Validação e feedback do formulário
-            document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const current = document.getElementById('currentPassword').value.trim();
-                const nova = document.getElementById('newPassword').value.trim();
-                const confirma = document.getElementById('confirmPassword').value.trim();
-                const error = document.getElementById('changePasswordError');
-                const success = document.getElementById('changePasswordSuccess');
-                error.style.display = 'none';
-                success.style.display = 'none';
-
-                if (nova.length < 6) {
-                    error.textContent = 'A nova senha deve ter pelo menos 6 caracteres.';
-                    error.style.display = 'block';
-                    return;
-                }
-                if (nova !== confirma) {
-                    error.textContent = 'As senhas não coincidem.';
-                    error.style.display = 'block';
-                    return;
-                }
-
-                // Chamada para o backend
-                try {
-                    const res = await fetch('/dashboard/alterar-senha', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ atual: current, nova })
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                        success.textContent = data.message;
-                        success.style.display = 'block';
-                        setTimeout(() => {
-                            document.getElementById('changePasswordModal').style.display = 'none';
-                        }, 1200);
-                    } else {
-                        error.textContent = data.message || 'Erro ao alterar senha.';
-                        error.style.display = 'block';
-                    }
-                } catch (err) {
-                    error.textContent = 'Erro ao conectar ao servidor.';
-                    error.style.display = 'block';
-                }
             });
             // Push Notification Form
 const pushForm = document.getElementById('pushNotificationForm');
@@ -3661,6 +3590,71 @@ fetch(`/dashboard/servicos/${id}`, { method: 'DELETE' })
             }
         }
     });
+
+    // Abrir modal de adicionar serviço
+    const addServiceBtn = document.getElementById('addServiceBtn');
+    const addServiceModal = document.getElementById('addServiceModal');
+    const closeAddServiceModal = document.getElementById('closeAddServiceModal');
+    const addServiceForm = document.getElementById('addServiceForm');
+    const addServiceMsg = document.getElementById('addServiceMsg');
+
+    if (addServiceBtn) {
+        addServiceBtn.onclick = function() {
+            addServiceModal.style.display = 'flex';
+            addServiceMsg.textContent = '';
+            addServiceForm.reset();
+        };
+    }
+    if (closeAddServiceModal) {
+        closeAddServiceModal.onclick = function() {
+            addServiceModal.style.display = 'none';
+        };
+    }
+    if (addServiceModal) {
+        addServiceModal.addEventListener('click', function(e) {
+            if (e.target === addServiceModal) addServiceModal.style.display = 'none';
+        });
+    }
+
+    // Submissão do formulário de novo serviço
+    if (addServiceForm) {
+        addServiceForm.onsubmit = async function(e) {
+            e.preventDefault();
+            addServiceMsg.textContent = '';
+            const nome = document.getElementById('addServiceName').value.trim();
+            const tempo = document.getElementById('addServiceTime').value.trim();
+            const preco = document.getElementById('addServicePrice').value;
+            const imagem = document.getElementById('addServiceImage').value.trim();
+
+            if (!nome || !tempo || !preco) {
+                addServiceMsg.style.color = 'var(--primary-dark)';
+                addServiceMsg.textContent = 'Preencha todos os campos obrigatórios.';
+                return;
+            }
+            try {
+                const res = await fetch('/dashboard/servicos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, tempo, preco, imagem })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    addServiceMsg.style.color = 'var(--success)';
+                    addServiceMsg.textContent = 'Serviço adicionado com sucesso!';
+                    setTimeout(() => {
+                        addServiceModal.style.display = 'none';
+                        if (typeof renderDashboardServices === 'function') renderDashboardServices();
+                    }, 900);
+                } else {
+                    addServiceMsg.style.color = 'var(--primary-dark)';
+                    addServiceMsg.textContent = data.message || 'Erro ao adicionar serviço.';
+                }
+            } catch (err) {
+                addServiceMsg.style.color = 'var(--primary-dark)';
+                addServiceMsg.textContent = 'Erro ao conectar ao servidor.';
+            }
+        };
+    }
 
         });
         </script>

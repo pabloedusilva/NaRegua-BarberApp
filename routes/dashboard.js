@@ -229,5 +229,17 @@ router.delete('/servicos/:id', async(req, res) => {
         res.status(500).json({ success: false, message: 'Erro ao excluir serviço.' });
     }
 });
-
+// Adicionar novo serviço
+router.post('/servicos', requireLogin, async(req, res) => {
+    const { nome, tempo, preco, imagem } = req.body;
+    if (!nome || !tempo || !preco) return res.status(400).json({ success: false, message: 'Campos obrigatórios.' });
+    try {
+        await db.query(
+            'INSERT INTO servicos (nome, tempo, preco, imagem, ativo) VALUES (?, ?, ?, ?, 1)', [nome, tempo, preco, imagem]
+        );
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao adicionar serviço.' });
+    }
+});
 module.exports = router;
