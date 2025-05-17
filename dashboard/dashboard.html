@@ -265,7 +265,6 @@
         .edit-btn,
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
-        .card-header .edit-btn#editServicesBtn,
         .card-header .edit-btn#editWorkingHoursBtn,
         .card-header .edit-btn#addDayOffBtn,
         .card-header .edit-btn#editBarbershopInfoBtn,
@@ -454,43 +453,118 @@
         
         .services-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 18px;
+            margin-top: 10px;
         }
         
         .service-card {
             background-color: var(--gray-light);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 18px 18px 14px 18px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.22s, transform 0.18s;
+            border: 1.5px solid var(--primary-light);
+            min-width: 0;
+            position: relative;
         }
         
         .service-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+            border-color: var(--primary);
+            transform: translateY(-2px) scale(1.01);
         }
         
         .service-card-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
         }
         
         .service-card-name {
-            font-weight: 600;
-            color: var(--text);
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.13rem;
+            flex: 1 1 180px;
+            min-width: 120px;
+            word-break: break-word;
+            line-height: 1.2;
+            margin-right: 10px;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+        
+        .service-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .service-action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .service-action-btn.edit-btn {
+            color: var(--primary);
+        }
+        
+        .service-action-btn.delete-btn {
+            color: #c82333;
+        }
+        
+        .service-action-btn:hover,
+        .service-action-btn:focus {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .service-action-btn.delete-btn:hover,
+        .service-action-btn.delete-btn:focus {
+            background: #c82333;
+            color: #fff;
         }
         
         .service-card-details {
             display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 14px;
+            gap: 18px;
+            margin-top: 8px;
+            font-size: 0.99rem;
             color: var(--text);
+            flex-wrap: wrap;
+        }
+        
+        .service-switch-title {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            flex: 1 1 0;
+        }
+        
+        .service-card-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            flex: 1 1 0;
         }
         
         .toggle-switch {
@@ -1135,82 +1209,6 @@
         body.dark-mode .footer-admin-link-modern:focus {
             color: var(--primary);
         }
-        /* Organização visual do modal de editar serviços */
-        
-        #editServicesModal .form-group {
-            margin-bottom: 0;
-        }
-        
-        #editServicesModal .service-option {
-            border-radius: 8px;
-            background: var(--gray);
-            padding: 16px 14px 12px 14px;
-            margin-bottom: 18px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-        }
-        
-        #editServicesModal .service-option-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
-        }
-        
-        #editServicesModal .service-name {
-            font-weight: 600;
-            font-size: 1.08rem;
-            color: var(--text);
-        }
-        
-        #editServicesModal .time-price-inputs {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control {
-            width: 70px;
-            padding-left: 28px;
-            font-size: 1em;
-        }
-        
-        #editServicesModal .time-price-inputs {
-            position: relative;
-        }
-        
-        #editServicesModal .time-price-inputs input[placeholder*="Tempo"] {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm0-368c-92.6 0-168 75.4-168 168s75.4 168 168 168 168-75.4 168-168-75.4-168-168-168zm12 88v76h68c6.6 0 12 5.4 12 12s-5.4 12-12 12h-80c-6.6 0-12-5.4-12-12V136c0-6.6 5.4-12 12-12s12 5.4 12 12z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: 6px 50%;
-            background-size: 16px 16px;
-        }
-        
-        #editServicesModal .time-price-inputs input[placeholder*="Preço"] {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512"><path d="M209.3 233.3l-80-32A16 16 0 0 1 112 186V152a24 24 0 0 1 24-24h16a24 24 0 0 1 24 24v8a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-8a56 56 0 0 0-56-56V56a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v40a56 56 0 0 0-56 56v34a48 48 0 0 0 30.7 44.7l80 32A16 16 0 0 1 176 326v34a24 24 0 0 1-24 24h-16a24 24 0 0 1-24-24v-8a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v8a56 56 0 0 0 56 56v40a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-40a56 56 0 0 0 56-56v-34a48 48 0 0 0-30.7-44.7z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: 6px 50%;
-            background-size: 16px 16px;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control {
-            padding-left: 28px;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control:focus {
-            border-color: var(--primary);
-        }
-        
-        #editServicesModal .tab-content {
-            margin-top: 10px;
-        }
-        
-        #editWorkingHoursModal .day-schedule-edit {
-            background: var(--gray, #f3f3f3);
-            border-radius: 10px;
-            padding: 18px 16px 14px 16px;
-            margin-bottom: 18px;
-        }
-        /* Fim do bloco de organização visual do modal de editar serviços */
         /* Responsive Design */
         
         @media screen and (max-width: 768px) {
@@ -1876,6 +1874,51 @@
             font-size: 0.93em;
             margin-left: 10px;
         }
+        /* NOVO: Estilo para ações dos serviços */
+        
+        .service-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .service-action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            outline: none;
+            margin-left: 0;
+        }
+        
+        .service-action-btn.edit-btn {
+            color: var(--primary);
+        }
+        
+        .service-action-btn.delete-btn {
+            color: #c82333;
+        }
+        
+        .service-action-btn:hover,
+        .service-action-btn:focus {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .service-action-btn.delete-btn:hover,
+        .service-action-btn.delete-btn:focus {
+            background: #c82333;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -1966,10 +2009,10 @@
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
-                <button class="edit-btn" id="editServicesBtn">
-            <i class="fas fa-edit"></i> Editar
-        </button>
             </div>
+            <button class="edit-btn" id="editServicesBtn">
+            <i class="fas fa-add"></i> Adicionar
+        </button>
             <div class="services-container" id="servicesContainer"></div>
         </section>
 
@@ -2227,134 +2270,6 @@
     </main>
 
     <!-- Modals -->
-    <!-- Modal de Edição de Serviços -->
-    <div id="editServicesModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Serviços</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="tab-container">
-                    <div class="tabs">
-                        <div class="tab active" data-tab="existing">Serviços Existentes
-                        </div>
-                        <div class="tab" data-tab="new">Adicionar Novo</div>
-                    </div>
-
-                    <div class="tab-content active" id="existing-tab">
-                        <div class="form-group">
-                            <label class="form-label">Selecione os serviços
-                                    que deseja oferecer:</label>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="15">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="20.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Corte de
-                                            Cabelo</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="30">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="35.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Corte +
-                                            Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="45">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="50.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox">
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Bigodinho</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="5">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="7.00">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="new-tab">
-                        <div class="form-group">
-                            <label class="form-label">Nome do
-                                    Serviço</label>
-                            <input type="text" class="form-control" placeholder="Ex: Colorimetria">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Tempo Estimado
-                                    (minutos)</label>
-                            <input type="number" class="form-control" placeholder="Ex: 30">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Preço (R$)</label>
-                            <input type="text" class="form-control" placeholder="Ex: 45.00">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Escolha uma imagem
-                                    para o serviço</label>
-                            <div class="service-gallery">
-                                <div class="gallery-option selected" data-img="none" title="Nenhuma imagem">
-                                    <div class="gallery-none-img">
-                                        <i class="fas fa-ban"></i>
-                                    </div>
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/corte-masculino.jpg">
-                                    <img src="img/servicos/corte-masculino.jpg" alt="Corte Masculino">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/barba.jpg">
-                                    <img src="img/servicos/barba.jpg" alt="Barba">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/colorimetria.jpg">
-                                    <img src="img/servicos/colorimetria.jpg" alt="Colorimetria">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/sobrancelha.jpg">
-                                    <img src="img/servicos/sobrancelha.jpg" alt="Sobrancelha">
-                                </div>
-                                <!-- Adicione mais imagens conforme desejar -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Alterações</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal para adicionar dia de folga especial -->
     <div id="addDayOffModal" class="modal">
@@ -2736,205 +2651,203 @@
                     <div class="tab-content" id="week-tab">
                         <div class="appointments-list">
                             <!-- Agendamentos da semana seriam listados aqui -->
-                        </div>
-                    </div>
+                        </div </div>
 
-                    <div class="tab-content" id="month-tab">
-                        <div class="appointments-list">
-                            <!-- Agendamentos do mês seriam listados aqui -->
+                        <div class="tab-content" id="month-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos do mês seriam listados aqui -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Alterar Senha -->
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
-                </h3>
-                <button class="close-modal" aria-label="Fechar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" autocomplete="off">
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </form>
-                <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
-                <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
-                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal">Fechar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="copyright">
-            &copy; 2025 NaRégua. Todos os direitos reservados.
-    </footer>
+        <!-- Modal de Alterar Senha -->
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
+                    </h3>
+                    <button class="close-modal" aria-label="Fechar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm" autocomplete="off">
+                        <div class="form-group senha-group">
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
+                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        </div>
+                        <div class="form-group senha-group">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
+                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        </div>
+                        <div class="form-group senha-group">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
+                            <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        </div>
+                    </form>
+                    <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                    <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
+                    <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+                </div>
+            </div>
+        </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-                    // Toggle theme
-                    const themeToggle = document.getElementById('themeToggle');
-                    const themeIcon = themeToggle.querySelector('i');
+        <!-- Footer -->
+        <footer>
+            <div class="copyright">
+                &copy; 2025 NaRégua. Todos os direitos reservados.
+        </footer>
 
-                    // Verificar preferência de tema no localStorage
-                    const currentTheme = localStorage.getItem('theme') || 'light';
-                    if (currentTheme === 'dark') {
-                        document.body.classList.add('dark-mode');
-                        themeIcon.classList.remove('fa-moon');
-                        themeIcon.classList.add('fa-sun');
-                    }
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                        // Toggle theme
+                        const themeToggle = document.getElementById('themeToggle');
+                        const themeIcon = themeToggle.querySelector('i');
 
-                    // Alternar tema
-                    themeToggle.addEventListener('click', function() {
-                        document.body.classList.toggle('dark-mode');
-
-                        if (document.body.classList.contains('dark-mode')) {
+                        // Verificar preferência de tema no localStorage
+                        const currentTheme = localStorage.getItem('theme') || 'light';
+                        if (currentTheme === 'dark') {
+                            document.body.classList.add('dark-mode');
                             themeIcon.classList.remove('fa-moon');
                             themeIcon.classList.add('fa-sun');
-                            localStorage.setItem('theme', 'dark');
-                        } else {
-                            themeIcon.classList.remove('fa-sun');
-                            themeIcon.classList.add('fa-moon');
-                            localStorage.setItem('theme', 'light');
                         }
-                    });
 
-                    // Modal functionality
-                    const modals = document.querySelectorAll('.modal');
-                    const modalTriggers = {
-                        'editServicesBtn': 'editServicesModal',
-                        'addProfessionalBtn': 'addProfessionalModal',
-                        'editWorkingHoursBtn': 'editWorkingHoursModal',
-                        'editBarbershopInfoBtn': 'editBarbershopInfoModal',
-                        'viewAllAppointments': 'allAppointmentsModal',
-                        'addDayOffBtn': 'addDayOffModal',
-                        'changePasswordBtn': 'changePasswordModal',
-                        'viewPushHistoryBtn': 'pushHistoryModal'
-                    };
+                        // Alternar tema
+                        themeToggle.addEventListener('click', function() {
+                            document.body.classList.toggle('dark-mode');
 
-                    // Open modals
-                    Object.keys(modalTriggers).forEach(triggerId => {
-                        const trigger = document.getElementById(triggerId);
-                        const modalId = modalTriggers[triggerId];
-                        const modal = document.getElementById(modalId);
+                            if (document.body.classList.contains('dark-mode')) {
+                                themeIcon.classList.remove('fa-moon');
+                                themeIcon.classList.add('fa-sun');
+                                localStorage.setItem('theme', 'dark');
+                            } else {
+                                themeIcon.classList.remove('fa-sun');
+                                themeIcon.classList.add('fa-moon');
+                                localStorage.setItem('theme', 'light');
+                            }
+                        });
 
-                        if (trigger && modal) {
-                            trigger.addEventListener('click', () => {
-                                modal.style.display = 'flex';
+                        // Modal functionality
+                        const modals = document.querySelectorAll('.modal');
+                        const modalTriggers = {
+                            'addProfessionalBtn': 'addProfessionalModal',
+                            'editWorkingHoursBtn': 'editWorkingHoursModal',
+                            'editBarbershopInfoBtn': 'editBarbershopInfoModal',
+                            'viewAllAppointments': 'allAppointmentsModal',
+                            'addDayOffBtn': 'addDayOffModal',
+                            'changePasswordBtn': 'changePasswordModal',
+                            'viewPushHistoryBtn': 'pushHistoryModal'
+                        };
+
+                        // Open modals
+                        Object.keys(modalTriggers).forEach(triggerId => {
+                            const trigger = document.getElementById(triggerId);
+                            const modalId = modalTriggers[triggerId];
+                            const modal = document.getElementById(modalId);
+
+                            if (trigger && modal) {
+                                trigger.addEventListener('click', () => {
+                                    modal.style.display = 'flex';
+                                });
+                            }
+                        });
+
+                        // Close modals
+                        document.querySelectorAll('.close-modal').forEach(closeBtn => {
+                            closeBtn.addEventListener('click', function() {
+                                const modal = this.closest('.modal');
+                                modal.style.display = 'none';
+                            });
+                        });
+
+                        // Close when clicking outside modal content
+                        modals.forEach(modal => {
+                            modal.addEventListener('click', function(e) {
+                                if (e.target === modal) {
+                                    modal.style.display = 'none';
+                                }
+                            });
+                        });
+
+                        // Tab functionality
+                        document.querySelectorAll('.tab').forEach(tab => {
+                            tab.addEventListener('click', function() {
+                                const tabContainer = this.closest('.tab-container');
+                                const tabId = this.getAttribute('data-tab');
+
+                                // Remove active class from all tabs and contents
+                                tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                                tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                                // Add active class to clicked tab and corresponding content
+                                this.classList.add('active');
+                                document.getElementById(`${tabId}-tab`).classList.add('active');
+                            });
+                        });
+
+                        // Avatar upload preview
+                        const avatarInput = document.getElementById('avatarInput');
+                        const avatarPreview = document.querySelector('.avatar-preview');
+
+                        if (avatarInput && avatarPreview) {
+                            document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
+                                avatarInput.click();
+                            });
+
+                            avatarInput.addEventListener('change', function(e) {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(event) {
+                                        avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
                             });
                         }
-                    });
 
-                    // Close modals
-                    document.querySelectorAll('.close-modal').forEach(closeBtn => {
-                        closeBtn.addEventListener('click', function() {
-                            const modal = this.closest('.modal');
-                            modal.style.display = 'none';
-                        });
-                    });
+                        // Avatar upload preview para foto do estabelecimento
+                        const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
+                        const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
+                        const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
 
-                    // Close when clicking outside modal content
-                    modals.forEach(modal => {
-                        modal.addEventListener('click', function(e) {
-                            if (e.target === modal) {
-                                modal.style.display = 'none';
-                            }
-                        });
-                    });
+                        if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
+                            barbershopPhotoBtn.addEventListener('click', function() {
+                                barbershopPhotoInput.click();
+                            });
 
-                    // Tab functionality
-                    document.querySelectorAll('.tab').forEach(tab => {
-                        tab.addEventListener('click', function() {
-                            const tabContainer = this.closest('.tab-container');
-                            const tabId = this.getAttribute('data-tab');
+                            barbershopPhotoInput.addEventListener('change', function(e) {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(event) {
+                                        barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        }
 
-                            // Remove active class from all tabs and contents
-                            tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                            tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-                            // Add active class to clicked tab and corresponding content
-                            this.classList.add('active');
-                            document.getElementById(`${tabId}-tab`).classList.add('active');
-                        });
-                    });
-
-                    // Avatar upload preview
-                    const avatarInput = document.getElementById('avatarInput');
-                    const avatarPreview = document.querySelector('.avatar-preview');
-
-                    if (avatarInput && avatarPreview) {
-                        document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
-                            avatarInput.click();
-                        });
-
-                        avatarInput.addEventListener('change', function(e) {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function(event) {
-                                    avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    }
-
-                    // Avatar upload preview para foto do estabelecimento
-                    const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
-                    const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
-                    const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
-
-                    if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
-                        barbershopPhotoBtn.addEventListener('click', function() {
-                            barbershopPhotoInput.click();
-                        });
-
-                        barbershopPhotoInput.addEventListener('change', function(e) {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function(event) {
-                                    barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    }
-
-                    // Add another time slot
-                    document.querySelectorAll('.add-another-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const timeSlotsEdit = this.previousElementSibling;
-                            const newTimeInputGroup = document.createElement('div');
-                            newTimeInputGroup.className = 'time-input-group';
-                            newTimeInputGroup.innerHTML = `
+                        // Add another time slot
+                        document.querySelectorAll('.add-another-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const timeSlotsEdit = this.previousElementSibling;
+                                const newTimeInputGroup = document.createElement('div');
+                                newTimeInputGroup.className = 'time-input-group';
+                                newTimeInputGroup.innerHTML = `
                         <input type="time" class="time-input" value="09:00">
                         <span>às</span>
                         <input type="time" class="time-input" value="12:00">
@@ -2942,74 +2855,74 @@
                             <i class="fas fa-times"></i>
                         </button>
                     `;
-                            timeSlotsEdit.appendChild(newTimeInputGroup);
+                                timeSlotsEdit.appendChild(newTimeInputGroup);
 
-                            // Add event listener to new remove button
-                            newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                                // Add event listener to new remove button
+                                newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                                    this.parentElement.remove();
+                                });
+                            });
+                        });
+
+                        // Remove time slot
+                        document.querySelectorAll('.remove-time-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
                                 this.parentElement.remove();
                             });
                         });
-                    });
 
-                    // Remove time slot
-                    document.querySelectorAll('.remove-time-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            this.parentElement.remove();
-                        });
-                    });
+                        // Compartilhar link de agendamento moderno melhorado
+                        const copyBtn = document.getElementById('copyBookingLinkBtn');
+                        const bookingLink = document.getElementById('bookingLink');
+                        const globalCopyMsg = document.getElementById('globalCopySuccessMsg');
 
-                    // Compartilhar link de agendamento moderno melhorado
-                    const copyBtn = document.getElementById('copyBookingLinkBtn');
-                    const bookingLink = document.getElementById('bookingLink');
-                    const globalCopyMsg = document.getElementById('globalCopySuccessMsg');
+                        if (copyBtn && bookingLink && globalCopyMsg) {
+                            copyBtn.addEventListener('click', function() {
+                                bookingLink.select();
+                                bookingLink.setSelectionRange(0, 99999); // Para mobile
+                                document.execCommand('copy');
+                                globalCopyMsg.style.display = 'flex';
+                                setTimeout(() => {
+                                    globalCopyMsg.style.display = 'none';
+                                }, 1800);
+                            });
+                        }
 
-                    if (copyBtn && bookingLink && globalCopyMsg) {
-                        copyBtn.addEventListener('click', function() {
-                            bookingLink.select();
-                            bookingLink.setSelectionRange(0, 99999); // Para mobile
-                            document.execCommand('copy');
-                            globalCopyMsg.style.display = 'flex';
-                            setTimeout(() => {
-                                globalCopyMsg.style.display = 'none';
-                            }, 1800);
-                        });
-                    }
+                        // Modal de adicionar dia de folga especial
+                        const addDayOffModal = document.getElementById('addDayOffModal');
+                        const saveDayOffBtn = document.getElementById('saveDayOffBtn');
+                        const dayOffDate = document.getElementById('dayOffDate');
+                        const dayOffReason = document.getElementById('dayOffReason');
+                        const specialDaysOffList = document.getElementById('specialDaysOffList');
+                        const specialDayOffEmpty = document.getElementById('specialDayOffEmpty');
 
-                    // Modal de adicionar dia de folga especial
-                    const addDayOffModal = document.getElementById('addDayOffModal');
-                    const saveDayOffBtn = document.getElementById('saveDayOffBtn');
-                    const dayOffDate = document.getElementById('dayOffDate');
-                    const dayOffReason = document.getElementById('dayOffReason');
-                    const specialDaysOffList = document.getElementById('specialDaysOffList');
-                    const specialDayOffEmpty = document.getElementById('specialDayOffEmpty');
+                        // Setar data mínima para hoje
+                        if (dayOffDate) {
+                            const today = new Date();
+                            const yyyy = today.getFullYear();
+                            const mm = String(today.getMonth() + 1).padStart(2, '0');
+                            const dd = String(today.getDate()).padStart(2, '0');
+                            dayOffDate.min = `${yyyy}-${mm}-${dd}`;
+                        }
 
-                    // Setar data mínima para hoje
-                    if (dayOffDate) {
-                        const today = new Date();
-                        const yyyy = today.getFullYear();
-                        const mm = String(today.getMonth() + 1).padStart(2, '0');
-                        const dd = String(today.getDate()).padStart(2, '0');
-                        dayOffDate.min = `${yyyy}-${mm}-${dd}`;
-                    }
+                        // Adicionar dia de folga especial
+                        if (saveDayOffBtn && dayOffDate && specialDaysOffList) {
+                            saveDayOffBtn.addEventListener('click', function() {
+                                        const date = dayOffDate.value;
+                                        const reason = dayOffReason.value.trim();
+                                        if (!date) {
+                                            dayOffDate.focus();
+                                            return;
+                                        }
 
-                    // Adicionar dia de folga especial
-                    if (saveDayOffBtn && dayOffDate && specialDaysOffList) {
-                        saveDayOffBtn.addEventListener('click', function() {
-                                    const date = dayOffDate.value;
-                                    const reason = dayOffReason.value.trim();
-                                    if (!date) {
-                                        dayOffDate.focus();
-                                        return;
-                                    }
+                                        // Formatar data para dd/mm/yyyy
+                                        const [yyyy, mm, dd] = date.split('-');
+                                        const formattedDate = `${dd}/${mm}/${yyyy}`;
 
-                                    // Formatar data para dd/mm/yyyy
-                                    const [yyyy, mm, dd] = date.split('-');
-                                    const formattedDate = `${dd}/${mm}/${yyyy}`;
-
-                                    // Criar item visual
-                                    const item = document.createElement('div');
-                                    item.className = 'special-day-off-item';
-                                    item.innerHTML = `
+                                        // Criar item visual
+                                        const item = document.createElement('div');
+                                        item.className = 'special-day-off-item';
+                                        item.innerHTML = `
                         <div>
                             <span class="special-day-off-date"><i class="fas fa-calendar-day"></i> ${formattedDate}</span>
                             ${reason ? `<span class="special-day-off-reason">(${reason})</span>` : ''}
@@ -3035,18 +2948,6 @@
                     });
                 });
             }
-
-            // Galeria de seleção de imagem para novo serviço
-            document.querySelectorAll('.service-gallery').forEach(gallery => {
-                gallery.addEventListener('click', function(e) {
-                    const option = e.target.closest('.gallery-option');
-                    if (option) {
-                        gallery.querySelectorAll('.gallery-option').forEach(opt => opt.classList.remove('selected'));
-                        option.classList.add('selected');
-                        // Aqui você pode salvar o valor de option.dataset.img para uso posterior
-                    }
-                });
-            });
 
             // Logout functionality
             document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -3513,65 +3414,93 @@ filterBtns.forEach(btn => {
 });
 
 // Função para renderizar os serviços na dashboard
-    async function renderDashboardServices() {
-        const container = document.getElementById('servicesContainer');
-        if (!container) return;
-        container.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
-        try {
-            const res = await fetch('/dashboard/servicos-admin');
-            const data = await res.json();
-            if (data.success && Array.isArray(data.servicos)) {
-                if (data.servicos.length === 0) {
-                    container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
-                    return;
-                }
-                let html = '';
-                data.servicos.forEach(servico => {
-                    html += `
-                    <div class="service-card" data-id="${servico.id}">
-                        <div class="service-card-header">
-                            <div class="service-card-name">${servico.nome}</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="service-card-details">
-                            <span><i class="far fa-clock"></i> ${servico.tempo}</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
-                        </div>
+   async function renderDashboardServices() {
+    const container = document.getElementById('servicesContainer');
+    if (!container) return;
+    container.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+    try {
+        const res = await fetch('/dashboard/servicos-admin');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.servicos)) {
+            if (data.servicos.length === 0) {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+                return;
+            }
+            let html = '';
+            data.servicos.forEach(servico => {
+                html += `
+                <div class="service-card" data-id="${servico.id}">
+                   <div class="service-card-header">
+    <div class="service-switch-title">
+        <label class="toggle-switch" style="margin-right:10px;">
+            <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+            <span class="slider"></span>
+        </label>
+        <span class="service-card-name">${servico.nome}</span>
+    </div>
+    <div class="service-actions">
+        <button class="service-action-btn edit-btn" title="Editar serviço" data-id="${servico.id}">
+            <i class="fas fa-pen"></i>
+        </button>
+        <button class="service-action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</div>
+                    <div class="service-card-details">
+                        <span><i class="far fa-clock"></i> ${servico.tempo}</span>
+                        <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
                     </div>
-                    `;
-                });
-                container.innerHTML = html;
+                </div>
+                `;
+            });
+            container.innerHTML = html;
 
-                // Adiciona evento aos switches
-                container.querySelectorAll('.service-switch').forEach(switchEl => {
-                    switchEl.addEventListener('change', async function() {
-                        const id = this.getAttribute('data-id');
-                        const ativo = this.checked ? 1 : 0;
-                        // Atualiza no banco
-                        await fetch(`/dashboard/servicos/${id}/ativo`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ ativo })
-                        });
-                        // Opcional: feedback visual
+            // Adiciona evento aos switches
+            container.querySelectorAll('.service-switch').forEach(switchEl => {
+                switchEl.addEventListener('change', async function() {
+                    const id = this.getAttribute('data-id');
+                    const ativo = this.checked ? 1 : 0;
+                    await fetch(`/dashboard/servicos/${id}/ativo`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ativo })
                     });
                 });
-            } else {
-                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
-            }
-        } catch (err) {
+            });
+
+            // Eventos dos botões de editar e deletar
+            container.querySelectorAll('.service-action-btn.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    // Aqui você pode abrir um modal de edição, ex: openEditServiceModal(id);
+                    alert('Função de editar serviço (ID: ' + id + ')');
+                });
+            });
+            container.querySelectorAll('.service-action-btn.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('Tem certeza que deseja excluir este serviço?')) {
+                        await fetch(`/dashboard/servicos/${id}`, {
+                            method: 'DELETE'
+                        });
+                        renderDashboardServices();
+                    }
+                });
+            });
+        } else {
             container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
         }
+    } catch (err) {
+        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
     }
+}
 
     // Chama ao carregar a página
     renderDashboardServices();
 
         });
-    </script>
+        </script>
 </body>
 
 </html>
