@@ -1615,6 +1615,15 @@
             opacity: 0.8;
             background-color: var(--hover);
         }
+        /* Botão de Continuar "Bloquado" */
+        
+        #phoneModalBtn:disabled {
+            background: #ccc !important;
+            color: #fff !important;
+            cursor: not-allowed !important;
+            border: none;
+            box-shadow: none;
+        }
     </style>
 </head>
 
@@ -1831,7 +1840,7 @@
         Aceito receber notificações de lembrete dos meus agendamentos
     </label>
             </div>
-            <button class="custom-modal-btn" id="phoneModalBtn">Continuar</button>
+            <button class="custom-modal-btn" id="phoneModalBtn" disabled>Continuar</button>
         </div>
     </div>
 
@@ -2341,10 +2350,55 @@
             const phoneModalBtn = document.getElementById('phoneModalBtn');
             const userPhone = document.getElementById('userPhone');
             const acceptNotifications = document.getElementById('acceptNotifications');
-            phoneModalBtn.disabled = true;
+            const acceptNotificationsLabel = document.querySelector('label[for="acceptNotifications"]');
 
-            acceptNotifications.addEventListener('change', function() {
-                phoneModalBtn.disabled = !this.checked;
+            // Função para validar telefone (10 ou 11 dígitos)
+            function validarTelefone(telefone) {
+                return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
+            }
+
+            // Atualiza o estado do botão
+            function atualizarEstadoBtn() {
+                const telefoneValido = validarTelefone(userPhone.value.trim());
+                const notificacaoAceita = acceptNotifications.checked;
+                if (telefoneValido && notificacaoAceita) {
+                    phoneModalBtn.disabled = false;
+                    phoneModalBtn.style.background = '';
+                    phoneModalBtn.style.cursor = '';
+                } else {
+                    phoneModalBtn.disabled = true;
+                    phoneModalBtn.style.background = '#ccc';
+                    phoneModalBtn.style.cursor = 'not-allowed';
+                }
+            }
+
+            // Eventos para atualizar o botão
+            userPhone.addEventListener('input', atualizarEstadoBtn);
+            acceptNotifications.addEventListener('change', atualizarEstadoBtn);
+
+            // Feedback visual ao tentar clicar bloqueado
+            phoneModalBtn.addEventListener('click', function(e) {
+                if (phoneModalBtn.disabled) {
+                    e.preventDefault();
+                    // Pisca o campo de telefone se inválido
+                    if (!validarTelefone(userPhone.value.trim())) {
+                        userPhone.style.transition = 'box-shadow 0.15s';
+                        userPhone.style.boxShadow = '0 0 0 2px #e74c3c';
+                        setTimeout(() => {
+                            userPhone.style.boxShadow = '';
+                        }, 700);
+                    }
+                    // Pisca o label do checkbox se não marcado
+                    if (!acceptNotifications.checked && acceptNotificationsLabel) {
+                        acceptNotificationsLabel.style.transition = 'color 0.15s';
+                        acceptNotificationsLabel.style.color = '#e74c3c';
+                        acceptNotificationsLabel.style.fontWeight = 'bold';
+                        setTimeout(() => {
+                            acceptNotificationsLabel.style.color = '';
+                            acceptNotificationsLabel.style.fontWeight = '';
+                        }, 700);
+                    }
+                }
             });
 
             confirmButton.addEventListener('click', async function() {
