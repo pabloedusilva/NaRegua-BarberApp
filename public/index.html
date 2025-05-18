@@ -2926,6 +2926,21 @@
                 });
             }
         };
+        // Botão "Ver endereço" - mostrar/ocultar endereço
+        const addressToggle = document.getElementById('addressToggle');
+        const addressContent = document.getElementById('addressContent');
+        if (addressToggle && addressContent) {
+            addressToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (addressContent.style.display === 'block') {
+                    addressContent.style.display = 'none';
+                    addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
+                } else {
+                    addressContent.style.display = 'block';
+                    addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
+                }
+            });
+        }
     </script>
 </body>
 
