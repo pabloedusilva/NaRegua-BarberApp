@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Envio Manual de Push</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+        
+        label {
+            display: block;
+            margin-top: 16px;
+        }
+        
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+        }
+        
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+        
+        .msg {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Envio Manual de Notificação Push</h2>
+    <form id="pushForm">
+        <label for="title">Título:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="body">Mensagem:</label>
+        <textarea id="body" name="body" rows="4" required></textarea>
+
+        <button type="submit">Enviar Notificação</button>
+    </form>
+    <div class="msg" id="msg"></div>
+
+    <script>
+        document.getElementById('pushForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const body = document.getElementById('body').value.trim();
+            const msgDiv = document.getElementById('msg');
+            msgDiv.textContent = 'Enviando...';
+            try {
+                const res = await fetch('/push/manual', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        body
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    msgDiv.textContent = `Notificação enviada para ${data.enviados} inscritos.`;
+                } else {
+                    msgDiv.textContent = 'Erro: ' + (data.message || 'Falha ao enviar.');
+                }
+            } catch (err) {
+                msgDiv.textContent = 'Erro de conexão ou servidor.';
+            }
+        };
+    </script>
+</body>
+
+</html>

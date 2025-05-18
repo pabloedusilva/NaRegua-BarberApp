@@ -1825,6 +1825,12 @@
                 <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
                 <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
             </div>
+            <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" id="acceptNotifications" style="width:18px;height:18px;">
+                <label for="acceptNotifications" style="font-size:0.98rem;cursor:pointer;">
+        Aceito receber notificações de lembrete dos meus agendamentos
+    </label>
+            </div>
             <button class="custom-modal-btn" id="phoneModalBtn">Continuar</button>
         </div>
     </div>
@@ -2334,6 +2340,12 @@
             const phoneModalClose = document.getElementById('phoneModalClose');
             const phoneModalBtn = document.getElementById('phoneModalBtn');
             const userPhone = document.getElementById('userPhone');
+            const acceptNotifications = document.getElementById('acceptNotifications');
+            phoneModalBtn.disabled = true;
+
+            acceptNotifications.addEventListener('change', function() {
+                phoneModalBtn.disabled = !this.checked;
+            });
 
             confirmButton.addEventListener('click', async function() {
                 if (selectedService && selectedProfessional && selectedDate && selectedTime) {
@@ -2368,95 +2380,51 @@
                     return;
                 }
 
-                // Salvar no banco via API
+                if (!acceptNotifications.checked) {
+                    alert('Você precisa aceitar receber notificações para continuar.');
+                    return;
+                }
                 try {
-                    const res = await fetch('/agendamento/novo', {
+                    const subscription = await subscribeUserToPush();
+                    // Envie a subscription junto com o agendamento
+                    await fetch('/agendamento/novo', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            nome: '', // Você pode pedir o nome do usuário se quiser
+                            nome: '', // ou peça o nome do usuário
                             telefone: tel,
                             servico: selectedService,
                             profissional: selectedProfessional,
-                            data: selectedDate.split('/').reverse().join('-'), // dd/mm/yyyy -> yyyy-mm-dd
+                            data: selectedDate.split('/').reverse().join('-'),
                             hora: selectedTime,
-                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
+                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                            subscription
                         })
                     });
-                    if (res.ok) {
-                        // Fecha o modal de telefone
-                        phoneModal.classList.remove('active');
-                        showCustomModal({
-                            message: `<strong>Agendamento confirmado!</strong><br><br>
-                            <b>Serviço:</b> ${selectedService}<br>
-                            <b>Profissional:</b> ${selectedProfessional}<br>
-                            <b>Data:</b> ${selectedDate}<br>
-                            <b>Horário:</b> ${selectedTime}<br>
-                            <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                            <b>Telefone:</b> ${tel}`,
-                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                            btnText: 'Fechar',
-                            onClose: function() {
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 300);
-                            }
-                        });
-                    } else {
-                        alert('Erro ao salvar agendamento!');
-                    }
+                    // Fecha o modal de telefone
+                    phoneModal.classList.remove('active');
+                    showCustomModal({
+                        message: `<strong>Agendamento confirmado!</strong><br><br>
+                        <b>Serviço:</b> ${selectedService}<br>
+                        <b>Profissional:</b> ${selectedProfessional}<br>
+                        <b>Data:</b> ${selectedDate}<br>
+                        <b>Horário:</b> ${selectedTime}<br>
+                        <b>Valor:</b> R$ ${selectedServicePrice}<br>
+                        <b>Telefone:</b> ${tel}`,
+                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                        btnText: 'Fechar',
+                        onClose: function() {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 300);
+                        }
+                    });
                 } catch (err) {
-                    alert('Erro ao conectar ao servidor.');
+                    alert('Erro ao ativar notificações: ' + err.message);
                 }
             };
-
-            // Novo código para o endereço
-            const addressToggle = document.getElementById('addressToggle');
-            const addressContent = document.getElementById('addressContent');
-
-            addressToggle.addEventListener('click', function() {
-                if (addressContent.style.display === 'block') {
-                    addressContent.style.display = 'none';
-                    this.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
-                } else {
-                    addressContent.style.display = 'block';
-                    this.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
-                }
-            });
-
-            // Atualizar dia selecionado
-            function updateSelectedDay(dateStr) {
-                // Remove seleção anterior
-                document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
-                // Seleciona o novo dia em ambos os calendários
-                document.querySelectorAll(`.day[data-date="${dateStr}"]`).forEach(el => el.classList.add('selected'));
-                selectedDate = dateStr;
-                // Atualize horários ou detalhes conforme necessário
-                // Exemplo: updateConfirmationDetails();
-            }
-
-            function animateWeekTransition(direction, callback) {
-                const weekDays = document.querySelector('.week-days');
-                if (!weekDays) {
-                    callback();
-                    return;
-                }
-                weekDays.classList.remove('active', 'slide-left', 'slide-right');
-                void weekDays.offsetWidth; // Força reflow
-
-                weekDays.classList.add(direction === 'left' ? 'slide-left' : 'slide-right');
-                setTimeout(() => {
-                    callback();
-                    setTimeout(() => {
-                        const newWeekDays = document.querySelector('.week-days');
-                        if (newWeekDays) {
-                            newWeekDays.classList.add('active');
-                        }
-                    }, 10);
-                }, 450); // Tempo igual ao transition do CSS
-            }
 
             // Código para o modal de "Meus agendamentos"
             const myAppointmentsBtn = document.querySelector('.my-appointments');
@@ -2657,6 +2625,253 @@
 
             modal.classList.add('active');
         }
+
+        async function subscribeUserToPush() {
+            if (!('serviceWorker' in navigator)) throw new Error('Service Worker não suportado.');
+            if (!('PushManager' in window)) throw new Error('Push API não suportada.');
+
+            // Registra o SW se ainda não estiver registrado
+            const reg = await navigator.serviceWorker.register('/sw.js');
+            // Solicita permissão
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') throw new Error('Permissão de notificação negada.');
+
+            // Verifica se já existe subscription
+            let subscription = await reg.pushManager.getSubscription();
+            const applicationServerKey = urlBase64ToUint8Array('BElvOnVGxu5czvx63n1FEo3ea90bKMVWwxlky9nZBMNB39u97JOckXngiEKParctze7ciGdPvEZkSAnMSGGfo_s');
+            if (!subscription) {
+                subscription = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey
+                });
+            }
+            return subscription;
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        // No evento do botão de confirmação do agendamento:
+        phoneModalBtn.onclick = async function() {
+            const tel = userPhone.value.trim();
+            // ...validações...
+            if (!acceptNotifications.checked) {
+                alert('Você precisa aceitar receber notificações para continuar.');
+                return;
+            }
+            try {
+                const subscription = await subscribeUserToPush();
+                // Envie a subscription junto com o agendamento
+                await fetch('/agendamento/novo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: '', // ou peça o nome do usuário
+                        telefone: tel,
+                        servico: selectedService,
+                        profissional: selectedProfessional,
+                        data: selectedDate.split('/').reverse().join('-'),
+                        hora: selectedTime,
+                        preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                        subscription
+                    })
+                });
+                // Fecha o modal de telefone
+                phoneModal.classList.remove('active');
+                showCustomModal({
+                    message: `<strong>Agendamento confirmado!</strong><br><br>
+                    <b>Serviço:</b> ${selectedService}<br>
+                    <b>Profissional:</b> ${selectedProfessional}<br>
+                    <b>Data:</b> ${selectedDate}<br>
+                    <b>Horário:</b> ${selectedTime}<br>
+                    <b>Valor:</b> R$ ${selectedServicePrice}<br>
+                    <b>Telefone:</b> ${tel}`,
+                    icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                    btnText: 'Fechar',
+                    onClose: function() {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 300);
+                    }
+                });
+            } catch (err) {
+                alert('Erro ao ativar notificações: ' + err.message);
+            }
+        };
+
+        // Código para o modal de "Meus agendamentos"
+        const myAppointmentsBtn = document.querySelector('.my-appointments');
+        const appointmentsModal = document.getElementById('appointmentsModal');
+        const appointmentsModalClose = document.getElementById('appointmentsModalClose');
+        const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
+        const appointmentsName = document.getElementById('appointmentsName');
+        const appointmentsPhone = document.getElementById('appointmentsPhone');
+
+        // Abrir modal ao clicar em "Meus agendamentos"
+        myAppointmentsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            appointmentsModal.classList.add('active');
+            appointmentsName.value = '';
+            appointmentsPhone.value = '';
+            appointmentsName.focus();
+        });
+
+        // Fechar modal
+        appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
+
+        // Fechar ao clicar fora do conteúdo
+        appointmentsModal.onclick = function(e) {
+            if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
+        };
+
+        // Ação do botão do modal
+        appointmentsModalBtn.onclick = async function() {
+            const nome = appointmentsName.value.trim();
+            const tel = appointmentsPhone.value.trim();
+
+            appointmentsName.style.borderColor = '';
+            appointmentsPhone.style.borderColor = '';
+
+            let erro = false;
+            if (!nome) {
+                appointmentsName.style.borderColor = 'var(--primary-dark)';
+                erro = true;
+            }
+            if (!tel) {
+                appointmentsPhone.style.borderColor = 'var(--primary-dark)';
+                erro = true;
+            }
+            if (erro) {
+                // Não exibe modal de aviso, apenas borda vermelha
+                return;
+            }
+
+            // Buscar agendamentos do usuário
+            try {
+                const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                const data = await res.json();
+                if (data.success && data.agendamentos.length > 0) {
+                    let html = `<b style="color:var(--text-main);">Olá, ${nome}!</b><br><br>
+                    <div style="display: flex; flex-direction: column; gap: 18px;">`;
+                    data.agendamentos.forEach(ag => {
+                        html += `
+                        <div style="
+                            border: 1px solid var(--border);
+                            border-radius: 12px;
+                            padding: 12px 18px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 6px;
+                            background: var(--card);
+                            margin-bottom: 8px;
+                            position: relative;
+                        ">
+                            <div>
+                                <span style="font-weight: 500; color: var(--text-secondary);">Serviço:</span>
+                                <span style="color:var(--text-main);">${ag.servico}</span>
+                            </div>
+                            <div>
+                                <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
+                                <span style="color:var(--text-main);">${ag.profissional}</span>
+                            </div>
+                            <div>
+                                <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
+                                <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
+                            </div>
+                            <div>
+                                <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
+                                <span style="color:var(--text-main);">${ag.hora}</span>
+                            </div>
+                            <div>
+                                <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
+                                <span style="color:var(--success); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <button class="delete-appointment-btn" data-id="${ag.id}" style="
+                                margin-top: 8px;
+                                align-self: flex-end;
+                                background: var(--primary-dark);
+                                color: #fff;
+                                border: none;
+                                border-radius: 6px;
+                                padding: 6px 16px;
+                                font-size: 0.98rem;
+                                cursor: pointer;
+                                transition: background 0.2s;
+                            ">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                        `;
+                    });
+                    html += '</div>';
+                    appointmentsModal.classList.remove('active');
+                    showCustomModal({
+                        message: html,
+                        icon: `<i class="fas fa-calendar-check" style="color:var(--primary);"></i>`,
+                        btnText: 'Fechar'
+                    });
+
+                    // Ativar botões de exclusão
+                    setTimeout(() => {
+                        document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+                            btn.onclick = async function() {
+                                const id = this.getAttribute('data-id');
+                                try {
+                                    const res = await fetch(`/agendamento/excluir/${id}`, {
+                                        method: 'DELETE'
+                                    });
+                                    const result = await res.json();
+                                    if (result.success) {
+                                        this.closest('div').remove();
+                                        showCustomModal({
+                                            message: 'Agendamento excluído com sucesso!',
+                                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                            btnText: 'Fechar'
+                                        });
+                                    } else {
+                                        showCustomModal({
+                                            message: 'Erro ao excluir agendamento.',
+                                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                            btnText: 'Fechar'
+                                        });
+                                    }
+                                } catch (err) {
+                                    showCustomModal({
+                                        message: 'Erro ao conectar ao servidor.',
+                                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                        btnText: 'Fechar'
+                                    });
+                                }
+                            };
+                        });
+                    }, 100);
+                } else {
+                    appointmentsModal.classList.remove('active');
+                    showCustomModal({
+                        message: `<b>Olá, ${nome}!</b><br>Você ainda não possui agendamentos.`,
+                        icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
+                        btnText: 'Fechar'
+                    });
+                }
+            } catch (err) {
+                appointmentsModal.classList.remove('active');
+                showCustomModal({
+                    message: 'Erro ao buscar agendamentos.',
+                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                    btnText: 'Fechar'
+                });
+            }
+        };
     </script>
 </body>
 

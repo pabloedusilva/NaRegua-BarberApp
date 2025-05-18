@@ -48,3 +48,14 @@ INSERT INTO servicos (nome, tempo, preco, imagem, ativo) VALUES
 ('Colorimetria + corte', '1h:30min', 65.00, 'img/servicos/colorimetria.jpg', 1),
 ('Corte infantil', '30min', 25.00, 'img/servicos/infantil.jpg', 1),
 ('Barba raspada na máquina', '05min', 10.00, 'img/servicos/maquina.jpg', 1);
+
+-- Tabela para subscriptions de notificações push
+CREATE TABLE IF NOT EXISTS subscriptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    agendamento_id INT,
+    endpoint TEXT NOT NULL,
+    p256dh TEXT NOT NULL,
+    auth TEXT NOT NULL,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (agendamento_id) REFERENCES agendamentos(id) ON DELETE CASCADE
+);

@@ -4,11 +4,27 @@ const db = require('../db/mysql');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
-    const { nome, telefone, servico, profissional, data, hora, preco } = req.body;
+    const { nome, telefone, servico, profissional, data, hora, preco, subscription } = req.body;
     try {
-        await db.query(
+        // Salva o agendamento
+        const [result] = await db.query(
             'INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco) VALUES (?, ?, ?, ?, ?, ?, ?)', [nome, telefone, servico, profissional, data, hora, preco]
         );
+        const agendamentoId = result.insertId;
+
+        // Salva a subscription (evita duplicidade)
+        if (subscription && subscription.endpoint) {
+            // Remove subscriptions antigas para o mesmo endpoint
+            await db.query('DELETE FROM subscriptions WHERE endpoint = ?', [subscription.endpoint]);
+            await db.query(
+                'INSERT INTO subscriptions (agendamento_id, endpoint, p256dh, auth) VALUES (?, ?, ?, ?)', [
+                    agendamentoId,
+                    subscription.endpoint,
+                    subscription.keys.p256dh,
+                    subscription.keys.auth
+                ]
+            );
+        }
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });
