@@ -1498,117 +1498,6 @@
                 top: 16px;
             }
         }
-        
-        .push-notification-form {
-            background: var(--gray-light);
-            border-radius: 10px;
-            padding: 24px 18px 18px 18px;
-            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.04);
-            margin-top: 18px;
-            max-width: 540px;
-        }
-        
-        .push-notification-form .form-group {
-            margin-bottom: 18px;
-        }
-        
-        .push-notification-form .form-label {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 7px;
-            display: block;
-        }
-        
-        .push-notification-form .form-control {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 1.08rem;
-            color: var(--text);
-            transition: border 0.2s;
-        }
-        
-        .push-notification-form .form-control:focus {
-            border-color: var(--primary);
-        }
-        
-        .push-recipients {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
-            margin-top: 4px;
-        }
-        
-        .push-recipients label {
-            font-size: 1rem;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-        
-        .char-count {
-            font-size: 0.93rem;
-            color: var(--gray);
-            margin-top: 4px;
-            text-align: right;
-        }
-        
-        #pushNotificationStatus {
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .push-history-item {
-            background: var(--gray-light);
-            border-radius: 8px;
-            padding: 13px 14px 10px 14px;
-            margin-bottom: 13px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-            font-size: 1rem;
-            color: var(--text);
-            position: relative;
-        }
-        
-        .push-history-item .push-history-title {
-            font-weight: 600;
-            color: var (--primary);
-            margin-bottom: 2px;
-        }
-        
-        .push-history-item .push-history-message {
-            margin-bottom: 4px;
-        }
-        
-        .push-history-item .push-history-meta {
-            font-size: 0.93rem;
-            color: var(--gray);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .push-history-item .push-history-link {
-            color: var(--primary);
-            text-decoration: underline;
-            font-size: 0.97rem;
-            margin-left: 6px;
-        }
-        
-        .push-history-item .push-history-date {
-            font-size: 0.92rem;
-            color: var(--gray);
-            margin-left: auto;
-        }
-        
-        @media (max-width: 600px) {
-            .push-notification-form {
-                padding: 12px 4px 10px 4px;
-                max-width: 100%;
-            }
-        }
         /* Barra lateral estilo Mac */
         
         .mac-sidebar {
@@ -2200,73 +2089,22 @@
                 </div>
             </div>
         </section>
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title">
-                    <i class="fas fa-bell"></i> Enviar Notificação Push
-                </h2>
-                <button class="edit-btn" id="viewPushHistoryBtn">
-                        <i class="fas fa-history"></i> Histórico
-                    </button>
-            </div>
-            <form id="pushNotificationForm" class="push-notification-form" autocomplete="off">
-                <div class="form-group">
-                    <label class="form-label" for="pushTitle">
-                            Título da Notificação <span
-                                style="color:var(--primary-dark);">*</span>
-                        </label>
-                    <input type="text" class="form-control" id="pushTitle" maxlength="60" required placeholder="Ex: Promoção especial de hoje!">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pushMessage">
-                            Mensagem <span
-                                style="color:var(--primary-dark);">*</span>
-                        </label>
-                    <textarea class="form-control" id="pushMessage" maxlength="180" required rows="3" placeholder="Digite a mensagem da notificação"></textarea>
-                    <div class="char-count" id="pushMessageCount">0/180</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Destinatários</label>
-                    <div class="push-recipients">
-                        <label><input type="checkbox" id="recipientAll"
-                                    checked> Todos os clientes</label>
-                        <label><input type="checkbox" id="recipientToday">
-                                Clientes com agendamento hoje</label>
-                        <label><input type="checkbox" id="recipientWeek">
-                                Clientes com agendamento nesta semana</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pushUrl">
-                            Link de Ação (opcional)
-                        </label>
-                    <input type="url" class="form-control" id="pushUrl" placeholder="https://...">
-                </div>
-                <div class="modal-footer" style="justify-content: flex-start; gap: 14px;">
-                    <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Enviar
-                            Notificação
-                        </button>
-                    <span id="pushNotificationStatus" style="display:none;font-size:1rem;"></span>
-                </div>
-            </form>
-        </section>
 
-        <!-- Modal de Histórico de Notificações Push -->
-        <div id="pushHistoryModal" class="modal">
-            <div class="modal-content" style="max-width: 480px;">
-                <div class="modal-header">
-                    <h3 class="modal-title"><i class="fas fa-history"></i> Histórico de Notificações</h3>
-                    <button class="close-modal">&times;</button>
-                </div>
-                <div class="modal-body" id="pushHistoryList" style="max-height: 340px; overflow-y: auto;">
-                    <!-- Histórico será preenchido via JS -->
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal">Fechar</button>
-                </div>
+        <section class="dashboard-section animate-slide-up" id="notificacoes-section" style="display:none;">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-bell"></i> Envio Manual de Notificação Push</h2>
             </div>
-        </div>
+            <form id="pushForm" style="max-width:400px;margin:auto;">
+                <label for="title">Título:</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+
+                <label for="body" style="margin-top:16px;">Mensagem:</label>
+                <textarea id="body" name="body" rows="4" class="form-control" required></textarea>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:20px;">Enviar Notificação</button>
+            </form>
+            <div class="msg" id="msg" style="margin-top:20px;font-weight:bold;"></div>
+        </section>
 
     </main>
 
@@ -2769,136 +2607,6 @@
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 window.location.href = '/dashboard/logout';
             });
-            // Push Notification Form
-const pushForm = document.getElementById('pushNotificationForm');
-const pushTitle = document.getElementById('pushTitle');
-const pushMessage = document.getElementById('pushMessage');
-const pushMessageCount = document.getElementById('pushMessageCount');
-const pushUrl = document.getElementById('pushUrl');
-const pushStatus = document.getElementById('pushNotificationStatus');
-const recipientAll = document.getElementById('recipientAll');
-const recipientToday = document.getElementById('recipientToday');
-const recipientWeek = document.getElementById('recipientWeek');
-
-// Atualiza contador de caracteres da mensagem
-if (pushMessage && pushMessageCount) {
-    pushMessage.addEventListener('input', function() {
-        pushMessageCount.textContent = `${this.value.length}/180`;
-    });
-}
-
-// Lógica de seleção de destinatários (ao menos um)
-if (recipientAll && recipientToday && recipientWeek) {
-    function ensureAtLeastOneRecipient(e) {
-        if (!recipientAll.checked && !recipientToday.checked && !recipientWeek.checked) {
-            e.target.checked = true;
-        }
-    }
-    recipientAll.addEventListener('change', ensureAtLeastOneRecipient);
-    recipientToday.addEventListener('change', ensureAtLeastOneRecipient);
-    recipientWeek.addEventListener('change', ensureAtLeastOneRecipient);
-}
-
-// Histórico de notificações (simulado localStorage)
-function getPushHistory() {
-    return JSON.parse(localStorage.getItem('pushHistory') || '[]');
-}
-function savePushHistory(history) {
-    localStorage.setItem('pushHistory', JSON.stringify(history));
-}
-
-// Envio do formulário de notificação
-if (pushForm) {
-    pushForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        pushStatus.style.display = 'none';
-
-        // Validação simples
-        if (!pushTitle.value.trim() || !pushMessage.value.trim()) {
-            pushStatus.textContent = 'Preencha título e mensagem.';
-            pushStatus.style.color = 'var(--red)';
-            pushStatus.style.display = 'inline';
-            return;
-        }
-
-        // Simulação de envio (aqui você integraria com backend/push real)
-        pushStatus.textContent = 'Enviando...';
-        pushStatus.style.color = 'var(--gold)';
-        pushStatus.style.display = 'inline';
-
-        setTimeout(() => {
-            // Salva no histórico local
-            const history = getPushHistory();
-            history.unshift({
-                title: pushTitle.value.trim(),
-                message: pushMessage.value.trim(),
-                url: pushUrl.value.trim(),
-                recipients: [
-                    recipientAll.checked ? 'Todos' : null,
-                    recipientToday.checked ? 'Hoje' : null,
-                    recipientWeek.checked ? 'Semana' : null
-                ].filter(Boolean).join(', '),
-                date: new Date().toLocaleString('pt-BR')
-            });
-            savePushHistory(history);
-
-            pushStatus.textContent = 'Notificação enviada!';
-            pushStatus.style.color = 'var(--green)';
-            pushStatus.style.display = 'inline';
-
-            // Limpa campos
-            pushForm.reset();
-            pushMessageCount.textContent = '0/180';
-
-            setTimeout(() => {
-                pushStatus.style.display = 'none';
-            }, 1800);
-        }, 900);
-    });
-}
-
-// Modal de histórico de notificações
-const pushHistoryBtn = document.getElementById('viewPushHistoryBtn');
-const pushHistoryModal = document.getElementById('pushHistoryModal');
-const pushHistoryList = document.getElementById('pushHistoryList');
-
-if (pushHistoryBtn && pushHistoryModal && pushHistoryList) {
-    pushHistoryBtn.addEventListener('click', function() {
-        // Preenche histórico
-        const history = getPushHistory();
-        pushHistoryList.innerHTML = '';
-        if (history.length === 0) {
-            pushHistoryList.innerHTML = '<div style="color:var(--gray);text-align:center;padding:18px 0;">Nenhuma notificação enviada ainda.</div>';
-        } else {
-            history.forEach(item => {
-                pushHistoryList.innerHTML += `
-                    <div class="push-history-item">
-                        <div class="push-history-title">${item.title}</div>
-                        <div class="push-history-message">${item.message}</div>
-                        <div class="push-history-meta">
-                            <span><i class="fas fa-users"></i> ${item.recipients}</span>
-                            ${item.url ? `<a href="${item.url}" class="push-history-link" target="_blank"><i class="fas fa-link"></i> Link</a>` : ''}
-                            <span class="push-history-date"><i class="far fa-clock"></i> ${item.date}</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        pushHistoryModal.style.display = 'flex';
-    });
-}
-
-// Fecha modal de histórico
-if (pushHistoryModal) {
-    pushHistoryModal.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', function() {
-            pushHistoryModal.style.display = 'none';
-        });
-    });
-    pushHistoryModal.addEventListener('click', function(e) {
-        if (e.target === pushHistoryModal) pushHistoryModal.style.display = 'none';
-    });
-}
 
 // Atualiza o contador de agendamentos totais
 function atualizarTotalAgendamentos() {
@@ -2993,7 +2701,7 @@ const sections = [
     {section: 'horarios', selector: '.dashboard-section:nth-of-type(5)'},
     {section: 'folgas', selector: '.dashboard-section:nth-of-type(6)'},
     {section: 'barbearia', selector: '.dashboard-section:nth-of-type(7)'},
-    {section: 'notificacoes', selector: ''},
+    {section: 'notificacoes', selector: '#notificacoes-section'},
     {section: 'compartilhar', selector: '.dashboard-section:nth-of-type(4)'},
 ];
 function showSection(sectionName) {
@@ -3575,6 +3283,35 @@ if (editServiceImageInput && editServiceImagePreview) {
             setTimeout(updateEditServicePreview, 50);
         };
     }
+}
+
+// Enviar notificação push manual
+const pushForm = document.getElementById('pushForm');
+if (pushForm) {
+    pushForm.onsubmit = async function(e) {
+        e.preventDefault();
+        const title = document.getElementById('title').value.trim();
+        const body = document.getElementById('body').value.trim();
+        const msgDiv = document.getElementById('msg');
+        msgDiv.textContent = 'Enviando...';
+        try {
+            const res = await fetch('/push/manual', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, body })
+            });
+            const data = await res.json();
+            if (data.success) {
+                msgDiv.textContent = `Notificação enviada para ${data.enviados} inscritos.`;
+            } else {
+                msgDiv.textContent = 'Erro: ' + (data.message || 'Falha ao enviar.');
+            }
+        } catch (err) {
+            msgDiv.textContent = 'Erro de conexão ou servidor.';
+        }
+    };
 }
 
         });
