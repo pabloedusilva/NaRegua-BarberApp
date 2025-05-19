@@ -18,6 +18,7 @@
             --accent: #ca9a41;
             /* Dourado de destaque */
             --white: #ffffff;
+            --red: rgb(255, 0, 0);
             --gray-light: #f5f5f5;
             --gray: #e0e0e0;
             --gray-dark: #333333;
@@ -2532,12 +2533,12 @@
                     const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                     const data = await res.json();
                     if (data.success && data.agendamentos.length > 0) {
-                        let html = `<b style="color:var(--text-main);">Olá, ${nome}!</b><br><br>
+                        let html = `<b style="color:var(--text-main);">Olá,</b><br><br>
                         <div style="display: flex; flex-direction: column; gap: 18px;">`;
                         data.agendamentos.forEach(ag => {
                             html += `
                             <div style="
-                                border: 1px solid var(--border);
+                                border: 1px solid var(--primary-dark);
                                 border-radius: 12px;
                                 padding: 12px 18px;
                                 display: flex;
@@ -2570,7 +2571,7 @@
                                 <button class="delete-appointment-btn" data-id="${ag.id}" style="
                                     margin-top: 8px;
                                     align-self: flex-end;
-                                    background: var(--primary-dark);
+                                    background: var(--red);
                                     color: #fff;
                                     border: none;
                                     border-radius: 6px;
@@ -2629,7 +2630,7 @@
                     } else {
                         appointmentsModal.classList.remove('active');
                         showCustomModal({
-                            message: `<b>Olá, ${nome}!</b><br>Você ainda não possui agendamentos.`,
+                            message: `<b>Olá,</b><br>Você ainda não possui agendamentos.`,
                             icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
                             btnText: 'Fechar'
                         });
@@ -2815,7 +2816,7 @@
                 const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                 const data = await res.json();
                 if (data.success && data.agendamentos.length > 0) {
-                    let html = `<b style="color:var(--text-main);">Olá, ${nome}!</b><br><br>
+                    let html = `<b style="color:var(--text-main);">Olá,</b><br><br>
                     <div style="display: flex; flex-direction: column; gap: 18px;">`;
                     data.agendamentos.forEach(ag => {
                         html += `
@@ -2853,7 +2854,7 @@
                             <button class="delete-appointment-btn" data-id="${ag.id}" style="
                                 margin-top: 8px;
                                 align-self: flex-end;
-                                background: var(--primary-dark);
+                                background: var(--red);
                                 color: #fff;
                                 border: none;
                                 border-radius: 6px;
@@ -2912,7 +2913,7 @@
                 } else {
                     appointmentsModal.classList.remove('active');
                     showCustomModal({
-                        message: `<b>Olá, ${nome}!</b><br>Você ainda não possui agendamentos.`,
+                        message: `<b>Olá,</b><br>Você ainda não possui agendamentos.`,
                         icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
                         btnText: 'Fechar'
                     });
