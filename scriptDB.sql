@@ -59,3 +59,18 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (agendamento_id) REFERENCES agendamentos(id) ON DELETE CASCADE
 );
+
+-- Tabela para horários semanais da barbearia
+CREATE TABLE IF NOT EXISTS horarios_semana (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dia_semana ENUM('segunda','terca','quarta','quinta','sexta','sabado','domingo') NOT NULL UNIQUE,
+    horario VARCHAR(50) NOT NULL
+);
+
+-- Tabela para turnos da barbearia
+CREATE TABLE IF NOT EXISTS horarios_turnos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dia_semana ENUM('segunda','terca','quarta','quinta','sexta','sabado','domingo') NOT NULL,
+    turno_inicio TIME NOT NULL,
+    turno_fim TIME NOT NULL
+);

@@ -289,4 +289,23 @@ router.post('/enviar-push', requireLogin, async(req, res) => {
     }
 });
 
+// Buscar todos os turnos
+router.get('/horarios-turnos', requireLogin, async(req, res) => {
+    const [rows] = await db.query('SELECT * FROM horarios_turnos');
+    res.json({ success: true, turnos: rows });
+});
+
+// Salvar turnos de um dia (substitui todos os turnos do dia)
+router.post('/horarios-turnos', requireLogin, async(req, res) => {
+    const { dia_semana, turnos } = req.body; // turnos: [{inicio, fim}, ...]
+    if (!dia_semana || !Array.isArray(turnos)) return res.status(400).json({ success: false });
+    await db.query('DELETE FROM horarios_turnos WHERE dia_semana = ?', [dia_semana]);
+    for (const t of turnos) {
+        if (t.inicio && t.fim) {
+            await db.query('INSERT INTO horarios_turnos (dia_semana, turno_inicio, turno_fim) VALUES (?, ?, ?)', [dia_semana, t.inicio, t.fim]);
+        }
+    }
+    res.json({ success: true });
+});
+
 module.exports = router;

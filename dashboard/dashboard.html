@@ -1777,6 +1777,40 @@
             background: #c82333;
             color: #fff;
         }
+        /* Modal e turnos */
+        
+        .turno-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .turno-row input[type="time"] {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        
+        .turno-row .remove-turno-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .turno-row .remove-turno-btn:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
 
@@ -1899,9 +1933,9 @@
         <section class="dashboard-section animate-slide-up" id="horarios-section">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
                 <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
-                <!-- (Se quiser adicionar botão de ação, coloque aqui) -->
             </div>
-            <div class="working-hours" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
+            </div>
+            <div class="working-hours" id="workingHoursGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
                     <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
@@ -1919,8 +1953,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -1940,8 +1974,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -1961,8 +1995,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -1982,8 +2016,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -2003,8 +2037,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -2024,7 +2058,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 13:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
                 <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
@@ -2044,7 +2079,8 @@
                         </button>
                     </div>
                     <div class="time-slots">
-                        <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
             </div>
@@ -2109,6 +2145,22 @@
     </main>
 
     <!-- Modals -->
+
+    <!-- Modal de edição de horários -->
+    <div id="horarioModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close" id="closeHorarioModal" style="float:right;font-size:1.5rem;cursor:pointer;">&times;</span>
+            <h3 id="modalHorarioTitle" style="margin-bottom:18px;">Editar Horários</h3>
+            <form id="horarioForm">
+                <input type="hidden" id="modalDiaSemana">
+                <div id="turnosContainer"></div>
+                <button type="button" id="addTurnoBtn" class="btn btn-secondary" style="width:100%;margin:14px 0 10px 0;">
+        <i class="fas fa-plus"></i> Adicionar turno
+      </button>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar</button>
+            </form>
+        </div>
+    </div>
     <!-- Modal de Alterar Senha -->
     <div id="changePasswordModal" class="modal">
         <div class="modal-content">
@@ -3314,6 +3366,153 @@ if (pushForm) {
     };
 }
 
+async function carregarHorariosSemana() {
+    const res = await fetch('/dashboard/horarios-semana');
+    const data = await res.json();
+    if (data.success) {
+        data.horarios.forEach(h => {
+            const input = document.querySelector(`[data-dia="${h.dia_semana}"]`);
+            if (input) input.value = h.horario;
+        });
+    }
+}
+
+async function salvarHorarioSemana(dia, horario) {
+    await fetch('/dashboard/horarios-semana', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana: dia, horario })
+    });
+}
+
+// Exemplo: ao salvar um campo
+document.querySelectorAll('.input-horario-semana').forEach(input => {
+    input.addEventListener('change', function() {
+        const dia = this.getAttribute('data-dia');
+        salvarHorarioSemana(dia, this.value);
+    });
+});
+
+// Horários da semana
+const diasSemana = [
+    { key: 'segunda', label: 'Segunda-feira' },
+    { key: 'terca', label: 'Terça-feira' },
+    { key: 'quarta', label: 'Quarta-feira' },
+    { key: 'quinta', label: 'Quinta-feira' },
+    { key: 'sexta', label: 'Sexta-feira' },
+    { key: 'sabado', label: 'Sábado' },
+    { key: 'domingo', label: 'Domingo' }
+];
+
+let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
+
+const horarioModal = document.getElementById('horarioModal');
+const closeHorarioModal = document.getElementById('closeHorarioModal');
+const horarioForm = document.getElementById('horarioForm');
+const modalDiaSemana = document.getElementById('modalDiaSemana');
+const modalHorarioTitle = document.getElementById('modalHorarioTitle');
+const turnosContainer = document.getElementById('turnosContainer');
+const addTurnoBtn = document.getElementById('addTurnoBtn');
+
+// Render cards dos dias (exemplo)
+function renderHorariosSemana() {
+    workingHoursGrid.innerHTML = '';
+    diasSemana.forEach(dia => {
+        const turnos = turnosSemana.filter(t => t.dia_semana === dia.key);
+        workingHoursGrid.innerHTML += `
+        <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+            <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-calendar-day" style="color:#888;font-size:1.1rem;"></i>
+                    <div class="day-title">${dia.label}</div>
+                </div>
+                <button class="edit-btn" data-dia="${dia.key}" title="Editar horários" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);transition:background 0.2s;">
+                    <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                </button>
+            </div>
+            <div class="time-slots" style="margin-top:10px;">
+                ${turnos.length === 0
+                    ? '<span class="time-slot" style="color:#e74c3c;font-weight:bold;">Fechado</span>'
+                    : turnos.map(t => `<span class="time-slot">${t.turno_inicio.slice(0,5)} - ${t.turno_fim.slice(0,5)}</span>`).join('')}
+            </div>
+        </div>
+        `;
+    });
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
+    });
+}
+
+// Modal: abrir para editar/adicionar turnos
+function abrirModalHorario(diaKey) {
+    modalDiaSemana.value = diaKey;
+    modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
+    turnosContainer.innerHTML = '';
+    const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
+    if (turnos.length === 0) addTurnoRow(); // Se não houver, adiciona um turno vazio
+    else turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+    horarioModal.style.display = 'flex';
+}
+
+// Adiciona um campo de turno ao modal
+function addTurnoRow(inicio = '', fim = '') {
+    const row = document.createElement('div');
+    row.className = 'turno-row';
+    row.innerHTML = `
+        <input type="time" class="turno-inicio" value="${inicio}" required>
+        <span>às</span>
+        <input type="time" class="turno-fim" value="${fim}" required>
+        <button type="button" class="remove-turno-btn" title="Remover turno"><i class="fas fa-trash"></i></button>
+    `;
+    row.querySelector('.remove-turno-btn').onclick = () => {
+        row.remove();
+        if (turnosContainer.childElementCount === 0) addTurnoRow();
+    };
+    turnosContainer.appendChild(row);
+}
+
+// Botão para adicionar turno
+addTurnoBtn.onclick = () => addTurnoRow();
+
+// Fechar modal
+closeHorarioModal.onclick = () => { horarioModal.style.display = 'none'; };
+window.onclick = function(event) {
+    if (event.target === horarioModal) horarioModal.style.display = 'none';
+};
+
+// Salvar turnos do dia
+horarioForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const dia_semana = modalDiaSemana.value;
+    const turnos = [];
+    turnosContainer.querySelectorAll('.turno-row').forEach(row => {
+        const inicio = row.querySelector('.turno-inicio').value;
+        const fim = row.querySelector('.turno-fim').value;
+        if (inicio && fim) turnos.push({ inicio, fim });
+    });
+    await fetch('/dashboard/horarios-turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana, turnos })
+    });
+    await carregarHorariosTurnos();
+    horarioModal.style.display = 'none';
+};
+
+// Carregar turnos do backend
+async function carregarHorariosTurnos() {
+    const res = await fetch('/dashboard/horarios-turnos');
+    const data = await res.json();
+    if (data.success) {
+        turnosSemana = data.turnos;
+        renderHorariosSemana();
+    }
+}
+
+// Inicialização
+if (document.getElementById('horarios-section')) {
+    carregarHorariosTurnos();
+}
         });
         </script>
 </body>
