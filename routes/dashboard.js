@@ -290,7 +290,7 @@ router.post('/enviar-push', requireLogin, async(req, res) => {
 });
 
 // Buscar todos os turnos
-router.get('/horarios-turnos', requireLogin, async(req, res) => {
+router.get('/horarios-turnos', async(req, res) => {
     const [rows] = await db.query('SELECT * FROM horarios_turnos');
     res.json({ success: true, turnos: rows });
 });
