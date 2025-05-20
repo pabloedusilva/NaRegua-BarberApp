@@ -1812,6 +1812,59 @@
         .turno-row .remove-turno-btn:hover {
             background: #c0392b;
         }
+        
+        .fechar-dia-btn,
+        .abrir-dia-btn {
+            border: none;
+            border-radius: 22px;
+            padding: 10px 26px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 18px auto 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        
+        .fechar-dia-btn {
+            background: #e74c3c;
+            color: #fff;
+        }
+        
+        .fechar-dia-btn:hover {
+            background: #c0392b;
+        }
+        
+        .abrir-dia-btn {
+            background: var(--primary, #dac02d);
+            color: #fff;
+        }
+        
+        .abrir-dia-btn:hover {
+            background: var(--primary-dark, #816a02);
+        }
+        
+        .dia-fechado-msg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0 12px 0;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -3506,6 +3559,110 @@ closeHorarioModal.onclick = () => { horarioModal.style.display = 'none'; };
 window.onclick = function(event) {
     if (event.target === horarioModal) horarioModal.style.display = 'none';
 };
+const fecharDiaBtn = document.createElement('button');
+fecharDiaBtn.type = 'button';
+fecharDiaBtn.className = 'btn fechar-dia-btn';
+fecharDiaBtn.innerHTML = '<i class="fas fa-lock"></i> Fechar dia';
+
+const abrirDiaBtn = document.createElement('button');
+abrirDiaBtn.type = 'button';
+abrirDiaBtn.className = 'btn abrir-dia-btn';
+abrirDiaBtn.innerHTML = '<i class="fas fa-unlock"></i> Abrir dia';
+
+// ...dentro da função abrirModalHorario(diaKey) substitua o conteúdo do modal...
+function abrirModalHorario(diaKey) {
+    modalDiaSemana.value = diaKey;
+    modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
+    turnosContainer.innerHTML = '';
+
+    // Verifica se o dia está fechado (sem turnos e flag especial)
+    const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
+    const diaFechado = turnos.length === 0 || (turnos.length === 1 && turnos[0].fechado);
+
+    // Limpa botões antigos
+    fecharDiaBtn.remove();
+    abrirDiaBtn.remove();
+
+    if (diaFechado) {
+        // Dia fechado: mostra botão "Abrir dia"
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    } else {
+        // Dia aberto: mostra horários e botão "Fechar dia"
+        turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+        if (turnos.length === 0) addTurnoRow();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    }
+    horarioModal.style.display = 'flex';
+
+    // Evento para fechar o dia
+    fecharDiaBtn.onclick = () => {
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
+        turnosSemana.push({ dia_semana: diaKey, fechado: true });
+        fecharDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    };
+
+    // Evento para abrir o dia
+    abrirDiaBtn.onclick = () => {
+        turnosSemana = turnosSemana.filter(t => !(t.dia_semana === diaKey && t.fechado));
+        turnosContainer.innerHTML = '';
+        addTurnoRow();
+        abrirDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    };
+}
+
+// ...no onsubmit do horarioForm, ajuste para salvar corretamente...
+horarioForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const dia_semana = modalDiaSemana.value;
+    let turnos = [];
+    // Se o dia está fechado, salva como fechado
+    if (turnosContainer.textContent.includes('Fechado')) {
+        turnos = [{ fechado: true }];
+    } else {
+        turnosContainer.querySelectorAll('.turno-row').forEach(row => {
+            const inicio = row.querySelector('.turno-inicio').value;
+            const fim = row.querySelector('.turno-fim').value;
+            if (inicio && fim) turnos.push({ inicio, fim });
+        });
+    }
+    await fetch('/dashboard/horarios-turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana, turnos })
+    });
+    await carregarHorariosTurnos();
+    horarioModal.style.display = 'none';
+};
+
+// ...no carregarHorariosTurnos, ajuste para considerar o flag fechado...
+async function carregarHorariosTurnos() {
+    const res = await fetch('/dashboard/horarios-turnos');
+    const data = await res.json();
+    if (data.success) {
+        // Se vier [{dia_semana, fechado:true}], trata como fechado
+        turnosSemana = data.turnos.map(t => {
+            if (t.fechado) return { dia_semana: t.dia_semana, fechado: true };
+            return t;
+        });
+        renderHorariosSemana();
+    }
+}
 
 // Salvar turnos do dia
 horarioForm.onsubmit = async function(e) {
