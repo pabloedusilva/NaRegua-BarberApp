@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NaRégua - Agendamentos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <style>
-         :root {
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>NaRégua - Agendamentos</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <style>
+                 :root {
             --primary: #dac02d;
             /* Dourado principal */
             --primary-dark: #816a02;
@@ -1626,258 +1629,318 @@
             box-shadow: none;
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+    <body>
+        <header>
+            <div class="container">
+                <nav class="navbar">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img src="img/sua-logo.png" alt="Logo NaRégua"
+                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                        </div>
+                        <div class="logo-text">NA<span>RÉGUA</span><span
+                                class="highlight">.</span></div>
                     </div>
-                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
-                </div>
-                <div class="nav-links">
-                    <a href="#" class="my-appointments">Meus
+                    <div class="nav-links">
+                        <a href="#" class="my-appointments">Meus
                             agendamentos</a>
-                    <button class="theme-toggle" id="themeToggle">
+                        <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="welcome-section animate-fade-in">
+                <div class="profile-pic">
+                    <i class="fas fa-user-alt"
+                        style="font-size: 32px; color: #aaa;"></i>
                 </div>
-            </nav>
-        </div>
-    </header>
+                <div class="welcome-text">Seja bem vindo(a) ao</div>
+                <h1 class="barbershop-name">Barbearia Pablo do corte</h1>
 
-    <main class="container">
-        <section class="welcome-section animate-fade-in">
-            <div class="profile-pic">
-                <i class="fas fa-user-alt" style="font-size: 32px; color: #aaa;"></i>
-            </div>
-            <div class="welcome-text">Seja bem vindo(a) ao</div>
-            <h1 class="barbershop-name">Barbearia Pablo do corte</h1>
-
-            <!-- Ícones sociais adicionados -->
-            <div class="social-icons-welcome">
-                <a href="https://wa.me/5511999998888" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-                <a href="https://instagram.com/barbeariapablo" target="_blank" class="social-icon-welcome" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-            </div>
-
-            <!-- Componente de endereço adicionado -->
-            <div class="address-container">
-                <button class="address-toggle" id="addressToggle">
-                        <i class="fas fa-map-marker-alt"></i> Ver endereço
-                    </button>
-                <div class="address-content" id="addressContent">
-                    <p>Av. Principal, 123 - Centro</p>
-                    <p>São Paulo - SP</p>
-                    <a href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP" target="_blank" class="map-link">
-                        <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                <!-- Ícones sociais adicionados -->
+                <div class="social-icons-welcome">
+                    <a href="https://wa.me/5511999998888" target="_blank"
+                        class="social-icon-welcome" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/barbeariapablo"
+                        target="_blank" class="social-icon-welcome"
+                        aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
                     </a>
                 </div>
-            </div>
-        </section>
 
-        <section class="services-section animate-slide-up">
-        </section>
-
-        <section class="professionals-section animate-slide-up">
-            <h2 class="section-title"><i class="fas fa-user-tie"></i> Selecione o profissional</h2>
-            <div class="professional-list">
-                <div class="professional-card selected" data-professional="Pablo barber">
-                    <div class="professional-avatar">
-                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                <!-- Componente de endereço adicionado -->
+                <div class="address-container">
+                    <button class="address-toggle" id="addressToggle">
+                        <i class="fas fa-map-marker-alt"></i> Ver endereço
+                    </button>
+                    <div class="address-content" id="addressContent">
+                        <p>Av. Principal, 123 - Centro</p>
+                        <p>São Paulo - SP</p>
+                        <a
+                            href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP"
+                            target="_blank" class="map-link">
+                            <i class="fas fa-external-link-alt"></i> Abrir no
+                            Google Maps
+                        </a>
                     </div>
-                    <div class="professional-name">Pablo barber</div>
                 </div>
+            </section>
 
-                <div class="professional-card" data-professional="Felipe silva">
-                    <div class="professional-avatar">
-                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+            <section class="services-section animate-slide-up">
+            </section>
+
+            <section class="professionals-section animate-slide-up">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i>
+                    Selecione o profissional</h2>
+                <div class="professional-list">
+                    <div class="professional-card selected"
+                        data-professional="Pablo barber">
+                        <div class="professional-avatar">
+                            <i class="fas fa-user"
+                                style="font-size: 24px; color: #aaa;"></i>
+                        </div>
+                        <div class="professional-name">Pablo barber</div>
                     </div>
-                    <div class="professional-name">Felipe silva</div>
-                </div>
 
-                <div class="professional-card" data-professional="Maria oliveira">
-                    <div class="professional-avatar">
-                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    <div class="professional-card"
+                        data-professional="Felipe silva">
+                        <div class="professional-avatar">
+                            <i class="fas fa-user"
+                                style="font-size: 24px; color: #aaa;"></i>
+                        </div>
+                        <div class="professional-name">Felipe silva</div>
                     </div>
-                    <div class="professional-name">Maria oliveira</div>
-                </div>
 
-                <div class="professional-card" data-professional="Carlos santos">
-                    <div class="professional-avatar">
-                        <i class="fas fa-user" style="font-size: 24px; color: #aaa;"></i>
+                    <div class="professional-card"
+                        data-professional="Maria oliveira">
+                        <div class="professional-avatar">
+                            <i class="fas fa-user"
+                                style="font-size: 24px; color: #aaa;"></i>
+                        </div>
+                        <div class="professional-name">Maria oliveira</div>
                     </div>
-                    <div class="professional-name">Carlos santos</div>
-                </div>
-            </div>
-        </section>
 
-        <section class="calendar-section animate-fade-in" id="calendar-section">
-            <h2 class="section-title"><i class="far fa-calendar-alt"></i> Selecione o horário de início</h2>
-            <button class="calendar-toggle-btn" id="calendarToggleBtn">Visualização semanal</button>
-            <div class="calendar-month">
-                <div class="month-name">Maio 2025</div>
-                <div class="calendar-nav">
-                    <button class="prev-month"><i
+                    <div class="professional-card"
+                        data-professional="Carlos santos">
+                        <div class="professional-avatar">
+                            <i class="fas fa-user"
+                                style="font-size: 24px; color: #aaa;"></i>
+                        </div>
+                        <div class="professional-name">Carlos santos</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="calendar-section animate-fade-in"
+                id="calendar-section">
+                <h2 class="section-title"><i class="far fa-calendar-alt"></i>
+                    Selecione o horário de início</h2>
+                <button class="calendar-toggle-btn"
+                    id="calendarToggleBtn">Visualização semanal</button>
+                <div class="calendar-month">
+                    <div class="month-name">Maio 2025</div>
+                    <div class="calendar-nav">
+                        <button class="prev-month"><i
                                 class="fas fa-chevron-left"></i></button>
-                    <button class="next-month"><i
+                        <button class="next-month"><i
                                 class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-            <div class="calendar-days">
-                <!-- Dias serão gerados dinamicamente pelo JavaScript -->
-            </div>
-            <div class="time-slots" id="timeSlotsContainer" style="display:none;">
-                <h3 class="time-slots-title">Horários disponíveis</h3>
-                <div class="slots-container"></div>
-            </div>
-        </section>
-
-        <section class="confirmation-section animate-fade-in" id="confirmation-section">
-            <h2 class="section-title"><i class="fas fa-check-circle"></i> Confirmar agendamento</h2>
-
-            <div class="confirmation-details">
-                <div class="detail-row">
-                    <div class="detail-label">Serviço:</div>
-                    <div class="detail-value" id="confirm-service">Barba</div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Profissional:</div>
-                    <div class="detail-value" id="confirm-professional">Pablo barber</div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Data:</div>
-                    <div class="detail-value" id="confirm-date">07/05/2025</div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Horário:</div>
-                    <div class="detail-value" id="confirm-time">09:30</div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Valor:</div>
-                    <div class="detail-value" id="confirm-price">R$ 20,00
                     </div>
                 </div>
-            </div>
+                <div class="calendar-days">
+                    <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+                </div>
+                <div class="time-slots">
+                    <div class="time-slots">
+                        <h3 class="time-slots-title">Horários disponíveis</h3>
+                        <div class="slots-container"></div>
+                    </div>
+                </div>
+            </section>
 
-            <button class="confirm-button animate-pulse">Confirmar
+            <section class="confirmation-section animate-fade-in"
+                id="confirmation-section">
+                <h2 class="section-title"><i class="fas fa-check-circle"></i>
+                    Confirmar agendamento</h2>
+
+                <div class="confirmation-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Serviço:</div>
+                        <div class="detail-value"
+                            id="confirm-service">Barba</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Profissional:</div>
+                        <div class="detail-value"
+                            id="confirm-professional">Pablo barber</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Data:</div>
+                        <div class="detail-value"
+                            id="confirm-date">07/05/2025</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Horário:</div>
+                        <div class="detail-value" id="confirm-time">09:30</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Valor:</div>
+                        <div class="detail-value" id="confirm-price">R$ 20,00
+                        </div>
+                    </div>
+                </div>
+
+                <button class="confirm-button animate-pulse">Confirmar
                     Agendamento</button>
-        </section>
-    </main>
+            </section>
+        </main>
 
-    <!-- Modais -->
-    <div id="customModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="custom-modal-close" id="customModalClose">&times;</span>
-            <div class="custom-modal-icon" id="customModalIcon"></div>
-            <div class="custom-modal-message" id="customModalMessage"></div>
-            <button class="custom-modal-btn" id="customModalBtn">OK</button>
+        <!-- Modais -->
+        <div id="customModal" class="custom-modal">
+            <div class="custom-modal-content">
+                <span class="custom-modal-close"
+                    id="customModalClose">&times;</span>
+                <div class="custom-modal-icon" id="customModalIcon"></div>
+                <div class="custom-modal-message" id="customModalMessage"></div>
+                <button class="custom-modal-btn" id="customModalBtn">OK</button>
+            </div>
         </div>
-    </div>
-    <!-- Modal de "Meus agendamentos" -->
-    <div id="appointmentsModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="custom-modal-close" id="appointmentsModalClose">&times;</span>
-            <div class="custom-modal-icon">
-                <i class="fas fa-user-check" style="color:var(--primary);"></i>
-            </div>
-            <div class="custom-modal-message" style="margin-bottom:18px;">
-                <label for="appointmentsName" style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
-                <input id="appointmentsName" type="text" class="custom-modal-input" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:16px;">
-                <label for="appointmentsPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                <input id="appointmentsPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
-            </div>
-            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
+        <!-- Modal de "Meus agendamentos" -->
+        <div id="appointmentsModal" class="custom-modal">
+            <div class="custom-modal-content">
+                <span class="custom-modal-close"
+                    id="appointmentsModalClose">&times;</span>
+                <div class="custom-modal-icon">
+                    <i class="fas fa-user-check"
+                        style="color:var(--primary);"></i>
+                </div>
+                <div class="custom-modal-message" style="margin-bottom:18px;">
+                    <label for="appointmentsName"
+                        style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
+                    <input id="appointmentsName" type="text"
+                        class="custom-modal-input" placeholder="Digite seu nome"
+                        autocomplete="off" style="margin-bottom:16px;">
+                    <label for="appointmentsPhone"
+                        style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                    <input id="appointmentsPhone" type="tel"
+                        class="custom-modal-input" placeholder="(99) 99999-9999"
+                        autocomplete="off">
+                </div>
+                <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
                     meus agendamentos</button>
+            </div>
         </div>
-    </div>
-    <!-- Modal de Login para Confirmação -->
-    <div id="phoneModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="custom-modal-close" id="phoneModalClose">&times;</span>
-            <div class="custom-modal-icon">
-                <i class="fas fa-phone" style="color:var(--primary);"></i>
-            </div>
-            <p style="text-align: center; margin: 15px 0; color: var(--text); font-size: 16px;">
-                Digite o número de telefone para continuar
-            </p>
-            <div class="custom-modal-message" style="margin-bottom:18px;">
-                <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
-            </div>
-            <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                <input type="checkbox" id="acceptNotifications" style="width:18px;height:18px;">
-                <label for="acceptNotifications" style="font-size:0.98rem;cursor:pointer;">
+        <!-- Modal de Login para Confirmação -->
+        <div id="phoneModal" class="custom-modal">
+            <div class="custom-modal-content">
+                <span class="custom-modal-close"
+                    id="phoneModalClose">&times;</span>
+                <div class="custom-modal-icon">
+                    <i class="fas fa-phone" style="color:var(--primary);"></i>
+                </div>
+                <p
+                    style="text-align: center; margin: 15px 0; color: var(--text); font-size: 16px;">
+                    Digite o número de telefone para continuar
+                </p>
+                <div class="custom-modal-message" style="margin-bottom:18px;">
+                    <label for="userPhone"
+                        style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                    <input id="userPhone" type="tel" class="custom-modal-input"
+                        placeholder="(99) 99999-9999" autocomplete="off">
+                </div>
+                <div
+                    style="margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="acceptNotifications"
+                        style="width:18px;height:18px;">
+                    <label for="acceptNotifications"
+                        style="font-size:0.98rem;cursor:pointer;">
                         Aceito receber notificações de lembrete dos meus
                         agendamentos
                     </label>
+                </div>
+                <button class="custom-modal-btn" id="phoneModalBtn"
+                    disabled>Continuar</button>
             </div>
-            <button class="custom-modal-btn" id="phoneModalBtn" disabled>Continuar</button>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="logo">
+                            <div class="logo-icon">
+                                <img src="img/sua-logo.png" alt="Logo NaRégua"
+                                    style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
+                            </div>
+                            <div class="logo-text">NA<span>RÉGUA</span><span
+                                    class="highlight">.</span></div>
                         </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
-                    </div>
-                    <div class="social-links">
-                        <a href="#" aria-label="Instagram"><i
+                        <div class="social-links">
+                            <a href="#" aria-label="Instagram"><i
                                     class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="WhatsApp"><i
+                            <a href="#" aria-label="WhatsApp"><i
                                     class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-contact">
+                        <h3 class="footer-title">Contato</h3>
+                        <ul class="footer-links">
+                            <li><i class="fas fa-phone"></i> (31) 98507-9718
+                            </li>
+                            <li><i class="fas fa-envelope"></i>
+                                pablo.silva.edu@gmail.com
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-barber">
+                        <h3 class="footer-title">Barbeiro</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fas fa-user-shield"></i> Gerencie
+                                agendamentos, profissionais e horários.
+                            </li>
+                        </ul>
+                        <a href="/dashboard/dashboard"
+                            class="footer-admin-link-modern">
+                            <span>Área do barbeiro</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
 
-                <div class="footer-contact">
-                    <h3 class="footer-title">Contato</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-phone"></i> (31) 98507-9718
-                        </li>
-                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="footer-barber">
-                    <h3 class="footer-title">Barbeiro</h3>
-                    <ul class="footer-links">
-                        <li>
-                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
-                        </li>
-                    </ul>
-                    <a href="/dashboard/dashboard" class="footer-admin-link-modern">
-                        <span>Área do barbeiro</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        &copy; 2025 NaRégua. Todos os direitos reservados.
+                    </div>
                 </div>
             </div>
+        </footer>
 
-            <div class="footer-bottom">
-                <div class="copyright">
-                    &copy; 2025 NaRégua. Todos os direitos reservados.
-                </div>
-            </div>
-        </div>
-    </footer>
+        <script>
+        // Adicione esta função antes do document.addEventListener('DOMContentLoaded', async function() { ... });
+        function updateSelectedDay(dateStr) {
+            selectedDate = dateStr;
+            updateConfirmationDetails();
+            // Exibe horários do turno do banco para o dia da semana selecionado
+            renderTimeSlots(getDiaSemana(dateStr));
+            // Mostra a seção de confirmação (opcional)
+            // confirmationSection.style.display = 'block';
+        }
 
-    <script>
         document.addEventListener('DOMContentLoaded', async function() {
             // Carregar serviços do backend
             const servicesSection = document.querySelector('.services-section');
@@ -1928,6 +1991,7 @@
             let selectedTime = '';
             let currentSelectedButton = null;
             let calendarMode = 'month'; // Pode ser 'month' ou 'week'
+            let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
 
             // Elementos da página
             const calendarSection = document.getElementById('calendar-section');
@@ -2271,7 +2335,7 @@
                     // Para modo semanal
                     if (dayEl.hasAttribute('data-date')) {
                         const [d, m, y] = dayEl.getAttribute('data-date').split('/');
-                        const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
+                        const dateObj = new Date(Number(y), Number(m) -     1, Number(d));
                         const weekDay = dateObj.getDay();
                         if (weekDay === 0) dayEl.classList.add('sunday');
                         if (weekDay === 6) dayEl.classList.add('saturday');
@@ -2303,66 +2367,18 @@
                     // Guardar o horário selecionado
                     selectedTime = this.textContent;
 
-                    // Atualiza o campo de confirmação
-                    document.getElementById('confirm-time').textContent = selectedTime;
+                    // Mostrar a seção de confirmação
                     confirmationSection.style.display = 'block';
+
+                    // Atualizar os campos de confirmação
                     updateConfirmationDetails();
+
+                    // Scroll para a confirmação
                     confirmationSection.scrollIntoView({
                         behavior: 'smooth'
                     });
                 });
             });
-
-            // Função para exibir horários disponíveis do dia selecionado
-            async function exibirHorariosDisponiveis(dateStr) {
-                // Aceita datas no formato dd/mm/yyyy ou yyyy-mm-dd
-                let data;
-                if (dateStr.includes('/')) {
-                    const [d, m, y] = dateStr.split('/');
-                    data = new Date(Number(y), Number(m) - 1, Number(d));
-                } else if (dateStr.includes('-')) {
-                    data = new Date(dateStr);
-                } else {
-                    data = new Date(dateStr);
-                }
-                const diaSemana = mapearDiaSemana(data);
-
-                const horarios = await carregarHorariosDoDia(diaSemana);
-
-                const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-                const slotsDiv = timeSlotsContainer.querySelector('.slots-container');
-                slotsDiv.innerHTML = '';
-
-                if (horarios.length === 0) {
-                    slotsDiv.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum horário disponível para este dia.</div>';
-                    timeSlotsContainer.style.display = '';
-                    return;
-                }
-
-                horarios.forEach(horario => {
-                    const div = document.createElement('div');
-                    div.className = 'time-slot';
-                    div.textContent = horario;
-                    slotsDiv.appendChild(div);
-                });
-
-                timeSlotsContainer.style.display = '';
-                // Adiciona eventos de seleção
-                slotsDiv.querySelectorAll('.time-slot').forEach(slot => {
-                    slot.addEventListener('click', function() {
-                        slotsDiv.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                        this.classList.add('selected');
-                        selectedTime = this.textContent;
-                        // Atualiza o campo de confirmação
-                        document.getElementById('confirm-time').textContent = selectedTime;
-                        confirmationSection.style.display = 'block';
-                        updateConfirmationDetails();
-                        confirmationSection.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    });
-                });
-            }
 
             // Atualizar detalhes de confirmação
             function updateConfirmationDetails() {
@@ -2375,9 +2391,65 @@
 
             // Botão de confirmação final
             const confirmButton = document.querySelector('.confirm-button');
-            confirmButton.addEventListener('click', function() {
+            const phoneModal = document.getElementById('phoneModal');
+            const phoneModalClose = document.getElementById('phoneModalClose');
+            const phoneModalBtn = document.getElementById('phoneModalBtn');
+            const userPhone = document.getElementById('userPhone');
+            const acceptNotifications = document.getElementById('acceptNotifications');
+            const acceptNotificationsLabel = document.querySelector('label[for="acceptNotifications"]');
+
+            // Função para validar telefone (10 ou 11 dígitos)
+            function validarTelefone(telefone) {
+                return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
+            }
+
+            // Atualiza o estado do botão
+            function atualizarEstadoBtn() {
+                const telefoneValido = validarTelefone(userPhone.value.trim());
+                const notificacaoAceita = acceptNotifications.checked;
+                if (telefoneValido && notificacaoAceita) {
+                    phoneModalBtn.disabled = false;
+                    phoneModalBtn.style.background = '';
+                    phoneModalBtn.style.cursor = '';
+                } else {
+                    phoneModalBtn.disabled = true;
+                    phoneModalBtn.style.background = '#ccc';
+                    phoneModalBtn.style.cursor = 'not-allowed';
+                }
+            }
+
+            // Eventos para atualizar o botão
+            userPhone.addEventListener('input', atualizarEstadoBtn);
+            acceptNotifications.addEventListener('change', atualizarEstadoBtn);
+
+            // Feedback visual ao tentar clicar bloqueado
+            phoneModalBtn.addEventListener('click', function(e) {
+                if (phoneModalBtn.disabled) {
+                    e.preventDefault();
+                    // Pisca o campo de telefone se inválido
+                    if (!validarTelefone(userPhone.value.trim())) {
+                        userPhone.style.transition = 'box-shadow 0.15s';
+                        userPhone.style.boxShadow = '0 0 0 2px #e74c3c';
+                        setTimeout(() => {
+                            userPhone.style.boxShadow = '';
+                        }, 700);
+                    }
+                    // Pisca o label do checkbox se não marcado
+                    if (!acceptNotifications.checked && acceptNotificationsLabel) {
+                        acceptNotificationsLabel.style.transition = 'color 0.15s';
+                        acceptNotificationsLabel.style.color = '#e74c3c';
+                        acceptNotificationsLabel.style.fontWeight = 'bold';
+                        setTimeout(() => {
+                            acceptNotificationsLabel.style.color = '';
+                            acceptNotificationsLabel.style.fontWeight = '';
+                        }, 700);
+                    }
+                }
+            });
+
+            confirmButton.addEventListener('click', async function() {
                 if (selectedService && selectedProfessional && selectedDate && selectedTime) {
-                    // Abre o modal de telefone para finalizar o agendamento
+                    // Abre o modal de telefone
                     phoneModal.classList.add('active');
                     userPhone.value = '';
                     userPhone.focus();
@@ -2617,13 +2689,96 @@
                     });
                 }
             };
-        });
 
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('day') && !e.target.classList.contains('past-day')) {
-                const dateStr = e.target.getAttribute('data-date');
-                updateSelectedDay(dateStr);
+            // Função para carregar turnos do backend
+            async function carregarHorariosTurnos() {
+                try {
+                    const res = await fetch('/dashboard/horarios-turnos');
+                    const data = await res.json();
+                    if (data.success) {
+                        turnosSemana = data.turnos;
+                    } else {
+                        turnosSemana = [];
+                    }
+                } catch (err) {
+                    turnosSemana = [];
+                }
             }
+
+            // Função para exibir horários disponíveis do dia selecionado
+            function renderTimeSlots(diaSemana) {
+                const slotsContainer = document.querySelector('.slots-container');
+                slotsContainer.innerHTML = '';
+                // Filtra turnos do dia da semana selecionado
+                const turnos = turnosSemana.filter(t => t.dia_semana === diaSemana);
+                if (turnos.length === 0) {
+                    slotsContainer.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Fechado</div>';
+                    return;
+                }
+                // Gera os horários de cada turno
+                turnos.forEach(turno => {
+                    let inicio = turno.turno_inicio.slice(0,5);
+                    let fim = turno.turno_fim.slice(0,5);
+                    let [hIni, mIni] = inicio.split(':').map(Number);
+                    let [hFim, mFim] = fim.split(':').map(Number);
+                    let tIni = hIni * 60 + mIni;
+                    let tFim = hFim * 60 + mFim;
+                    for (let t = tIni; t < tFim; t += 10) { // intervalos de 10 minutos
+                        let h = Math.floor(t / 60);
+                        let m = t % 60;
+                        let horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                        const slotDiv = document.createElement('div');
+                        slotDiv.className = 'time-slot';
+                        slotDiv.textContent = horaStr;
+                        slotsContainer.appendChild(slotDiv);
+                    }
+                });
+                // Reaplica eventos de seleção
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.addEventListener('click', function() {
+                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedTime = this.textContent;
+                        confirmationSection.style.display = 'block';
+                        updateConfirmationDetails();
+                        confirmationSection.scrollIntoView({behavior: 'smooth'});
+                    });
+                });
+            }
+
+            // Ao selecionar um dia, busque os turnos do banco e exiba os horários
+            function getDiaSemana(dateStr) {
+                // dateStr: 'dd/mm/yyyy'
+                const [d, m, y] = dateStr.split('/');
+                // Corrija o mês para 0-based
+                const date = new Date(y, Number(m) - 1, d);
+                const dias = [
+                    'domingo',   // 0
+                    'segunda',   // 1
+                    'terca',     // 2
+                    'quarta',    // 3
+                    'quinta',    // 4
+                    'sexta',     // 5
+                    'sabado'     // 6
+                ];
+                return dias[date.getDay()];
+            }
+
+            // No evento de clique do dia do calendário, chame renderTimeSlots:
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('day') && !e.target.classList.contains('past-day')) {
+                    const dateStr = e.target.getAttribute('data-date');
+                    selectedDate = dateStr;
+                    updateConfirmationDetails();
+                    // Chame renderTimeSlots com o dia da semana do dia selecionado
+                    renderTimeSlots(getDiaSemana(dateStr));
+                    // Mostre a seção de confirmação se quiser
+                    confirmationSection.style.display = 'block';
+                }
+            });
+
+            // No carregamento da página, carregue os turnos:
+            await carregarHorariosTurnos();
         });
 
         // Substitua os alerts por esta função e use-a nos lugares dos alerts
@@ -2794,7 +2949,7 @@
                     data.agendamentos.forEach(ag => {
                         html += `
                         <div style="
-                            border: 1px solid var(--border);
+                            border: 1px solid var(--primary-dark);
                             border-radius: 12px;
                             padding: 12px 18px;
                             display: flex;
@@ -2915,132 +3070,7 @@
                 }
             });
         }
-
-        // Função utilitária para gerar horários de 10 em 10 minutos entre dois horários
-        function gerarHorariosTurno(inicio, fim) {
-            const horarios = [];
-            let [h, m] = inicio.split(':').map(Number);
-            const [hFim, mFim] = fim.split(':').map(Number);
-            while (h < hFim || (h === hFim && m <= mFim)) {
-                horarios.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
-                m += 10;
-                if (m >= 60) {
-                    m = 0;
-                    h++;
-                }
-            }
-            return horarios;
-        }
-
-        // Função para buscar os turnos do dia da semana selecionado
-        async function carregarHorariosDoDia(diaSemana) {
-            // Busca todos os turnos do backend
-            const res = await fetch('/dashboard/horarios-turnos');
-            const data = await res.json();
-            if (!data.success) return [];
-
-            // Filtra os turnos do dia da semana
-            const turnos = data.turnos.filter(t => t.dia_semana === diaSemana);
-
-            // Gera todos os horários disponíveis dos turnos
-            let horarios = [];
-            turnos.forEach(t => {
-                horarios = horarios.concat(gerarHorariosTurno(t.turno_inicio.slice(0, 5), t.turno_fim.slice(0, 5)));
-            });
-            return horarios;
-        }
-
-        // Função para mapear o dia da semana do JS para o enum do banco
-        function mapearDiaSemana(date) {
-            // getDay(): 0=Domingo, 1=Segunda, ..., 6=Sábado
-            const map = {
-                0: 'domingo',
-                1: 'segunda',
-                2: 'terca',
-                3: 'quarta',
-                4: 'quinta',
-                5: 'sexta',
-                6: 'sabado'
-            };
-            return map[date.getDay()];
-        }
-
-        // Função para exibir horários disponíveis do dia selecionado
-        async function exibirHorariosDisponiveis(dateStr) {
-            // Aceita datas no formato dd/mm/yyyy ou yyyy-mm-dd
-            let data;
-            if (dateStr.includes('/')) {
-                const [d, m, y] = dateStr.split('/');
-                data = new Date(Number(y), Number(m) - 1, Number(d));
-            } else if (dateStr.includes('-')) {
-                data = new Date(dateStr);
-            } else {
-                data = new Date(dateStr);
-            }
-            const diaSemana = mapearDiaSemana(data);
-
-            const horarios = await carregarHorariosDoDia(diaSemana);
-
-            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-            const slotsDiv = timeSlotsContainer.querySelector('.slots-container');
-            slotsDiv.innerHTML = '';
-
-            if (horarios.length === 0) {
-                slotsDiv.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum horário disponível para este dia.</div>';
-                timeSlotsContainer.style.display = '';
-                return;
-            }
-
-            horarios.forEach(horario => {
-                const div = document.createElement('div');
-                div.className = 'time-slot';
-                div.textContent = horario;
-                slotsDiv.appendChild(div);
-            });
-
-            timeSlotsContainer.style.display = '';
-            // Adiciona eventos de seleção
-            slotsDiv.querySelectorAll('.time-slot').forEach(slot => {
-                slot.addEventListener('click', function() {
-                    slotsDiv.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedTime = this.textContent;
-                    // Atualiza o campo de confirmação
-                    document.getElementById('confirm-time').textContent = selectedTime;
-                    confirmationSection.style.display = 'block';
-                    updateConfirmationDetails();
-                    confirmationSection.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        }
-
-        // Certifique-se de que updateSelectedDay está chamando exibirHorariosDisponiveis corretamente
-        function updateSelectedDay(dateStr) {
-            selectedDate = dateStr;
-            exibirHorariosDisponiveis(dateStr);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // ...existing code...
-            document.querySelectorAll('.day').forEach(dayEl => {
-                dayEl.addEventListener('click', function() {
-                    if (this.classList.contains('past-day')) {
-                        document.getElementById('timeSlotsContainer').style.display = 'none';
-                        return;
-                    }
-                    document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
-                    this.classList.add('selected');
-                    const dateStr = this.getAttribute('data-date');
-                    updateSelectedDay(dateStr);
-                });
-            });
-        });
-
-        // Opcional: ao carregar a página, pode esconder o container de horários
-        document.getElementById('timeSlotsContainer').style.display = 'none';
     </script>
-</body>
+    </body>
 
 </html>

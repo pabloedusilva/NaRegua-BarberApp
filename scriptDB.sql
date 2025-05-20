@@ -60,10 +60,10 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     FOREIGN KEY (agendamento_id) REFERENCES agendamentos(id) ON DELETE CASCADE
 );
 
--- Tabela para turnos da barbearia
-CREATE TABLE IF NOT EXISTS horarios_turnos (
+-- Crie a tabela horarios_turnos
+CREATE TABLE horarios_turnos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    dia_semana ENUM('segunda','terca','quarta','quinta','sexta','sabado','domingo') NOT NULL,
+    dia_semana VARCHAR(20) NOT NULL,
     turno_inicio TIME NOT NULL,
     turno_fim TIME NOT NULL
 );
