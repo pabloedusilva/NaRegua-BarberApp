@@ -2460,6 +2460,16 @@
                             subscription
                         })
                     });
+                    await fetch('/dashboard/notificacoes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            titulo: 'Novo agendamento',
+                            mensagem: `Novo agendamento para ${selectedService} com ${selectedProfessional} em ${selectedDate} às ${selectedTime}.`
+                        })
+                    });
                     // Fecha o modal de telefone
                     phoneModal.classList.remove('active');
                     showCustomModal({

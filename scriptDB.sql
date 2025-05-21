@@ -67,3 +67,12 @@ CREATE TABLE horarios_turnos (
     turno_inicio TIME NOT NULL,
     turno_fim TIME NOT NULL
 );
+
+-- Criação da tabela de notificações
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
+    mensagem TEXT NOT NULL,
+    data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lida TINYINT(1) DEFAULT 0
+);

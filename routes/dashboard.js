@@ -308,4 +308,23 @@ router.post('/horarios-turnos', requireLogin, async(req, res) => {
     res.json({ success: true });
 });
 
+// Listar notificações (mais recentes primeiro)
+router.get('/notificacoes', requireLogin, async(req, res) => {
+    const [rows] = await db.query('SELECT * FROM notificacoes ORDER BY data DESC');
+    res.json({ success: true, notificacoes: rows });
+});
+
+// Criar notificação
+router.post('/notificacoes', async(req, res) => {
+    const { titulo, mensagem } = req.body;
+    await db.query('INSERT INTO notificacoes (titulo, mensagem) VALUES (?, ?)', [titulo, mensagem]);
+    res.json({ success: true });
+});
+
+// Excluir (marcar como lida)
+router.delete('/notificacoes/:id', requireLogin, async(req, res) => {
+    await db.query('DELETE FROM notificacoes WHERE id = ?', [req.params.id]);
+    res.json({ success: true });
+});
+
 module.exports = router;

@@ -192,8 +192,9 @@
         }
         
         .theme-toggle:hover {
-            background-color: var(--hover);
-            transform: rotate(30deg);
+            background: var(--hover);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.13);
         }
         /* Main Content */
         
@@ -1875,6 +1876,153 @@
         #horarioModal .turno-row {
             justify-content: center;
         }
+        /* Notificações */
+        
+        .notification-item {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 18px 22px 16px 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            box-shadow: 0 2px 12px rgba(26, 75, 140, 0.07);
+            border-left: 5px solid var(--primary);
+            margin-bottom: 12px;
+            position: relative;
+            transition: box-shadow 0.18s, border-color 0.18s;
+            animation: fadeIn 0.4s;
+        }
+        
+        .notification-item:hover {
+            box-shadow: 0 6px 24px rgba(48, 48, 48, 0.13);
+            border-left-color: var(--primary-dark);
+        }
+        
+        .notification-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .notification-title {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.12rem;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        
+        .notification-title i {
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+        
+        .notification-date {
+            font-size: 0.97rem;
+            color: var(--gray-dark);
+            opacity: 0.7;
+            margin-bottom: 2px;
+            font-style: italic;
+        }
+        
+        .notification-message {
+            color: var(--text);
+            font-size: 1.04rem;
+            margin-top: 2px;
+            line-height: 1.5;
+        }
+        
+        .delete-notification-btn {
+            background: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.18rem;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+            margin-left: 10px;
+            margin-top: 2px;
+        }
+        
+        .delete-notification-btn:hover,
+        .delete-notification-btn:focus {
+            background: linear-gradient(135deg, var(--primary-dark) 80%, var(--primary) 100%);
+            box-shadow: 0 4px 16px rgba(26, 75, 140, 0.16);
+            transform: scale(1.08);
+        }
+        
+        @media (max-width: 600px) {
+            .notification-item {
+                flex-direction: column;
+                gap: 10px;
+                padding: 14px 10px 12px 14px;
+            }
+            .delete-notification-btn {
+                margin-left: 0;
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+        /* Wrapper para alinhar o botão de notificação e o dot */
+        
+        .notification-btn-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Botão de notificação */
+        
+        #notificationBtn {
+            position: relative;
+            background: var(--card);
+            border: none;
+            font-size: 1.15rem;
+            color: var(--text);
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 4px rgba(26, 75, 140, 0.07);
+            outline: none;
+        }
+        
+        #notificationBtn:hover,
+        #notificationBtn:focus {
+            background: var(--hover);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.13);
+        }
+        /* Bolinha de notificação aprimorada */
+        
+        #notificationDot {
+            display: none;
+            position: absolute;
+            top: 4px;
+            right: 5px;
+            width: 11px;
+            height: 11px;
+            background: linear-gradient(135deg, #ff3b3b 60%, #ff7b00 100%);
+            border-radius: 50%;
+            border: none;
+            z-index: 2;
+            box-shadow: 0 0 6px 2px #ff3b3b55, 0 1px 4px #0001;
+            animation: pulseDot 1.2s infinite alternate;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
     </style>
 </head>
 
@@ -1889,6 +2037,12 @@
                     <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                 </div>
                 <div class="nav-links">
+                    <div class="notification-btn-wrapper">
+                        <button class="theme-toggle" id="notificationBtn" title="Notificações">
+        <i class="fas fa-bell"></i>
+        <span id="notificationDot"></span>
+    </button>
+                    </div>
                     <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
                             <i class="fas fa-key"></i>
                         </button>
@@ -2221,6 +2375,15 @@
     </main>
 
     <!-- Modals -->
+
+    <!-- Modal de Notificações -->
+    <div id="notificationsModal" class="modal">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close-modal" id="closeNotificationsModal">&times;</span>
+            <h3 class="modal-title" style="margin-bottom:18px;"><i class="fas fa-bell"></i> Notificações</h3>
+            <div id="notificationsList" style="display:flex;flex-direction:column;gap:16px;min-height:80px;"></div>
+        </div>
+    </div>
 
     <!-- Modal de edição de horários -->
     <div id="horarioModal" class="modal" style="display:none;">
@@ -3707,8 +3870,68 @@ async function carregarHorariosTurnos() {
 if (document.getElementById('horarios-section')) {
     carregarHorariosTurnos();
 }
+
+// Notificações
+const notificationBtn = document.getElementById('notificationBtn');
+const notificationsModal = document.getElementById('notificationsModal');
+const closeNotificationsModal = document.getElementById('closeNotificationsModal');
+const notificationsList = document.getElementById('notificationsList');
+const notificationDot = document.getElementById('notificationDot');
+
+notificationBtn.onclick = () => {
+    notificationsModal.style.display = 'flex';
+    carregarNotificacoes();
+};
+closeNotificationsModal.onclick = () => notificationsModal.style.display = 'none';
+notificationsModal.onclick = function(e) {
+    if (e.target === notificationsModal) notificationsModal.style.display = 'none';
+};
+
+async function carregarNotificacoes() {
+    notificationsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+    try {
+        const res = await fetch('/dashboard/notificacoes');
+        const data = await res.json();
+        if (data.success && data.notificacoes.length > 0) {
+            notificationsList.innerHTML = '';
+            let hasUnread = false;
+            data.notificacoes.forEach(n => {
+                const item = document.createElement('div');
+                item.className = 'notification-item';
+                item.innerHTML = `
+                    <div class="notification-content">
+                        <div class="notification-title"><i class="fas fa-bell"></i> ${n.titulo}</div>
+                        <div class="notification-date">${new Date(n.data).toLocaleString('pt-BR')}</div>
+                        <div class="notification-message">${n.mensagem}</div>
+                    </div>
+                    <button class="delete-notification-btn" data-id="${n.id}" title="Marcar como lida">
+                        <i class="fas fa-check"></i>
+                    </button>
+                `;
+                item.querySelector('.delete-notification-btn').onclick = async function() {
+                    await fetch('/dashboard/notificacoes/' + n.id, { method: 'DELETE' });
+                    item.remove();
+                    carregarNotificacoes();
+                };
+                notificationsList.appendChild(item);
+                if (!n.lida) hasUnread = true;
+            });
+            notificationDot.style.display = hasUnread ? 'block' : 'none';
+        } else {
+            notificationsList.innerHTML = '<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhuma notificação.</div>';
+            notificationDot.style.display = 'none';
+        }
+    } catch (err) {
+        notificationsList.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar notificações.</div>';
+    }
+}
+
+// Atualizar dot de notificação ao abrir dashboard
+carregarNotificacoes();
         });
         </script>
 </body>
+
+</html>
 
 </html>
