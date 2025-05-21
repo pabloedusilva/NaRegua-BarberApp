@@ -1814,13 +1814,16 @@
             <div class="custom-modal-message" style="margin-bottom:18px;">
                 <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
                 <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+                <div id="userNameContainer" style="display:none; margin-top:14px;">
+                    <label for="userName" style="display:block; margin-bottom:8px; font-weight:600;">Nome completo</label>
+                    <input id="userName" type="text" class="custom-modal-input" placeholder="Seu nome completo" autocomplete="off">
+                </div>
             </div>
             <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;">
                 <input type="checkbox" id="acceptNotifications" style="width:18px;height:18px;">
                 <label for="acceptNotifications" style="font-size:0.98rem;cursor:pointer;">
-                        Aceito receber notificações de lembrete dos meus
-                        agendamentos
-                    </label>
+                Aceito receber notificações de lembrete dos meus agendamentos
+            </label>
             </div>
             <button class="custom-modal-btn" id="phoneModalBtn" disabled>Continuar</button>
         </div>
@@ -2352,6 +2355,8 @@
             const userPhone = document.getElementById('userPhone');
             const acceptNotifications = document.getElementById('acceptNotifications');
             const acceptNotificationsLabel = document.querySelector('label[for="acceptNotifications"]');
+            const userNameContainer = document.getElementById('userNameContainer');
+            const userName = document.getElementById('userName');
 
             // Função para validar telefone (10 ou 11 dígitos)
             function validarTelefone(telefone) {
@@ -2362,7 +2367,11 @@
             function atualizarEstadoBtn() {
                 const telefoneValido = validarTelefone(userPhone.value.trim());
                 const notificacaoAceita = acceptNotifications.checked;
-                if (telefoneValido && notificacaoAceita) {
+                let nomeValido = true;
+                if (userNameContainer.style.display !== 'none') {
+                    nomeValido = !!userName.value.trim();
+                }
+                if (telefoneValido && notificacaoAceita && nomeValido) {
                     phoneModalBtn.disabled = false;
                     phoneModalBtn.style.background = '';
                     phoneModalBtn.style.cursor = '';
@@ -2373,20 +2382,59 @@
                 }
             }
 
-            // Eventos para atualizar o botão
-            userPhone.addEventListener('input', atualizarEstadoBtn);
+            // Ao digitar telefone, verifica se já é usuário cadastrado
+            userPhone.addEventListener('input', async function() {
+                const tel = userPhone.value.trim();
+                userPhone.style.borderColor = '';
+                userNameContainer.style.display = 'none';
+                userName.value = '';
+                if (validarTelefone(tel)) {
+                    try {
+                        // Verifica se já existe algum agendamento para esse telefone
+                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                        const data = await res.json();
+                        // Se nunca agendou, pede o nome
+                        if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
+                            userNameContainer.style.display = '';
+                        } else {
+                            userNameContainer.style.display = 'none';
+                            userName.value = '';
+                        }
+                    } catch (err) {
+                        userNameContainer.style.display = 'none';
+                        userName.value = '';
+                    }
+                }
+                atualizarEstadoBtn();
+            });
             acceptNotifications.addEventListener('change', atualizarEstadoBtn);
+            if (userName) userName.addEventListener('input', atualizarEstadoBtn);
 
             // Feedback visual ao tentar clicar bloqueado
             phoneModalBtn.addEventListener('click', function(e) {
                 if (phoneModalBtn.disabled) {
                     e.preventDefault();
-                    // Pisca o campo de telefone se inválido
                     if (!validarTelefone(userPhone.value.trim())) {
                         userPhone.style.transition = 'box-shadow 0.15s';
                         userPhone.style.boxShadow = '0 0 0 2px #e74c3c';
                         setTimeout(() => {
                             userPhone.style.boxShadow = '';
+                        }, 700);
+                    }
+                    if (userNameContainer.style.display !== 'none' && !userName.value.trim()) {
+                        userName.style.transition = 'box-shadow 0.15s';
+                        userName.style.boxShadow = '0 0 0 2px #e74c3c';
+                        setTimeout(() => {
+                            userName.style.boxShadow = '';
+                        }, 700);
+                    }
+                    if (!acceptNotifications.checked && acceptNotificationsLabel) {
+                        acceptNotificationsLabel.style.transition = 'color 0.15s';
+                        acceptNotificationsLabel.style.color = '#e74c3c';
+                        acceptNotificationsLabel.style.fontWeight = 'bold';
+                        setTimeout(() => {
+                            acceptNotificationsLabel.style.color = '';
+                            acceptNotificationsLabel.style.fontWeight = '';
                         }, 700);
                     }
                     // Pisca o label do checkbox se não marcado
@@ -2428,13 +2476,16 @@
             // Ação do botão do modal de telefone
             phoneModalBtn.onclick = async function() {
                 const tel = userPhone.value.trim();
+                const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
                 userPhone.style.borderColor = '';
-
                 if (!tel) {
                     userPhone.style.borderColor = 'var(--primary-dark)';
                     return;
                 }
-
+                if (userNameContainer.style.display !== 'none' && !nome) {
+                    userName.style.borderColor = 'var(--primary-dark)';
+                    return;
+                }
                 if (!acceptNotifications.checked) {
                     alert('Você precisa aceitar receber notificações para continuar.');
                     return;
@@ -2448,7 +2499,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            nome: '', // ou peça o nome do usuário
+                            nome: nome || '', // Se não for o primeiro, backend pode manter o nome já cadastrado
                             telefone: tel,
                             servico: selectedService,
                             profissional: selectedProfessional,
@@ -2472,12 +2523,12 @@
                     phoneModal.classList.remove('active');
                     showCustomModal({
                         message: `<strong>Agendamento confirmado!</strong><br><br>
-                        <b>Serviço:</b> ${selectedService}<br>
-                        <b>Profissional:</b> ${selectedProfessional}<br>
-                        <b>Data:</b> ${selectedDate}<br>
-                        <b>Horário:</b> ${selectedTime}<br>
-                        <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                        <b>Telefone:</b> ${tel}`,
+            <b>Serviço:</b> ${selectedService}<br>
+            <b>Profissional:</b> ${selectedProfessional}<br>
+            <b>Data:</b> ${selectedDate}<br>
+            <b>Horário:</b> ${selectedTime}<br>
+            <b>Valor:</b> R$ ${selectedServicePrice}<br>
+            <b>Telefone:</b> ${tel}`,
                         icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
                         btnText: 'Fechar',
                         onClose: function() {

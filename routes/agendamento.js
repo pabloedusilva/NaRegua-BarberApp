@@ -4,8 +4,13 @@ const db = require('../db/mysql');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
-    const { nome, telefone, servico, profissional, data, hora, preco, subscription } = req.body;
+    let { nome, telefone, servico, profissional, data, hora, preco, subscription } = req.body;
     try {
+        // Se nome não veio, busca o nome já cadastrado para esse telefone
+        if (!nome) {
+            const [rows] = await db.query('SELECT nome FROM agendamentos WHERE telefone = ? AND nome IS NOT NULL AND nome != "" ORDER BY id DESC LIMIT 1', [telefone]);
+            if (rows.length > 0) nome = rows[0].nome;
+        }
         // Salva o agendamento
         const [result] = await db.query(
             'INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco) VALUES (?, ?, ?, ?, ?, ?, ?)', [nome, telefone, servico, profissional, data, hora, preco]
