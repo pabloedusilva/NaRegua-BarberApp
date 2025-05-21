@@ -387,15 +387,18 @@
             font-size: 0.98rem;
             color: var(--text);
         }
+        /* Status */
         
         .appointment-status {
-            padding: 2px 10px;
+            background: var(--success);
+            color: #fff !important;
             border-radius: 12px;
-            font-size: 0.92rem;
+            padding: 2px 12px;
+            font-size: 0.95em;
             font-weight: 600;
-            background: rgba(40, 167, 69, 0.13);
-            color: var(--success);
-            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
         }
         
         @media (max-width: 600px) {
@@ -403,6 +406,31 @@
                 flex-direction: column;
                 gap: 6px;
                 align-items: flex-start;
+            }
+        }
+        /* Responsivo: status e botão sempre juntos, quebram juntos para baixo */
+        
+        @media (max-width: 600px) {
+            .appointment-details {
+                flex-wrap: wrap;
+                gap: 8px 10px;
+            }
+            .appointment-status,
+            .send-push-btn {
+                margin-left: 0;
+                margin-top: 6px;
+            }
+            .appointment-details {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .appointment-status {
+                display: inline-flex;
+                margin-right: 8px;
+            }
+            .send-push-btn {
+                margin-top: 0;
+                margin-left: 0;
             }
         }
         
@@ -1717,22 +1745,23 @@
             color: var(--primary-dark);
             font-size: 1.05em;
         }
+        /* Container dos detalhes do agendamento */
         
         .appointment-details {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px;
-            font-size: 0.98em;
-            color: var(--gray-dark);
+            gap: 12px 18px;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
         }
+        /* Agrupa status e botão juntos à direita em telas grandes */
         
-        .appointment-status {
-            background: var(--success);
-            color: #fff !important;
-            border-radius: 12px;
-            padding: 2px 10px;
-            font-size: 0.93em;
-            margin-left: 10px;
+        .appointment-status-group {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 8px;
         }
         /* NOVO: Estilo para ações dos serviços */
         
@@ -2022,6 +2051,73 @@
             box-shadow: 0 0 6px 2px #ff3b3b55, 0 1px 4px #0001;
             animation: pulseDot 1.2s infinite alternate;
             transition: background 0.2s, box-shadow 0.2s;
+        }
+        /* Botão de notificação */
+        
+        .send-push-btn {
+            background: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.08rem;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            box-shadow: 0 1px 4px rgba(26, 75, 140, 0.10);
+            flex-shrink: 0;
+        }
+        
+        .send-push-btn:hover,
+        .send-push-btn:focus {
+            background: linear-gradient(135deg, var(--primary-dark) 80%, var(--primary) 100%);
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.16);
+            transform: scale(1.08);
+        }
+        /* Responsivo: status e botão centralizados em telas pequenas */
+        
+        @media (max-width: 700px) {
+            .appointment-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px 0;
+            }
+            .appointment-status-group {
+                margin-left: 0;
+                align-self: center;
+                justify-content: center;
+                width: 100%;
+                margin-top: 8px;
+            }
+        }
+        /* Coluna de ícones de notificação alinhados verticalmente */
+        
+        .appointment-notification-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+            margin-left: 18px;
+            margin-right: 4px;
+            min-width: 38px;
+        }
+        /* Garante que o botão de notificação ocupe toda a largura da coluna se necessário */
+        
+        .appointment-notification-col .send-push-btn {
+            margin: 0;
+        }
+        /* Responsivo: mantém alinhamento vertical em telas pequenas */
+        
+        @media (max-width: 600px) {
+            .appointment-notification-col {
+                margin-left: 8px;
+                min-width: 32px;
+                gap: 8px;
+            }
         }
     </style>
 </head>
@@ -2967,16 +3063,33 @@ function carregarAgendamentosHoje() {
                         const item = document.createElement('div');
                         item.className = 'appointment-item';
 item.innerHTML = `
-    <div class="appointment-info">
-        <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
-        <div class="appointment-details">
-            <span><i class="far fa-calendar-alt"></i> ${ag.data ? new Date(ag.data).toLocaleDateString('pt-BR') : '-'}</span>
-            <span><i class="far fa-clock"></i> ${ag.hora}</span>
-            <span><i class="fas fa-cut"></i> ${ag.servico}</span>
-            <span><i class="fas fa-user"></i> ${ag.profissional}</span>
-            <span class="appointment-status status-confirmed">Confirmado</span>
-        </div>
+    <div class="appointment-card">
+    <div class="appointment-header">
+        <span class="appointment-client">
+            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+        </span>
     </div>
+<div class="appointment-details">
+    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+    <div class="appointment-status-group">
+        <span class="appointment-status status-confirmed">Confirmado</span>
+        <button class="send-push-btn"
+            title="Enviar notificação de lembrete"
+            data-agendamento-id="${ag.id}"
+            data-nome="${ag.nome || ''}"
+            data-telefone="${ag.telefone || ''}"
+            data-servico="${ag.servico || ''}"
+            data-profissional="${ag.profissional || ''}"
+            data-data="${ag.data || ''}"
+            data-hora="${ag.hora || ''}">
+            <i class="fas fa-bell"></i>
+        </button>
+    </div>
+</div>
+</div>
                         `;
                         container.appendChild(item);
                     });
@@ -3092,16 +3205,33 @@ function fetchAppointments(filter) {
                     const item = document.createElement('div');
                     item.className = 'appointment-item';
                     item.innerHTML = `
-                        <div class="appointment-info">
-                            <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
-                            <div class="appointment-details">
-                                <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                                <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                                <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                                <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                                <span class="appointment-status status-confirmed">Confirmado</span>
-                            </div>
-                        </div>
+                        <div class="appointment-card">
+    <div class="appointment-header">
+        <span class="appointment-client">
+            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+        </span>
+    </div>
+<div class="appointment-details">
+    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+    <div class="appointment-status-group">
+        <span class="appointment-status status-confirmed">Confirmado</span>
+        <button class="send-push-btn"
+            title="Enviar notificação de lembrete"
+            data-agendamento-id="${ag.id}"
+            data-nome="${ag.nome || ''}"
+            data-telefone="${ag.telefone || ''}"
+            data-servico="${ag.servico || ''}"
+            data-profissional="${ag.profissional || ''}"
+            data-data="${ag.data || ''}"
+            data-hora="${ag.hora || ''}">
+            <i class="fas fa-bell"></i>
+        </button>
+    </div>
+</div>
+</div>
                     `;
                     filteredAppointmentsList.appendChild(item);
                 });
@@ -3150,15 +3280,32 @@ function renderAgendamentosAgrupados(agendamentos) {
             const item = document.createElement('div');
             item.className = 'appointment-item';
             item.innerHTML = `
-                <div class="appointment-info">
-                    <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
-                    <div class="appointment-details">
-                        <span><i class="far fa-clock"></i> ${ag.hora}</span>
-                        <span><i class="fas fa-cut"></i> ${ag.servico}</span>
-                        <span><i class="fas fa-user"></i> ${ag.profissional}</span>
-                        <span class="appointment-status status-confirmed">Confirmado</span>
-                    </div>
-                </div>
+                <div class="appointment-card">
+    <div class="appointment-header">
+        <span class="appointment-client">
+            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+        </span>
+    </div>
+<div class="appointment-details">
+    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+    <div class="appointment-status-group">
+        <span class="appointment-status status-confirmed">Confirmado</span>
+        <button class="send-push-btn"
+            title="Enviar notificação de lembrete"
+            data-agendamento-id="${ag.id}"
+            data-nome="${ag.nome || ''}"
+            data-telefone="${ag.telefone || ''}"
+            data-servico="${ag.servico || ''}"
+            data-profissional="${ag.profissional || ''}"
+            data-data="${ag.data || ''}"
+            data-hora="${ag.hora || ''}">
+            <i class="fas fa-bell"></i>
+        </button>
+    </div>
+</div>
             `;
             container.appendChild(item);
         });
@@ -3928,6 +4075,58 @@ async function carregarNotificacoes() {
 
 // Atualizar dot de notificação ao abrir dashboard
 carregarNotificacoes();
+
+// Evento para enviar push manual para o usuário do agendamento
+document.addEventListener('click', async function(e) {
+    const btn = e.target.closest('.send-push-btn');
+    if (!btn) return;
+
+    const nome = btn.getAttribute('data-nome') || 'Cliente';
+    const telefone = btn.getAttribute('data-telefone');
+    const servico = btn.getAttribute('data-servico');
+    const profissional = btn.getAttribute('data-profissional');
+    const dataAg = btn.getAttribute('data-data');
+    const hora = btn.getAttribute('data-hora');
+    const agendamentoId = btn.getAttribute('data-agendamento-id');
+
+    if (!telefone || !agendamentoId) {
+        alert('Não foi possível identificar o usuário deste agendamento.');
+        return;
+    }
+
+    if (!confirm(`Deseja enviar uma notificação de lembrete para ${nome} (${telefone}) sobre o agendamento de ${servico} às ${hora}?`)) {
+        return;
+    }
+
+    // Chama o endpoint backend para enviar push para este usuário
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    try {
+        const res = await fetch('/dashboard/enviar-push-agendamento', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                agendamentoId: agendamentoId,
+                nome,
+                telefone,
+                servico,
+                profissional,
+                data: dataAg,
+                hora
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert('Notificação enviada com sucesso!');
+        } else {
+            alert(data.message || 'Erro ao enviar notificação.');
+        }
+    } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-bell"></i>';
+});
         });
         </script>
 </body>

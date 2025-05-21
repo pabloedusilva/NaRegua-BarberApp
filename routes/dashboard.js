@@ -327,4 +327,43 @@ router.delete('/notificacoes/:id', requireLogin, async(req, res) => {
     res.json({ success: true });
 });
 
+// Endpoint para envio de push notification de agendamento
+router.post('/enviar-push-agendamento', requireLogin, async(req, res) => {
+    const { agendamentoId, nome, telefone, servico, profissional, data, hora } = req.body;
+    if (!agendamentoId) return res.status(400).json({ success: false, message: 'Agendamento não informado.' });
+
+    try {
+        // Busca a subscription do usuário deste agendamento
+        const [subs] = await db.query(
+            'SELECT endpoint, p256dh, auth FROM subscriptions WHERE agendamento_id = ? ORDER BY criado_em DESC LIMIT 1', [agendamentoId]
+        );
+        if (!subs.length) {
+            return res.status(404).json({ success: false, message: 'Usuário deste agendamento não possui push ativo.' });
+        }
+        const subscription = {
+            endpoint: subs[0].endpoint,
+            keys: {
+                p256dh: subs[0].p256dh,
+                auth: subs[0].auth
+            }
+        };
+
+        // Monta a mensagem personalizada
+        const pushPayload = JSON.stringify({
+            title: 'Lembrete de agendamento',
+            body: `Olá ${nome}, lembrete do seu agendamento de ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`,
+        });
+
+        await webpush.sendNotification(subscription, pushPayload);
+
+        res.json({ success: true });
+    } catch (err) {
+        if (err.statusCode === 410 || err.statusCode === 404) {
+            // Subscription inválida, pode remover do banco
+            await db.query('DELETE FROM subscriptions WHERE agendamento_id = ?', [agendamentoId]);
+        }
+        res.status(500).json({ success: false, message: 'Erro ao enviar notificação.' });
+    }
+});
+
 module.exports = router;
