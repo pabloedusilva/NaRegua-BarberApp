@@ -2450,6 +2450,26 @@
                     <strong>Instagram:</strong> @barbeariajhoninha
                 </div>
             </div>
+
+            <!-- Container de Profissionais -->
+<div class="professionals-section" style="margin-top:32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <h2 class="section-title" style="font-size:1.18rem;"><i class="fas fa-user-tie"></i> Profissionais</h2>
+        <button id="editProfessionalsBtn" class="edit-btn" style="margin-left:12px;">
+            <i class="fas fa-pen"></i> Editar
+        </button>
+    </div>
+    <div id="professionalsContainer" class="professionals-container">
+        <!-- Profissionais serão listados aqui futuramente -->
+        <div class="professional-card">
+            <div class="professional-avatar">
+                <i class="fas fa-user" style="font-size: 32px; color: #aaa;"></i>
+            </div>
+            <div class="professional-name">Exemplo Profissional</div>
+        </div>
+        <!-- Adicione mais cards conforme necessário -->
+    </div>
+</div>
         </section>
 
         <section class="dashboard-section animate-slide-up" id="notificacoes-section" style="display:none;">
@@ -2471,6 +2491,33 @@
     </main>
 
     <!-- Modals -->
+     <div id="addProfessionalModal" class="modal">
+    <div class="modal-content" style="max-width:410px;">
+        <div class="modal-header">
+            <h3 class="modal-title"><i class="fas fa-user-tie"></i> Adicionar Profissional</h3>
+            <button class="close-modal" type="button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="avatar-upload">
+                <div class="avatar-preview">
+                    <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
+                </div>
+                <button class="avatar-upload-btn" type="button">
+                    <i class="fas fa-camera"></i> Adicionar Foto
+                </button>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nome do Profissional</label>
+                <input type="text" class="form-control" placeholder="Ex: João Silva">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button">Cancelar</button>
+            <button class="btn btn-primary" type="button">Adicionar Profissional</button>
+        </div>
+    </div>
+</div>
 
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="modal">
@@ -2612,63 +2659,6 @@
         </div>
     </div>
 
-    <!-- Modal para adicionar dia de folga especial -->
-    <div id="addDayOffModal" class="modal">
-        <div class="modal-content" style="max-width: 370px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-calendar-plus"></i> Adicionar Dia de Folga</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label" for="dayOffDate">Selecione o
-                    dia:</label>
-                    <input type="date" class="form-control" id="dayOffDate" min>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="dayOffReason">Motivo
-                    (opcional):</label>
-                    <input type="text" class="form-control" id="dayOffReason" placeholder="Ex: Feriado, evento, etc.">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary" id="saveDayOffBtn">Adicionar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Adicionar Profissional -->
-    <div id="addProfessionalModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Adicionar Profissional</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="avatar-upload">
-                    <div class="avatar-preview">
-                        <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
-                    </div>
-                    <button class="avatar-upload-btn">
-                    <i class="fas fa-camera"></i> Adicionar Foto
-                </button>
-                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Nome do Profissional</label>
-                    <input type="text" class="form-control" placeholder="Ex: João Silva">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Adicionar
-                Profissional</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal de Edição de Informações da Barbearia -->
     <div id="editBarbershopInfoModal" class="modal">
         <div class="modal-content">
@@ -2715,7 +2705,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-secondary">Cancelar</button>
                 <button class="btn btn-primary">Salvar Alterações</button>
             </div>
         </div>
@@ -4128,6 +4118,22 @@ document.addEventListener('click', async function(e) {
     btn.innerHTML = '<i class="fas fa-bell"></i>';
 });
         });
+
+        const editProfessionalsBtn = document.getElementById('editProfessionalsBtn');
+const addProfessionalModal = document.getElementById('addProfessionalModal');
+
+if (editProfessionalsBtn && addProfessionalModal) {
+    editProfessionalsBtn.addEventListener('click', () => {
+        addProfessionalModal.style.display = 'flex';
+    });
+}
+
+document.querySelectorAll('#editBarbershopInfoModal .btn.btn-secondary, #addProfessionalModal .btn.btn-secondary').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const modal = this.closest('.modal');
+        if (modal) modal.style.display = 'none';
+    });
+})
         </script>
 </body>
 
