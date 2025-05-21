@@ -2554,57 +2554,59 @@
                     const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                     const data = await res.json();
                     if (data.success && data.agendamentos.length > 0) {
-                        let html = `<b style="color:var(--text-main);">Olá!</b><br><br>
-                        <div style="display: flex; flex-direction: column; gap: 18px;">`;
+                        // Obtém o nome do primeiro agendamento retornado
+                        const nomeCliente = data.agendamentos[0].nome ? data.agendamentos[0].nome.split(' ')[0] : '';
+                        let html = `<b style="color:var(--text-main);">Olá${nomeCliente ? ', ' + nomeCliente : ''}!</b><br><br>
+        <div style="display: flex; flex-direction: column; gap: 18px;">`;
                         data.agendamentos.forEach(ag => {
                             html += `
-                            <div style="
-                                border: 1px solid var(--primary-dark);
-                                border-radius: 12px;
-                                padding: 12px 18px;
-                                display: flex;
-                                flex-direction: column;
-                                gap: 6px;
-                                background: var(--card);
-                                margin-bottom: 8px;
-                                position: relative;
-                            ">
-                                <div>
-                                    <span style="font-weight: 500; color: var(--text-secondary);">Serviço:</span>
-                                    <span style="color:var(--text-main);">${ag.servico}</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
-                                    <span style="color:var(--text-main);">${ag.profissional}</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
-                                    <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
-                                    <span style="color:var(--text-main);">${ag.hora}</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
-                                    <span style="color:var(--success); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
-                                </div>
-                                <button class="delete-appointment-btn" data-id="${ag.id}" style="
-                                    margin-top: 8px;
-                                    align-self: flex-end;
-                                    background: var(--red);
-                                    color: #fff;
-                                    border: none;
-                                    border-radius: 6px;
-                                    padding: 6px 16px;
-                                    font-size: 0.98rem;
-                                    cursor: pointer;
-                                    transition: background 0.2s;
-                                ">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </div>
-                            `;
+            <div style="
+                border: 1px solid var(--primary-dark);
+                border-radius: 12px;
+                padding: 12px 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                background: var(--card);
+                margin-bottom: 8px;
+                position: relative;
+            ">
+                <div>
+                    <span style="font-weight: 500; color: var(--text-secondary);">Serviço:</span>
+                    <span style="color:var(--text-main);">${ag.servico}</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
+                    <span style="color:var(--text-main);">${ag.profissional}</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
+                    <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
+                    <span style="color:var(--text-main);">${ag.hora}</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
+                    <span style="color:var(--success); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
+                </div>
+                <button class="delete-appointment-btn" data-id="${ag.id}" style="
+                    margin-top: 8px;
+                    align-self: flex-end;
+                    background: var(--red);
+                    color: #fff;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 6px 16px;
+                    font-size: 0.98rem;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                ">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+            `;
                         });
                         html += '</div>';
                         appointmentsModal.classList.remove('active');
