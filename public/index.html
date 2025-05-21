@@ -2363,6 +2363,8 @@
                 return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
             }
 
+            let aguardandoNome = false;
+
             // Atualiza o estado do botão
             function atualizarEstadoBtn() {
                 const telefoneValido = validarTelefone(userPhone.value.trim());
@@ -2371,174 +2373,145 @@
                 if (userNameContainer.style.display !== 'none') {
                     nomeValido = !!userName.value.trim();
                 }
-                if (telefoneValido && notificacaoAceita && nomeValido) {
-                    phoneModalBtn.disabled = false;
-                    phoneModalBtn.style.background = '';
-                    phoneModalBtn.style.cursor = '';
-                } else {
-                    phoneModalBtn.disabled = true;
-                    phoneModalBtn.style.background = '#ccc';
-                    phoneModalBtn.style.cursor = 'not-allowed';
-                }
+                phoneModalBtn.disabled = !(telefoneValido && notificacaoAceita && (userNameContainer.style.display === 'none' || nomeValido));
             }
-
-            // Ao digitar telefone, verifica se já é usuário cadastrado
-            userPhone.addEventListener('input', async function() {
-                const tel = userPhone.value.trim();
-                userPhone.style.borderColor = '';
-                userNameContainer.style.display = 'none';
-                userName.value = '';
-                if (validarTelefone(tel)) {
-                    try {
-                        // Verifica se já existe algum agendamento para esse telefone
-                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
-                        const data = await res.json();
-                        // Se nunca agendou, pede o nome
-                        if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
-                            userNameContainer.style.display = '';
-                        } else {
-                            userNameContainer.style.display = 'none';
-                            userName.value = '';
-                        }
-                    } catch (err) {
-                        userNameContainer.style.display = 'none';
-                        userName.value = '';
-                    }
-                }
-                atualizarEstadoBtn();
-            });
+            userPhone.addEventListener('input', atualizarEstadoBtn);
             acceptNotifications.addEventListener('change', atualizarEstadoBtn);
             if (userName) userName.addEventListener('input', atualizarEstadoBtn);
 
-            // Feedback visual ao tentar clicar bloqueado
-            phoneModalBtn.addEventListener('click', function(e) {
-                if (phoneModalBtn.disabled) {
-                    e.preventDefault();
-                    if (!validarTelefone(userPhone.value.trim())) {
-                        userPhone.style.transition = 'box-shadow 0.15s';
-                        userPhone.style.boxShadow = '0 0 0 2px #e74c3c';
-                        setTimeout(() => {
-                            userPhone.style.boxShadow = '';
-                        }, 700);
+            // Sempre que abrir o modal, reseta o fluxo
+            if (confirmButton) {
+                confirmButton.addEventListener('click', function() {
+                    if (selectedService && selectedProfessional && selectedDate && selectedTime) {
+                        phoneModal.classList.add('active');
+                        userPhone.value = '';
+                        userName.value = '';
+                        userNameContainer.style.display = 'none';
+                        acceptNotifications.checked = false;
+                        phoneModalBtn.disabled = true;
+                        aguardandoNome = false;
+                    } else {
+                        showCustomModal({
+                            message: 'Por favor, complete todas as informações para agendar.',
+                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                            btnText: 'OK'
+                        });
                     }
-                    if (userNameContainer.style.display !== 'none' && !userName.value.trim()) {
-                        userName.style.transition = 'box-shadow 0.15s';
-                        userName.style.boxShadow = '0 0 0 2px #e74c3c';
-                        setTimeout(() => {
-                            userName.style.boxShadow = '';
-                        }, 700);
-                    }
-                    if (!acceptNotifications.checked && acceptNotificationsLabel) {
-                        acceptNotificationsLabel.style.transition = 'color 0.15s';
-                        acceptNotificationsLabel.style.color = '#e74c3c';
-                        acceptNotificationsLabel.style.fontWeight = 'bold';
-                        setTimeout(() => {
-                            acceptNotificationsLabel.style.color = '';
-                            acceptNotificationsLabel.style.fontWeight = '';
-                        }, 700);
-                    }
-                    // Pisca o label do checkbox se não marcado
-                    if (!acceptNotifications.checked && acceptNotificationsLabel) {
-                        acceptNotificationsLabel.style.transition = 'color 0.15s';
-                        acceptNotificationsLabel.style.color = '#e74c3c';
-                        acceptNotificationsLabel.style.fontWeight = 'bold';
-                        setTimeout(() => {
-                            acceptNotificationsLabel.style.color = '';
-                            acceptNotificationsLabel.style.fontWeight = '';
-                        }, 700);
-                    }
-                }
-            });
+                });
+            }
 
-            confirmButton.addEventListener('click', async function() {
-                if (selectedService && selectedProfessional && selectedDate && selectedTime) {
-                    // Abre o modal de telefone
-                    phoneModal.classList.add('active');
-                    userPhone.value = '';
-                    userPhone.focus();
-                } else {
-                    showCustomModal({
-                        message: 'Por favor, complete todas as informações para agendar.',
-                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                        btnText: 'OK'
-                    });
-                }
-            });
-
-            // Fechar modal de telefone
-            phoneModalClose.onclick = () => phoneModal.classList.remove('active');
-
-            // Fechar ao clicar fora do conteúdo
-            phoneModal.onclick = function(e) {
-                if (e.target === phoneModal) phoneModal.classList.remove('active');
-            };
-
-            // Ação do botão do modal de telefone
             phoneModalBtn.onclick = async function() {
                 const tel = userPhone.value.trim();
                 const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
-                userPhone.style.borderColor = '';
                 if (!tel) {
                     userPhone.style.borderColor = 'var(--primary-dark)';
-                    return;
-                }
-                if (userNameContainer.style.display !== 'none' && !nome) {
-                    userName.style.borderColor = 'var(--primary-dark)';
                     return;
                 }
                 if (!acceptNotifications.checked) {
                     alert('Você precisa aceitar receber notificações para continuar.');
                     return;
                 }
-                try {
-                    const subscription = await subscribeUserToPush();
-                    // Envie a subscription junto com o agendamento
-                    await fetch('/agendamento/novo', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            nome: nome || '', // Se não for o primeiro, backend pode manter o nome já cadastrado
-                            telefone: tel,
-                            servico: selectedService,
-                            profissional: selectedProfessional,
-                            data: selectedDate.split('/').reverse().join('-'),
-                            hora: selectedTime,
-                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
-                            subscription
-                        })
-                    });
-                    await fetch('/dashboard/notificacoes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            titulo: 'Novo agendamento',
-                            mensagem: `Novo agendamento para ${selectedService} com ${selectedProfessional} em ${selectedDate} às ${selectedTime}.`
-                        })
-                    });
-                    // Fecha o modal de telefone
-                    phoneModal.classList.remove('active');
-                    showCustomModal({
-                        message: `<strong>Agendamento confirmado!</strong><br><br>
-            <b>Serviço:</b> ${selectedService}<br>
-            <b>Profissional:</b> ${selectedProfessional}<br>
-            <b>Data:</b> ${selectedDate}<br>
-            <b>Horário:</b> ${selectedTime}<br>
-            <b>Valor:</b> R$ ${selectedServicePrice}<br>
-            <b>Telefone:</b> ${tel}`,
-                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                        btnText: 'Fechar',
-                        onClose: function() {
-                            setTimeout(() => {
-                                location.reload();
-                            }, 300);
+                // Se o campo de nome está visível, é porque já foi solicitado
+                if (userNameContainer.style.display !== 'none') {
+                    if (!nome) {
+                        userName.style.borderColor = 'var(--primary-dark)';
+                        return;
+                    }
+                    try {
+                        const subscription = await subscribeUserToPush();
+                        await fetch('/agendamento/novo', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                nome: nome,
+                                telefone: tel,
+                                servico: selectedService,
+                                profissional: selectedProfessional,
+                                data: selectedDate.split('/').reverse().join('-'),
+                                hora: selectedTime,
+                                preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                                subscription
+                            })
+                        });
+                        phoneModal.classList.remove('active');
+                        showCustomModal({
+                            message: `<strong>Agendamento confirmado!</strong><br><br>
+                    <b>Serviço:</b> ${selectedService}<br>
+                    <b>Profissional:</b> ${selectedProfessional}<br>
+                    <b>Data:</b> ${selectedDate}<br>
+                    <b>Horário:</b> ${selectedTime}<br>
+                    <b>Valor:</b> R$ ${selectedServicePrice}<br>
+                    <b>Telefone:</b> ${tel}`,
+                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                            btnText: 'Fechar',
+                            onClose: function() {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 300);
+                            }
+                        });
+                    } catch (err) {
+                        alert('Erro ao ativar notificações: ' + err.message);
+                    }
+                    return;
+                }
+                // Se ainda não pediu o nome, verifica no banco se já é usuário cadastrado
+                if (!aguardandoNome) {
+                    phoneModalBtn.disabled = true;
+                    try {
+                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                        const data = await res.json();
+                        if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
+                            // Primeiro agendamento: pede o nome
+                            userNameContainer.style.display = '';
+                            aguardandoNome = true;
+                            phoneModalBtn.disabled = false;
+                            userName.focus();
+                            atualizarEstadoBtn();
+                            return;
+                        } else {
+                            // Já é usuário: agenda normalmente
+                            const subscription = await subscribeUserToPush();
+                            await fetch('/agendamento/novo', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    nome: '', // backend irá buscar o nome já cadastrado
+                                    telefone: tel,
+                                    servico: selectedService,
+                                    profissional: selectedProfessional,
+                                    data: selectedDate.split('/').reverse().join('-'),
+                                    hora: selectedTime,
+                                    preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                                    subscription
+                                })
+                            });
+                            phoneModal.classList.remove('active');
+                            showCustomModal({
+                                message: `<strong>Agendamento confirmado!</strong><br><br>
+                        <b>Serviço:</b> ${selectedService}<br>
+                        <b>Profissional:</b> ${selectedProfessional}<br>
+                        <b>Data:</b> ${selectedDate}<br>
+                        <b>Horário:</b> ${selectedTime}<br>
+                        <b>Valor:</b> R$ ${selectedServicePrice}<br>
+                        <b>Telefone:</b> ${tel}`,
+                                icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                btnText: 'Fechar',
+                                onClose: function() {
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 300);
+                                }
+                            });
                         }
-                    });
-                } catch (err) {
-                    alert('Erro ao ativar notificações: ' + err.message);
+                    } catch (err) {
+                        alert('Erro ao verificar telefone: ' + err.message);
+                        phoneModalBtn.disabled = false;
+                    }
                 }
             };
 
