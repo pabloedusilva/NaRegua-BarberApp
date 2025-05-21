@@ -1794,13 +1794,11 @@
                 <i class="fas fa-user-check" style="color:var(--primary);"></i>
             </div>
             <div class="custom-modal-message" style="margin-bottom:18px;">
-                <label for="appointmentsName" style="display:block; margin-bottom:8px; font-weight:600;">Nome</label>
-                <input id="appointmentsName" type="text" class="custom-modal-input" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:16px;">
+                <!-- Remova o campo de nome, mantenha só o telefone -->
                 <label for="appointmentsPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
                 <input id="appointmentsPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
             </div>
-            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
-                    meus agendamentos</button>
+            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver meus agendamentos</button>
         </div>
     </div>
     <!-- Modal de Login para Confirmação -->
@@ -2498,16 +2496,14 @@
             const appointmentsModal = document.getElementById('appointmentsModal');
             const appointmentsModalClose = document.getElementById('appointmentsModalClose');
             const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
-            const appointmentsName = document.getElementById('appointmentsName');
             const appointmentsPhone = document.getElementById('appointmentsPhone');
 
             // Abrir modal ao clicar em "Meus agendamentos"
             myAppointmentsBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 appointmentsModal.classList.add('active');
-                appointmentsName.value = '';
                 appointmentsPhone.value = '';
-                appointmentsName.focus();
+                appointmentsPhone.focus();
             });
 
             // Fechar modal
@@ -2520,23 +2516,12 @@
 
             // Ação do botão do modal
             appointmentsModalBtn.onclick = async function() {
-                const nome = appointmentsName.value.trim();
                 const tel = appointmentsPhone.value.trim();
 
-                appointmentsName.style.borderColor = '';
                 appointmentsPhone.style.borderColor = '';
 
-                let erro = false;
-                if (!nome) {
-                    appointmentsName.style.borderColor = 'var(--primary-dark)';
-                    erro = true;
-                }
                 if (!tel) {
                     appointmentsPhone.style.borderColor = 'var(--primary-dark)';
-                    erro = true;
-                }
-                if (erro) {
-                    // Não exibe modal de aviso, apenas borda vermelha
                     return;
                 }
 
@@ -2545,7 +2530,7 @@
                     const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                     const data = await res.json();
                     if (data.success && data.agendamentos.length > 0) {
-                        let html = `<b style="color:var(--text-main);">Olá,</b><br><br>
+                        let html = `<b style="color:var(--text-main);">Olá!</b><br><br>
                         <div style="display: flex; flex-direction: column; gap: 18px;">`;
                         data.agendamentos.forEach(ag => {
                             html += `
@@ -2642,7 +2627,7 @@
                     } else {
                         appointmentsModal.classList.remove('active');
                         showCustomModal({
-                            message: `<b>Olá,</b><br>Você ainda não possui agendamentos.`,
+                            message: `<b>Olá!</b><br>Você ainda não possui agendamentos.`,
                             icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
                             btnText: 'Fechar'
                         });
@@ -2866,16 +2851,14 @@
         const appointmentsModal = document.getElementById('appointmentsModal');
         const appointmentsModalClose = document.getElementById('appointmentsModalClose');
         const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
-        const appointmentsName = document.getElementById('appointmentsName');
         const appointmentsPhone = document.getElementById('appointmentsPhone');
 
         // Abrir modal ao clicar em "Meus agendamentos"
         myAppointmentsBtn.addEventListener('click', function(e) {
             e.preventDefault();
             appointmentsModal.classList.add('active');
-            appointmentsName.value = '';
             appointmentsPhone.value = '';
-            appointmentsName.focus();
+            appointmentsPhone.focus();
         });
 
         // Fechar modal
@@ -2888,23 +2871,12 @@
 
         // Ação do botão do modal
         appointmentsModalBtn.onclick = async function() {
-            const nome = appointmentsName.value.trim();
             const tel = appointmentsPhone.value.trim();
 
-            appointmentsName.style.borderColor = '';
             appointmentsPhone.style.borderColor = '';
 
-            let erro = false;
-            if (!nome) {
-                appointmentsName.style.borderColor = 'var(--primary-dark)';
-                erro = true;
-            }
             if (!tel) {
                 appointmentsPhone.style.borderColor = 'var(--primary-dark)';
-                erro = true;
-            }
-            if (erro) {
-                // Não exibe modal de aviso, apenas borda vermelha
                 return;
             }
 
@@ -2913,7 +2885,7 @@
                 const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                 const data = await res.json();
                 if (data.success && data.agendamentos.length > 0) {
-                    let html = `<b style="color:var(--text-main);">Olá,</b><br><br>
+                    let html = `<b style="color:var(--text-main);">Olá!</b><br><br>
                     <div style="display: flex; flex-direction: column; gap: 18px;">`;
                     data.agendamentos.forEach(ag => {
                         html += `
@@ -3010,7 +2982,7 @@
                 } else {
                     appointmentsModal.classList.remove('active');
                     showCustomModal({
-                        message: `<b>Olá,</b><br>Você ainda não possui agendamentos.`,
+                        message: `<b>Olá!</b><br>Você ainda não possui agendamentos.`,
                         icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
                         btnText: 'Fechar'
                     });

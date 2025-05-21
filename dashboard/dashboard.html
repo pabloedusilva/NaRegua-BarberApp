@@ -24,8 +24,7 @@
             --gray-dark: #333333;
             --success: #28a745;
             --warning: #fd7e14;
-            --red: 
-            --purple: #6f42c1;
+            --red: --purple: #6f42c1;
             /* Tema claro */
             --background: var(--white);
             --text: var(--gray-dark);
@@ -2121,134 +2120,145 @@
                 gap: 8px;
             }
         }
+        
         @media (max-width: 600px) {
-  .barbershop-info {
-    flex-direction: column;
-    align-items: center !important;
-    text-align: center;
-    padding: 20px 10px;
-  }
-  .barbershop-info > div:first-child {
-    margin-bottom: 18px;
-  }
-  .barbershop-info img {
-    margin: 0 auto;
-  }
-}
-
-/* Informações da Barbearia */
-/* Container principal */
-.barbershop-info {
-  display: flex;
-  align-items: flex-start;
-  gap: 32px;
-  background: var(--gray-light);
-  border-radius: 14px;
-  padding: 28px 32px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-  margin-top: 18px;
-  flex-wrap: wrap;
-  border: 1.5px solid var(--primary-dark);
-}
-
-/* Foto da barbearia */
-.barbershop-photo {
-  flex-shrink: 0;
-}
-.barbershop-photo-inner {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 2px 10px #0001;
-  background: var(--gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.barbershop-photo-inner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Informações principais */
-.barbershop-main {
-  flex: 1;
-  min-width: 220px;
-}
-.barbershop-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.barbershop-title {
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  letter-spacing: 0.5px;
-}
-
-/* Endereço */
-.barbershop-address-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 7px;
-}
-.barbershop-address-row i {
-  color: red;
-}
-.barbershop-address-row span {
-  font-size: 1.05rem;
-  color: var(--text);
-}
-
-/* WhatsApp */
-.barbershop-whatsapp-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 7px;
-}
-.barbershop-whatsapp-row i {
-  color: #25d366;
-}
-.barbershop-whatsapp-row a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-
-/* Instagram */
-.barbershop-instagram-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.barbershop-instagram-row i {
-  color: #f874bf;
-}
-.barbershop-instagram-row a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-
-/* Responsivo: Centraliza logo e informações em telas pequenas */
-@media (max-width: 600px) {
-  .barbershop-info {
-    flex-direction: column;
-    align-items: center !important;
-    text-align: center;
-    padding: 20px 10px;
-  }
-  .barbershop-photo {
-    margin-bottom: 18px;
-  }
-}
+            .barbershop-info {
+                flex-direction: column;
+                align-items: center !important;
+                text-align: center;
+                padding: 20px 10px;
+            }
+            .barbershop-info>div:first-child {
+                margin-bottom: 18px;
+            }
+            .barbershop-info img {
+                margin: 0 auto;
+            }
+        }
+        /* Informações da Barbearia */
+        /* Container principal */
+        
+        .barbershop-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 32px;
+            background: var(--gray-light);
+            border-radius: 14px;
+            padding: 28px 32px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+            margin-top: 18px;
+            flex-wrap: wrap;
+            border: 1.5px solid var(--primary-dark);
+        }
+        /* Foto da barbearia */
+        
+        .barbershop-photo {
+            flex-shrink: 0;
+        }
+        
+        .barbershop-photo-inner {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 10px #0001;
+            background: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .barbershop-photo-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Informações principais */
+        
+        .barbershop-main {
+            flex: 1;
+            min-width: 220px;
+        }
+        
+        .barbershop-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .barbershop-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            letter-spacing: 0.5px;
+        }
+        /* Endereço */
+        
+        .barbershop-address-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 7px;
+        }
+        
+        .barbershop-address-row i {
+            color: red;
+        }
+        
+        .barbershop-address-row span {
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+        /* WhatsApp */
+        
+        .barbershop-whatsapp-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 7px;
+        }
+        
+        .barbershop-whatsapp-row i {
+            color: #25d366;
+        }
+        
+        .barbershop-whatsapp-row a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.05rem;
+        }
+        /* Instagram */
+        
+        .barbershop-instagram-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .barbershop-instagram-row i {
+            color: #f874bf;
+        }
+        
+        .barbershop-instagram-row a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.05rem;
+        }
+        /* Responsivo: Centraliza logo e informações em telas pequenas */
+        
+        @media (max-width: 600px) {
+            .barbershop-info {
+                flex-direction: column;
+                align-items: center !important;
+                text-align: center;
+                padding: 20px 10px;
+            }
+            .barbershop-photo {
+                margin-bottom: 18px;
+            }
+        }
     </style>
 </head>
 
@@ -2566,61 +2576,61 @@
                 </button>
             </div>
 
-<!-- Informações da Barbearia -->
- <div class="barbershop-info">
-    <!-- Foto da barbearia -->
-    <div class="barbershop-photo">
-        <div class="barbershop-photo-inner">
-            <img src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg" alt="Foto da Barbearia">
-        </div>
-    </div>
-    <!-- Informações principais -->
-    <div class="barbershop-main">
-        <div class="barbershop-title-row">
-            <span class="barbershop-title">
+            <!-- Informações da Barbearia -->
+            <div class="barbershop-info">
+                <!-- Foto da barbearia -->
+                <div class="barbershop-photo">
+                    <div class="barbershop-photo-inner">
+                        <img src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg" alt="Foto da Barbearia">
+                    </div>
+                </div>
+                <!-- Informações principais -->
+                <div class="barbershop-main">
+                    <div class="barbershop-title-row">
+                        <span class="barbershop-title">
                 Barbearia Jhoninha do Corte
             </span>
-        </div>
-        <div class="barbershop-address-row">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Av. Principal, 123 - Centro, São Paulo - SP</span>
-        </div>
-        <div class="barbershop-whatsapp-row">
-            <i class="fab fa-whatsapp"></i>
-            <a href="https://wa.me/5511999998888" target="_blank">
+                    </div>
+                    <div class="barbershop-address-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Av. Principal, 123 - Centro, São Paulo - SP</span>
+                    </div>
+                    <div class="barbershop-whatsapp-row">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/5511999998888" target="_blank">
                 (11) 99999-8888
             </a>
-        </div>
-        <div class="barbershop-instagram-row">
-            <i class="fab fa-instagram"></i>
-            <a href="https://instagram.com/barbeariajhoninha" target="_blank">
+                    </div>
+                    <div class="barbershop-instagram-row">
+                        <i class="fab fa-instagram"></i>
+                        <a href="https://instagram.com/barbeariajhoninha" target="_blank">
                 @barbeariajhoninha
             </a>
-        </div>
-    </div>
-</div>
+                    </div>
+                </div>
+            </div>
 
-<!-- Container de Profissionais -->
-<div class="professionals-section" style="margin-top:32px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <h2 class="section-title" style="font-size:1.18rem;"><i class="fas fa-user-tie"></i> Profissionais</h2>
-        <button id="editProfessionalsBtn" class="edit-btn" style="margin-left:12px;">
+            <!-- Container de Profissionais -->
+            <div class="professionals-section" style="margin-top:32px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                    <h2 class="section-title" style="font-size:1.18rem;"><i class="fas fa-user-tie"></i> Profissionais</h2>
+                    <button id="editProfessionalsBtn" class="edit-btn" style="margin-left:12px;">
             <i class="fas fa-add"></i> Adicionar
         </button>
-    </div>
-    <div id="professionalsContainer" class="professionals-container" style="justify-content: center;">
-        <!-- Profissionais serão listados aqui futuramente -->
-        <div class="professional-card" style="position:relative;">
-            <button class="edit-professional-btn" title="Editar profissional" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
+                </div>
+                <div id="professionalsContainer" class="professionals-container" style="justify-content: center;">
+                    <!-- Profissionais serão listados aqui futuramente -->
+                    <div class="professional-card" style="position:relative;">
+                        <button class="edit-professional-btn" title="Editar profissional" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
                 <i class="fas fa-pen" style="color:#666;font-size:1rem;"></i>
             </button>
-            <div class="professional-avatar">
-                <i class="fas fa-user" style="font-size: 32px; color: #aaa;"></i>
+                        <div class="professional-avatar">
+                            <i class="fas fa-user" style="font-size: 32px; color: #aaa;"></i>
+                        </div>
+                        <div class="professional-name">Exemplo Profissional</div>
+                    </div>
+                </div>
             </div>
-            <div class="professional-name">Exemplo Profissional</div>
-        </div>
-    </div>
-</div>
         </section>
 
         <section class="dashboard-section animate-slide-up" id="notificacoes-section" style="display:none;">
@@ -2642,33 +2652,33 @@
     </main>
 
     <!-- Modals -->
-     <div id="addProfessionalModal" class="modal">
-    <div class="modal-content" style="max-width:410px;">
-        <div class="modal-header">
-            <h3 class="modal-title"><i class="fas fa-user-tie"></i> Adicionar Profissional</h3>
-            <button class="close-modal" type="button">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="avatar-upload">
-                <div class="avatar-preview">
-                    <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
-                </div>
-                <button class="avatar-upload-btn" type="button">
+    <div id="addProfessionalModal" class="modal">
+        <div class="modal-content" style="max-width:410px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-user-tie"></i> Adicionar Profissional</h3>
+                <button class="close-modal" type="button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-upload">
+                    <div class="avatar-preview">
+                        <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
+                    </div>
+                    <button class="avatar-upload-btn" type="button">
                     <i class="fas fa-camera"></i> Adicionar Foto
                 </button>
-                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nome do Profissional</label>
+                    <input type="text" class="form-control" placeholder="Ex: João Silva">
+                </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Nome do Profissional</label>
-                <input type="text" class="form-control" placeholder="Ex: João Silva">
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button">Cancelar</button>
+                <button class="btn btn-primary" type="button">Adicionar Profissional</button>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" type="button">Cancelar</button>
-            <button class="btn btn-primary" type="button">Adicionar Profissional</button>
         </div>
     </div>
-</div>
 
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="modal">
@@ -3304,7 +3314,6 @@ document.querySelectorAll('.password-eye-btn').forEach(btn => {
 const filterBtns = document.querySelectorAll('.filter-btn');
 const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
 
-// ...existing code...
 function fetchAppointments(filter) {
     let url = '';
     if (filter === 'today') url = '/dashboard/agendamentos-hoje';
