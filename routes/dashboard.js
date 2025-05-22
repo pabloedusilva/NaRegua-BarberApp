@@ -129,7 +129,7 @@ router.post('/alterar-senha', requireLogin, async(req, res) => {
     }
 });
 
-// Rota para buscar total de agendamentos da semana atual
+// Atualiza o contador de agendamentos da semana (segunda a domingo da semana atual)
 router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
@@ -137,7 +137,8 @@ router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
         const diaSemana = hoje.getDay();
         // Calcula o primeiro dia da semana (segunda-feira)
         const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
-        const inicioSemana = new Date(hoje.setDate(diff));
+        const inicioSemana = new Date(hoje.setHours(0, 0, 0, 0));
+        inicioSemana.setDate(diff);
         const fimSemana = new Date(inicioSemana);
         fimSemana.setDate(inicioSemana.getDate() + 6);
 
@@ -153,13 +154,16 @@ router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
     }
 });
 
-// Agendamentos da semana atual
+// Agendamentos da semana atual (segunda a domingo da semana corrente)
 router.get('/agendamentos-semana', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
+        // Pega o dia da semana (0=domingo, 1=segunda, ...)
         const diaSemana = hoje.getDay();
+        // Calcula o primeiro dia da semana (segunda-feira)
         const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
-        const inicioSemana = new Date(hoje.setDate(diff));
+        const inicioSemana = new Date(hoje.setHours(0, 0, 0, 0));
+        inicioSemana.setDate(diff);
         const fimSemana = new Date(inicioSemana);
         fimSemana.setDate(inicioSemana.getDate() + 6);
 
@@ -317,7 +321,10 @@ router.get('/notificacoes', requireLogin, async(req, res) => {
 // Criar notificação
 router.post('/notificacoes', async(req, res) => {
     const { titulo, mensagem } = req.body;
-    await db.query('INSERT INTO notificacoes (titulo, mensagem) VALUES (?, ?)', [titulo, mensagem]);
+    'INSERT INTO notificacoes (titulo, mensagem, data) VALUES (?, ?, NOW())', [
+        'Novo agendamento',
+        `Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`
+    ]
     res.json({ success: true });
 });
 

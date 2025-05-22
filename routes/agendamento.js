@@ -15,6 +15,15 @@ router.post('/novo', async(req, res) => {
         const [result] = await db.query(
             'INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco) VALUES (?, ?, ?, ?, ?, ?, ?)', [nome, telefone, servico, profissional, data, hora, preco]
         );
+
+        // Cria notificação para dashboard
+        await db.query(
+            'INSERT INTO notificacoes (titulo, mensagem, data) VALUES (?, ?, NOW())', [
+                'Novo agendamento',
+                `Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`
+            ]
+        );
+
         const agendamentoId = result.insertId;
 
         // Salva a subscription (evita duplicidade)
