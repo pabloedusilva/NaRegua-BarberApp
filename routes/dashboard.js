@@ -373,4 +373,31 @@ router.post('/enviar-push-agendamento', requireLogin, async(req, res) => {
     }
 });
 
+// Buscar informações da barbearia (público e dashboard)
+router.get('/barbearia', async(req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM barbearia LIMIT 1');
+        if (rows.length > 0) {
+            res.json({ success: true, barbearia: rows[0] });
+        } else {
+            res.json({ success: false, message: 'Informações não cadastradas.' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar informações.' });
+    }
+});
+
+// Atualizar informações da barbearia (dashboard)
+router.post('/barbearia', requireLogin, async(req, res) => {
+    const { nome, endereco, cidade_estado, whatsapp, instagram, foto } = req.body;
+    try {
+        await db.query(
+            'UPDATE barbearia SET nome=?, endereco=?, cidade_estado=?, whatsapp=?, instagram=?, foto=? WHERE id=1', [nome, endereco, cidade_estado, whatsapp, instagram, foto]
+        );
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao atualizar informações.' });
+    }
+});
+
 module.exports = router;

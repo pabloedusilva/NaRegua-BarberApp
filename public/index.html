@@ -195,6 +195,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .welcome-text {
@@ -1650,37 +1652,11 @@
     </header>
 
     <main class="container">
+        <!-- Informações da Barberaria -->
         <section class="welcome-section animate-fade-in">
-            <div class="profile-pic">
-                <i class="fas fa-user-alt" style="font-size: 32px; color: #aaa;"></i>
-            </div>
-            <div class="welcome-text">Seja bem vindo(a) ao</div>
-            <h1 class="barbershop-name">Barbearia Pablo do corte</h1>
-
-            <!-- Ícones sociais adicionados -->
-            <div class="social-icons-welcome">
-                <a href="https://wa.me/5511999998888" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-                <a href="https://instagram.com/barbeariapablo" target="_blank" class="social-icon-welcome" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-            </div>
-
-            <!-- Componente de endereço adicionado -->
-            <div class="address-container">
-                <button class="address-toggle" id="addressToggle">
-                        <i class="fas fa-map-marker-alt"></i> Ver endereço
-                    </button>
-                <div class="address-content" id="addressContent">
-                    <p>Av. Principal, 123 - Centro</p>
-                    <p>São Paulo - SP</p>
-                    <a href="https://maps.google.com?q=Av.+Principal,+123+-+Centro,+São+Paulo+-+SP" target="_blank" class="map-link">
-                        <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
-                    </a>
-                </div>
-            </div>
+            <div id="barbershopInfo"></div>
         </section>
+
 
         <section class="services-section animate-slide-up">
         </section>
@@ -3037,6 +3013,65 @@
                 }
             });
         }
+
+        // Informações da Barbearia
+        async function carregarBarbearia() {
+            const container = document.getElementById('barbershopInfo');
+            try {
+                const res = await fetch('/dashboard/barbearia');
+                const data = await res.json();
+                if (data.success) {
+                    const b = data.barbearia;
+                    container.innerHTML = `
+                <div class="profile-pic">
+                    <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                </div>
+                <div class="welcome-text">Seja bem vindo(a) ao</div>
+                <h1 class="barbershop-name">${b.nome}</h1>
+                <div class="social-icons-welcome">
+                    <a href="https://wa.me/${b.whatsapp}" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/${b.instagram}" target="_blank" class="social-icon-welcome" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+                <div class="address-container">
+                    <button class="address-toggle" id="addressToggle">
+                        <i class="fas fa-map-marker-alt"></i> Ver endereço
+                    </button>
+                    <div class="address-content" id="addressContent">
+                        <p>${b.endereco}</p>
+                        <p>${b.cidade_estado}</p>
+                        <a href="https://maps.google.com?q=${encodeURIComponent(b.endereco + ', ' + b.cidade_estado)}" target="_blank" class="map-link">
+                            <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+                    // Reaplica evento do botão de endereço
+                    const addressToggle = document.getElementById('addressToggle');
+                    const addressContent = document.getElementById('addressContent');
+                    if (addressToggle && addressContent) {
+                        addressToggle.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            if (addressContent.style.display === 'block') {
+                                addressContent.style.display = 'none';
+                                addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
+                            } else {
+                                addressContent.style.display = 'block';
+                                addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
+                            }
+                        });
+                    }
+                } else {
+                    container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
+                }
+            } catch (err) {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
+            }
+        }
+        carregarBarbearia();
     </script>
 </body>
 

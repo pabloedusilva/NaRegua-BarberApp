@@ -2577,38 +2577,7 @@
             </div>
 
             <!-- Informações da Barbearia -->
-            <div class="barbershop-info">
-                <!-- Foto da barbearia -->
-                <div class="barbershop-photo">
-                    <div class="barbershop-photo-inner">
-                        <img src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg" alt="Foto da Barbearia">
-                    </div>
-                </div>
-                <!-- Informações principais -->
-                <div class="barbershop-main">
-                    <div class="barbershop-title-row">
-                        <span class="barbershop-title">
-                Barbearia Jhoninha do Corte
-            </span>
-                    </div>
-                    <div class="barbershop-address-row">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Av. Principal, 123 - Centro, São Paulo - SP</span>
-                    </div>
-                    <div class="barbershop-whatsapp-row">
-                        <i class="fab fa-whatsapp"></i>
-                        <a href="https://wa.me/5511999998888" target="_blank">
-                (11) 99999-8888
-            </a>
-                    </div>
-                    <div class="barbershop-instagram-row">
-                        <i class="fab fa-instagram"></i>
-                        <a href="https://instagram.com/barbeariajhoninha" target="_blank">
-                @barbeariajhoninha
-            </a>
-                    </div>
-                </div>
-            </div>
+            <div class="barbershop-info" id="barbershopInfoDashboard"></div>
 
             <!-- Container de Profissionais -->
             <div class="professionals-section" style="margin-top:32px;">
@@ -4294,6 +4263,52 @@ document.querySelectorAll('#editBarbershopInfoModal .btn.btn-secondary, #addProf
         if (modal) modal.style.display = 'none';
     });
 })
+
+
+// Informações da barbearia
+async function carregarBarbeariaDashboard() {
+    const container = document.getElementById('barbershopInfoDashboard');
+    try {
+        const res = await fetch('/dashboard/barbearia');
+        const data = await res.json();
+        if (data.success) {
+            const b = data.barbearia;
+            container.innerHTML = `
+                <div class="barbershop-photo">
+                    <div class="barbershop-photo-inner">
+                        <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia">
+                    </div>
+                </div>
+                <div class="barbershop-main">
+                    <div class="barbershop-title-row">
+                        <span class="barbershop-title">${b.nome}</span>
+                    </div>
+                    <div class="barbershop-address-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${b.endereco}, ${b.cidade_estado}</span>
+                    </div>
+                    <div class="barbershop-whatsapp-row">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/${b.whatsapp}" target="_blank">
+                            (${b.whatsapp.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')})
+                        </a>
+                    </div>
+                    <div class="barbershop-instagram-row">
+                        <i class="fab fa-instagram"></i>
+                        <a href="https://instagram.com/${b.instagram}" target="_blank">
+                            @${b.instagram}
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
+        }
+    } catch (err) {
+        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
+    }
+}
+carregarBarbeariaDashboard();
         </script>
 </body>
 

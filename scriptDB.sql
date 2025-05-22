@@ -76,3 +76,18 @@ CREATE TABLE IF NOT EXISTS notificacoes (
     data DATETIME DEFAULT CURRENT_TIMESTAMP,
     lida TINYINT(1) DEFAULT 0
 );
+
+-- Criação da tabela de barbearias
+CREATE TABLE IF NOT EXISTS barbearia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(200) NOT NULL,
+    cidade_estado VARCHAR(100) NOT NULL,
+    whatsapp VARCHAR(30) NOT NULL,
+    instagram VARCHAR(100) NOT NULL,
+    foto VARCHAR(255) DEFAULT NULL
+);
+
+-- Exemplo de inserção inicial na tabela de barbearias
+INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto) VALUES
+('Barbearia Pablo do corte', 'Av. Principal, 123 - Centro', 'São Paulo - SP', '5511999998888', 'p4blozz__', 'https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg');
