@@ -373,7 +373,7 @@ router.post('/enviar-push-agendamento', requireLogin, async(req, res) => {
     }
 });
 
-// Buscar informações da barbearia (público e dashboard)
+// Buscar informações da barbearia
 router.get('/barbearia', async(req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM barbearia LIMIT 1');
@@ -387,13 +387,21 @@ router.get('/barbearia', async(req, res) => {
     }
 });
 
-// Atualizar informações da barbearia (dashboard)
-router.post('/barbearia', requireLogin, async(req, res) => {
+// Atualizar informações da barbearia
+router.post('/barbearia', async(req, res) => {
     const { nome, endereco, cidade_estado, whatsapp, instagram, foto } = req.body;
     try {
-        await db.query(
-            'UPDATE barbearia SET nome=?, endereco=?, cidade_estado=?, whatsapp=?, instagram=?, foto=? WHERE id=1', [nome, endereco, cidade_estado, whatsapp, instagram, foto]
-        );
+        // Garante que existe pelo menos um registro
+        const [rows] = await db.query('SELECT id FROM barbearia LIMIT 1');
+        if (rows.length === 0) {
+            await db.query(
+                'INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto) VALUES (?, ?, ?, ?, ?, ?)', [nome, endereco, cidade_estado, whatsapp, instagram, foto]
+            );
+        } else {
+            await db.query(
+                'UPDATE barbearia SET nome=?, endereco=?, cidade_estado=?, whatsapp=?, instagram=?, foto=? WHERE id=?', [nome, endereco, cidade_estado, whatsapp, instagram, foto, rows[0].id]
+            );
+        }
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao atualizar informações.' });

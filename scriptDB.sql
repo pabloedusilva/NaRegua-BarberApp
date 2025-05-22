@@ -89,5 +89,5 @@ CREATE TABLE IF NOT EXISTS barbearia (
 );
 
 -- Exemplo de inserção inicial na tabela de barbearias
-INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto) VALUES
-('Barbearia Pablo do corte', 'Av. Principal, 123 - Centro', 'São Paulo - SP', '5511999998888', 'p4blozz__', 'https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg');
+INSERT INTO barbearia (id, nome, endereco, cidade_estado, whatsapp, instagram, foto)
+VALUES (1, 'Barbearia Pablo do corte', 'Av. Principal, 123 - Centro', 'São Paulo - SP', '5511999998888', 'p4blozz__', 'https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg');

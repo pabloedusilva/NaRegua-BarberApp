@@ -268,7 +268,6 @@
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
         .card-header .edit-btn#addDayOffBtn,
-        .card-header .edit-btn#editBarbershopInfoBtn,
         .card-header .edit-btn#viewPushHistoryBtn {
             padding: 6px 12px !important;
             /* Menor altura e largura */
@@ -2789,58 +2788,6 @@
         </div>
     </div>
 
-    <!-- Modal de Edição de Informações da Barbearia -->
-    <div id="editBarbershopInfoModal" class="modal">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Informações da Barbearia</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Avatar upload para foto do estabelecimento -->
-                <div class="avatar-upload" id="barbershop-photo-upload">
-                    <div class="avatar-preview" id="barbershop-photo-preview">
-                        <i class="fas fa-store" style="font-size: 40px; color: #aaa;"></i>
-                    </div>
-                    <button type="button" class="avatar-upload-btn" id="barbershop-photo-btn">
-                    <i class="fas fa-camera"></i> Adicionar Foto
-                </button>
-                    <input type="file" id="barbershopPhotoInput" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Nome da Barbearia</label>
-                    <input type="text" class="form-control" value="Barbearia Jhoninha do Corte">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Endereço</label>
-                    <input type="text" class="form-control" value="Av. Principal, 123 - Centro">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Cidade/Estado</label>
-                    <input type="text" class="form-control" value="São Paulo - SP">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Número do WhatsApp</label>
-                    <input type="text" class="form-control" value="(11) 99999-8888">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Perfil do Instagram</label>
-                    <input type="text" class="form-control" value="@barbeariajhoninha">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary">Cancelar</button>
-                <button class="btn btn-primary">Salvar Alterações</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal de Todos os Agendamentos -->
     <div id="allAppointmentsModal" class="modal">
         <div class="modal-content">
@@ -2919,7 +2866,6 @@
                         const modals = document.querySelectorAll('.modal');
                         const modalTriggers = {
                             'addProfessionalBtn': 'addProfessionalModal',
-                            'editBarbershopInfoBtn': 'editBarbershopInfoModal',
                             'viewAllAppointments': 'allAppointmentsModal',
                             'addDayOffBtn': 'addDayOffModal',
                             'changePasswordBtn': 'changePasswordModal',

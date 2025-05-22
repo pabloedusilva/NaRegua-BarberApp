@@ -1,0 +1,47 @@
+<!-- Modal de Edição de Informações da Barbearia -->
+<div id="editBarbershopInfoModal" class="modal">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h3 class="modal-title">Editar Informações da Barbearia</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Avatar upload para foto do estabelecimento -->
+            <div class="avatar-upload" id="barbershop-photo-upload">
+                <div class="avatar-preview" id="barbershop-photo-preview">
+                    <i class="fas fa-store" style="font-size: 40px; color: #aaa;"></i>
+                </div>
+                <button type="button" class="avatar-upload-btn" id="barbershop-photo-btn">
+                    <i class="fas fa-camera"></i> Adicionar Foto
+                </button>
+                <input type="file" id="barbershopPhotoInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nome da Barbearia</label>
+                <input type="text" class="form-control" id="editBarbershopNome">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Endereço</label>
+                <input type="text" class="form-control" id="editBarbershopEndereco">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Cidade/Estado</label>
+                <input type="text" class="form-control" id="editBarbershopCidadeEstado">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Número do WhatsApp</label>
+                <input type="text" class="form-control" id="editBarbershopWhatsapp">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Perfil do Instagram</label>
+                <input type="text" class="form-control" id="editBarbershopInstagram">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary">Cancelar</button>
+            <button class="btn btn-primary">Salvar Alterações</button>
+        </div>
+    </div>
+</div>
