@@ -1204,7 +1204,7 @@
             top: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(26, 75, 140, 0.18);
+            background: rgba(0, 0, 0, 0.40);
             align-items: center;
             justify-content: center;
             transition: background 0.3s;
@@ -1217,14 +1217,14 @@
         
         @media (min-width: 600px) {
             .custom-modal {
-                max-width: 420px;
+                /* max-width: 420px; */
                 padding: 36px 32px;
             }
         }
         
         @media (min-width: 900px) {
             .custom-modal {
-                max-width: 520px;
+                /* max-width: 520px; */
                 padding: 48px 40px;
             }
         }
@@ -3072,6 +3072,25 @@
             }
         }
         carregarBarbearia();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Para todos os modais customizados
+            document.querySelectorAll('.custom-modal').forEach(function(modal) {
+                // Fecha ao clicar no X
+                const closeBtn = modal.querySelector('.custom-modal-close');
+                if (closeBtn) {
+                    closeBtn.onclick = function() {
+                        modal.classList.remove('active');
+                    };
+                }
+                // Fecha ao clicar fora do conteúdo
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

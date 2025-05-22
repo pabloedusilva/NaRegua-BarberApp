@@ -408,4 +408,13 @@ router.post('/barbearia', async(req, res) => {
     }
 });
 
+router.get('/servertime', (req, res) => {
+    // Retorna a data/hora do servidor em UTC
+    const now = new Date();
+    res.json({
+        iso: now.toISOString(),
+        timestamp: now.getTime()
+    });
+});
+
 module.exports = router;

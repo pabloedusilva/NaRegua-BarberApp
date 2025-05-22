@@ -268,6 +268,7 @@
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
         .card-header .edit-btn#addDayOffBtn,
+        .card-header .edit-btn#editBarbershopInfoBtn,
         .card-header .edit-btn#viewPushHistoryBtn {
             padding: 6px 12px !important;
             /* Menor altura e largura */
@@ -2834,6 +2835,26 @@
         </footer>
 
         <script>
+            let serverNow = null;
+
+            async function getServerTime() {
+                try {
+                    const res = await fetch('/dashboard/servertime');
+                    const data = await res.json();
+                    if (data && data.iso) {
+                        serverNow = new Date(data.iso);
+                    } else {
+                        serverNow = new Date(); // fallback
+                    }
+                } catch (err) {
+                    serverNow = new Date(); // fallback
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', async function() {
+                await getServerTime();
+                renderCalendar(serverNow);
+            });
             document.addEventListener('DOMContentLoaded', function() {
                         // Toggle theme
                         const themeToggle = document.getElementById('themeToggle');
@@ -3018,7 +3039,7 @@
 
                         // Setar data mínima para hoje
                         if (dayOffDate) {
-                            const today = new Date();
+                            const today = serverNow;
                             const yyyy = today.getFullYear();
                             const mm = String(today.getMonth() + 1).padStart(2, '0');
                             const dd = String(today.getDate()).padStart(2, '0');
