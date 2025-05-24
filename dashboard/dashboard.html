@@ -268,7 +268,6 @@
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
         .card-header .edit-btn#addDayOffBtn,
-        .card-header .edit-btn#editBarbershopInfoBtn,
         .card-header .edit-btn#viewPushHistoryBtn {
             padding: 6px 12px !important;
             /* Menor altura e largura */
@@ -2259,6 +2258,16 @@
                 margin-bottom: 18px;
             }
         }
+        
+        #barbershopPhotoPreview {
+            border: 2px solid var(--primary-light);
+            transition: border-color 0.2s;
+        }
+        
+        #barbershopPhotoPreview:hover {
+            border-color: var(--primary);
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -2576,8 +2585,8 @@
             <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
                 <button class="edit-btn" id="editBarbershopInfoBtn">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
+    <i class="fas fa-edit"></i> Editar
+</button>
             </div>
 
             <!-- Informações da Barbearia -->
@@ -2625,6 +2634,51 @@
     </main>
 
     <!-- Modals -->
+
+    <!-- Modal de Edição da Barbearia -->
+    <div id="editBarbershopModal" class="modal">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close-modal" id="closeEditBarbershopModal">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-store"></i> Editar Barbearia</h3>
+            <form id="editBarbershopForm" autocomplete="off">
+                <div class="form-group" style="display:flex;flex-direction:column;align-items:center;">
+                    <label for="editBarbershopPhoto" style="align-self:flex-start;">Foto</label>
+                    <div id="barbershopPhotoPreview" style="width:110px;height:110px;border-radius:50%;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px #0001;margin-bottom:12px;position:relative;">
+                        <img id="barbershopPhotoImg" src="" alt="Pré-visualização" style="width:100%;height:100%;object-fit:cover;display:none;">
+                        <i id="barbershopPhotoIcon" class="fas fa-camera" style="font-size:2.2rem;color:#bbb;display:block;"></i>
+                    </div>
+                    <input type="file" id="barbershopPhotoInput" accept="image/*" style="display:none;">
+                    <input type="text" class="form-control" id="editBarbershopPhoto" maxlength="255" placeholder="Ou cole uma URL de imagem" style="margin-top:10px;">
+                    <button type="button" class="btn btn-primary" id="barbershopPhotoBtn" style="margin-top:10px;width:100%;">Adicionar Imagem</button>
+                </div>
+                <div class="form-group">
+                    <label for="editBarbershopName">Nome</label>
+                    <input type="text" class="form-control" id="editBarbershopName" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="editBarbershopWhatsapp">WhatsApp</label>
+                    <input type="text" class="form-control" id="editBarbershopWhatsapp" maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label for="editBarbershopInstagram">Instagram</label>
+                    <input type="text" class="form-control" id="editBarbershopInstagram" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="editBarbershopAddress">Endereço</label>
+                    <input type="text" class="form-control" id="editBarbershopAddress" maxlength="255">
+                </div>
+                <div class="form-group">
+                    <label for="editBarbershopCityState">Cidade/Estado</label>
+                    <input type="text" class="form-control" id="editBarbershopCityState" maxlength="100">
+                </div>
+                <div id="editBarbershopMsg" style="margin:10px 0 0 0;font-size:0.98rem;"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelEditBarbershop">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div id="addProfessionalModal" class="modal">
         <div class="modal-content" style="max-width:410px;">
             <div class="modal-header">
@@ -3939,9 +3993,9 @@ function renderHorariosSemana() {
         </div>
         `;
     });
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
-    });
+    document.querySelectorAll('.edit-btn[data-dia]').forEach(btn => {
+    btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
+});
 }
 
 // Modal: abrir para editar/adicionar turnos
@@ -4283,7 +4337,7 @@ if (editProfessionalsBtn && addProfessionalModal) {
     });
 }
 
-document.querySelectorAll('#editBarbershopInfoModal .btn.btn-secondary, #addProfessionalModal .btn.btn-secondary').forEach(btn => {
+document.querySelectorAll(' .btn.btn-secondary, #addProfessionalModal .btn.btn-secondary').forEach(btn => {
     btn.addEventListener('click', function() {
         const modal = this.closest('.modal');
         if (modal) modal.style.display = 'none';
@@ -4335,6 +4389,144 @@ async function carregarBarbeariaDashboard() {
     }
 }
 carregarBarbeariaDashboard();
+
+// Elementos do modal
+const editBarbershopModal = document.getElementById('editBarbershopModal');
+const closeEditBarbershopModal = document.getElementById('closeEditBarbershopModal');
+const cancelEditBarbershop = document.getElementById('cancelEditBarbershop');
+const editBarbershopForm = document.getElementById('editBarbershopForm');
+const editBarbershopMsg = document.getElementById('editBarbershopMsg');
+
+// Abrir modal e preencher campos
+document.getElementById('editBarbershopInfoBtn').onclick = async function() {
+    try {
+        const res = await fetch('/dashboard/barbearia');
+        const data = await res.json();
+        if (data.success) {
+            const b = data.barbearia;
+            document.getElementById('editBarbershopName').value = b.nome || '';
+            document.getElementById('editBarbershopWhatsapp').value = b.whatsapp || '';
+            document.getElementById('editBarbershopInstagram').value = b.instagram || '';
+            document.getElementById('editBarbershopAddress').value = b.endereco || '';
+            document.getElementById('editBarbershopCityState').value = b.cidade_estado || '';
+            document.getElementById('editBarbershopPhoto').value = b.foto || '';
+            document.getElementById('editBarbershopMsg').textContent = '';
+            document.getElementById('editBarbershopModal').style.display = 'flex';
+        } else {
+            alert('Informações da barbearia não cadastradas.');
+        }
+    } catch (err) {
+        alert('Erro ao carregar informações da barbearia.');
+    }
+};
+
+// Fechar modal
+closeEditBarbershopModal.onclick = () => editBarbershopModal.style.display = 'none';
+cancelEditBarbershop.onclick = () => editBarbershopModal.style.display = 'none';
+editBarbershopModal.onclick = function(e) {
+    if (e.target === editBarbershopModal) editBarbershopModal.style.display = 'none';
+};
+
+// Submissão do formulário
+editBarbershopForm.onsubmit = async function(e) {
+    e.preventDefault();
+    editBarbershopMsg.textContent = '';
+    const nome = document.getElementById('editBarbershopName').value.trim();
+    const whatsapp = document.getElementById('editBarbershopWhatsapp').value.trim();
+    const instagram = document.getElementById('editBarbershopInstagram').value.trim();
+    const endereco = document.getElementById('editBarbershopAddress').value.trim();
+    const cidade_estado = document.getElementById('editBarbershopCityState').value.trim();
+    const foto = document.getElementById('editBarbershopPhoto').value.trim();
+
+    try {
+        const res = await fetch('/dashboard/barbearia', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ nome, whatsapp, instagram, endereco, cidade_estado, foto })
+        });
+        const data = await res.json();
+        if (data.success) {
+            editBarbershopMsg.style.color = 'var(--success)';
+            editBarbershopMsg.textContent = 'Informações atualizadas com sucesso!';
+            setTimeout(() => {
+                editBarbershopModal.style.display = 'none';
+                carregarBarbeariaDashboard();
+            }, 900);
+        } else {
+            editBarbershopMsg.style.color = 'var(--primary-dark)';
+            editBarbershopMsg.textContent = data.message || 'Erro ao atualizar informações.';
+        }
+    } catch (err) {
+        editBarbershopMsg.style.color = 'var(--primary-dark)';
+        editBarbershopMsg.textContent = 'Erro ao conectar ao servidor.';
+    }
+};
+// Elementos do preview de foto
+const barbershopPhotoPreview = document.getElementById('barbershopPhotoPreview');
+const barbershopPhotoImg = document.getElementById('barbershopPhotoImg');
+const barbershopPhotoIcon = document.getElementById('barbershopPhotoIcon');
+const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
+const barbershopPhotoBtn = document.getElementById('barbershopPhotoBtn');
+const editBarbershopPhoto = document.getElementById('editBarbershopPhoto');
+
+// Função para atualizar preview da imagem
+function updateBarbershopPhotoPreview(src) {
+    if (src) {
+        barbershopPhotoImg.src = src;
+        barbershopPhotoImg.style.display = 'block';
+        barbershopPhotoIcon.style.display = 'none';
+    } else {
+        barbershopPhotoImg.src = '';
+        barbershopPhotoImg.style.display = 'none';
+        barbershopPhotoIcon.style.display = 'block';
+    }
+}
+
+// Quando abrir o modal, carrega preview da imagem
+document.getElementById('editBarbershopInfoBtn').onclick = async function() {
+    try {
+        const res = await fetch('/dashboard/barbearia');
+        const data = await res.json();
+        if (data.success) {
+            const b = data.barbearia;
+            document.getElementById('editBarbershopName').value = b.nome || '';
+            document.getElementById('editBarbershopWhatsapp').value = b.whatsapp || '';
+            document.getElementById('editBarbershopInstagram').value = b.instagram || '';
+            document.getElementById('editBarbershopAddress').value = b.endereco || '';
+            document.getElementById('editBarbershopCityState').value = b.cidade_estado || '';
+            document.getElementById('editBarbershopPhoto').value = b.foto || '';
+            updateBarbershopPhotoPreview(b.foto || '');
+            document.getElementById('editBarbershopMsg').textContent = '';
+            document.getElementById('editBarbershopModal').style.display = 'flex';
+        } else {
+            alert('Informações da barbearia não cadastradas.');
+        }
+    } catch (err) {
+        alert('Erro ao carregar informações da barbearia.');
+    }
+};
+
+// Preview ao digitar/clicar no campo de URL
+editBarbershopPhoto.addEventListener('input', function() {
+    updateBarbershopPhotoPreview(this.value.trim());
+});
+
+// Botão para abrir explorador de arquivos
+barbershopPhotoBtn.onclick = () => barbershopPhotoInput.click();
+barbershopPhotoPreview.onclick = () => barbershopPhotoInput.click();
+
+// Quando selecionar arquivo, faz preview e converte para base64 (ou pode fazer upload para o backend se desejar)
+barbershopPhotoInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            updateBarbershopPhotoPreview(event.target.result);
+            editBarbershopPhoto.value = event.target.result; // Salva base64 no campo de texto
+        };
+        reader.readAsDataURL(file);
+    }
+});
         </script>
 </body>
 
