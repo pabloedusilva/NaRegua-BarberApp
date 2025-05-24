@@ -99,3 +99,21 @@ CREATE TABLE IF NOT EXISTS clientes (
     telefone VARCHAR(30) NOT NULL UNIQUE,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Criação da tabela de wallpapers
+CREATE TABLE IF NOT EXISTS wallpapers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    url TEXT NOT NULL, -- pode ser URL pública ou base64
+    ativo TINYINT(1) DEFAULT 1
+);
+
+-- Exemplo de inserção inicial (ajuste os caminhos para URLs públicas ou base64 depois)
+INSERT INTO wallpapers (nome, url, ativo) VALUES
+('Fundo 1', '/img/background1.jpg', 1),
+('Fundo 2', '/img/background2.png', 1),
+('Fundo 3', '/img/background3.png', 1),
+('Fundo 4', '/img/background4.png', 1);
+
+-- Tabela para guardar o wallpaper selecionado pela barbearia
+ALTER TABLE barbearia ADD COLUMN wallpaper_id INT DEFAULT NULL;

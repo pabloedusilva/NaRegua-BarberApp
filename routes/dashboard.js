@@ -427,4 +427,31 @@ router.get('/total-clientes', requireLogin, async(req, res) => {
     }
 });
 
+// Listar wallpapers
+router.get('/wallpapers', async(req, res) => {
+    const [rows] = await db.query('SELECT * FROM wallpapers WHERE ativo = 1');
+    res.json({ success: true, wallpapers: rows });
+});
+
+// Salvar wallpaper selecionado
+router.post('/wallpaper-selecionado', async(req, res) => {
+    const { wallpaper_id } = req.body;
+    await db.query('UPDATE barbearia SET wallpaper_id = ? LIMIT 1', [wallpaper_id]);
+    res.json({ success: true });
+});
+
+// Obter wallpaper selecionado
+router.get('/wallpaper-selecionado', async(req, res) => {
+    const [rows] = await db.query(`
+        SELECT w.* FROM barbearia b
+        LEFT JOIN wallpapers w ON b.wallpaper_id = w.id
+        LIMIT 1
+    `);
+    if (rows.length && rows[0].url) {
+        res.json({ success: true, wallpaper: rows[0] });
+    } else {
+        res.json({ success: false });
+    }
+});
+
 module.exports = router;

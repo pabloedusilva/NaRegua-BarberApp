@@ -3036,13 +3036,18 @@
             const container = document.getElementById('barbershopInfo');
             const welcomeSection = document.querySelector('.welcome-section');
             try {
+                // Busca o wallpaper selecionado
+                const wallpaperRes = await fetch('/dashboard/wallpaper-selecionado');
+                const wallpaperData = await wallpaperRes.json();
+                let wallpaperUrl = wallpaperData.success && wallpaperData.wallpaper && wallpaperData.wallpaper.url ? wallpaperData.wallpaper.url : null;
+
                 const res = await fetch('/dashboard/barbearia');
                 const data = await res.json();
                 if (data.success) {
                     const b = data.barbearia;
                     // Defina o background na seção welcome
                     if (welcomeSection) {
-                        welcomeSection.style.backgroundImage = `url('img/background.jpg')`;
+                        welcomeSection.style.backgroundImage = wallpaperUrl ? `url('${wallpaperUrl}')` : 'none';
                     }
                     container.innerHTML = `
                 <div class="profile-pic">

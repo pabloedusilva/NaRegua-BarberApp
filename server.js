@@ -8,6 +8,9 @@ const pushRoutes = require('./routes/push'); // ADICIONE ESTA LINHA
 const app = express();
 const port = 3000;
 
+
+app.use(express.static('public'));
+
 // Sessão
 app.use(session({
     secret: 'um-segredo-bem-forte-aqui',

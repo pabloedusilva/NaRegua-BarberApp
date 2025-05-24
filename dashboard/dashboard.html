@@ -2169,19 +2169,20 @@
         }
         
         .bg-chooser-item {
-            border: 2.5px solid var(--primary-light);
-            border-radius: 10px;
-            padding: 0;
-            background: none;
-            cursor: pointer;
-            transition: border-color 0.22s, box-shadow 0.18s;
-            box-shadow: 0 1px 6px #0001;
+            position: relative;
             width: 110px;
             height: 70px;
+            border: 2.5px solid var(--gray);
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 1px 6px #0001;
+            cursor: pointer;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
+            background: #eee;
+            transition: border-color 0.22s, box-shadow 0.18s;
+            padding: 0;
         }
         
         .bg-chooser-item.selected,
@@ -2191,13 +2192,16 @@
         }
         
         .bg-chooser-item img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 8px;
-            display: block;
+            border-radius: 10px;
+            z-index: 1;
             pointer-events: none;
             user-select: none;
+            display: block;
         }
         
         @media (max-width: 600px) {
@@ -2661,20 +2665,7 @@
                 <div style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:1.08rem;">
                     Escolha o plano de fundo do agendamento:
                 </div>
-                <div class="bg-chooser-list">
-                    <button class="bg-chooser-item" data-bg="img/background1.jpg" title="Fundo 1">
-            <img src="img/background1.jpg" alt="Fundo 1">
-        </button>
-                    <button class="bg-chooser-item" data-bg="img/background2.jpg" title="Fundo 2">
-            <img src="img/background2.jpg" alt="Fundo 2">
-        </button>
-                    <button class="bg-chooser-item" data-bg="img/background3.jpg" title="Fundo 3">
-            <img src="img/background3.jpg" alt="Fundo 3">
-        </button>
-                    <button class="bg-chooser-item" data-bg="img/background4.jpg" title="Fundo 4">
-            <img src="img/background4.jpg" alt="Fundo 4">
-        </button>
-                </div>
+                <div class="bg-chooser-list" id="bgChooserList"></div>
             </div>
 
             <!-- Container de Profissionais -->
@@ -4612,6 +4603,53 @@ barbershopPhotoInput.addEventListener('change', function(e) {
         reader.readAsDataURL(file);
     }
 });
+
+async function carregarWallpapers() {
+    const list = document.getElementById('bgChooserList');
+    list.innerHTML = 'Carregando...';
+    try {
+        const res = await fetch('/dashboard/wallpapers');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.wallpapers)) {
+            list.innerHTML = '';
+            // Busca o wallpaper atualmente selecionado
+            const selectedRes = await fetch('/dashboard/wallpaper-selecionado');
+            const selectedData = await selectedRes.json();
+            const selectedId = selectedData.success && selectedData.wallpaper ? selectedData.wallpaper.id : null;
+
+            data.wallpapers.forEach(wallpaper => {
+                const card = document.createElement('div');
+                card.className = 'bg-chooser-item';
+                card.title = wallpaper.nome || 'Wallpaper';
+                card.dataset.bg = wallpaper.id;
+                card.style.cursor = 'pointer';
+                // Carrega a imagem do banco de dados no card
+                card.innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;">
+                        <img src="${wallpaper.url}" alt="${wallpaper.nome || 'Wallpaper'}" sty>
+                        <span style="margin-top:4px;font-size:0.95em;color:#222;">${wallpaper.nome || ''}</span>
+                    </div>
+                `;
+                if (wallpaper.id === selectedId) card.classList.add('selected');
+                card.onclick = async function() {
+                    document.querySelectorAll('.bg-chooser-item').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    await fetch('/dashboard/wallpaper-selecionado', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ wallpaper_id: wallpaper.id })
+                    });
+                };
+                list.appendChild(card);
+            });
+        } else {
+            list.innerHTML = 'Nenhum wallpaper cadastrado.';
+        }
+    } catch (err) {
+        list.innerHTML = 'Erro ao carregar wallpapers.';
+    }
+}
+carregarWallpapers();
         </script>
 </body>
 
