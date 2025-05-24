@@ -39,6 +39,12 @@ router.post('/novo', async(req, res) => {
                 ]
             );
         }
+        // Salva ou atualiza o cliente
+        if (telefone) {
+            await db.query(
+                'INSERT INTO clientes (nome, telefone) VALUES (?, ?) ON DUPLICATE KEY UPDATE nome = IF(VALUES(nome) != "", VALUES(nome), nome)', [nome, telefone]
+            );
+        }
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });

@@ -417,4 +417,14 @@ router.get('/servertime', (req, res) => {
     });
 });
 
+// Rota para buscar total de clientes
+router.get('/total-clientes', requireLogin, async(req, res) => {
+    try {
+        const [rows] = await db.query('SELECT COUNT(*) AS total FROM clientes');
+        res.json({ total: rows[0].total });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao buscar total de clientes.' });
+    }
+});
+
 module.exports = router;

@@ -91,3 +91,11 @@ CREATE TABLE IF NOT EXISTS barbearia (
 -- Exemplo de inserção inicial na tabela de barbearias
 INSERT INTO barbearia (id, nome, endereco, cidade_estado, whatsapp, instagram, foto)
 VALUES (1, 'Barbearia Pablo do corte', 'Av. Principal, 123 - Centro', 'São Paulo - SP', '5511999998888', 'p4blozz__', 'https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg');
+
+-- Criação da tabela de clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    telefone VARCHAR(30) NOT NULL UNIQUE,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);

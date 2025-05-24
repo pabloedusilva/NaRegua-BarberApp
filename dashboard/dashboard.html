@@ -1369,7 +1369,7 @@
         }
         
         .btn-copy-modern {
-            background: linear-gradient(135deg, #2563eb 60%, #1e40af 100%);
+            background: var(--primary);
             color: #fff;
             border: none;
             border-radius: 0 10px 10px 0;
@@ -1387,7 +1387,7 @@
         
         .btn-copy-modern:hover,
         .btn-copy-modern:focus {
-            background: linear-gradient(135deg, #1e40af 80%, #2563eb 100%);
+            background: var(--primary-dark);
             box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
             transform: scale(1.07);
         }
@@ -2333,6 +2333,10 @@
                     <div class="stat-value" id="total-appointments">0</div>
                     <div class="stat-label">Agendamentos totais</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-clients">0</div>
+                    <div class="stat-label">Clientes únicos</div>
+                </div>
             </div>
         </section>
 
@@ -3130,6 +3134,17 @@ function atualizarTotalAgendamentosSemana() {
 }
 atualizarTotalAgendamentosSemana();
 
+// Atualiza o contador de clientes totais
+function atualizarTotalClientes() {
+    fetch('/dashboard/total-clientes')
+        .then(res => res.json())
+        .then(data => {
+            const clientEl = document.getElementById('total-clients');
+            if (clientEl) clientEl.textContent = data.total || 0;
+        });
+}
+atualizarTotalClientes();
+
 // Carregar agendamentos do dia
 function carregarAgendamentosHoje() {
     fetch('/dashboard/agendamentos-hoje')
@@ -3554,11 +3569,11 @@ filterBtns.forEach(btn => {
             return;
         }
         try {
-const res = await fetch(`/dashboard/servicos/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, tempo, preco, imagem })
-});
+            const res = await fetch(`/dashboard/servicos/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, tempo, preco, imagem })
+            });
             const data = await res.json();
             if (res.ok && data.success) {
                 editServiceMsg.style.color = 'var(--success)';
@@ -3935,9 +3950,53 @@ function abrirModalHorario(diaKey) {
     modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
     turnosContainer.innerHTML = '';
     const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
-    if (turnos.length === 0) addTurnoRow(); // Se não houver, adiciona um turno vazio
-    else turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+    const diaFechado = turnos.length === 0 || (turnos.length === 1 && turnos[0].fechado);
+
+    // Limpa botões antigos
+    fecharDiaBtn.remove();
+    abrirDiaBtn.remove();
+
+    if (diaFechado) {
+        // Dia fechado: mostra botão "Abrir dia"
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    } else {
+        // Dia aberto: mostra horários e botão "Fechar dia"
+        turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+        if (turnos.length === 0) addTurnoRow();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    }
     horarioModal.style.display = 'flex';
+
+    // Evento para fechar o dia
+    fecharDiaBtn.onclick = () => {
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
+        turnosSemana.push({ dia_semana: diaKey, fechado: true });
+        fecharDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    };
+
+    // Evento para abrir o dia
+    abrirDiaBtn.onclick = () => {
+        turnosSemana = turnosSemana.filter(t => !(t.dia_semana === diaKey && t.fechado));
+        turnosContainer.innerHTML = '';
+        addTurnoRow();
+        abrirDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    };
 }
 
 // Adiciona um campo de turno ao modal
