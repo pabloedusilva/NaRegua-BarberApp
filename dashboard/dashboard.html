@@ -2149,6 +2149,70 @@
             flex-wrap: wrap;
             border: 1.5px solid var(--primary-dark);
         }
+        /* Background da barbearia */
+        
+        .barbershop-bg-chooser {
+            background: var(--gray-light);
+            border-radius: 12px;
+            padding: 22px 24px 18px 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            border: 1.5px solid var(--primary-light);
+            margin-top: 18px;
+            max-width: 600px;
+        }
+        
+        .bg-chooser-list {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        
+        .bg-chooser-item {
+            border: 2.5px solid var(--primary-light);
+            border-radius: 10px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            transition: border-color 0.22s, box-shadow 0.18s;
+            box-shadow: 0 1px 6px #0001;
+            width: 110px;
+            height: 70px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bg-chooser-item.selected,
+        .bg-chooser-item:focus {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(218, 192, 45, 0.13);
+        }
+        
+        .bg-chooser-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        @media (max-width: 600px) {
+            .barbershop-bg-chooser {
+                padding: 12px 6px 10px 6px;
+                max-width: 100%;
+            }
+            .bg-chooser-list {
+                gap: 10px;
+            }
+            .bg-chooser-item {
+                width: 80px;
+                height: 52px;
+            }
+        }
         /* Foto da barbearia */
         
         .barbershop-photo {
@@ -2591,6 +2655,27 @@
 
             <!-- Informações da Barbearia -->
             <div class="barbershop-info" id="barbershopInfoDashboard"></div>
+
+            <!-- NOVO: Escolha de Background -->
+            <div class="barbershop-bg-chooser" style="margin: 28px 0 0 0;">
+                <div style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:1.08rem;">
+                    Escolha o plano de fundo do agendamento:
+                </div>
+                <div class="bg-chooser-list">
+                    <button class="bg-chooser-item" data-bg="img/background1.jpg" title="Fundo 1">
+            <img src="img/background1.jpg" alt="Fundo 1">
+        </button>
+                    <button class="bg-chooser-item" data-bg="img/background2.jpg" title="Fundo 2">
+            <img src="img/background2.jpg" alt="Fundo 2">
+        </button>
+                    <button class="bg-chooser-item" data-bg="img/background3.jpg" title="Fundo 3">
+            <img src="img/background3.jpg" alt="Fundo 3">
+        </button>
+                    <button class="bg-chooser-item" data-bg="img/background4.jpg" title="Fundo 4">
+            <img src="img/background4.jpg" alt="Fundo 4">
+        </button>
+                </div>
+            </div>
 
             <!-- Container de Profissionais -->
             <div class="professionals-section" style="margin-top:32px;">

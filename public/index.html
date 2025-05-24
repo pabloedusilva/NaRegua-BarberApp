@@ -15,7 +15,7 @@
             /* Dourado escuro */
             --primary-light: #b99729;
             /* Dourado claro */
-            --accent: #ca9a41;
+            --accent: #88621c;
             /* Dourado de destaque */
             --white: #ffffff;
             --red: rgb(255, 0, 0);
@@ -30,7 +30,7 @@
             --text: var(--gray-dark);
             --card: var(--white);
             --header: var(--white);
-            --footer: var(--accent);
+            --footer: var(--white);
             --footer-text: var(--white);
             --border: var(--gray);
             --hover: var(--gray);
@@ -173,16 +173,34 @@
         /* Main Content */
         
         .welcome-section {
-            background-color: var(--card);
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 10px;
             margin: 20px 0;
             padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             transition: background-color 0.3s;
+            overflow: hidden;
+        }
+        
+        .welcome-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            border-radius: 10px;
+        }
+        
+        .welcome-section>* {
+            position: relative;
+            z-index: 2;
         }
         
         .profile-pic {
@@ -201,7 +219,7 @@
         
         .welcome-text {
             font-size: 18px;
-            color: var(--text);
+            color: var(--white);
             margin-bottom: 10px;
         }
         
@@ -209,7 +227,7 @@
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 20px;
-            color: var(--text);
+            color: var(--white);
         }
         /* Novos estilos para os ícones sociais e endereço */
         
@@ -1075,7 +1093,7 @@
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: var(--white);
+            color: var(--text);
             position: relative;
             padding-bottom: 10px;
         }
@@ -1098,7 +1116,7 @@
         }
         
         .footer-links li {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1127,7 +1145,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            color: var(--white);
+            color: var(--text);
         }
         
         .social-links a:hover {
@@ -1814,7 +1832,6 @@
                         <div class="logo-icon">
                             <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                         </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
                     </div>
                     <div class="social-links">
                         <a href="#" aria-label="Instagram"><i
@@ -3017,11 +3034,16 @@
         // Informações da Barbearia
         async function carregarBarbearia() {
             const container = document.getElementById('barbershopInfo');
+            const welcomeSection = document.querySelector('.welcome-section');
             try {
                 const res = await fetch('/dashboard/barbearia');
                 const data = await res.json();
                 if (data.success) {
                     const b = data.barbearia;
+                    // Defina o background na seção welcome
+                    if (welcomeSection) {
+                        welcomeSection.style.backgroundImage = `url('img/background.jpg')`;
+                    }
                     container.innerHTML = `
                 <div class="profile-pic">
                     <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
