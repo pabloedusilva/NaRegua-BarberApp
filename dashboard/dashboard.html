@@ -2802,8 +2802,8 @@
                 <input type="hidden" id="modalDiaSemana">
                 <div id="turnosContainer"></div>
                 <button type="button" id="addTurnoBtn" class="btn btn-secondary" style="width:100%;margin:14px 0 10px 0;">
-                    <i class="fas fa-plus"></i> Adicionar turno
-                </button>
+    <i class="fas fa-plus"></i> Adicionar turno
+</button>
                 <button type="submit" class="btn btn-primary" style="width:100%;">Salvar</button>
             </form>
         </div>
@@ -4044,6 +4044,7 @@ const modalDiaSemana = document.getElementById('modalDiaSemana');
 const modalHorarioTitle = document.getElementById('modalHorarioTitle');
 const turnosContainer = document.getElementById('turnosContainer');
 const addTurnoBtn = document.getElementById('addTurnoBtn');
+addTurnoBtn.onclick = () => addTurnoRow();
 
 // Render cards dos dias (exemplo)
 function renderHorariosSemana() {
