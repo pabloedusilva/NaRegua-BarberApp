@@ -1,6 +1,6 @@
 # NaRégua BarberApp
 
-Sistema completo de agendamento online para barbearias, com dashboard administrativa, notificações push, controle de serviços, profissionais, horários, folgas, autenticação, e integração com WhatsApp e Instagram.
+Sistema completo de agendamento online para barbearias, com dashboard administrativa, notificações push, controle de serviços, profissionais, horários, folgas, autenticação, integração com WhatsApp e Instagram, **personalização visual com wallpapers dinâmicos**, preview de imagens, e interface moderna e responsiva.
 
 ---
 
@@ -17,6 +17,7 @@ Sistema completo de agendamento online para barbearias, com dashboard administra
 - [Notificações Push](#notificações-push)
 - [Service Worker](#service-worker)
 - [Autenticação e Middleware](#autenticação-e-middleware)
+- [Wallpapers e Personalização Visual](#wallpapers-e-personalização-visual)
 - [Ícones e Recursos Visuais](#ícones-e-recursos-visuais)
 - [Personalização e Temas](#personalização-e-temas)
 - [Dúvidas Frequentes](#dúvidas-frequentes)
@@ -24,7 +25,7 @@ Sistema completo de agendamento online para barbearias, com dashboard administra
 ---
 
 ## Descrição Geral
-O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clientes agendem horários online e que administradores gerenciem serviços, profissionais, horários, folgas, notificações e informações da barbearia. Possui dashboard protegida por login, notificações automáticas e manuais, integração com WhatsApp e Instagram, e interface responsiva.
+O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clientes agendem horários online e que administradores gerenciem serviços, profissionais, horários, folgas, notificações e informações da barbearia. Possui dashboard protegida por login, notificações automáticas e manuais, integração com WhatsApp e Instagram, interface responsiva, **personalização de plano de fundo** e preview de imagens.
 
 ## Funcionalidades
 - Agendamento online de serviços
@@ -38,6 +39,11 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - Service Worker para notificações
 - Estatísticas de agendamentos (dia, semana, mês)
 - Compartilhamento de link de agendamento
+- **Personalização visual com wallpapers dinâmicos**
+- **Preview de imagens em modais e cards**
+- **Seleção dinâmica de plano de fundo do agendamento**
+- **CRUD completo de wallpapers**
+- Interface responsiva e moderna
 
 ## Arquitetura e Estrutura de Pastas
 ```
@@ -51,7 +57,8 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 │   └── auth.js               # Middleware de autenticação
 ├── public/                   # Frontend público (cliente)
 │   ├── index.html            # Página de agendamento
-│   └── sw.js                 # Service Worker para push
+│   ├── sw.js                 # Service Worker para push
+│   └── img/                  # Imagens de wallpapers, serviços, etc.
 ├── routes/                   # Rotas backend (Express)
 │   ├── agendamento.js        # Rotas de agendamento
 │   ├── dashboard.js          # Rotas da dashboard/admin
@@ -106,6 +113,13 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
   - `barbearia`
   - `notificacoes`
   - `subscriptions` (push)
+  - `wallpapers` (**planos de fundo dinâmicos**)
+
+### Wallpapers (Planos de Fundo)
+- Tabela `wallpapers` armazena nome, url/base64 e status de cada plano de fundo.
+- O campo `url` pode ser um caminho local (`/img/background1.jpg`) ou uma URL externa/base64.
+- O campo `ativo` permite ativar/desativar wallpapers.
+- A tabela `barbearia` possui o campo `wallpaper_id` para o plano de fundo selecionado.
 
 ## Detalhes Técnicos
 - **Backend:** Node.js, Express, MySQL
@@ -114,17 +128,15 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - **Notificações:** web-push, node-cron
 - **Service Worker:** `public/sw.js` para push notifications
 - **Middleware:** `middleware/auth.js` protege rotas admin
-- **Rotas RESTful** para CRUD de agendamentos, serviços, profissionais, horários, folgas, notificações
+- **Rotas RESTful** para CRUD de agendamentos, serviços, profissionais, horários, folgas, notificações, wallpapers
 - **Push automático:** Notifica clientes 1h antes do agendamento (cron)
 - **Push manual:** Admin pode enviar notificações pela dashboard
 - **Autenticação:** Usuários admin, login e alteração de senha
 - **Dashboard:** Estatísticas, filtros, CRUD, modais, responsivo
 - **Agendamento:** Cliente escolhe serviço, profissional, data/hora, recebe confirmação e push
-- **Folgas:** Cadastro de folgas especiais e recorrentes
-- **Horários:** Cadastro de turnos por dia da semana
-- **Serviços:** CRUD completo, ativação/desativação
-- **Profissionais:** Cadastro e edição
-- **Barbearia:** Edição de dados, foto, WhatsApp, Instagram
+- **Wallpapers:** CRUD, seleção dinâmica, preview, integração total com dashboard e frontend
+- **Preview de imagens:** Em modais de edição, cards de serviços e wallpapers
+- **Personalização visual:** Escolha de plano de fundo, tema claro/escuro, responsividade
 - **Compartilhamento:** Link direto para agendamento
 - **Temas:** Claro/Escuro, persistente via localStorage
 
@@ -140,6 +152,8 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - `/dashboard/enviar-push` — Envio manual de push
 - `/dashboard/enviar-push-agendamento` — Push para cliente específico
 - `/dashboard/alterar-senha` — Alteração de senha admin
+- `/dashboard/wallpapers` — Listar wallpapers disponíveis
+- `/dashboard/wallpaper-selecionado` — Get/Set wallpaper selecionado
 - `/agendamento/novo` — Novo agendamento (cliente)
 - `/agendamento/meus` — Listar agendamentos do cliente
 - `/agendamento/excluir/:id` — Excluir agendamento
@@ -162,16 +176,26 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - Login e alteração de senha admin
 - Redirecionamento automático para login se não autenticado
 
+## Wallpapers e Personalização Visual
+- **Escolha dinâmica de plano de fundo do agendamento** pela dashboard
+- **Cards de wallpapers** com preview de imagem e nome, carregados do banco de dados
+- **CRUD de wallpapers**: adicionar, editar, ativar/desativar e remover planos de fundo
+- **Preview de imagem** ao editar/adicionar wallpapers e serviços
+- **Plano de fundo do agendamento** é refletido automaticamente na tela pública após seleção
+- Suporte a imagens locais, externas e base64
+- Responsivo e com destaque visual para o wallpaper selecionado
+
 ## Ícones e Recursos Visuais
 - Ícones SVG: `icons/instagram.svg`, `icons/whatsapp.svg`
 - FontAwesome para ícones gerais
-- Imagens de serviços e barbearia
+- Imagens de serviços, barbearia e wallpapers
 - Interface responsiva e moderna
 
 ## Personalização e Temas
 - Suporte a tema claro/escuro
 - Persistência do tema via localStorage
 - Customização de cores via CSS
+- **Plano de fundo do agendamento** personalizável por admin
 
 ## Dúvidas Frequentes
 - **Como alterar as chaves VAPID?**
@@ -180,8 +204,12 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
   Insira manualmente na tabela `usuarios`.
 - **Como trocar o WhatsApp/Instagram?**
   Edite pela dashboard em "Barbearia".
+- **Como adicionar ou trocar wallpapers?**
+  Use a dashboard para adicionar, editar ou selecionar wallpapers. Imagens podem ser locais, externas ou base64.
 - **Como rodar em produção?**
   Configure variáveis de ambiente, use HTTPS e gere novas chaves VAPID.
+- **Limite de upload de imagens?**
+  O Express está configurado para aceitar imagens até 5MB por padrão. Ajuste em `server.js` se necessário.
 
 ---
 
