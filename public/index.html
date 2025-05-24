@@ -313,14 +313,21 @@
             display: none;
             margin-top: 10px;
             padding: 15px;
-            background-color: var(--gray-light);
+            background: rgba(255, 255, 255, 0.18);
+            /* Transparente */
             border-radius: 10px;
+            backdrop-filter: blur(8px);
+            /* Desfoque */
+            -webkit-backdrop-filter: blur(8px);
+            /* Suporte Safari */
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
             animation: fadeIn 0.3s ease;
         }
         
         .address-content p {
             margin: 5px 0;
-            color: var(--text);
+            color: var(--white);
         }
         
         .map-link {
@@ -336,11 +343,6 @@
         
         .map-link:hover {
             color: var(--accent);
-        }
-        /* Dark mode adjustments */
-        
-        .dark-mode .address-content {
-            background-color: var(--professional-card);
         }
         /* Services Section */
         

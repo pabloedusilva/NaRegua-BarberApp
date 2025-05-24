@@ -3,7 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
-const pushRoutes = require('./routes/push'); // ADICIONE ESTA LINHA
+const pushRoutes = require('./routes/push');
 
 const app = express();
 const port = 3000;
@@ -19,8 +19,8 @@ app.use(session({
     cookie: { httpOnly: true, secure: false }
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Rota para index sem extensão
 app.get(['/', '/index'], (req, res) => {
