@@ -1,0 +1,609 @@
+/* =========================
+   Variáveis Globais (Cores)
+   ========================= */
+
+:root {
+    --primary: #dac02d;
+    /* Dourado principal */
+    --primary-dark: #816a02;
+    /* Dourado escuro */
+    --primary-light: #b99729;
+    /* Dourado claro */
+    --accent: #ca9a41;
+    /* Dourado de destaque */
+    --white: #ffffff;
+    /* Branco */
+    --gray-light: #f5f5f5;
+    /* Cinza claro */
+    --gray: #e0e0e0;
+    /* Cinza */
+    --gray-dark: #333333;
+    /* Cinza escuro */
+    --success: #28a745;
+    /* Verde sucesso */
+    --warning: #fd7e14;
+    /* Laranja alerta */
+    --purple: #6f42c1;
+    /* Roxo */
+    --background: var(--white);
+    /* Fundo padrão */
+    --text: var(--gray-dark);
+    /* Cor do texto */
+    --card: var(--white);
+    /* Fundo dos cards */
+    --header: var(--white);
+    /* Fundo do header */
+    --footer: var(--accent);
+    /* Fundo do footer */
+    --footer-text: var(--white);
+    /* Texto do footer */
+    --border: var(--gray);
+    /* Bordas */
+    --hover: var(--gray);
+    /* Cor ao passar mouse */
+    --selected: var(--primary);
+    /* Selecionado */
+    --disabled: var(--gray);
+    /* Desabilitado */
+    --slot-bg: var(--gray-light);
+    /* Fundo dos horários */
+    --professional-card: var(--gray-light);
+    /* Card do profissional */
+}
+
+
+/* =========================
+   Tema Escuro
+   ========================= */
+
+.dark-mode {
+    --background: #121212;
+    /* Fundo escuro */
+    --text: #e0e0e0;
+    /* Texto claro */
+    --card: #1e1e1e;
+    /* Card escuro */
+    --header: #1e1e1e;
+    /* Header escuro */
+    --footer: #0a0a0a;
+    /* Footer escuro */
+    --footer-text: #e0e0e0;
+    /* Texto do footer */
+    --border: #333;
+    /* Bordas escuras */
+    --hover: #333;
+    /* Hover escuro */
+    --selected: var(--primary);
+    /* Selecionado */
+    --disabled: #444;
+    /* Desabilitado */
+    --slot-bg: #2a2a2a;
+    /* Fundo dos horários */
+    --professional-card: #2a2a2a;
+    /* Card do profissional */
+    --gray-light: #2a2a2a;
+    /* Cinza claro escuro */
+    --gray: #444;
+    /* Cinza escuro */
+}
+
+
+/* =========================
+   Reset e Base
+   ========================= */
+
+* {
+    margin: 0;
+    /* Remove margens padrão */
+    padding: 0;
+    /* Remove padding padrão */
+    box-sizing: border-box;
+    /* Box model mais fácil */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Fonte padrão */
+}
+
+body {
+    background-color: var(--background);
+    /* Fundo do site */
+    color: var(--text);
+    /* Cor do texto */
+    line-height: 1.6;
+    /* Espaçamento entre linhas */
+    transition: background-color 0.3s, color 0.3s;
+    /* Transição suave */
+    min-height: 100vh;
+    /* Garante altura mínima */
+    display: flex;
+    /* Layout flexível */
+    flex-direction: column;
+    /* Coluna */
+}
+
+.container {
+    max-width: 1200px;
+    /* Largura máxima */
+    margin: 0 auto;
+    /* Centraliza */
+    padding: 0 15px;
+    /* Espaçamento lateral */
+    flex: 1;
+    /* Ocupa espaço disponível */
+}
+
+
+/* =========================
+   Botão de alternância de tema
+   ========================= */
+
+.theme-toggle {
+    background: none;
+    /* Sem fundo */
+    border: none;
+    /* Sem borda */
+    font-size: 20px;
+    /* Tamanho do ícone */
+    cursor: pointer;
+    /* Muda cursor */
+    color: var(--text);
+    /* Cor do ícone */
+    transition: transform 0.3s;
+    /* Animação ao girar */
+    width: 40px;
+    /* Tamanho do botão */
+    height: 40px;
+    display: flex;
+    /* Centraliza ícone */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Botão redondo */
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover);
+    /* Fundo ao passar mouse */
+    transform: rotate(30deg);
+    /* Gira ícone */
+}
+
+
+/* =========================
+   Main Content - Formulários de Autenticação
+   ========================= */
+
+.auth-container {
+    display: flex;
+    /* Centraliza conteúdo */
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    /* Altura mínima */
+    padding: 40px 0;
+}
+
+.auth-card {
+    background-color: var(--card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    /* Sombra leve */
+    width: 100%;
+    max-width: 450px;
+    /* Largura máxima */
+    overflow: hidden;
+    transition: all 0.3s ease;
+    /* Transição suave */
+}
+
+.auth-header {
+    background-color: var(--primary);
+    /* Fundo dourado */
+    color: var(--white);
+    /* Texto branco */
+    padding: 25px;
+    /* Espaço interno */
+    text-align: center;
+    /* Centraliza texto */
+    position: relative;
+}
+
+.auth-header h2 {
+    font-size: 24px;
+    /* Título grande */
+    margin-bottom: 5px;
+}
+
+.auth-header p {
+    font-size: 14px;
+    /* Texto menor */
+    opacity: 0.9;
+}
+
+.auth-body {
+    padding: 30px;
+    /* Espaço interno */
+}
+
+.form-group {
+    margin-bottom: 20px;
+    /* Espaço entre campos */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    color: var(--text);
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(218, 192, 45, 0.2);
+}
+
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary);
+}
+
+.input-icon input {
+    padding-left: 45px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    width: 100%;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid var(--border);
+}
+
+.divider::before {
+    margin-right: 10px;
+}
+
+.divider::after {
+    margin-left: 10px;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.auth-switch a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   Tabs de Login/Cadastro
+   ========================= */
+
+.auth-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.3s;
+    position: relative;
+}
+
+.auth-tab.active {
+    color: var(--primary);
+}
+
+.auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+.auth-content {
+    display: none;
+}
+
+.auth-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   Checkbox
+   ========================= */
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    color: var(--text);
+}
+
+
+/* =========================
+   Footer (Rodapé)
+   ========================= */
+
+footer {
+    background-color: var(--footer);
+    /* Fundo do footer */
+    color: var(--footer-text);
+    /* Cor do texto */
+    padding: 30px 0;
+    margin-top: auto;
+    transition: background-color 0.3s;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo-text-footer {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--footer-text);
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.logo-text-footer span {
+    color: var(--primary);
+}
+
+.logo-text-footer .highlight {
+    color: var(--primary-dark);
+}
+
+.copyright {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+
+/* =========================
+   Responsividade
+   ========================= */
+
+@media (max-width: 768px) {
+    .auth-card {
+        max-width: 100%;
+    }
+    .auth-header {
+        padding: 20px;
+    }
+    .auth-body {
+        padding: 20px;
+    }
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-header h2 {
+        font-size: 20px;
+    }
+    .auth-tab {
+        padding: 12px;
+        font-size: 14px;
+    }
+    .logo-text-footer {
+        font-size: 20px;
+    }
+}
+
+
+/* =========================
+   Modal de Recuperação de Senha
+   ========================= */
+
+.modal {
+    display: none;
+    /* Esconde por padrão */
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    /* Fundo escuro */
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.modal.active {
+    display: flex;
+    /* Mostra modal */
+}
+
+.modal-content {
+    background: var(--card);
+    /* Fundo do modal */
+    color: var(--text);
+    /* Cor do texto */
+    border-radius: 12px;
+    /* Borda arredondada */
+    box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
+    /* Sombra */
+    padding: 32px 24px 24px 24px;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.4s;
+}
+
+.close-modal {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 22px;
+    color: var(--text);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: var(--primary-dark);
+}
+
+.modal-content h3 {
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: var(--primary);
+}
+
+.modal-content p {
+    margin-bottom: 22px;
+    font-size: 15px;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.btn.btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+}
+
+.btn.btn-whatsapp:hover {
+    background: #1ebe57;
+}
+
+.btn.btn-email {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn.btn-email:hover {
+    background: var(--accent);
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px 8px 16px 8px;
+        max-width: 95vw;
+    }
+}

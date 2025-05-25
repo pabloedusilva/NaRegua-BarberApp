@@ -1,0 +1,2029 @@
+/* =========================
+   Variáveis Globais (Cores)
+   ========================= */
+
+:root {
+    --primary: #dac02d;
+    /* Dourado principal */
+    --primary-dark: #816a02;
+    /* Dourado escuro */
+    --primary-light: #b99729;
+    /* Dourado claro */
+    --accent: #88621c;
+    /* Dourado de destaque */
+    --white: #ffffff;
+    /* Branco */
+    --red: rgb(255, 0, 0);
+    /* Vermelho */
+    --gray-light: #f5f5f5;
+    /* Cinza claro */
+    --gray: #e0e0e0;
+    /* Cinza */
+    --gray-dark: #333333;
+    /* Cinza escuro */
+    --success: #28a745;
+    /* Verde sucesso */
+    --warning: #fd7e14;
+    /* Laranja alerta */
+    --purple: #6f42c1;
+    /* Roxo */
+    /* Tema claro */
+    --background: var(--white);
+    /* Fundo padrão */
+    --text: var(--gray-dark);
+    /* Cor do texto */
+    --card: var(--white);
+    /* Fundo dos cards */
+    --header: var(--white);
+    /* Fundo do header */
+    --footer: var(--white);
+    /* Fundo do footer */
+    --footer-text: var(--white);
+    /* Texto do footer */
+    --border: var(--gray);
+    /* Bordas */
+    --hover: var(--gray);
+    /* Cor ao passar mouse */
+    --selected: var(--primary);
+    /* Selecionado */
+    --disabled: var(--gray);
+    /* Desabilitado */
+    --slot-bg: var(--gray-light);
+    /* Fundo dos horários */
+    --professional-card: var(--gray-light);
+    /* Card do profissional */
+}
+
+
+/* =========================
+   Tema Escuro
+   ========================= */
+
+.dark-mode {
+    --background: #121212;
+    /* Fundo escuro */
+    --text: #e0e0e0;
+    /* Texto claro */
+    --card: #1e1e1e;
+    /* Card escuro */
+    --header: #1e1e1e;
+    /* Header escuro */
+    --footer: #0a0a0a;
+    /* Footer escuro */
+    --footer-text: #e0e0e0;
+    /* Texto do footer */
+    --border: #333;
+    /* Bordas escuras */
+    --hover: #333;
+    /* Hover escuro */
+    --selected: var(--primary);
+    /* Selecionado */
+    --disabled: #444;
+    /* Desabilitado */
+    --slot-bg: #2a2a2a;
+    /* Fundo dos horários */
+    --professional-card: #2a2a2a;
+    /* Card do profissional */
+    --gray-light: #2a2a2a;
+    /* Cinza claro escuro */
+    --gray: #444;
+    /* Cinza escuro */
+}
+
+
+/* =========================
+   Reset e Base
+   ========================= */
+
+* {
+    margin: 0;
+    /* Remove margens padrão */
+    padding: 0;
+    /* Remove padding padrão */
+    box-sizing: border-box;
+    /* Box model mais fácil */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Fonte padrão */
+}
+
+body {
+    background-color: var(--background);
+    /* Fundo do site */
+    color: var(--text);
+    /* Cor do texto */
+    line-height: 1.6;
+    /* Espaçamento entre linhas */
+    transition: background-color 0.3s, color 0.3s;
+    /* Transição suave */
+}
+
+.container {
+    max-width: 1200px;
+    /* Largura máxima */
+    margin: 0 auto;
+    /* Centraliza */
+    padding: 0 15px;
+    /* Espaçamento lateral */
+}
+
+
+/* =========================
+   Header (Cabeçalho)
+   ========================= */
+
+header {
+    background-color: var(--header);
+    /* Fundo do header */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra leve */
+    position: sticky;
+    /* Fixa no topo */
+    top: 0;
+    /* Topo da página */
+    z-index: 100;
+    /* Sobrepõe outros elementos */
+    transition: background-color 0.3s;
+    /* Transição suave */
+}
+
+.navbar {
+    display: flex;
+    /* Layout flexível */
+    justify-content: space-between;
+    /* Espaço entre itens */
+    align-items: center;
+    /* Alinha verticalmente */
+    padding: 15px 0;
+    /* Espaçamento interno */
+}
+
+.logo {
+    display: flex;
+    /* Layout flexível */
+    align-items: center;
+    /* Alinha verticalmente */
+    gap: 10px;
+    /* Espaço entre logo e texto */
+}
+
+.logo-icon {
+    width: 40px;
+    /* Tamanho do ícone */
+    height: 40px;
+}
+
+.logo-text {
+    font-size: 24px;
+    /* Tamanho do texto */
+    font-weight: 600;
+    /* Negrito */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.logo-text span {
+    color: var(--primary);
+    /* Destaque dourado */
+}
+
+.logo-text .highlight {
+    color: var(--primary-dark);
+    /* Destaque escuro */
+}
+
+.nav-links {
+    display: flex;
+    /* Layout flexível */
+    gap: 20px;
+    /* Espaço entre links */
+    align-items: center;
+    /* Alinha verticalmente */
+}
+
+.nav-links a {
+    text-decoration: none;
+    /* Remove sublinhado */
+    color: var(--text);
+    /* Cor do link */
+    font-weight: 500;
+    /* Peso da fonte */
+    transition: color 0.3s;
+    /* Transição suave */
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+    /* Cor ao passar mouse */
+}
+
+.my-appointments {
+    background-color: var(--gray-light);
+    /* Fundo do botão */
+    padding: 8px 15px;
+    /* Espaçamento interno */
+    border-radius: 20px;
+    /* Borda arredondada */
+    font-weight: 600;
+    /* Negrito */
+    transition: background-color 0.3s;
+    /* Transição suave */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.my-appointments:hover {
+    background-color: var(--hover);
+    /* Hover do botão */
+}
+
+
+/* Botão de alternância de tema */
+
+.theme-toggle {
+    background: none;
+    /* Sem fundo */
+    border: none;
+    /* Sem borda */
+    font-size: 20px;
+    /* Tamanho do ícone */
+    cursor: pointer;
+    /* Muda cursor */
+    color: var(--text);
+    /* Cor do ícone */
+    transition: transform 0.3s;
+    /* Animação ao girar */
+    width: 40px;
+    /* Tamanho do botão */
+    height: 40px;
+    display: flex;
+    /* Centraliza ícone */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Botão redondo */
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover);
+    /* Fundo ao passar mouse */
+    transform: rotate(30deg);
+    /* Gira ícone */
+}
+
+
+/* =========================
+   Seção de Boas-vindas
+   ========================= */
+
+.welcome-section {
+    position: relative;
+    /* Para overlay */
+    background-size: cover;
+    /* Cobre todo espaço */
+    background-position: center;
+    /* Centraliza imagem */
+    background-repeat: no-repeat;
+    /* Não repete imagem */
+    border-radius: 10px;
+    /* Borda arredondada */
+    margin: 20px 0;
+    /* Espaço externo */
+    padding: 30px;
+    /* Espaço interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    /* Sombra escura */
+    display: flex;
+    /* Layout flexível */
+    flex-direction: column;
+    /* Coluna */
+    align-items: center;
+    /* Centraliza */
+    text-align: center;
+    /* Centraliza texto */
+    transition: background-color 0.3s;
+    /* Transição suave */
+    overflow: hidden;
+    /* Esconde overflow */
+}
+
+.welcome-section::before {
+    content: "";
+    /* Overlay escuro */
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Fundo escuro */
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.welcome-section>* {
+    position: relative;
+    /* Fica acima do overlay */
+    z-index: 2;
+}
+
+.profile-pic {
+    width: 80px;
+    /* Tamanho da foto */
+    height: 80px;
+    background-color: var(--gray);
+    /* Fundo da foto */
+    border-radius: 50%;
+    /* Redonda */
+    margin-bottom: 15px;
+    /* Espaço abaixo */
+    overflow: hidden;
+    /* Esconde excesso */
+    display: flex;
+    /* Centraliza */
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.welcome-text {
+    font-size: 18px;
+    /* Tamanho do texto */
+    color: var(--white);
+    /* Texto branco */
+    margin-bottom: 10px;
+    /* Espaço abaixo */
+}
+
+.barbershop-name {
+    font-size: 28px;
+    /* Nome grande */
+    font-weight: 700;
+    /* Bem negrito */
+    margin-bottom: 20px;
+    /* Espaço abaixo */
+    color: var(--white);
+    /* Branco */
+}
+
+
+/* Ícones sociais e endereço */
+
+.social-icons-welcome {
+    display: flex;
+    /* Layout flexível */
+    justify-content: center;
+    /* Centraliza */
+    gap: 20px;
+    /* Espaço entre ícones */
+    margin: 15px 0;
+}
+
+.social-icon-welcome {
+    width: 44px;
+    /* Tamanho do ícone */
+    height: 44px;
+    border-radius: 50%;
+    /* Redondo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    /* Tamanho do ícone */
+    box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+    /* Sombra leve */
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    /* Branco */
+    transition: transform 0.18s, box-shadow 0.25s;
+    /* Animação */
+}
+
+.social-icon-welcome[aria-label="Instagram"] {
+    background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    /* Gradiente Instagram */
+    border-color: 1px #d6249f;
+}
+
+.social-icon-welcome[aria-label="WhatsApp"] {
+    background: linear-gradient(135deg, #25d366 60%, #128c7e 100%);
+    /* Gradiente WhatsApp */
+    border-color: 1.5px #25d366;
+}
+
+.social-icon-welcome i {
+    color: #fff;
+    /* Ícone branco */
+    transition: transform 0.18s;
+}
+
+.social-icon-welcome:hover,
+.social-icon-welcome:focus {
+    transform: translateY(-3px) scale(1.08) rotate(-8deg);
+    /* Animação ao passar mouse */
+    box-shadow: 0 6px 18px rgba(34, 51, 108, 0.18);
+}
+
+.social-icon-welcome:active {
+    transform: scale(0.96);
+    /* Clique */
+}
+
+@media (max-width: 768px) {
+    .social-icon-welcome {
+        width: 38px;
+        /* Menor em telas pequenas */
+        height: 38px;
+        font-size: 18px;
+    }
+}
+
+.address-container {
+    text-align: center;
+    /* Centraliza texto */
+    margin-top: 15px;
+}
+
+.address-toggle {
+    background: none;
+    /* Sem fundo */
+    border: none;
+    /* Sem borda */
+    color: var(--primary);
+    /* Dourado */
+    font-size: 16px;
+    /* Tamanho do texto */
+    cursor: pointer;
+    /* Mãozinha */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.address-toggle:hover {
+    background-color: rgba(26, 75, 140, 0.1);
+    /* Fundo ao passar mouse */
+}
+
+.address-content {
+    display: none;
+    /* Esconde por padrão */
+    margin-top: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.18);
+    /* Fundo transparente */
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    /* Desfoque */
+    -webkit-backdrop-filter: blur(8px);
+    /* Safari */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    /* Sombra leve */
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    /* Borda clara */
+    animation: fadeIn 0.3s ease;
+    /* Animação */
+}
+
+.address-content p {
+    margin: 5px 0;
+    color: var(--white);
+    /* Texto branco */
+}
+
+.map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    color: var(--primary);
+    /* Dourado */
+    text-decoration: none;
+    /* Sem sublinhado */
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.map-link:hover {
+    color: var(--accent);
+    /* Dourado escuro */
+}
+
+
+/* =========================
+   Seção de Serviços
+   ========================= */
+
+.services-section {
+    background-color: var(--card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    margin: 20px 0;
+    /* Espaço externo */
+    padding: 30px;
+    /* Espaço interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Sombra leve */
+    transition: background-color 0.3s;
+    /* Transição suave */
+}
+
+.section-title {
+    font-size: 24px;
+    /* Título grande */
+    font-weight: 600;
+    /* Negrito */
+    margin-bottom: 20px;
+    /* Espaço abaixo */
+    color: var(--primary);
+    /* Dourado */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: var(--primary-dark);
+    /* Ícone dourado escuro */
+}
+
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Espaço entre serviços */
+}
+
+.service-item {
+    background-color: var(--gray-light);
+    /* Fundo do serviço */
+    padding: 20px;
+    /* Espaço interno */
+    border-radius: 10px;
+    /* Borda arredondada */
+    display: flex;
+    align-items: flex-start;
+    /* Alinha ao topo */
+    gap: 18px;
+    /* Espaço entre imagem e texto */
+    margin-bottom: 18px;
+    /* Espaço abaixo */
+}
+
+.service-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Alinha texto à esquerda */
+    justify-content: flex-start;
+    flex: 1;
+}
+
+.service-item:hover {
+    transform: translateY(-2px);
+    /* Sobe levemente */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    /* Sombra leve */
+}
+
+.service-name {
+    font-size: 18px;
+    /* Nome do serviço */
+    font-weight: 600;
+    /* Negrito */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.service-details {
+    display: flex;
+    gap: 20px;
+    /* Espaço entre detalhes */
+    color: var(--text);
+    font-size: 14px;
+}
+
+.service-time,
+.service-price {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.book-button {
+    background-color: var(--gray-light);
+    /* Fundo do botão */
+    border: 0.5px var(--gray-dark) solid;
+    /* Borda */
+    padding: 8px 15px;
+    /* Espaço interno */
+    border-radius: 20px;
+    /* Borda arredondada */
+    cursor: pointer;
+    /* Mãozinha */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    /* Negrito */
+    transition: background-color 0.3s, transform 0.2s;
+    /* Animação */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.book-button:hover {
+    background-color: var(--hover);
+    /* Hover */
+    transform: scale(1.05);
+    /* Aumenta */
+}
+
+.book-button.selected {
+    background-color: var(--success);
+    /* Verde */
+    color: var(--white);
+    /* Texto branco */
+}
+
+
+/* Imagem do serviço */
+
+.service-image {
+    width: 60px;
+    /* Tamanho da imagem */
+    height: 60px;
+    border-radius: 10px;
+    /* Borda arredondada */
+    object-fit: cover;
+    /* Cobre todo espaço */
+    margin-right: 18px;
+    background: #f0f0f0;
+    /* Fundo */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Responsividade para imagens dos serviços */
+
+@media (max-width: 768px) {
+    .service-item {
+        flex-direction: column;
+        /* Empilha */
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .service-image {
+        margin: 0 0 10px 0;
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-image {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+
+/* =========================
+   Seleção de Profissionais
+   ========================= */
+
+.professionals-section {
+    background-color: var(--card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    margin: 20px 0;
+    /* Espaço externo */
+    padding: 30px;
+    /* Espaço interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Sombra leve */
+    transition: background-color 0.3s;
+    /* Transição suave */
+}
+
+.professional-list {
+    display: flex;
+    gap: 15px;
+    /* Espaço entre cards */
+    overflow-x: auto;
+    /* Scroll horizontal */
+    padding: 10px 0;
+    scrollbar-width: thin;
+}
+
+.professional-list::-webkit-scrollbar {
+    height: 6px;
+    /* Altura da barra */
+}
+
+.professional-list::-webkit-scrollbar-track {
+    background: var(--gray-light);
+    /* Fundo da barra */
+    border-radius: 10px;
+}
+
+.professional-list::-webkit-scrollbar-thumb {
+    background-color: var(--gray);
+    /* Cor da barra */
+    border-radius: 10px;
+}
+
+.professional-card {
+    min-width: 150px;
+    /* Largura mínima */
+    background-color: var(--professional-card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    padding: 15px;
+    /* Espaço interno */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    /* Mãozinha */
+    transition: transform 0.3s, box-shadow 0.3s;
+    /* Animação */
+}
+
+.professional-card.selected {
+    border: 2px solid var(--primary);
+    /* Borda dourada */
+    background-color: rgba(26, 75, 140, 0.05);
+    /* Fundo levemente azul */
+}
+
+.professional-card:hover {
+    transform: translateY(-5px);
+    /* Sobe */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+}
+
+.professional-avatar {
+    width: 60px;
+    /* Tamanho do avatar */
+    height: 60px;
+    background-color: var(--gray);
+    /* Fundo */
+    border-radius: 50%;
+    /* Redondo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.professional-name {
+    font-weight: 600;
+    /* Negrito */
+    text-align: center;
+    /* Centraliza */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+
+/* =========================
+   Calendário de Agendamento
+   ========================= */
+
+.calendar-section {
+    background-color: var(--card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    margin: 20px 0;
+    /* Espaço externo */
+    padding: 30px;
+    /* Espaço interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Sombra leve */
+    display: none;
+    /* Esconde por padrão */
+    transition: background-color 0.3s;
+    /* Transição suave */
+}
+
+.calendar-month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-name {
+    font-size: 20px;
+    /* Nome do mês */
+    font-weight: 600;
+    /* Negrito */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.calendar-nav button {
+    background: none;
+    /* Sem fundo */
+    border: none;
+    /* Sem borda */
+    font-size: 20px;
+    /* Tamanho do ícone */
+    cursor: pointer;
+    /* Mãozinha */
+    color: var(--text);
+    /* Cor do ícone */
+    transition: color 0.3s;
+}
+
+.calendar-nav button:hover {
+    color: var(--primary);
+    /* Dourado */
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* 7 dias */
+    gap: 10px;
+    text-align: center;
+}
+
+.day-header {
+    font-weight: 600;
+    /* Negrito */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.day {
+    height: 40px;
+    /* Tamanho do dia */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Redondo */
+    cursor: pointer;
+    /* Mãozinha */
+    transition: background-color 0.3s;
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.day:hover {
+    background-color: var(--hover);
+    /* Hover */
+}
+
+.day.selected {
+    background: var(--primary) !important;
+    /* Fundo azul */
+    color: #fff !important;
+    /* Texto branco */
+    border: 1.5px solid #007bff !important;
+    /* Borda azul */
+}
+
+.day.disabled {
+    color: var(--disabled);
+    /* Cinza */
+    cursor: not-allowed;
+    /* Não clicável */
+}
+
+.day.holiday {
+    color: orange !important;
+    /* Feriado */
+    font-weight: 600;
+}
+
+.holiday-tooltip {
+    display: none !important;
+    /* Esconde tooltip */
+}
+
+.day.today {
+    color: #1fa463;
+    /* Verde */
+    border: #28a745 2px solid !important;
+    /* Borda verde */
+}
+
+.day.saturday,
+.day.sunday {
+    color: #e53935 !important;
+    /* Fim de semana vermelho */
+}
+
+.day.past-day {
+    color: #ffb366 !important;
+    /* Laranja claro */
+    background: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    opacity: 0.7;
+}
+
+.calendar-toggle-btn {
+    background: var(--primary);
+    /* Dourado */
+    color: #fff;
+    /* Texto branco */
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 18px;
+    transition: background 0.3s;
+}
+
+.calendar-toggle-btn:hover {
+    background: var(--accent);
+    /* Dourado escuro */
+}
+
+.calendar-compact .calendar-days {
+    display: flex !important;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.calendar-compact .day-header {
+    display: block;
+    width: 40px;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.calendar-compact .day {
+    min-width: 40px;
+    max-width: 40px;
+    height: 60px;
+    flex-direction: column;
+    border-radius: 12px;
+    background: var(--gray-light);
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 2px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text);
+}
+
+.calendar-compact .day.selected {
+    background: var(--card);
+    color: var(--text);
+    border: 2px solid var(--primary);
+}
+
+.calendar-compact .day.holiday {
+    color: orange !important;
+    font-weight: 600;
+}
+
+.calendar-compact .day.disabled {
+    color: var(--disabled);
+    background: var(--gray-light);
+    cursor: not-allowed;
+}
+
+.week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 10px;
+    background: var(--card);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.week-days {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex: 1;
+}
+
+.day-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.prev-week,
+.next-week {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.prev-week:hover,
+.next-week:hover {
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.day {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.day:hover {
+    background-color: var(--hover);
+}
+
+.day.selected {
+    background-color: var(--selected);
+    color: var(--white);
+}
+
+.day.today {
+    border: 2px solid var(--primary);
+}
+
+.day-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+
+/* Calendário semanal */
+
+.calendar-week-view {
+    background: var(--card);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+}
+
+.week-days,
+.week-days.slide-left,
+.week-days.slide-right {
+    transition: transform 0.45s cubic-bezier(.77, 0, .18, 1), opacity 0.45s;
+    will-change: transform, opacity;
+}
+
+.week-days.slide-left {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.week-days.slide-right {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.week-days.active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.week-navigation {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.week-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.day-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.week-day-name {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.day {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    background: var(--card);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    color: var(--text);
+}
+
+.day:hover {
+    background: var(--primary-light);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 75, 140, 0.15);
+}
+
+.day.selected {
+    background: linear-gradient(145deg, var(--primary), var(--accent));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(26, 75, 140, 0.3);
+}
+
+.day.today {
+    border: 2px solid var(--primary);
+}
+
+.prev-week,
+.next-week {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.prev-week:hover,
+.next-week:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   Horários (Time Slots)
+   ========================= */
+
+.time-slots {
+    margin-top: 30px;
+    /* Espaço acima */
+}
+
+.time-slots-title {
+    font-size: 18px;
+    /* Tamanho do título */
+    font-weight: 600;
+    /* Negrito */
+    margin-bottom: 15px;
+    /* Espaço abaixo */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.slots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    /* Responsivo */
+    gap: 10px;
+}
+
+.time-slot {
+    background-color: var(--slot-bg);
+    /* Fundo */
+    border-radius: 20px;
+    /* Borda arredondada */
+    padding: 10px;
+    /* Espaço interno */
+    text-align: center;
+    /* Centraliza texto */
+    cursor: pointer;
+    /* Mãozinha */
+    transition: background-color 0.3s, transform 0.2s;
+    /* Animação */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.time-slot:hover {
+    background-color: var(--hover);
+    /* Hover */
+    transform: scale(1.05);
+    /* Aumenta */
+}
+
+.time-slot.selected {
+    background-color: var(--selected);
+    /* Selecionado */
+    color: var(--white);
+    /* Texto branco */
+}
+
+
+/* =========================
+   Confirmação de Agendamento
+   ========================= */
+
+.confirmation-section {
+    background-color: var(--card);
+    /* Fundo do card */
+    border-radius: 10px;
+    /* Borda arredondada */
+    margin: 20px 0;
+    /* Espaço externo */
+    padding: 30px;
+    /* Espaço interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Sombra leve */
+    display: none;
+    /* Esconde por padrão */
+    transition: background-color 0.3s;
+    /* Transição suave */
+}
+
+.confirmation-details {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: var(--gray-light);
+    /* Fundo */
+    border-radius: 10px;
+    /* Borda arredondada */
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.detail-label {
+    font-weight: 600;
+    /* Negrito */
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.detail-value {
+    color: var(--text);
+    /* Cor do texto */
+}
+
+.confirm-button {
+    background-color: var(--primary);
+    /* Dourado */
+    color: var(--white);
+    /* Texto branco */
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.confirm-button:hover {
+    background-color: var(--accent);
+    /* Dourado escuro */
+    transform: scale(1.02);
+}
+
+
+/* =========================
+   Footer (Rodapé)
+   ========================= */
+
+footer {
+    background-color: var(--footer);
+    /* Fundo do footer */
+    color: var(--footer-text);
+    /* Cor do texto */
+    padding: 50px 0 20px;
+    margin-top: 60px;
+    transition: background-color 0.3s;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-brand .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-brand .logo-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.footer-brand .logo-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--footer-text);
+}
+
+.footer-brand .logo-text span {
+    color: var(--primary);
+}
+
+.footer-brand .logo-text .highlight {
+    color: var(--primary-dark);
+}
+
+.footer-slogan {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary-dark);
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-links li {
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-links i {
+    width: 20px;
+    text-align: center;
+    color: var(--primary);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-links a {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    color: var(--text);
+}
+
+.social-links a:hover {
+    background-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.copyright {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+
+/* Ajustes para modo escuro no footer */
+
+.dark-mode footer {
+    background-color: var(--footer);
+}
+
+.footer-admin-link-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 0;
+    background: none;
+    color: var(--white);
+    font-size: 0.80rem;
+    font-weight: 400;
+    text-decoration: none;
+    border: none;
+    box-shadow: none;
+    margin-top: 6px;
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: color 0.18s;
+}
+
+.footer-admin-link-modern i {
+    font-size: 0.68em;
+    margin-left: 1.5px;
+    transition: transform 0.15s, color 0.18s;
+    color: inherit;
+}
+
+.footer-admin-link-modern:hover,
+.footer-admin-link-modern:focus {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.footer-admin-link-modern:hover i,
+.footer-admin-link-modern:focus i {
+    transform: translateX(2px);
+}
+
+body.dark-mode .footer-admin-link-modern {
+    color: #e0e0e0;
+}
+
+body.dark-mode .footer-admin-link-modern:hover,
+body.dark-mode .footer-admin-link-modern:focus {
+    color: var(--primary);
+}
+
+
+/* =========================
+   Modal Personalizado
+   ========================= */
+
+.custom-modal {
+    display: none;
+    /* Esconde por padrão */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.18);
+    /* Fundo escuro */
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.custom-modal.active {
+    display: flex;
+    /* Mostra modal */
+    animation: fadeIn 0.3s;
+}
+
+@media (min-width: 600px) {
+    .custom-modal {
+        /* padding maior em telas médias */
+        padding: 36px 32px;
+    }
+}
+
+@media (min-width: 900px) {
+    .custom-modal {
+        /* padding maior em telas grandes */
+        padding: 48px 40px;
+    }
+}
+
+.custom-modal-content {
+    background: var(--card);
+    /* Fundo do modal */
+    color: var(--text);
+    /* Cor do texto */
+    border-radius: 18px;
+    /* Borda arredondada */
+    box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
+    /* Sombra */
+    padding: 38px 28px 28px 28px;
+    min-width: 320px;
+    max-width: 90vw;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: slideUp 0.4s;
+    font-size: 1.08rem;
+}
+
+
+/* Modal de "Meus agendamentos" */
+
+.custom-modal-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 6px;
+    outline: none;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+
+.custom-modal-input:focus {
+    border-color: var(--primary);
+}
+
+
+/* Telas grandes */
+
+@media (min-width: 900px) {
+    .custom-modal-content {
+        min-width: 420px;
+        max-width: 420px;
+        padding: 48px 38px 38px 38px;
+        font-size: 1.18rem;
+    }
+    .custom-modal-message {
+        font-size: 1.08rem;
+    }
+    .custom-modal-btn {
+        font-size: 1.08rem;
+        padding: 12px 38px;
+    }
+}
+
+
+/* Telas médias */
+
+@media (max-width: 899px) and (min-width: 481px) {
+    .custom-modal-content {
+        min-width: 280px;
+        max-width: 360px;
+        padding: 32px 18px 22px 18px;
+        font-size: 1rem;
+    }
+    .custom-modal-message {
+        font-size: 0.98rem;
+    }
+    .custom-modal-btn {
+        font-size: 1rem;
+        padding: 10px 28px;
+    }
+}
+
+
+/* Telas pequenas */
+
+@media (max-width: 480px) {
+    .custom-modal-content {
+        min-width: 0;
+        max-width: 96vw;
+        padding: 18px 4vw 14px 4vw;
+        font-size: 0.95rem;
+    }
+    .custom-modal-message {
+        font-size: 0.93rem;
+    }
+    .custom-modal-btn {
+        font-size: 0.95rem;
+        padding: 8px 18px;
+    }
+}
+
+.custom-modal-icon {
+    font-size: 2.3rem;
+    margin-bottom: 12px;
+    color: var(--primary);
+    display: flex;
+    justify-content: center;
+}
+
+.custom-modal-message {
+    font-size: 1.08rem;
+    margin-bottom: 22px;
+    color: var(--text);
+    word-break: break-word;
+    text-align: left !important;
+}
+
+.custom-modal-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 10px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.18s;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+}
+
+.custom-modal-btn:hover {
+    background: var(--accent);
+    transform: scale(1.04);
+}
+
+.custom-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 1.3rem;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.custom-modal-close:hover {
+    color: var(--primary-dark);
+}
+
+@media (max-width: 480px) {
+    .custom-modal-content {
+        min-width: 0;
+        padding: 22px 8vw 18px 8vw;
+    }
+    .custom-modal-message {
+        font-size: 0.98rem;
+    }
+}
+
+
+/* =========================
+   Responsividade Geral
+   ========================= */
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .footer-brand {
+        text-align: center;
+        align-items: center;
+    }
+    .footer-title {
+        margin-bottom: 15px;
+    }
+    .footer-links li {
+        font-size: 13px;
+    }
+    /* Ajustes para os novos elementos */
+    .social-icon-welcome {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+    .address-toggle {
+        font-size: 15px;
+    }
+}
+
+
+/* =========================
+   Animações
+   ========================= */
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-in-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* =========================
+   Responsividade Extra
+   ========================= */
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+    }
+    .service-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .book-button {
+        align-self: flex-end;
+    }
+    .calendar-days {
+        gap: 5px;
+    }
+    .day {
+        height: 35px;
+        width: 35px;
+    }
+    .slots-container {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .service-details {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .slots-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .calendar-days {
+        font-size: 14px;
+    }
+    .day {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+
+/* Responsividade para calendário */
+
+@media screen and (max-width: 768px) {
+    .calendar-week-view {
+        padding: 15px;
+        margin: 10px;
+    }
+    .week-days {
+        gap: 8px;
+    }
+    .day-column {
+        padding: 5px;
+    }
+    .day {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    .week-day-name {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+    .prev-week,
+    .next-week {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        padding: 8px;
+    }
+    .calendar-toggle {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    .calendar-toggle i {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .calendar-week-view {
+        padding: 10px;
+        margin: 5px;
+    }
+    .week-days {
+        gap: 4px;
+    }
+    .day-column {
+        padding: 3px;
+    }
+    .day {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    .week-day-name {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+    }
+    .prev-week,
+    .next-week {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        padding: 6px;
+    }
+    /* Modo adaptativo para telas muito pequenas */
+    @media screen and (max-width: 360px) {
+        .week-day-name {
+            font-size: 0.6rem;
+        }
+        .day {
+            width: 25px;
+            height: 25px;
+            font-size: 0.75rem;
+        }
+    }
+    /* Ajustes para paisagem em mobile */
+    @media screen and (max-height: 480px) and (orientation: landscape) {
+        .calendar-week-view {
+            padding: 8px;
+        }
+        .week-navigation {
+            margin-bottom: 10px;
+        }
+        .day {
+            width: 28px;
+            height: 28px;
+        }
+    }
+}
+
+
+/* =========================
+   Acessibilidade e Touch
+   ========================= */
+
+@media (hover: none) {
+    .day:hover,
+    .prev-week:hover,
+    .next-week:hover,
+    .calendar-toggle:hover {
+        transform: none;
+    }
+    .day:active,
+    .prev-week:active,
+    .next-week:active,
+    .calendar-toggle:active {
+        transform: scale(0.95);
+    }
+}
+
+.prev-month-day {
+    opacity: 0.5;
+    /* Mais claro */
+    cursor: pointer !important;
+}
+
+.prev-month-day:hover {
+    opacity: 0.8;
+    background-color: var(--hover);
+}
+
+.next-month-day {
+    opacity: 0.5;
+    /* Mais claro */
+    cursor: pointer !important;
+}
+
+.next-month-day:hover {
+    opacity: 0.8;
+    background-color: var(--hover);
+}
+
+
+/* =========================
+   Botão Continuar Bloqueado
+   ========================= */
+
+#phoneModalBtn:disabled {
+    background: #ccc !important;
+    /* Cinza bloqueado */
+    color: #fff !important;
+    /* Texto branco */
+    cursor: not-allowed !important;
+    /* Não clicável */
+    border: none;
+    box-shadow: none;
+}

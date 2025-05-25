@@ -8,7 +8,7 @@ const pushRoutes = require('./routes/push');
 const app = express();
 const port = 3000;
 
-
+app.use('/dashboard', express.static(__dirname + '/dashboard'));
 app.use(express.static('public'));
 
 // Sessão
