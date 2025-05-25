@@ -117,7 +117,8 @@ INSERT INTO wallpapers (nome, url, ativo) VALUES
 ('Fundo 5', '/img/background5.jpg', 1),
 ('Fundo 6', '/img/background6.png', 1),
 ('Fundo 7', '/img/background7.png', 1),
-('Fundo 8', '/img/background8.png', 1);
+('Fundo 8', '/img/background8.jpg', 1),
+('Fundo 9', '/img/background9.png', 1);
 
 -- Tabela para guardar o wallpaper selecionado pela barbearia
 ALTER TABLE barbearia ADD COLUMN wallpaper_id INT DEFAULT NULL;
