@@ -389,7 +389,82 @@ O **NaRégua BarberApp** é um sistema web completo para barbearias, permitindo 
 - [ ] Melhorias de acessibilidade e SEO
 - [ ] App mobile (PWA ou nativo)
 
-Contribuições são bem-vindas! Abra uma issue ou pull request.
+Contribuições são bem-vindas! Ara uma issue ou pull request.
+
+## Galeria do Projeto
+
+![image](https://github.com/user-attachments/assets/a6f03961-5218-40a4-b091-bc02bf82219e)
+
+---
+
+![image](https://github.com/user-attachments/assets/ade82ddf-d45d-44f6-84df-59e9d4913775)
+
+---
+
+![image](https://github.com/user-attachments/assets/28fb3984-c8d4-4346-994a-e50cb14608d6)
+
+---
+
+![image](https://github.com/user-attachments/assets/61b312d9-8efd-4237-9449-478510b23a37)
+
+---
+
+![image](https://github.com/user-attachments/assets/64e872cf-7223-4e9d-9b23-e5322fa228ff)
+
+---
+
+![image](https://github.com/user-attachments/assets/eca935fd-6ed6-4bc8-95d9-ff417624a307)
+
+---
+
+![image](https://github.com/user-attachments/assets/5ddb4cf1-5f28-4e98-9e23-4046ffc0f029)
+
+---
+
+![image](https://github.com/user-attachments/assets/b1709ea6-17f3-4838-9d33-f64731a3f1b7)
+
+---
+
+![image](https://github.com/user-attachments/assets/cdeef3d9-26e5-43ed-83e8-f31178b2d44d)
+
+---
+
+![image](https://github.com/user-attachments/assets/d8effebc-531c-4658-a35f-6413bd54dc4f)
+
+---
+
+![image](https://github.com/user-attachments/assets/a47f4aff-b3f2-423f-a241-9389bb9c7c72)
+
+---
+
+![image](https://github.com/user-attachments/assets/6a932047-4dbf-449a-bea1-da11eb1a6f15)
+
+---
+
+![image](https://github.com/user-attachments/assets/b01ad839-c726-417d-86a2-f94a1286b86c)
+
+---
+
+![image](https://github.com/user-attachments/assets/c421780b-7075-49b1-bf39-e9e86377fc57)
+
+---
+
+![image](https://github.com/user-attachments/assets/f38c0866-597e-4f81-b387-885c2bccaef9)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Licença
 MIT. Veja o arquivo LICENSE.
