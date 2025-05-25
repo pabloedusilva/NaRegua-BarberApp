@@ -639,14 +639,23 @@ document.addEventListener('DOMContentLoaded', async function() {
                             });
                             phoneModal.classList.remove('active');
                             showCustomModal({
-                                message: `<strong>Agendamento confirmado!</strong><br><br>
-                        <b>Serviço:</b> ${selectedService}<br>
-                        <b>Profissional:</b> ${selectedProfessional}<br>
-                        <b>Data:</b> ${selectedDate}<br>
-                        <b>Horário:</b> ${selectedTime}<br>
-                        <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                        <b>Telefone:</b> ${tel}`,
-                                icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                message: `<div class="confirmed-modal-content">
+            <div class="confirmed-modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmed-modal-title">Agendamento confirmado!</div>
+            <ul class="confirmed-modal-list">
+                <li><span>Serviço:</span> <strong>${selectedService}</strong></li>
+                <li><span>Profissional:</span> <strong>${selectedProfessional}</strong></li>
+                <li><span>Data:</span> <strong>${selectedDate}</strong></li>
+                <li><span>Horário:</span> <strong>${selectedTime}</strong></li>
+                <li><span>Valor:</span> <strong style="color:var(--success);">R$ ${selectedServicePrice}</strong></li>
+                <li><span>Telefone:</span> <strong>${tel}</strong></li>
+            </ul>
+            <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
+        </div>
+    `,
+                                icon: '', // Ícone já incluso acima
                                 btnText: 'Fechar',
                                 onClose: function() {
                                     setTimeout(() => {
@@ -1024,19 +1033,28 @@ phoneModalBtn.onclick = async function() {
         // Fecha o modal de telefone
         phoneModal.classList.remove('active');
         showCustomModal({
-            message: `<strong>Agendamento confirmado!</strong><br><br>
-                    <b>Serviço:</b> ${selectedService}<br>
-                    <b>Profissional:</b> ${selectedProfessional}<br>
-                    <b>Data:</b> ${selectedDate}<br>
-                    <b>Horário:</b> ${selectedTime}<br>
-                    <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                    <b>Telefone:</b> ${tel}`,
-            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-            btnText: 'Fechar',
-            onClose: function() {
-                setTimeout(() => {
-                    location.reload();
-                }, 300);
+            message: `<div class="confirmed-modal-content">
+            <div class="confirmed-modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmed-modal-title">Agendamento confirmado!</div>
+            <ul class="confirmed-modal-list">
+                <li><span>Serviço:</span> <strong>${selectedService}</strong></li>
+                <li><span>Profissional:</span> <strong>${selectedProfessional}</strong></li>
+                <li><span>Data:</span> <strong>${selectedDate}</strong></li>
+                <li><span>Horário:</span> <strong>${selectedTime}</strong></li>
+                <li><span>Valor:</span> <strong style="color:var(--success);">R$ ${selectedServicePrice}</strong></li>
+                <li><span>Telefone:</span> <strong>${tel}</strong></li>
+            </ul>
+            <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
+        </div>
+    `,
+                            icon: '', // Ícone já incluso acima
+                            btnText: 'Fechar',
+                            onClose: function() {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 300);
             }
         });
     } catch (err) {
