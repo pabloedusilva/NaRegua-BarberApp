@@ -1756,6 +1756,60 @@ body.dark-mode .footer-admin-link-modern:focus {
 }
 
 
+/* Modal "Sem Agendamentos" - visual moderno */
+
+.no-appointments-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 12px 0;
+    margin: 0;
+}
+
+.no-appointments-icon {
+    font-size: 2.7rem;
+    color: var(--primary-light);
+    margin-bottom: 12px;
+    animation: popIn 0.5s;
+}
+
+.no-appointments-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.no-appointments-text {
+    color: var(--text);
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.no-appointments-btn {
+    background: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    padding: 10px 28px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.18s;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(218, 192, 45, 0.10);
+}
+
+.no-appointments-btn:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 80%, var(--primary) 100%);
+    transform: scale(1.04);
+}
+
+
 /* Modal de Agendamento Confirmado */
 
 .confirmed-modal-content {

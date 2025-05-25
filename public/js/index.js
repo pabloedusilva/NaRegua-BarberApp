@@ -781,11 +781,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             } else {
                 appointmentsModal.classList.remove('active');
-                showCustomModal({
-                    message: `<b>Olá!</b><br>Você ainda não possui agendamentos.`,
-                    icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
-                    btnText: 'Fechar'
-                });
+showCustomModal({
+    message: `
+        <div class="no-appointments-modal">
+            <div class="no-appointments-icon">
+                <i class="far fa-calendar-times"></i>
+            </div>
+            <div class="no-appointments-title">Você ainda não possui agendamentos</div>
+            <div class="no-appointments-text">
+                Que tal agendar um serviço agora mesmo?<br>
+                Assim que você fizer um agendamento, ele aparecerá aqui.
+            </div>
+        </div>
+    `,
+    icon: '',
+    btnText: 'Fechar'
+});
             }
         } catch (err) {
             appointmentsModal.classList.remove('active');
@@ -1196,12 +1207,23 @@ appointmentsModalBtn.onclick = async function() {
                 });
             }, 100);
         } else {
-            appointmentsModal.classList.remove('active');
-            showCustomModal({
-                message: `<b>Olá!</b><br>Você ainda não possui agendamentos.`,
-                icon: '<i class="fas fa-calendar-check" style="color:var(--primary);"></i>',
-                btnText: 'Fechar'
-            });
+           appointmentsModal.classList.remove('active');
+showCustomModal({
+    message: `
+        <div class="no-appointments-modal">
+            <div class="no-appointments-icon">
+                <i class="far fa-calendar-times"></i>
+            </div>
+            <div class="no-appointments-title">Você ainda não possui agendamentos</div>
+            <div class="no-appointments-text">
+                Que tal agendar um serviço agora mesmo?<br>
+                Assim que você fizer um agendamento, ele aparecerá aqui.
+            </div>
+        </div>
+    `,
+    icon: '',
+    btnText: 'Fechar'
+});
         }
     } catch (err) {
         appointmentsModal.classList.remove('active');
