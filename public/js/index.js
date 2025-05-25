@@ -1,3 +1,23 @@
+// Função para formatar a data no formato brasileiro (DD/MM/AAAA)
+function formatarDataBR(dataISO) {
+    if (!dataISO) return '';
+    // Se vier só a data (ex: 2025-05-26)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dataISO)) {
+        const [ano, mes, dia] = dataISO.split('-');
+        return `${dia}/${mes}/${ano}`;
+    }
+    // Se vier no formato ISO completo (ex: 2025-05-26T03:00:00.000Z)
+    const data = new Date(dataISO);
+    if (!isNaN(data.getTime())) {
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+    }
+    // Se não conseguir converter, retorna original
+    return dataISO;
+}
+
 // Adicione esta função antes de renderCalendar ou logo no início do <script>
 function animateWeekTransition(direction, callback) {
     const weekDays = document.querySelector('.week-days');
@@ -696,7 +716,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <span class="my-appointments-prof"><i class="fas fa-user-tie"></i> ${ag.profissional}</span>
                         </div>
                         <div class="my-appointments-row">
-                            <span class="my-appointments-date"><i class="far fa-calendar-alt"></i> ${ag.data.split('-').reverse().join('/')}</span>
+<span class="my-appointments-date"><i class="far fa-calendar-alt"></i> ${formatarDataBR(ag.data)}</span>
                             <span class="my-appointments-time"><i class="far fa-clock"></i> ${ag.hora}</span>
                         </div>
                         <div class="my-appointments-row">
@@ -1086,10 +1106,10 @@ appointmentsModalBtn.onclick = async function() {
                                 <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
                                 <span style="color:var(--text-main);">${ag.profissional}</span>
                             </div>
-                            <div>
-                                <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
-                                <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
-                            </div>
+<div>
+    <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
+    <span style="color:var(--text-main);">${formatarDataBR(ag.data)}</span>
+</div>
                             <div>
                                 <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
                                 <span style="color:var(--text-main);">${ag.hora}</span>
