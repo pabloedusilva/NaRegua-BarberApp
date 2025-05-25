@@ -17,17 +17,17 @@ function animateWeekTransition(direction, callback) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Carregar serviços do backend
-    const servicesSection = document.querySelector('.services-section');
-    if (servicesSection) {
-        try {
-            const res = await fetch('/dashboard/servicos');
-            const data = await res.json();
-            if (data.success && Array.isArray(data.servicos)) {
-                let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
+            // Carregar serviços do backend
+            const servicesSection = document.querySelector('.services-section');
+            if (servicesSection) {
+                try {
+                    const res = await fetch('/dashboard/servicos');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.servicos)) {
+                        let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
                         <div class="service-list">`;
-                data.servicos.forEach(servico => {
-                    html += `
+                        data.servicos.forEach(servico => {
+                            html += `
                             <div class="service-item">
                                 <img class="service-image" src="${servico.imagem || 'img/servicos/default.jpg'}" alt="${servico.nome}">
                                 <div class="service-info">
@@ -46,727 +46,710 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 </button>
                             </div>
                             `;
-                });
-                html += `</div>`;
-                servicesSection.innerHTML = html;
-            } else {
-                servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
-            }
-        } catch (err) {
-            servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
-        }
-    }
-
-    // Variáveis para armazenar as seleções
-    let selectedService = '';
-    let selectedServicePrice = '';
-    let selectedServiceTime = '';
-    let selectedProfessional = 'Pablo barber';
-    let selectedDate = null;
-    let selectedTime = '';
-    let currentSelectedButton = null;
-    let calendarMode = 'month'; // Pode ser 'month' ou 'week'
-    let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
-
-    // Elementos da página
-    const calendarSection = document.getElementById('calendar-section');
-    const confirmationSection = document.getElementById('confirmation-section');
-    const calendarDaysContainer = document.querySelector('.calendar-days');
-    const monthNameElement = document.querySelector('.month-name');
-    const calendarToggleBtn = document.getElementById('calendarToggleBtn');
-
-    // Elementos do tema
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('i');
-
-    // Verificar preferência de tema no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-    }
-
-    // Alternar tema
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-
-        if (document.body.classList.contains('dark-mode')) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-            localStorage.setItem('theme', 'light');
-        }
-    });
-
-    // Feriados (pode ser expandido)
-    const holidays = {
-        '1/1': 'Ano Novo',
-        '21/4': 'Tiradentes',
-        '1/5': 'Dia do Trabalho',
-        '7/9': 'Independência',
-        '12/10': 'Nossa Senhora Aparecida',
-        '2/11': 'Finados',
-        '15/11': 'Proclamação da República',
-        '25/12': 'Natal'
-    };
-
-    // Inicializar calendário
-    let currentDate = new Date();
-    renderCalendar(currentDate);
-
-    // Selecionar serviço
-    const bookButtons = document.querySelectorAll('.book-button');
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remover seleção anterior
-            if (currentSelectedButton) {
-                currentSelectedButton.classList.remove('selected');
+                        });
+                        html += `</div>`;
+                        servicesSection.innerHTML = html;
+                    } else {
+                        servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+                    }
+                } catch (err) {
+                    servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+                }
             }
 
-            // Adicionar seleção atual
-            this.classList.add('selected');
-            currentSelectedButton = this;
+            // Variáveis para armazenar as seleções
+            let selectedService = '';
+            let selectedServicePrice = '';
+            let selectedServiceTime = '';
+            let selectedProfessional = 'Pablo barber';
+            let selectedDate = null;
+            let selectedTime = '';
+            let currentSelectedButton = null;
+            let calendarMode = 'month'; // Pode ser 'month' ou 'week'
+            let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
 
-            selectedService = this.getAttribute('data-service');
-            selectedServicePrice = this.getAttribute('data-price');
-            selectedServiceTime = this.getAttribute('data-time');
+            // Elementos da página
+            const calendarSection = document.getElementById('calendar-section');
+            const confirmationSection = document.getElementById('confirmation-section');
+            const calendarDaysContainer = document.querySelector('.calendar-days');
+            const monthNameElement = document.querySelector('.month-name');
+            const calendarToggleBtn = document.getElementById('calendarToggleBtn');
 
-            // Mostrar a seção de calendário
-            calendarSection.style.display = 'block';
+            // Elementos do tema
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
 
-            // Scroll para o calendário
-            calendarSection.scrollIntoView({
-                behavior: 'smooth'
+            // Verificar preferência de tema no localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+
+            // Alternar tema
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+
+                if (document.body.classList.contains('dark-mode')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
             });
 
-            // Atualizar os campos de confirmação
-            updateConfirmationDetails();
-        });
-    });
+            // Feriados (pode ser expandido)
+            const holidays = {
+                '1/1': 'Ano Novo',
+                '21/4': 'Tiradentes',
+                '1/5': 'Dia do Trabalho',
+                '7/9': 'Independência',
+                '12/10': 'Nossa Senhora Aparecida',
+                '2/11': 'Finados',
+                '15/11': 'Proclamação da República',
+                '25/12': 'Natal'
+            };
 
-    // Selecionar profissional
-    const professionalCards = document.querySelectorAll('.professional-card');
-    professionalCards.forEach(card => {
-        card.addEventListener('click', function() {
-            // Remover seleção anterior
-            professionalCards.forEach(c => c.classList.remove('selected'));
+            // Inicializar calendário
+            let currentDate = new Date();
+            renderCalendar(currentDate);
 
-            // Adicionar seleção atual
-            this.classList.add('selected');
+            // Selecionar serviço
+            const bookButtons = document.querySelectorAll('.book-button');
+            bookButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    if (currentSelectedButton) {
+                        currentSelectedButton.classList.remove('selected');
+                    }
 
-            // Guardar o profissional selecionado
-            selectedProfessional = this.getAttribute('data-professional');
+                    // Adicionar seleção atual
+                    this.classList.add('selected');
+                    currentSelectedButton = this;
 
-            // Atualizar os campos de confirmação
-            updateConfirmationDetails();
-        });
-    });
+                    selectedService = this.getAttribute('data-service');
+                    selectedServicePrice = this.getAttribute('data-price');
+                    selectedServiceTime = this.getAttribute('data-time');
 
-    // Navegação do calendário
-    const prevMonthButton = document.querySelector('.prev-month');
-    const nextMonthButton = document.querySelector('.next-month');
+                    // Mostrar a seção de calendário
+                    calendarSection.style.display = 'block';
 
-    prevMonthButton.addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar(currentDate);
-    });
+                    // Scroll para o calendário
+                    calendarSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
 
-    nextMonthButton.addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar(currentDate);
-    });
+                    // Atualizar os campos de confirmação
+                    updateConfirmationDetails();
+                });
+            });
 
-    // Alternar visualização do calendário
-    calendarToggleBtn.addEventListener('click', function() {
-        if (calendarMode === 'month') {
-            calendarMode = 'week';
-            calendarSection.classList.add('calendar-compact');
-            calendarToggleBtn.textContent = 'Visualização mensal';
-        } else {
-            calendarMode = 'month';
-            calendarSection.classList.remove('calendar-compact');
-            calendarToggleBtn.textContent = 'Visualização semanal';
-        }
-        renderCalendar(currentDate);
-    });
+            // Selecionar profissional
+            const professionalCards = document.querySelectorAll('.professional-card');
+            professionalCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    professionalCards.forEach(c => c.classList.remove('selected'));
 
-    // Renderizar calendário
-    function renderCalendar(date) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const today = new Date();
+                    // Adicionar seleção atual
+                    this.classList.add('selected');
 
-        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-        ];
+                    // Guardar o profissional selecionado
+                    selectedProfessional = this.getAttribute('data-professional');
 
-        monthNameElement.textContent = `${monthNames[month]} ${year}`;
+                    // Atualizar os campos de confirmação
+                    updateConfirmationDetails();
+                });
+            });
 
-        let days = '';
-        const dayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+            // Navegação do calendário
+            const prevMonthButton = document.querySelector('.prev-month');
+            const nextMonthButton = document.querySelector('.next-month');
 
-        if (calendarMode === 'week') {
-            // Encontrar o início da semana (domingo)
-            let weekStart = new Date(date);
-            weekStart.setDate(date.getDate() - date.getDay());
+            prevMonthButton.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
 
-            // Cabeçalho dos dias da semana
-            days += '<div class="calendar-week-view">';
-            days += '<div class="week-navigation">';
-            days += '<button class="prev-week"><i class="fas fa-chevron-left"></i></button>';
-            days += '<div class="week-days">';
+            nextMonthButton.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
 
-            // Gerar os 7 dias da semana
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-            for (let i = 0; i < 7; i++) {
-                const weekDay = new Date(weekStart);
-                weekDay.setDate(weekStart.getDate() + i);
-                weekDay.setHours(0, 0, 0, 0);
-
-                let dayClass = 'day';
-                if (weekDay < today) {
-                    dayClass += ' past-day';
+            // Alternar visualização do calendário
+            calendarToggleBtn.addEventListener('click', function() {
+                if (calendarMode === 'month') {
+                    calendarMode = 'week';
+                    calendarSection.classList.add('calendar-compact');
+                    calendarToggleBtn.textContent = 'Visualização mensal';
+                } else {
+                    calendarMode = 'month';
+                    calendarSection.classList.remove('calendar-compact');
+                    calendarToggleBtn.textContent = 'Visualização semanal';
                 }
-                if (
-                    weekDay.getDate() === today.getDate() &&
-                    weekDay.getMonth() === today.getMonth() &&
-                    weekDay.getFullYear() === today.getFullYear()
-                ) {
-                    dayClass += ' today';
-                }
+                renderCalendar(currentDate);
+            });
 
-                // Adicione o nome do dia acima do número
-                days += `<div class="day-column">
+            // Renderizar calendário
+            function renderCalendar(date) {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const today = new Date();
+
+                const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ];
+
+                monthNameElement.textContent = `${monthNames[month]} ${year}`;
+
+                let days = '';
+                const dayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+
+                if (calendarMode === 'week') {
+                    // Encontrar o início da semana (domingo)
+                    let weekStart = new Date(date);
+                    weekStart.setDate(date.getDate() - date.getDay());
+
+                    // Cabeçalho dos dias da semana
+                    days += '<div class="calendar-week-view">';
+                    days += '<div class="week-navigation">';
+                    days += '<button class="prev-week"><i class="fas fa-chevron-left"></i></button>';
+                    days += '<div class="week-days">';
+
+                    // Gerar os 7 dias da semana
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+                    for (let i = 0; i < 7; i++) {
+                        const weekDay = new Date(weekStart);
+                        weekDay.setDate(weekStart.getDate() + i);
+                        weekDay.setHours(0, 0, 0, 0);
+
+                        let dayClass = 'day';
+                        if (weekDay < today) {
+                            dayClass += ' past-day';
+                        }
+                        if (
+                            weekDay.getDate() === today.getDate() &&
+                            weekDay.getMonth() === today.getMonth() &&
+                            weekDay.getFullYear() === today.getFullYear()
+                        ) {
+                            dayClass += ' today';
+                        }
+
+                        // Adicione o nome do dia acima do número
+                        days += `<div class="day-column">
                                     <div class="week-day-name">${weekDayNames[i]}</div>
                                     <div class="${dayClass}" data-date="${weekDay.toLocaleDateString('pt-BR')}">${weekDay.getDate()}</div>
                                 </div>`;
-            }
+                    }
 
-            days += '</div>';
-            days += '<button class="next-week"><i class="fas fa-chevron-right"></i></button>';
-            days += '</div></div>';
-        } else {
-            // Código existente do calendário mensal
-            dayNames.forEach(day => {
-                days += `<div class="day-header">${day}</div>`;
-            });
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const prevLastDay = new Date(year, month, 0).getDate();
-            const firstDayIndex = firstDay.getDay();
-            const lastDayIndex = lastDay.getDay();
-            const nextDays = 7 - lastDayIndex - 1;
+                    days += '</div>';
+                    days += '<button class="next-week"><i class="fas fa-chevron-right"></i></button>';
+                    days += '</div></div>';
+                } else {
+                    // Código existente do calendário mensal
+                    dayNames.forEach(day => {
+                        days += `<div class="day-header">${day}</div>`;
+                    });
+                    const firstDay = new Date(year, month, 1);
+                    const lastDay = new Date(year, month + 1, 0);
+                    const prevLastDay = new Date(year, month, 0).getDate();
+                    const firstDayIndex = firstDay.getDay();
+                    const lastDayIndex = lastDay.getDay();
+                    const nextDays = 7 - lastDayIndex - 1;
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Garante comparação só por data
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
-            for (let i = firstDayIndex; i > 0; i--) {
-                const prevMonthDate = new Date(year, month - 1, prevLastDay - i + 1);
-                const dateStr = `${String(prevLastDay - i + 1).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
-                days += `<div class="day disabled prev-month-day" 
+                    for (let i = firstDayIndex; i > 0; i--) {
+                        const prevMonthDate = new Date(year, month - 1, prevLastDay - i + 1);
+                        const dateStr = `${String(prevLastDay - i + 1).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+                        days += `<div class="day disabled prev-month-day" 
                             data-date="${dateStr}" 
                             data-month="${month === 0 ? 12 : month}"
                             data-year="${month === 0 ? year - 1 : year}">
                             ${prevLastDay - i + 1}
                         </div>`;
-            }
-            for (let i = 1; i <= lastDay.getDate(); i++) {
-                const dayDate = new Date(year, month, i);
-                dayDate.setHours(0, 0, 0, 0);
-
-                let dayClass = 'day';
-                if (dayDate < today) {
-                    dayClass += ' past-day';
-                }
-                const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-                if (isToday) dayClass += ' today';
-                if (selectedDate) {
-                    const [sd, sm, sy] = selectedDate.split('/');
-                    if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
-                        dayClass += ' selected';
                     }
-                }
-                const dateStr = `${String(i).padStart(2, '0')}/${String(month+1).padStart(2, '0')}/${year}`;
-                // Ao criar cada dia:
-                if (selectedDate === dateStr) {
-                    dayClass += ' selected';
-                }
-                days += `<div class="${dayClass}" data-date="${dateStr}">${i}</div>`;
-            }
-            for (let i = 1; i <= nextDays; i++) {
-                const nextMonthDate = new Date(year, month + 1, i);
-                const dateStr = `${String(i).padStart(2, '0')}/${String(month + 2).padStart(2, '0')}/${month === 11 ? year + 1 : year}`;
-                days += `<div class="day disabled next-month-day" 
+                    for (let i = 1; i <= lastDay.getDate(); i++) {
+                        const dayDate = new Date(year, month, i);
+                        dayDate.setHours(0, 0, 0, 0);
+
+                        let dayClass = 'day';
+                        if (dayDate < today) {
+                            dayClass += ' past-day';
+                        }
+                        const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                        if (isToday) dayClass += ' today';
+                        if (selectedDate) {
+                            const [sd, sm, sy] = selectedDate.split('/');
+                            if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
+                                dayClass += ' selected';
+                            }
+                        }
+                        const dateStr = `${String(i).padStart(2, '0')}/${String(month+1).padStart(2, '0')}/${year}`;
+                        // Ao criar cada dia:
+                        if (selectedDate === dateStr) {
+                            dayClass += ' selected';
+                        }
+                        days += `<div class="${dayClass}" data-date="${dateStr}">${i}</div>`;
+                    }
+                    for (let i = 1; i <= nextDays; i++) {
+                        const nextMonthDate = new Date(year, month + 1, i);
+                        const dateStr = `${String(i).padStart(2, '0')}/${String(month + 2).padStart(2, '0')}/${month === 11 ? year + 1 : year}`;
+                        days += `<div class="day disabled next-month-day" 
                             data-date="${dateStr}"
                             data-month="${month === 11 ? 1 : month + 2}"
                             data-year="${month === 11 ? year + 1 : year}">
                             ${i}
                         </div>`;
-            }
-        }
+                    }
+                }
 
-        calendarDaysContainer.innerHTML = days;
+                calendarDaysContainer.innerHTML = days;
 
-        // Adicionar event listeners para os botões de navegação semanal
-        if (calendarMode === 'week') {
-            document.querySelector('.prev-week').addEventListener('click', () => {
-                animateWeekTransition('right', () => {
-                    currentDate.setDate(currentDate.getDate() - 7);
-                    renderCalendar(currentDate);
-                });
-            });
-
-            document.querySelector('.next-week').addEventListener('click', () => {
-                animateWeekTransition('left', () => {
-                    currentDate.setDate(currentDate.getDate() + 7);
-                    renderCalendar(currentDate);
-                });
-            });
-
-            // Após renderizar, marque a semana como ativa para a transição inicial
-            setTimeout(() => {
-                const weekDays = document.querySelector('.week-days');
-                if (weekDays) weekDays.classList.add('active');
-            }, 10);
-        }
-
-        // Adicionar event listeners para os dias
-        const dayElements = document.querySelectorAll('.day');
-        dayElements.forEach(day => {
-            day.addEventListener('click', function() {
-                // Se for um dia do mês anterior
-                if (this.classList.contains('prev-month-day')) {
-                    currentDate.setMonth(currentDate.getMonth() - 1);
-                    renderCalendar(currentDate);
-
-                    setTimeout(() => {
-                        const dayToSelect = this.textContent.trim();
-                        const newDays = document.querySelectorAll('.day:not(.disabled)');
-                        newDays.forEach(newDay => {
-                            if (newDay.textContent.trim() === dayToSelect) {
-                                newDay.click();
-                                newDay.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
-                            }
+                // Adicionar event listeners para os botões de navegação semanal
+                if (calendarMode === 'week') {
+                    document.querySelector('.prev-week').addEventListener('click', () => {
+                        animateWeekTransition('right', () => {
+                            currentDate.setDate(currentDate.getDate() - 7);
+                            renderCalendar(currentDate);
                         });
-                    }, 100);
-                    return;
-                }
+                    });
 
-                // Se for um dia do próximo mês
-                if (this.classList.contains('next-month-day')) {
-                    currentDate.setMonth(currentDate.getMonth() + 1);
-                    renderCalendar(currentDate);
-
-                    setTimeout(() => {
-                        const dayToSelect = this.textContent.trim();
-                        const newDays = document.querySelectorAll('.day:not(.disabled)');
-                        newDays.forEach(newDay => {
-                            if (newDay.textContent.trim() === dayToSelect) {
-                                newDay.click();
-                                newDay.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
-                            }
+                    document.querySelector('.next-week').addEventListener('click', () => {
+                        animateWeekTransition('left', () => {
+                            currentDate.setDate(currentDate.getDate() + 7);
+                            renderCalendar(currentDate);
                         });
-                    }, 100);
-                    return;
+                    });
+
+                    // Após renderizar, marque a semana como ativa para a transição inicial
+                    setTimeout(() => {
+                        const weekDays = document.querySelector('.week-days');
+                        if (weekDays) weekDays.classList.add('active');
+                    }, 10);
                 }
 
-                // Código existente para dias normais
-                dayElements.forEach(d => d.classList.remove('selected'));
-                this.classList.add('selected');
+                // Adicionar event listeners para os dias
+                const dayElements = document.querySelectorAll('.day');
+                dayElements.forEach(day => {
+                    day.addEventListener('click', function() {
+                        // Se for um dia do mês anterior
+                        if (this.classList.contains('prev-month-day')) {
+                            currentDate.setMonth(currentDate.getMonth() - 1);
+                            renderCalendar(currentDate);
 
-                const dateStr = this.getAttribute('data-date');
-                const [d, m, y] = dateStr.split('/');
-                selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+                            setTimeout(() => {
+                                const dayToSelect = this.textContent.trim();
+                                const newDays = document.querySelectorAll('.day:not(.disabled)');
+                                newDays.forEach(newDay => {
+                                    if (newDay.textContent.trim() === dayToSelect) {
+                                        newDay.click();
+                                        newDay.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
+                                    }
+                                });
+                            }, 100);
+                            return;
+                        }
 
-                updateConfirmationDetails();
-                confirmationSection.style.display = 'block';
-            });
-        });
+                        // Se for um dia do próximo mês
+                        if (this.classList.contains('next-month-day')) {
+                            currentDate.setMonth(currentDate.getMonth() + 1);
+                            renderCalendar(currentDate);
 
-        document.querySelectorAll('.day').forEach(dayEl => {
-            // Para modo mensal
-            if (dayEl.hasAttribute('data-day')) {
-                const year = Number(dayEl.getAttribute('data-year'));
-                const month = Number(dayEl.getAttribute('data-month')) - 1;
-                const day = Number(dayEl.getAttribute('data-day'));
-                const dateObj = new Date(year, month, day);
-                const weekDay = dateObj.getDay();
-                if (weekDay === 0) dayEl.classList.add('sunday');
-                if (weekDay === 6) dayEl.classList.add('saturday');
-            }
-            // Para modo semanal
-            if (dayEl.hasAttribute('data-date')) {
-                const [d, m, y] = dayEl.getAttribute('data-date').split('/');
-                const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
-                const weekDay = dateObj.getDay();
-                if (weekDay === 0) dayEl.classList.add('sunday');
-                if (weekDay === 6) dayEl.classList.add('saturday');
-            }
-        });
+                            setTimeout(() => {
+                                const dayToSelect = this.textContent.trim();
+                                const newDays = document.querySelectorAll('.day:not(.disabled)');
+                                newDays.forEach(newDay => {
+                                    if (newDay.textContent.trim() === dayToSelect) {
+                                        newDay.click();
+                                        newDay.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
+                                    }
+                                });
+                            }, 100);
+                            return;
+                        }
 
-        document.querySelectorAll('.day').forEach(dayEl => {
-            dayEl.addEventListener('click', function() {
-                if (this.classList.contains('past-day')) {
-                    document.querySelector('.time-slots').style.display = 'none';
-                    return;
-                }
-                // ...código normal para dias válidos...
-                document.querySelector('.time-slots').style.display = '';
-            });
-        });
-    }
+                        // Código existente para dias normais
+                        dayElements.forEach(d => d.classList.remove('selected'));
+                        this.classList.add('selected');
 
-    // Selecionar horário
-    const timeSlots = document.querySelectorAll('.time-slot');
-    timeSlots.forEach(slot => {
-        slot.addEventListener('click', function() {
-            // Remover seleção anterior
-            timeSlots.forEach(s => s.classList.remove('selected'));
+                        const dateStr = this.getAttribute('data-date');
+                        const [d, m, y] = dateStr.split('/');
+                        selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
 
-            // Adicionar seleção atual
-            this.classList.add('selected');
-
-            // Guardar o horário selecionado
-            selectedTime = this.textContent;
-
-            // Mostrar a seção de confirmação
-            confirmationSection.style.display = 'block';
-
-            // Atualizar os campos de confirmação
-            updateConfirmationDetails();
-
-            // Scroll para a confirmação
-            confirmationSection.scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Atualizar detalhes de confirmação
-    function updateConfirmationDetails() {
-        document.getElementById('confirm-service').textContent = selectedService || '-';
-        document.getElementById('confirm-professional').textContent = selectedProfessional || '-';
-        document.getElementById('confirm-date').textContent = selectedDate || '-';
-        document.getElementById('confirm-time').textContent = selectedTime || '-';
-        document.getElementById('confirm-price').textContent = selectedServicePrice ? `R$ ${selectedServicePrice}` : '-';
-    }
-
-    // Botão de confirmação final
-    const confirmButton = document.querySelector('.confirm-button');
-    const phoneModal = document.getElementById('phoneModal');
-    const phoneModalClose = document.getElementById('phoneModalClose');
-    const phoneModalBtn = document.getElementById('phoneModalBtn');
-    const userPhone = document.getElementById('userPhone');
-    const acceptNotifications = document.getElementById('acceptNotifications');
-    const acceptNotificationsLabel = document.querySelector('label[for="acceptNotifications"]');
-    const userNameContainer = document.getElementById('userNameContainer');
-    const userName = document.getElementById('userName');
-
-    // Função para validar telefone (10 ou 11 dígitos)
-    function validarTelefone(telefone) {
-        return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
-    }
-
-    let aguardandoNome = false;
-
-    // Atualiza o estado do botão
-    function atualizarEstadoBtn() {
-        const telefoneValido = validarTelefone(userPhone.value.trim());
-        const notificacaoAceita = acceptNotifications.checked;
-        let nomeValido = true;
-        if (userNameContainer.style.display !== 'none') {
-            nomeValido = !!userName.value.trim();
-        }
-        phoneModalBtn.disabled = !(telefoneValido && notificacaoAceita && (userNameContainer.style.display === 'none' || nomeValido));
-    }
-    userPhone.addEventListener('input', atualizarEstadoBtn);
-    acceptNotifications.addEventListener('change', atualizarEstadoBtn);
-    if (userName) userName.addEventListener('input', atualizarEstadoBtn);
-
-    // Sempre que abrir o modal, reseta o fluxo
-    if (confirmButton) {
-        confirmButton.addEventListener('click', function() {
-            if (selectedService && selectedProfessional && selectedDate && selectedTime) {
-                phoneModal.classList.add('active');
-                userPhone.value = '';
-                userName.value = '';
-                userNameContainer.style.display = 'none';
-                acceptNotifications.checked = false;
-                phoneModalBtn.disabled = true;
-                aguardandoNome = false;
-            } else {
-                showCustomModal({
-                    message: 'Por favor, complete todas as informações para agendar.',
-                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                    btnText: 'OK'
+                        updateConfirmationDetails();
+                        confirmationSection.style.display = 'block';
+                    });
                 });
-            }
-        });
-    }
 
-    phoneModalBtn.onclick = async function() {
-        const tel = userPhone.value.trim();
-        const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
-        if (!tel) {
-            userPhone.style.borderColor = 'var(--primary-dark)';
-            return;
-        }
-        if (!acceptNotifications.checked) {
-            alert('Você precisa aceitar receber notificações para continuar.');
-            return;
-        }
-        // Se o campo de nome está visível, é porque já foi solicitado
-        if (userNameContainer.style.display !== 'none') {
-            if (!nome) {
-                userName.style.borderColor = 'var(--primary-dark)';
-                return;
-            }
-            try {
-                const subscription = await subscribeUserToPush();
-                await fetch('/agendamento/novo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        nome: nome,
-                        telefone: tel,
-                        servico: selectedService,
-                        profissional: selectedProfessional,
-                        data: selectedDate.split('/').reverse().join('-'),
-                        hora: selectedTime,
-                        preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
-                        subscription
-                    })
-                });
-                phoneModal.classList.remove('active');
-                showCustomModal({
-                    message: `<strong>Agendamento confirmado!</strong><br><br>
-                    <b>Serviço:</b> ${selectedService}<br>
-                    <b>Profissional:</b> ${selectedProfessional}<br>
-                    <b>Data:</b> ${selectedDate}<br>
-                    <b>Horário:</b> ${selectedTime}<br>
-                    <b>Valor:</b> R$ ${selectedServicePrice}<br>
-                    <b>Telefone:</b> ${tel}`,
-                    icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                    btnText: 'Fechar',
-                    onClose: function() {
-                        setTimeout(() => {
-                            location.reload();
-                        }, 300);
+                document.querySelectorAll('.day').forEach(dayEl => {
+                    // Para modo mensal
+                    if (dayEl.hasAttribute('data-day')) {
+                        const year = Number(dayEl.getAttribute('data-year'));
+                        const month = Number(dayEl.getAttribute('data-month')) - 1;
+                        const day = Number(dayEl.getAttribute('data-day'));
+                        const dateObj = new Date(year, month, day);
+                        const weekDay = dateObj.getDay();
+                        if (weekDay === 0) dayEl.classList.add('sunday');
+                        if (weekDay === 6) dayEl.classList.add('saturday');
+                    }
+                    // Para modo semanal
+                    if (dayEl.hasAttribute('data-date')) {
+                        const [d, m, y] = dayEl.getAttribute('data-date').split('/');
+                        const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
+                        const weekDay = dateObj.getDay();
+                        if (weekDay === 0) dayEl.classList.add('sunday');
+                        if (weekDay === 6) dayEl.classList.add('saturday');
                     }
                 });
-            } catch (err) {
-                alert('Erro ao ativar notificações: ' + err.message);
-            }
-            return;
-        }
-        // Se ainda não pediu o nome, verifica no banco se já é usuário cadastrado
-        if (!aguardandoNome) {
-            phoneModalBtn.disabled = true;
-            try {
-                const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
-                const data = await res.json();
-                if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
-                    // Primeiro agendamento: pede o nome
-                    userNameContainer.style.display = '';
-                    aguardandoNome = true;
-                    phoneModalBtn.disabled = false;
-                    userName.focus();
-                    atualizarEstadoBtn();
-                    return;
-                } else {
-                    // Já é usuário: agenda normalmente
-                    const subscription = await subscribeUserToPush();
-                    await fetch('/agendamento/novo', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            nome: '', // backend irá buscar o nome já cadastrado
-                            telefone: tel,
-                            servico: selectedService,
-                            profissional: selectedProfessional,
-                            data: selectedDate.split('/').reverse().join('-'),
-                            hora: selectedTime,
-                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
-                            subscription
-                        })
+
+                document.querySelectorAll('.day').forEach(dayEl => {
+                    dayEl.addEventListener('click', function() {
+                        if (this.classList.contains('past-day')) {
+                            document.querySelector('.time-slots').style.display = 'none';
+                            return;
+                        }
+                        // ...código normal para dias válidos...
+                        document.querySelector('.time-slots').style.display = '';
                     });
-                    phoneModal.classList.remove('active');
-                    showCustomModal({
-                        message: `<strong>Agendamento confirmado!</strong><br><br>
+                });
+            }
+
+            // Selecionar horário
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    timeSlots.forEach(s => s.classList.remove('selected'));
+
+                    // Adicionar seleção atual
+                    this.classList.add('selected');
+
+                    // Guardar o horário selecionado
+                    selectedTime = this.textContent;
+
+                    // Mostrar a seção de confirmação
+                    confirmationSection.style.display = 'block';
+
+                    // Atualizar os campos de confirmação
+                    updateConfirmationDetails();
+
+                    // Scroll para a confirmação
+                    confirmationSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Atualizar detalhes de confirmação
+            function updateConfirmationDetails() {
+                document.getElementById('confirm-service').textContent = selectedService || '-';
+                document.getElementById('confirm-professional').textContent = selectedProfessional || '-';
+                document.getElementById('confirm-date').textContent = selectedDate || '-';
+                document.getElementById('confirm-time').textContent = selectedTime || '-';
+                document.getElementById('confirm-price').textContent = selectedServicePrice ? `R$ ${selectedServicePrice}` : '-';
+            }
+
+            // Botão de confirmação final
+            const confirmButton = document.querySelector('.confirm-button');
+            const phoneModal = document.getElementById('phoneModal');
+            const phoneModalClose = document.getElementById('phoneModalClose');
+            const phoneModalBtn = document.getElementById('phoneModalBtn');
+            const userPhone = document.getElementById('userPhone');
+            const acceptNotifications = document.getElementById('acceptNotifications');
+            const acceptNotificationsLabel = document.querySelector('label[for="acceptNotifications"]');
+            const userNameContainer = document.getElementById('userNameContainer');
+            const userName = document.getElementById('userName');
+
+            // Função para validar telefone (10 ou 11 dígitos)
+            function validarTelefone(telefone) {
+                return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
+            }
+
+            let aguardandoNome = false;
+
+            // Atualiza o estado do botão
+            function atualizarEstadoBtn() {
+                const telefoneValido = validarTelefone(userPhone.value.trim());
+                const notificacaoAceita = acceptNotifications.checked;
+                let nomeValido = true;
+                if (userNameContainer.style.display !== 'none') {
+                    nomeValido = !!userName.value.trim();
+                }
+                phoneModalBtn.disabled = !(telefoneValido && notificacaoAceita && (userNameContainer.style.display === 'none' || nomeValido));
+            }
+            userPhone.addEventListener('input', atualizarEstadoBtn);
+            acceptNotifications.addEventListener('change', atualizarEstadoBtn);
+            if (userName) userName.addEventListener('input', atualizarEstadoBtn);
+
+            // Sempre que abrir o modal, reseta o fluxo
+            if (confirmButton) {
+                confirmButton.addEventListener('click', function() {
+                    if (selectedService && selectedProfessional && selectedDate && selectedTime) {
+                        phoneModal.classList.add('active');
+                        userPhone.value = '';
+                        userName.value = '';
+                        userNameContainer.style.display = 'none';
+                        acceptNotifications.checked = false;
+                        phoneModalBtn.disabled = true;
+                        aguardandoNome = false;
+                    } else {
+                        showCustomModal({
+                            message: 'Por favor, complete todas as informações para agendar.',
+                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                            btnText: 'OK'
+                        });
+                    }
+                });
+            }
+
+            phoneModalBtn.onclick = async function() {
+                const tel = userPhone.value.trim();
+                const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
+                if (!tel) {
+                    userPhone.style.borderColor = 'var(--primary-dark)';
+                    return;
+                }
+                if (!acceptNotifications.checked) {
+                    alert('Você precisa aceitar receber notificações para continuar.');
+                    return;
+                }
+                // Se o campo de nome está visível, é porque já foi solicitado
+                if (userNameContainer.style.display !== 'none') {
+                    if (!nome) {
+                        userName.style.borderColor = 'var(--primary-dark)';
+                        return;
+                    }
+                    try {
+                        const subscription = await subscribeUserToPush();
+                        await fetch('/agendamento/novo', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                nome: nome,
+                                telefone: tel,
+                                servico: selectedService,
+                                profissional: selectedProfessional,
+                                data: selectedDate.split('/').reverse().join('-'),
+                                hora: selectedTime,
+                                preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                                subscription
+                            })
+                        });
+                        phoneModal.classList.remove('active');
+                        showCustomModal({
+                            message: `
+        <div class="confirmed-modal-content">
+            <div class="confirmed-modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmed-modal-title">Agendamento confirmado!</div>
+            <ul class="confirmed-modal-list">
+                <li><span>Serviço:</span> <strong>${selectedService}</strong></li>
+                <li><span>Profissional:</span> <strong>${selectedProfessional}</strong></li>
+                <li><span>Data:</span> <strong>${selectedDate}</strong></li>
+                <li><span>Horário:</span> <strong>${selectedTime}</strong></li>
+                <li><span>Valor:</span> <strong style="color:var(--success);">R$ ${selectedServicePrice}</strong></li>
+                <li><span>Telefone:</span> <strong>${tel}</strong></li>
+            </ul>
+            <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
+        </div>
+    `,
+                            icon: '', // Ícone já incluso acima
+                            btnText: 'Fechar',
+                            onClose: function() {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 300);
+                            }
+                        });
+                    } catch (err) {
+                        alert('Erro ao ativar notificações: ' + err.message);
+                    }
+                    return;
+                }
+                // Se ainda não pediu o nome, verifica no banco se já é usuário cadastrado
+                if (!aguardandoNome) {
+                    phoneModalBtn.disabled = true;
+                    try {
+                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                        const data = await res.json();
+                        if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
+                            // Primeiro agendamento: pede o nome
+                            userNameContainer.style.display = '';
+                            aguardandoNome = true;
+                            phoneModalBtn.disabled = false;
+                            userName.focus();
+                            atualizarEstadoBtn();
+                            return;
+                        } else {
+                            // Já é usuário: agenda normalmente
+                            const subscription = await subscribeUserToPush();
+                            await fetch('/agendamento/novo', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    nome: '', // backend irá buscar o nome já cadastrado
+                                    telefone: tel,
+                                    servico: selectedService,
+                                    profissional: selectedProfessional,
+                                    data: selectedDate.split('/').reverse().join('-'),
+                                    hora: selectedTime,
+                                    preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                                    subscription
+                                })
+                            });
+                            phoneModal.classList.remove('active');
+                            showCustomModal({
+                                message: `<strong>Agendamento confirmado!</strong><br><br>
                         <b>Serviço:</b> ${selectedService}<br>
                         <b>Profissional:</b> ${selectedProfessional}<br>
                         <b>Data:</b> ${selectedDate}<br>
                         <b>Horário:</b> ${selectedTime}<br>
                         <b>Valor:</b> R$ ${selectedServicePrice}<br>
                         <b>Telefone:</b> ${tel}`,
-                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                        btnText: 'Fechar',
-                        onClose: function() {
-                            setTimeout(() => {
-                                location.reload();
-                            }, 300);
+                                icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                btnText: 'Fechar',
+                                onClose: function() {
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 300);
+                                }
+                            });
                         }
-                    });
+                    } catch (err) {
+                        alert('Erro ao verificar telefone: ' + err.message);
+                        phoneModalBtn.disabled = false;
+                    }
                 }
-            } catch (err) {
-                alert('Erro ao verificar telefone: ' + err.message);
-                phoneModalBtn.disabled = false;
-            }
-        }
-    };
+            };
 
-    // Código para o modal de "Meus agendamentos"
-    const myAppointmentsBtn = document.querySelector('.my-appointments');
-    const appointmentsModal = document.getElementById('appointmentsModal');
-    const appointmentsModalClose = document.getElementById('appointmentsModalClose');
-    const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
-    const appointmentsPhone = document.getElementById('appointmentsPhone');
+            // Código para o modal de "Meus agendamentos"
+            const myAppointmentsBtn = document.querySelector('.my-appointments');
+            const appointmentsModal = document.getElementById('appointmentsModal');
+            const appointmentsModalClose = document.getElementById('appointmentsModalClose');
+            const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
+            const appointmentsPhone = document.getElementById('appointmentsPhone');
 
-    // Abrir modal ao clicar em "Meus agendamentos"
-    myAppointmentsBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        appointmentsModal.classList.add('active');
-        appointmentsPhone.value = '';
-        appointmentsPhone.focus();
+            // Abrir modal ao clicar em "Meus agendamentos"
+            myAppointmentsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                appointmentsModal.classList.add('active');
+                appointmentsPhone.value = '';
+                appointmentsPhone.focus();
+            });
+
+            // Fechar modal
+            appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
+
+            // Fechar ao clicar fora do conteúdo
+            appointmentsModal.onclick = function(e) {
+                if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
+            };
+
+            // Ação do botão do modal
+            appointmentsModalBtn.onclick = async function() {
+                    const tel = appointmentsPhone.value.trim();
+
+                    appointmentsPhone.style.borderColor = '';
+
+                    if (!tel) {
+                        appointmentsPhone.style.borderColor = 'var(--primary-dark)';
+                        return;
+                    }
+
+                    // Buscar agendamentos do usuário
+                    try {
+                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                        const data = await res.json();
+                        if (data.success && data.agendamentos.length > 0) {
+                            const nomeCliente = data.agendamentos[0].nome ? data.agendamentos[0].nome.split(' ')[0] : '';
+                            let html = `
+        <div class="my-appointments-modal">
+            <div class="my-appointments-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="my-appointments-title">Meus agendamentos${nomeCliente ? `, ${nomeCliente}` : ''}</div>
+            <ul class="my-appointments-list">
+                ${data.agendamentos.map(ag => `
+                    <li>
+                        <div class="my-appointments-row">
+                            <span class="my-appointments-service"><i class="fas fa-cut"></i> ${ag.servico}</span>
+                            <span class="my-appointments-prof"><i class="fas fa-user-tie"></i> ${ag.profissional}</span>
+                        </div>
+                        <div class="my-appointments-row">
+                            <span class="my-appointments-date"><i class="far fa-calendar-alt"></i> ${ag.data.split('-').reverse().join('/')}</span>
+                            <span class="my-appointments-time"><i class="far fa-clock"></i> ${ag.hora}</span>
+                        </div>
+                        <div class="my-appointments-row">
+                            <span class="my-appointments-price"><i class="fas fa-money-bill-wave"></i> R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
+                            <button class="delete-appointment-btn" data-id="${ag.id}">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `;
+    appointmentsModal.classList.remove('active');
+    showCustomModal({
+        message: html,
+        icon: '',
+        btnText: 'Fechar'
     });
 
-    // Fechar modal
-    appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
-
-    // Fechar ao clicar fora do conteúdo
-    appointmentsModal.onclick = function(e) {
-        if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
-    };
-
-    // Ação do botão do modal
-    appointmentsModalBtn.onclick = async function() {
-        const tel = appointmentsPhone.value.trim();
-
-        appointmentsPhone.style.borderColor = '';
-
-        if (!tel) {
-            appointmentsPhone.style.borderColor = 'var(--primary-dark)';
-            return;
-        }
-
-        // Buscar agendamentos do usuário
-        try {
-            const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
-            const data = await res.json();
-            if (data.success && data.agendamentos.length > 0) {
-                // Obtém o nome do primeiro agendamento retornado
-                const nomeCliente = data.agendamentos[0].nome ? data.agendamentos[0].nome.split(' ')[0] : '';
-                let html = `<b style="color:var(--text-main);">Olá${nomeCliente ? ', ' + nomeCliente : ''}!</b><br><br>
-        <div style="display: flex; flex-direction: column; gap: 18px;">`;
-                data.agendamentos.forEach(ag => {
-                    html += `
-            <div style="
-                border: 1px solid var(--primary-dark);
-                border-radius: 12px;
-                padding: 12px 18px;
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-                background: var(--card);
-                margin-bottom: 8px;
-                position: relative;
-            ">
-                <div>
-                    <span style="font-weight: 500; color: var(--text-secondary);">Serviço:</span>
-                    <span style="color:var(--text-main);">${ag.servico}</span>
-                </div>
-                <div>
-                    <span style="font-weight: 500; color: var(--text-secondary);">Profissional:</span>
-                    <span style="color:var(--text-main);">${ag.profissional}</span>
-                </div>
-                <div>
-                    <span style="font-weight: 500; color: var(--text-secondary);">Data:</span>
-                    <span style="color:var(--text-main);">${ag.data.split('-').reverse().join('/')}</span>
-                </div>
-                <div>
-                    <span style="font-weight: 500; color: var(--text-secondary);">Horário:</span>
-                    <span style="color:var(--text-main);">${ag.hora}</span>
-                </div>
-                <div>
-                    <span style="font-weight: 500; color: var(--text-secondary);">Valor:</span>
-                    <span style="color:var(--success); font-weight: bold;">R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
-                </div>
-                <button class="delete-appointment-btn" data-id="${ag.id}" style="
-                    margin-top: 8px;
-                    align-self: flex-end;
-                    background: var(--red);
-                    color: #fff;
-                    border: none;
-                    border-radius: 6px;
-                    padding: 6px 16px;
-                    font-size: 0.98rem;
-                    cursor: pointer;
-                    transition: background 0.2s;
-                ">
-                    <i class="fas fa-trash"></i> Excluir
-                </button>
-            </div>
-            `;
-                });
-                html += '</div>';
-                appointmentsModal.classList.remove('active');
-                showCustomModal({
-                    message: html,
-                    icon: `<i class="fas fa-calendar-check" style="color:var(--primary);"></i>`,
-                    btnText: 'Fechar'
-                });
-
                 // Ativar botões de exclusão
-                setTimeout(() => {
-                    document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
-                        btn.onclick = async function() {
-                            const id = this.getAttribute('data-id');
-                            try {
-                                const res = await fetch(`/agendamento/excluir/${id}`, {
-                                    method: 'DELETE'
-                                });
-                                const result = await res.json();
-                                if (result.success) {
-                                    this.closest('div').remove();
-                                    showCustomModal({
-                                        message: 'Agendamento excluído com sucesso!',
-                                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                                        btnText: 'Fechar'
-                                    });
-                                } else {
-                                    showCustomModal({
-                                        message: 'Erro ao excluir agendamento.',
-                                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                                        btnText: 'Fechar'
-                                    });
-                                }
-                            } catch (err) {
-                                showCustomModal({
-                                    message: 'Erro ao conectar ao servidor.',
-                                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                                    btnText: 'Fechar'
-                                });
-                            }
-                        };
+    setTimeout(() => {
+        document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+            btn.onclick = async function() {
+                const id = this.getAttribute('data-id');
+                try {
+                    const res = await fetch(`/agendamento/excluir/${id}`, { method: 'DELETE' });
+                    const result = await res.json();
+                    if (result.success) {
+                        this.closest('li').remove();
+                        showCustomModal({
+                            message: 'Agendamento excluído com sucesso!',
+                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                            btnText: 'Fechar'
+                        });
+                    } else {
+                        showCustomModal({
+                            message: 'Erro ao excluir agendamento.',
+                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                            btnText: 'Fechar'
+                        });
+                    }
+                } catch (err) {
+                    showCustomModal({
+                        message: 'Erro ao conectar ao servidor.',
+                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                        btnText: 'Fechar'
                     });
-                }, 100);
+                }
+            };
+        });
+    }, 100);
+
             } else {
                 appointmentsModal.classList.remove('active');
                 showCustomModal({
