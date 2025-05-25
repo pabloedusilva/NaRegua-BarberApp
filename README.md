@@ -1,6 +1,6 @@
 # NaRégua BarberApp
 
-Sistema completo de agendamento online para barbearias, com dashboard administrativa, notificações push, controle de serviços, profissionais, horários, folgas, autenticação, integração com WhatsApp e Instagram, **personalização visual com wallpapers dinâmicos**, preview de imagens, e interface moderna e responsiva.
+Sistema completo de agendamento online para barbearias, com dashboard administrativa, notificações push, controle de serviços, profissionais, horários, folgas, autenticação, integração com WhatsApp e Instagram, **personalização visual com wallpapers dinâmicos**, preview de imagens, interface moderna e responsiva, e recursos avançados de personalização, segurança e automação.
 
 ---
 
@@ -20,36 +20,67 @@ Sistema completo de agendamento online para barbearias, com dashboard administra
 - [Wallpapers e Personalização Visual](#wallpapers-e-personalização-visual)
 - [Ícones e Recursos Visuais](#ícones-e-recursos-visuais)
 - [Personalização e Temas](#personalização-e-temas)
+- [Limitações e Considerações](#limitações-e-considerações)
+- [Dicas de Produção e Segurança](#dicas-de-produção-e-segurança)
+- [Exemplos de Uso e Fluxos](#exemplos-de-uso-e-fluxos)
 - [Dúvidas Frequentes](#dúvidas-frequentes)
+- [Roadmap e Contribuição](#roadmap-e-contribuição)
+- [Licença](#licença)
 
 ---
 
 ## Descrição Geral
-O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clientes agendem horários online e que administradores gerenciem serviços, profissionais, horários, folgas, notificações e informações da barbearia. Possui dashboard protegida por login, notificações automáticas e manuais, integração com WhatsApp e Instagram, interface responsiva, **personalização de plano de fundo** e preview de imagens.
+O **NaRégua BarberApp** é um sistema web completo para barbearias, permitindo que clientes agendem horários online e que administradores gerenciem serviços, profissionais, horários, folgas, notificações e informações da barbearia. Possui dashboard protegida por login, notificações automáticas e manuais, integração com WhatsApp e Instagram, interface responsiva, personalização visual avançada (wallpapers dinâmicos, temas), preview de imagens, estatísticas, e recursos de segurança e automação.
+
+### Principais Diferenciais
+- CRUD completo de todos os recursos (serviços, profissionais, horários, folgas, wallpapers, notificações, barbearia)
+- Notificações push automáticas (lembrete 1h antes do agendamento) e manuais (admin)
+- Personalização visual total: wallpapers dinâmicos, tema claro/escuro, preview de imagens
+- Integração com WhatsApp e Instagram (links diretos, edição pela dashboard)
+- Service Worker para notificações e experiência PWA
+- Estatísticas em tempo real (agendamentos por dia, semana, mês, total de clientes)
+- Interface moderna, responsiva e acessível
+- Segurança: autenticação, middleware, cookies HTTP Only, proteção de rotas
+- Suporte a imagens locais, externas e base64
+- Upload de imagens com preview instantâneo
+- Compartilhamento fácil do link de agendamento
+- Persistência de preferências (tema, wallpaper) via localStorage e banco
 
 ## Funcionalidades
-- Agendamento online de serviços
-- Dashboard administrativa (restrita a admin)
-- Gerenciamento de serviços, profissionais, horários e folgas
-- Notificações push automáticas e manuais
-- Autenticação de usuários (admin)
-- Visualização e edição de informações da barbearia
-- Integração com WhatsApp e Instagram
-- Controle de tema (claro/escuro)
-- Service Worker para notificações
-- Estatísticas de agendamentos (dia, semana, mês)
-- Compartilhamento de link de agendamento
-- **Personalização visual com wallpapers dinâmicos**
-- **Preview de imagens em modais e cards**
-- **Seleção dinâmica de plano de fundo do agendamento**
-- **CRUD completo de wallpapers**
-- Interface responsiva e moderna
+- Agendamento online de serviços (com seleção de serviço, profissional, data/hora, confirmação e push)
+- Dashboard administrativa (restrita a admin, com login seguro)
+- Gerenciamento completo de serviços, profissionais, horários, folgas e wallpapers
+- Notificações push automáticas (cron) e manuais (dashboard)
+- Autenticação de usuários admin, alteração de senha, sessão segura
+- Visualização e edição de informações da barbearia (nome, endereço, redes sociais, foto)
+- Integração com WhatsApp e Instagram (links e edição)
+- Controle de tema (claro/escuro), persistente
+- Service Worker para notificações push e experiência PWA
+- Estatísticas de agendamentos (dia, semana, mês, total)
+- Compartilhamento de link de agendamento (botão na dashboard)
+- Personalização visual com wallpapers dinâmicos (CRUD, seleção, preview)
+- Preview de imagens em modais e cards (serviços, wallpapers, barbearia)
+- Seleção dinâmica de plano de fundo do agendamento (refletido em tempo real)
+- CRUD completo de wallpapers (adicionar, editar, ativar/desativar, remover)
+- Interface responsiva, moderna e acessível
+- Filtros e busca de agendamentos por período
+- Upload de imagens com limite configurável
+- Proteção de rotas admin via middleware
+- Sessão via cookies HTTP Only
+- Redirecionamento automático para login se não autenticado
+- Logs de notificações e agendamentos
+- Suporte a múltiplos turnos por dia e folgas especiais
+- Painel de estatísticas e gráficos (dashboard)
+- Suporte a imagens em base64 para maior flexibilidade
+- Atualização automática de dados (sem reload manual)
 
 ## Arquitetura e Estrutura de Pastas
 ```
 ├── dashboard/                # Frontend da dashboard administrativa
 │   ├── dashboard.html        # Dashboard principal
-│   └── login-dashboard.html  # Tela de login/cadastro admin
+│   ├── login-dashboard.html  # Tela de login/cadastro admin
+│   ├── css/                  # Estilos da dashboard
+│   └── js/                   # Scripts da dashboard
 ├── db/
 │   └── mysql.js              # Conexão com banco MySQL
 ├── icons/                    # Ícones SVG (Instagram, WhatsApp)
@@ -58,6 +89,8 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 ├── public/                   # Frontend público (cliente)
 │   ├── index.html            # Página de agendamento
 │   ├── sw.js                 # Service Worker para push
+│   ├── css/                  # Estilos do frontend
+│   ├── js/                   # Scripts do frontend
 │   └── img/                  # Imagens de wallpapers, serviços, etc.
 ├── routes/                   # Rotas backend (Express)
 │   ├── agendamento.js        # Rotas de agendamento
@@ -70,10 +103,22 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 └── README.md                 # Este arquivo
 ```
 
+### Detalhes das Pastas/Arquivos
+- `dashboard/`: HTML, CSS e JS da dashboard admin, com modais, gráficos, CRUD, filtros, preview de imagens, seleção de wallpapers, etc.
+- `public/`: Frontend do cliente, com agendamento, seleção de serviço/profissional, confirmação, integração com push, preview de imagens, seleção de tema, etc.
+- `routes/`: Rotas Express para todos os recursos (RESTful), protegidas por middleware quando necessário.
+- `middleware/auth.js`: Middleware de autenticação, protege rotas admin.
+- `notificacoes.js`: Lógica de notificações automáticas (cron + web-push).
+- `server.js`: Inicialização do servidor Express, configuração de middlewares, rotas, static, etc.
+- `db/mysql.js`: Conexão e pool com banco MySQL.
+- `scriptDB.sql`: Script completo para criação e seed do banco de dados.
+- `icons/`: SVGs para redes sociais e ícones customizados.
+
 ## Requisitos
 - Node.js >= 14.x
 - MySQL >= 5.7
-- Navegador moderno (para notificações push)
+- Navegador moderno (para notificações push, PWA, temas)
+- Recomenda-se HTTPS em produção (para push notifications)
 
 ## Instalação e Configuração
 1. **Clone o repositório:**
@@ -90,6 +135,8 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
    - Ajuste as credenciais de conexão em `db/mysql.js`.
 4. **Configure as chaves VAPID para push:**
    - As chaves já estão no código, mas recomenda-se gerar novas para produção.
+   - Gere com: `npx web-push generate-vapid-keys`
+   - Substitua as chaves em `notificacoes.js` e `routes/dashboard.js`.
 5. **Inicie o servidor:**
    ```powershell
    npm start
@@ -98,8 +145,16 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
    - Página pública: [http://localhost:3000/index](http://localhost:3000/index)
    - Dashboard admin: [http://localhost:3000/dashboard/dashboard](http://localhost:3000/dashboard/dashboard)
 
+### Variáveis de Ambiente
+- Configure variáveis de ambiente para produção (porta, credenciais, chaves, etc) usando `.env` ou diretamente no ambiente.
+- Recomenda-se configurar:
+  - `PORT` (porta do servidor)
+  - `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME` (banco)
+  - `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` (push)
+
 ## Scripts Disponíveis
 - `npm start` — Inicia o servidor Express
+- Outros scripts podem ser adicionados para build, seed, backup, restore, etc.
 
 ## Banco de Dados
 - Script de criação: `scriptDB.sql`
@@ -114,36 +169,60 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
   - `notificacoes`
   - `subscriptions` (push)
   - `wallpapers` (**planos de fundo dinâmicos**)
+- Tabelas auxiliares: logs, estatísticas, etc (pode ser expandido)
 
 ### Wallpapers (Planos de Fundo)
 - Tabela `wallpapers` armazena nome, url/base64 e status de cada plano de fundo.
-- O campo `url` pode ser um caminho local (`/img/background1.jpg`) ou uma URL externa/base64.
+- O campo `url` pode ser um caminho local (`/img/background1.jpg`), uma URL externa ou base64.
 - O campo `ativo` permite ativar/desativar wallpapers.
 - A tabela `barbearia` possui o campo `wallpaper_id` para o plano de fundo selecionado.
 
+### Exemplos de Queries
+- Buscar agendamentos do dia:
+  ```sql
+  SELECT * FROM agendamentos WHERE data = CURDATE();
+  ```
+- Buscar serviços ativos:
+  ```sql
+  SELECT * FROM servicos WHERE ativo = 1;
+  ```
+- Buscar wallpapers ativos:
+  ```sql
+  SELECT * FROM wallpapers WHERE ativo = 1;
+  ```
+
+### Backup e Restore
+- Faça backup regular do banco (mysqldump) e da pasta `public/img/`.
+- Para restaurar, basta importar o dump e copiar as imagens.
+
 ## Detalhes Técnicos
-- **Backend:** Node.js, Express, MySQL
+- **Backend:** Node.js, Express, MySQL, RESTful
 - **Frontend:** HTML, CSS, JS puro, FontAwesome, Animate.css
-- **Sessão:** express-session
-- **Notificações:** web-push, node-cron
-- **Service Worker:** `public/sw.js` para push notifications
+- **Sessão:** express-session, cookies HTTP Only
+- **Notificações:** web-push, node-cron, Service Worker
+- **Service Worker:** `public/sw.js` para push notifications e PWA
 - **Middleware:** `middleware/auth.js` protege rotas admin
-- **Rotas RESTful** para CRUD de agendamentos, serviços, profissionais, horários, folgas, notificações, wallpapers
+- **Rotas RESTful** para CRUD de todos os recursos
 - **Push automático:** Notifica clientes 1h antes do agendamento (cron)
 - **Push manual:** Admin pode enviar notificações pela dashboard
-- **Autenticação:** Usuários admin, login e alteração de senha
-- **Dashboard:** Estatísticas, filtros, CRUD, modais, responsivo
+- **Autenticação:** Usuários admin, login seguro, alteração de senha
+- **Dashboard:** Estatísticas, filtros, CRUD, modais, preview, responsivo
 - **Agendamento:** Cliente escolhe serviço, profissional, data/hora, recebe confirmação e push
 - **Wallpapers:** CRUD, seleção dinâmica, preview, integração total com dashboard e frontend
 - **Preview de imagens:** Em modais de edição, cards de serviços e wallpapers
 - **Personalização visual:** Escolha de plano de fundo, tema claro/escuro, responsividade
 - **Compartilhamento:** Link direto para agendamento
 - **Temas:** Claro/Escuro, persistente via localStorage
+- **Logs:** Logs de notificações, agendamentos, erros (pode ser expandido)
+- **Performance:** Carregamento assíncrono, atualização automática, otimização de imagens
+- **Acessibilidade:** Interface com contraste, navegação por teclado, ARIA nos ícones
+- **Internacionalização:** Estrutura pronta para tradução (strings centralizadas)
+- **SEO e PWA:** Manifest, favicon, meta tags, Service Worker
 
 ## Rotas Backend
-- `/dashboard/login` — Login admin
-- `/dashboard/dashboard` — Dashboard protegida
-- `/dashboard/servicos` — CRUD de serviços
+- `/dashboard/login` — Login admin (POST)
+- `/dashboard/dashboard` — Dashboard protegida (GET)
+- `/dashboard/servicos` — CRUD de serviços (GET, POST, PUT, DELETE)
 - `/dashboard/profissionais` — CRUD de profissionais
 - `/dashboard/horarios-turnos` — CRUD de horários
 - `/dashboard/folgas` — CRUD de folgas
@@ -152,29 +231,65 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - `/dashboard/enviar-push` — Envio manual de push
 - `/dashboard/enviar-push-agendamento` — Push para cliente específico
 - `/dashboard/alterar-senha` — Alteração de senha admin
-- `/dashboard/wallpapers` — Listar wallpapers disponíveis
+- `/dashboard/wallpapers` — Listar/adicionar/editar/remover wallpapers
 - `/dashboard/wallpaper-selecionado` — Get/Set wallpaper selecionado
-- `/agendamento/novo` — Novo agendamento (cliente)
+- `/dashboard/servertime` — Data/hora do servidor (GET)
+- `/dashboard/total-agendamentos` — Total de agendamentos (GET)
+- `/dashboard/total-clientes` — Total de clientes (GET)
+- `/agendamento/novo` — Novo agendamento (cliente, POST)
 - `/agendamento/meus` — Listar agendamentos do cliente
 - `/agendamento/excluir/:id` — Excluir agendamento
 - `/push/manual` — Envio manual de push (backend)
+
+### Exemplos de Payloads
+- **Novo agendamento:**
+  ```json
+  {
+    "nome": "João",
+    "telefone": "11999999999",
+    "servico": "Corte",
+    "profissional": "Pablo",
+    "data": "2025-05-24",
+    "hora": "14:00",
+    "preco": 30.00,
+    "subscription": { ... }
+  }
+  ```
+- **Adicionar serviço:**
+  ```json
+  {
+    "nome": "Barba",
+    "tempo": "30min",
+    "preco": 20.00,
+    "imagem": "img/servicos/barba.jpg"
+  }
+  ```
 
 ## Notificações Push
 - **Automáticas:** Enviadas 1h antes do agendamento (cron + web-push)
 - **Manuais:** Enviadas pelo admin via dashboard
 - **Service Worker:** Recebe e exibe notificações no navegador
 - **Assinatura:** Cliente autoriza push ao agendar
+- **Exemplo de fluxo:**
+  1. Cliente agenda e aceita notificações
+  2. Subscription é salva no banco
+  3. Notificação automática é enviada 1h antes
+  4. Admin pode enviar push manual para todos ou para um cliente específico
 
 ## Service Worker
 - Arquivo: `public/sw.js`
 - Escuta eventos `push` e `notificationclick`
 - Exibe notificações com título, corpo, ícone e link
+- Permite experiência PWA (instalável, offline básico)
+- Atualização automática do Service Worker
 
 ## Autenticação e Middleware
 - Middleware `requireLogin` protege rotas admin
 - Sessão via cookies HTTP Only
 - Login e alteração de senha admin
 - Redirecionamento automático para login se não autenticado
+- Proteção contra acesso não autorizado
+- Senhas armazenadas com hash (recomenda-se bcrypt em produção)
 
 ## Wallpapers e Personalização Visual
 - **Escolha dinâmica de plano de fundo do agendamento** pela dashboard
@@ -184,18 +299,63 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
 - **Plano de fundo do agendamento** é refletido automaticamente na tela pública após seleção
 - Suporte a imagens locais, externas e base64
 - Responsivo e com destaque visual para o wallpaper selecionado
+- Persistência do wallpaper selecionado no banco e no frontend
 
 ## Ícones e Recursos Visuais
 - Ícones SVG: `icons/instagram.svg`, `icons/whatsapp.svg`
 - FontAwesome para ícones gerais
 - Imagens de serviços, barbearia e wallpapers
 - Interface responsiva e moderna
+- Preview de imagens em todos os CRUDs
 
 ## Personalização e Temas
 - Suporte a tema claro/escuro
 - Persistência do tema via localStorage
 - Customização de cores via CSS
 - **Plano de fundo do agendamento** personalizável por admin
+- Interface responsiva e acessível
+- Preferências do usuário salvas localmente
+
+## Limitações e Considerações
+- Push notifications exigem HTTPS em produção
+- Limite de upload de imagens: 5MB (ajustável em `server.js`)
+- Não há painel de cadastro de admin (inserir manualmente na tabela `usuarios`)
+- Não há integração nativa com gateways de pagamento (pode ser expandido)
+- Não há sistema de permissões por perfil (apenas admin)
+- Não há logs avançados (pode ser expandido)
+- Não há integração contínua/testes automatizados (pode ser adicionado)
+
+## Dicas de Produção e Segurança
+- Gere novas chaves VAPID para produção
+- Use HTTPS obrigatoriamente
+- Configure variáveis de ambiente para credenciais e chaves
+- Faça backup regular do banco e das imagens
+- Limite o upload de imagens e valide extensões
+- Use senhas fortes para admin
+- Considere usar bcrypt para hash de senhas
+- Monitore logs de erro e acesso
+- Atualize dependências regularmente
+
+## Exemplos de Uso e Fluxos
+### Fluxo de Agendamento (Cliente)
+1. Cliente acessa `/index`, escolhe serviço, profissional, data/hora
+2. Confirma dados, insere telefone, aceita notificações
+3. Recebe confirmação visual e push (se aceitou)
+4. Pode visualizar agendamentos futuros
+
+### Fluxo de Gerenciamento (Admin)
+1. Admin faz login em `/dashboard/login`
+2. Acessa dashboard com estatísticas, CRUD, filtros
+3. Gerencia serviços, profissionais, horários, folgas, wallpapers
+4. Envia notificações push manuais
+5. Edita informações da barbearia, redes sociais, foto
+6. Visualiza logs e estatísticas
+
+### Fluxo de Personalização
+1. Admin adiciona/edita wallpapers na dashboard
+2. Seleciona wallpaper ativo (refletido no frontend)
+3. Altera tema claro/escuro (persistente)
+4. Preview de imagens em todos os CRUDs
 
 ## Dúvidas Frequentes
 - **Como alterar as chaves VAPID?**
@@ -210,6 +370,29 @@ O **NaRégua BarberApp** é um sistema web para barbearias, permitindo que clien
   Configure variáveis de ambiente, use HTTPS e gere novas chaves VAPID.
 - **Limite de upload de imagens?**
   O Express está configurado para aceitar imagens até 5MB por padrão. Ajuste em `server.js` se necessário.
+- **Como restaurar o banco ou imagens?**
+  Importe o dump SQL e copie a pasta `public/img/`.
+- **Como fazer backup?**
+  Use `mysqldump` para o banco e backup manual das imagens.
+- **Como customizar temas?**
+  Edite os arquivos CSS em `public/css/` e `dashboard/css/`.
+- **Como adicionar novos serviços/profissionais?**
+  Use o CRUD na dashboard.
+
+## Roadmap e Contribuição
+- [ ] Integração com gateways de pagamento
+- [ ] Permissões por perfil (admin, atendente, etc)
+- [ ] Logs avançados e painel de auditoria
+- [ ] Testes automatizados e integração contínua
+- [ ] Internacionalização completa (i18n)
+- [ ] API pública para integrações externas
+- [ ] Melhorias de acessibilidade e SEO
+- [ ] App mobile (PWA ou nativo)
+
+Contribuições são bem-vindas! Abra uma issue ou pull request.
+
+## Licença
+MIT. Veja o arquivo LICENSE.
 
 ---
 
