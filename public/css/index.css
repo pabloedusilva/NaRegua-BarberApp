@@ -1556,15 +1556,14 @@ body.dark-mode .footer-admin-link-modern:focus {
 
 .custom-modal {
     display: none;
-    /* Esconde por padrão */
     position: fixed;
     z-index: 9999;
     left: 0;
     top: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.18);
-    /* Fundo escuro */
+    background: rgba(30, 30, 30, 0.38);
+    backdrop-filter: blur(2.5px);
     align-items: center;
     justify-content: center;
     transition: background 0.3s;
@@ -1591,22 +1590,31 @@ body.dark-mode .footer-admin-link-modern:focus {
 }
 
 .custom-modal-content {
-    background: var(--card);
-    /* Fundo do modal */
+    background: linear-gradient(135deg, var(--card) 85%, var(--primary-light) 100%);
     color: var(--text);
-    /* Cor do texto */
-    border-radius: 18px;
-    /* Borda arredondada */
-    box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
-    /* Sombra */
-    padding: 38px 28px 28px 28px;
+    border-radius: 22px;
+    box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.18), 0 1.5px 8px 0 rgba(218, 192, 45, 0.07);
+    padding: 38px 32px 24px 32px;
     min-width: 320px;
-    max-width: 90vw;
+    max-width: 96vw;
     width: 100%;
     text-align: center;
     position: relative;
-    animation: slideUp 0.4s;
+    animation: modalPopIn 0.38s cubic-bezier(.23, 1.12, .32, 1);
+    border: 2.5px solid var(--primary-light);
     font-size: 1.08rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+@keyframes modalPopIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 
