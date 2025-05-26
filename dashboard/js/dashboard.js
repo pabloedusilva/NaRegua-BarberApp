@@ -1800,4 +1800,10 @@ async function renderNotificacoesComDataReal() {
     }
 }
 
-// Substitua a chamada de carregarNotificacoes() por renderNotificacoesComDataReal() onde for necessário
+document.addEventListener('DOMContentLoaded', function() {
+    const el = document.getElementById('dashboardTodayDate');
+    if (el) {
+        const now = new Date();
+        el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+});
