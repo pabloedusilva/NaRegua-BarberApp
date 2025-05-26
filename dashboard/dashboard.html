@@ -60,30 +60,51 @@
         </div>
     </div>
     <main class="container">
-        <section class="dashboard-section animate-fade-in">
-            <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Painel
-            </h2>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-value" id="today-appointments">0</div>
-                    <div class="stat-label">Agendamentos de hoje</div>
+        <section class="dashboard-section animate-fade-in" style="padding-bottom: 0;">
+            <div class="dashboard-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <i class="fas fa-tachometer-alt"></i> Painel de Controle
+                </h2>
+                <span class="dashboard-date" style="font-size: 1.08rem; color: var(--primary-dark); font-weight: 600;">
+            <i class="far fa-calendar-alt"></i>
+            <span id="dashboardTodayDate"></span>
+                </span>
+            </div>
+            <div class="stats-container" style="gap: 24px; margin-bottom: 0;">
+                <div class="stat-card stat-card--main">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                    <div>
+                        <div class="stat-value" id="today-appointments">0</div>
+                        <div class="stat-label">Agendamentos de hoje</div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="week-appointments">0</div>
-                    <div class="stat-label">Agendamentos da semana</div>
+                    <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+                    <div>
+                        <div class="stat-value" id="week-appointments">0</div>
+                        <div class="stat-label">Semana</div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="month-appointments">0</div>
-                    <div class="stat-label">Agendamentos do mês</div>
+                    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                    <div>
+                        <div class="stat-value" id="month-appointments">0</div>
+                        <div class="stat-label">Mês</div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="total-appointments">0</div>
-                    <div class="stat-label">Agendamentos totais</div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-clients">0</div>
+                        <div class="stat-label">Clientes únicos</div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="total-clients">0</div>
-                    <div class="stat-label">Clientes únicos</div>
+                    <div class="stat-icon"><i class="fas fa-list-ol"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-appointments">0</div>
+                        <div class="stat-label">Total de agendamentos</div>
+                    </div>
                 </div>
             </div>
         </section>
