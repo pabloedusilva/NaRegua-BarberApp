@@ -461,47 +461,98 @@ function fetchAppointments(filter) {
                 filteredAppointmentsList.appendChild(header);
 
                 // Lista de agendamentos do dia
-                grupos[dataStr].forEach(ag => {
-                    const item = document.createElement('div');
-                    item.className = 'appointment-item';
-                    item.innerHTML = `
-                        <div class="appointment-card">
-    <div class="appointment-header">
-        <span class="appointment-client">
-            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
-        </span>
-    </div>
-<div class="appointment-details">
-    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-    <div class="appointment-status-group">
-        <span class="appointment-status status-confirmed">Confirmado</span>
-        <button class="send-push-btn"
-            title="Enviar notificação de lembrete"
-            data-agendamento-id="${ag.id}"
-            data-nome="${ag.nome || ''}"
-            data-telefone="${ag.telefone || ''}"
-            data-servico="${ag.servico || ''}"
-            data-profissional="${ag.profissional || ''}"
-            data-data="${ag.data || ''}"
-            data-hora="${ag.hora || ''}">
-            <i class="fas fa-bell"></i>
-        </button>
-    </div>
-</div>
-</div>
-                    `;
-                    filteredAppointmentsList.appendChild(item);
-                });
+                let agsDia = grupos[dataStr].slice();
+                // Se for hoje, destacar o próximo agendamento futuro
+                if (filter === 'today') {
+                    // Ordena por hora crescente
+                    agsDia.sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
+                    // Pega o próximo agendamento futuro
+                    let now = new Date();
+                    let idxProximo = agsDia.findIndex(ag => {
+                        if (!ag.hora) return false;
+                        const [h, m] = ag.hora.split(':');
+                        const agDate = new Date();
+                        agDate.setHours(Number(h), Number(m), 0, 0);
+                        return agDate > now;
+                    });
+                    if (idxProximo === -1) idxProximo = 0; // Se todos já passaram, destaca o primeiro
+                    agsDia.forEach((ag, idx) => {
+                        const item = document.createElement('div');
+                        item.className = 'appointment-item';
+                        if (idx === idxProximo) item.classList.add('next-appointment');
+                        item.innerHTML = `
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <span class="appointment-client">
+                                        <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+                                    </span>
+                                </div>
+                                <div class="appointment-details">
+                                    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                    <div class="appointment-status-group">
+                                        <span class="appointment-status status-confirmed">Confirmado</span>
+                                        <button class="send-push-btn"
+                                            title="Enviar notificação de lembrete"
+                                            data-agendamento-id="${ag.id}"
+                                            data-nome="${ag.nome || ''}"
+                                            data-telefone="${ag.telefone || ''}"
+                                            data-servico="${ag.servico || ''}"
+                                            data-profissional="${ag.profissional || ''}"
+                                            data-data="${ag.data || ''}"
+                                            data-hora="${ag.hora || ''}">
+                                            <i class="fas fa-bell"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        filteredAppointmentsList.appendChild(item);
+                    });
+                } else {
+                    agsDia.forEach(ag => {
+                        const item = document.createElement('div');
+                        item.className = 'appointment-item';
+                        item.innerHTML = `
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <span class="appointment-client">
+                                        <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+                                    </span>
+                                </div>
+                                <div class="appointment-details">
+                                    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                    <div class="appointment-status-group">
+                                        <span class="appointment-status status-confirmed">Confirmado</span>
+                                        <button class="send-push-btn"
+                                            title="Enviar notificação de lembrete"
+                                            data-agendamento-id="${ag.id}"
+                                            data-nome="${ag.nome || ''}"
+                                            data-telefone="${ag.telefone || ''}"
+                                            data-servico="${ag.servico || ''}"
+                                            data-profissional="${ag.profissional || ''}"
+                                            data-data="${ag.data || ''}"
+                                            data-hora="${ag.hora || ''}">
+                                            <i class="fas fa-bell"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        filteredAppointmentsList.appendChild(item);
+                    });
+                }
             });
         })
         .catch(() => {
             filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
 }
-// ...existing code...
 
 // Função para obter o nome do dia da semana em português
 function diaSemanaExtenso(dataStr) {
@@ -1750,10 +1801,3 @@ async function renderNotificacoesComDataReal() {
 }
 
 // Substitua a chamada de carregarNotificacoes() por renderNotificacoesComDataReal() onde for necessário
-document.addEventListener('DOMContentLoaded', function() {
-    const el = document.getElementById('dashboardTodayDate');
-    if (el) {
-        const now = new Date();
-        el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-});
