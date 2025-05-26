@@ -2638,7 +2638,6 @@ textarea {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
     font-weight: 800;
     letter-spacing: 0.03em;
     font-size: 2rem;
@@ -2835,7 +2834,6 @@ footer {
     background: none;
     color: #fff;
     -webkit-text-fill-color: #fff;
-    text-fill-color: #fff;
     text-shadow: 0 2px 8px #dac02d33;
 }
 
@@ -2858,6 +2856,21 @@ footer {
     background: #fff;
     color: var(--primary-dark);
     box-shadow: 0 4px 16px #dac02d33;
+}
+
+
+/* Remover blur dos ícones da sidebar e títulos */
+
+.section-title i,
+.modal-title i,
+.edit-btn i,
+.btn i,
+.service-action-btn i,
+.professional-actions .action-btn i,
+.mac-sidebar-btn i {
+    /* Remove filtro de blur/drop-shadow */
+    filter: none !important;
+    text-shadow: none !important;
 }
 
 
