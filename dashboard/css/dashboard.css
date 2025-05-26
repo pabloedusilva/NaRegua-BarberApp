@@ -2596,3 +2596,495 @@ body.dark-mode .password-eye-btn {
     border-color: var(--primary);
     cursor: pointer;
 }
+
+
+/* =========================
+   Refinamento Premium Moderno
+   ========================= */
+
+
+/* Gradiente dourado sofisticado */
+
+:root {
+    --gold-gradient: linear-gradient(90deg, #dac02d 0%, #f7e27c 100%);
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-dark-bg: rgba(30, 30, 30, 0.82);
+    --shadow-strong: 0 8px 32px rgba(218, 192, 45, 0.13), 0 1.5px 8px 0 rgba(218, 192, 45, 0.07);
+    --shadow-card: 0 6px 32px rgba(218, 192, 45, 0.10), 0 1.5px 8px 0 rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 12px 32px rgba(218, 192, 45, 0.18), 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+    --primary-glow: 0 0 12px 2px #dac02d55;
+}
+
+
+/* Tipografia refinada */
+
+body,
+input,
+button,
+textarea {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.01em;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* Títulos com gradiente dourado */
+
+.section-title,
+.modal-title,
+.footer-title {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    font-size: 2rem;
+    text-shadow: 0 2px 8px #dac02d22;
+}
+
+
+/* Cards com efeito glass e sombra */
+
+.dashboard-section,
+.stat-card,
+.service-card,
+.professional-card,
+.day-schedule,
+.modal-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    border-radius: 18px !important;
+    box-shadow: var(--shadow-card);
+    border: 1.5px solid var(--primary-light);
+    transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+}
+
+body.dark-mode .dashboard-section,
+body.dark-mode .stat-card,
+body.dark-mode .service-card,
+body.dark-mode .professional-card,
+body.dark-mode .day-schedule,
+body.dark-mode .modal-content {
+    background: var(--glass-dark-bg);
+    border: 1.5px solid var(--primary-dark);
+}
+
+
+/* Cards hover */
+
+.dashboard-card,
+.service-card,
+.professional-card,
+.stat-card,
+.day-schedule {
+    transition: box-shadow 0.25s, transform 0.18s, border-color 0.22s;
+}
+
+.dashboard-card:hover,
+.service-card:hover,
+.professional-card:hover,
+.stat-card:hover,
+.day-schedule:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+    transform: translateY(-6px) scale(1.025);
+}
+
+
+/* Botões principais com gradiente e brilho */
+
+.edit-btn,
+.btn-primary,
+.btn-copy-modern,
+.add-another-btn,
+.abrir-dia-btn,
+.fechar-dia-btn {
+    background: var(--gold-gradient);
+    color: #fff !important;
+    border: none;
+    border-radius: 22px;
+    font-weight: 700;
+    box-shadow: var(--primary-glow);
+    transition: background 0.22s, box-shadow 0.22s, transform 0.13s;
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-btn:hover,
+.btn-primary:hover,
+.btn-copy-modern:hover,
+.add-another-btn:hover,
+.abrir-dia-btn:hover,
+.fechar-dia-btn:hover {
+    background: linear-gradient(90deg, #f7e27c 0%, #dac02d 100%);
+    color: #816a02 !important;
+    box-shadow: 0 0 24px 4px #dac02d55;
+    transform: scale(1.04);
+}
+
+
+/* Botões secundários mais clean */
+
+.btn-secondary {
+    background: var(--gray-light);
+    color: var(--primary-dark);
+    border: 1.5px solid var(--primary-light);
+    font-weight: 600;
+    border-radius: 18px;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-light);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+
+/* Inputs com efeito glass e foco dourado */
+
+.form-control,
+.share-link-input-modern,
+input[type="time"],
+input[type="text"],
+input[type="number"],
+textarea {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid var(--primary-light);
+    border-radius: 12px;
+    font-size: 1.08rem;
+    padding: 12px 16px;
+    color: var(--primary-dark);
+    box-shadow: 0 1px 4px #dac02d11;
+    transition: border-color 0.22s, box-shadow 0.22s;
+}
+
+.form-control:focus,
+.share-link-input-modern:focus,
+input[type="time"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px #dac02d33;
+    outline: none;
+}
+
+
+/* Ícones maiores e destacados */
+
+.section-title i,
+.modal-title i,
+.edit-btn i,
+.btn i,
+.service-action-btn i,
+.professional-actions .action-btn i {
+    font-size: 1.25em !important;
+    filter: drop-shadow(0 2px 4px #dac02d33);
+}
+
+
+/* Avatar e foto com borda dourada e sombra */
+
+.avatar-preview,
+.barbershop-photo-inner,
+#barbershopPhotoPreview {
+    border: 3px solid var(--primary-light);
+    box-shadow: 0 2px 16px #dac02d22;
+    background: #fff;
+    transition: border-color 0.22s, box-shadow 0.22s;
+}
+
+.avatar-preview:hover,
+.barbershop-photo-inner:hover,
+#barbershopPhotoPreview:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 24px #dac02d33;
+}
+
+
+/* Glassmorphism para modais */
+
+.modal-content {
+    background: var(--glass-bg);
+    box-shadow: var(--shadow-strong);
+    border-radius: 22px;
+    border: 2.5px solid var(--primary-light);
+    backdrop-filter: blur(12px);
+}
+
+
+/* Footer refinado */
+
+footer {
+    background: linear-gradient(90deg, #dac02d 0%, #816a02 100%);
+    color: #fff;
+    border-top: none;
+    box-shadow: 0 -2px 24px #dac02d22;
+    font-size: 1.08rem;
+    letter-spacing: 0.01em;
+}
+
+.footer-title {
+    font-size: 1.22rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    background: none;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    text-fill-color: #fff;
+    text-shadow: 0 2px 8px #dac02d33;
+}
+
+.footer-links li,
+.footer-slogan {
+    color: #fff !important;
+    opacity: 0.92;
+    font-size: 1.01rem;
+}
+
+.social-links a {
+    background: var(--primary-dark);
+    color: #fff;
+    border: 2px solid #dac02d;
+    box-shadow: 0 2px 8px #dac02d22;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.social-links a:hover {
+    background: #fff;
+    color: var(--primary-dark);
+    box-shadow: 0 4px 16px #dac02d33;
+}
+
+
+/* Sidebar refinada */
+
+.mac-sidebar {
+    background: var(--glass-dark-bg);
+    box-shadow: 2px 0 24px #dac02d22;
+    border-right: 2px solid #dac02d33;
+}
+
+.mac-sidebar-btn {
+    background: none;
+    border: none;
+    width: 44px;
+    height: 44px;
+    margin: 7px 0;
+    border-radius: 14px;
+    color: var(--primary-dark);
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.13s;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    box-shadow: 0 1px 4px #dac02d11;
+    opacity: 0.93;
+}
+
+.mac-sidebar-btn.active,
+.mac-sidebar-btn:focus {
+    background: var(--gold-gradient);
+    color: #fff;
+    box-shadow: 0 2px 12px #dac02d33;
+}
+
+.mac-sidebar-btn:hover:not(.active) {
+    background: var(--primary-light);
+    color: #fff;
+    box-shadow: 0 2px 8px #dac02d22;
+}
+
+
+/* Indicador lateral para o botão ativo */
+
+.mac-sidebar-btn.active::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #dac02d 0%, #f7e27c 100%);
+    box-shadow: 0 2px 8px #dac02d33;
+    opacity: 0.85;
+    transition: opacity 0.18s;
+    z-index: 1;
+}
+
+
+/* Microinterações para inputs e botões */
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+    outline: 2px solid #dac02d55 !important;
+    outline-offset: 2px;
+}
+
+
+/* Status badge mais elegante */
+
+.appointment-status {
+    background: var(--gold-gradient);
+    color: #fff !important;
+    font-weight: 700;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px #dac02d22;
+    letter-spacing: 0.02em;
+}
+
+
+/* Compartilhar link refinado */
+
+.share-link-container-modern {
+    background: var(--glass-bg);
+    border: 2px solid var(--primary-light);
+    box-shadow: 0 4px 24px #dac02d22;
+    border-radius: 18px;
+}
+
+.share-link-input-modern {
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid var(--primary-light);
+    border-radius: 10px 0 0 10px;
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 1.13rem;
+}
+
+.btn-copy-modern {
+    background: var(--gold-gradient);
+    color: #fff;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 0 2px 8px #dac02d22;
+    font-size: 1.45rem;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+}
+
+.btn-copy-modern:hover,
+.btn-copy-modern:focus {
+    background: linear-gradient(90deg, #f7e27c 0%, #dac02d 100%);
+    color: #816a02;
+    box-shadow: 0 0 24px 4px #dac02d55;
+    transform: scale(1.07);
+}
+
+
+/* Responsividade refinada */
+
+@media (max-width: 900px) {
+    .dashboard-section,
+    .stat-card,
+    .service-card,
+    .professional-card,
+    .modal-content {
+        border-radius: 14px !important;
+    }
+    .section-title,
+    .modal-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-section,
+    .stat-card,
+    .service-card,
+    .professional-card,
+    .modal-content {
+        border-radius: 10px !important;
+    }
+    .section-title,
+    .modal-title {
+        font-size: 1.08rem;
+    }
+}
+
+
+/* Efeito de brilho sutil em hover nos botões principais */
+
+.edit-btn::after,
+.btn-primary::after,
+.btn-copy-modern::after,
+.add-another-btn::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -75%;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.01) 100%);
+    transform: skewX(-25deg);
+    transition: left 0.5s;
+    pointer-events: none;
+}
+
+.edit-btn:hover::after,
+.btn-primary:hover::after,
+.btn-copy-modern:hover::after,
+.add-another-btn:hover::after {
+    left: 120%;
+}
+
+
+/* Modal close button refinado */
+
+.close-modal,
+.modal .close {
+    background: var(--primary-light);
+    color: #fff !important;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px #dac02d22;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.close-modal:hover,
+.modal .close:hover {
+    background: var(--primary);
+    color: #fff !important;
+    box-shadow: 0 4px 16px #dac02d33;
+}
+
+
+/* Placeholder refinado */
+
+::placeholder {
+    color: var(--primary-light);
+    opacity: 0.7;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+
+/* Animação de entrada para cards */
+
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.dashboard-section,
+.stat-card,
+.service-card,
+.professional-card,
+.day-schedule {
+    animation: fadeInCard 0.7s cubic-bezier(.23, 1.12, .32, 1);
+}
