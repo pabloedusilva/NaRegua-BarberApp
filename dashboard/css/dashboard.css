@@ -2075,6 +2075,7 @@ body.dark-mode .password-eye-btn {
     margin: 18px auto 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     cursor: pointer;
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
@@ -2082,21 +2083,21 @@ body.dark-mode .password-eye-btn {
 }
 
 .fechar-dia-btn {
-    background: #e74c3c;
+    background: #e74c3c !important;
     color: #fff;
 }
 
 .fechar-dia-btn:hover {
-    background: #c0392b;
+    background: #c0392b !important;
 }
 
 .abrir-dia-btn {
-    background: green;
+    background: green !important;
     color: #fff;
 }
 
 .abrir-dia-btn:hover {
-    background: rgb(6, 73, 6);
+    background: rgb(6, 73, 6) !important;
 }
 
 .dia-fechado-msg {
@@ -2391,7 +2392,7 @@ body.dark-mode .password-eye-btn {
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
     margin-top: 18px;
     flex-wrap: wrap;
-    border: 1.5px solid var(--primary-dark);
+    border: 1.5px solid var(--primary-light);
 }
 
 
@@ -2719,7 +2720,7 @@ body.dark-mode .modal-content {
 .abrir-dia-btn:hover,
 .fechar-dia-btn:hover {
     background: linear-gradient(90deg, #f7e27c 0%, #dac02d 100%);
-    color: #816a02 !important;
+    color: #816a02;
     box-shadow: 0 0 24px 4px #dac02d55;
     transform: scale(1.04);
 }
@@ -2877,7 +2878,7 @@ footer {
 /* Sidebar refinada */
 
 .mac-sidebar {
-    background: var(--glass-dark-bg);
+    background: black;
     box-shadow: 2px 0 24px #dac02d22;
     border-right: 2px solid #dac02d33;
 }
@@ -3056,18 +3057,14 @@ button:focus {
 
 .close-modal,
 .modal .close {
-    background: var(--primary-light);
-    color: #fff !important;
+    color: var(--primary);
     border-radius: 50%;
-    box-shadow: 0 2px 8px #dac02d22;
     transition: background 0.18s, color 0.18s, box-shadow 0.18s;
 }
 
 .close-modal:hover,
 .modal .close:hover {
-    background: var(--primary);
-    color: #fff !important;
-    box-shadow: 0 4px 16px #dac02d33;
+    color: var(--primary-dark);
 }
 
 
