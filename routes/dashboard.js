@@ -454,4 +454,14 @@ router.get('/wallpaper-selecionado', async(req, res) => {
     }
 });
 
+// Endpoint para listar imagens de serviço
+router.get('/servico-imagens', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM servico_imagens WHERE ativo = 1');
+        res.json({ success: true, imagens: rows });
+    } catch (err) {
+        res.json({ success: false, error: 'Erro ao buscar imagens.' });
+    }
+});
+
 module.exports = router;

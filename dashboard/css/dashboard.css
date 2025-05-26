@@ -1204,7 +1204,7 @@ input:checked+.slider:before {
 
 .stat-card--main {
     background: linear-gradient(90deg, #dac02d 0%, #f7e27c 100%);
-    color: #fff;
+    color: var(--text);
     border: 2.5px solid #dac02d;
     box-shadow: 0 8px 32px #dac02d33;
 }
@@ -1224,7 +1224,7 @@ input:checked+.slider:before {
 }
 
 .stat-card--main .stat-icon {
-    background: #fff;
+    background: var(--text);
     color: #dac02d;
     box-shadow: 0 2px 12px #dac02d44;
 }
@@ -3219,4 +3219,27 @@ button:focus {
     font-size: 1.08rem;
     color: var(--primary-dark);
     font-weight: 600;
+}
+
+/* Galeria de imagem dos modais */
+.service-image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 10px 0 0 0;
+    justify-content: center;
+}
+.service-image-gallery .gallery-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px #0001;
+}
+.service-image-gallery .gallery-img.selected {
+    border: 2.5px solid var(--primary);
+    box-shadow: 0 4px 16px #dac02d33;
 }

@@ -741,6 +741,8 @@ filterBtns.forEach(btn => {
         document.getElementById('editServiceImage').value = servico.imagem || '';
         editServiceMsg.textContent = '';
         editServiceModal.style.display = 'flex';
+
+        carregarGaleriaImagensServico('editServiceImageGallery', 'editServiceImage', servico.imagem || '');
     }
     function closeEditModal() {
         editServiceModal.style.display = 'none';
@@ -836,6 +838,8 @@ if (addServiceBtn && addServiceModal) {
         addServiceModal.style.display = 'flex';
         addServiceMsg.textContent = '';
         addServiceForm.reset();
+
+        carregarGaleriaImagensServico('serviceImageGallery', 'addServiceImage');
     });
 }
 if (closeAddServiceModal && addServiceModal) {
@@ -1807,3 +1811,58 @@ document.addEventListener('DOMContentLoaded', function() {
         el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 });
+
+// Função para carregar galeria de imagens de serviço
+async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '') {
+    const gallery = document.getElementById(galleryId);
+    const input = document.getElementById(inputId);
+    if (!gallery || !input) return;
+
+    // Agora busca da rota correta
+    let imagens = [];
+    try {
+        const res = await fetch('/dashboard/servico-imagens');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.imagens)) {
+            imagens = data.imagens;
+        }
+    } catch (e) {
+        gallery.innerHTML = '<div style="color:#b00;">Erro ao carregar imagens.</div>';
+        return;
+    }
+
+    if (!imagens.length) {
+        gallery.innerHTML = '<div style="color:#888;">Nenhuma imagem disponível.</div>';
+        return;
+    }
+
+    gallery.innerHTML = '';
+    imagens.forEach(img => {
+        const el = document.createElement('img');
+        el.src = img.url;
+        el.alt = img.nome || 'Imagem';
+        el.className = 'gallery-img' + (img.url === selectedUrl ? ' selected' : '');
+        el.title = img.nome || '';
+        el.onclick = () => {
+            gallery.querySelectorAll('.gallery-img').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            input.value = img.url;
+        };
+        gallery.appendChild(el);
+    });
+
+    if (selectedUrl) {
+        input.value = selectedUrl;
+    } else {
+        input.value = imagens[0].url;
+        gallery.querySelector('.gallery-img').classList.add('selected');
+    }
+}
+
+// Ao abrir modal de adicionar serviço
+if (addServiceBtn && addServiceModal) {
+    addServiceBtn.addEventListener('click', () => {
+        carregarGaleriaImagensServico('serviceImageGallery', 'addServiceImage');
+        // ...restante do código...
+    });
+}

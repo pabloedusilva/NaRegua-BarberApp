@@ -110,15 +110,34 @@ CREATE TABLE IF NOT EXISTS wallpapers (
 
 -- Exemplo de inserção inicial (ajuste os caminhos para URLs públicas ou base64 depois)
 INSERT INTO wallpapers (nome, url, ativo) VALUES
-('Fundo 1', '/img/background1.jpg', 1),
-('Fundo 2', '/img/background2.png', 1),
-('Fundo 3', '/img/background3.png', 1),
-('Fundo 4', '/img/background4.png', 1),
-('Fundo 5', '/img/background5.jpg', 1),
-('Fundo 6', '/img/background6.png', 1),
-('Fundo 7', '/img/background7.png', 1),
-('Fundo 8', '/img/background8.jpg', 1),
-('Fundo 9', '/img/background9.png', 1);
+('Fundo 1', '/img/wallpappers/background1.jpg', 1),
+('Fundo 2', '/img/wallpappers/background2.png', 1),
+('Fundo 3', '/img/wallpappers/background3.png', 1),
+('Fundo 4', '/img/wallpappers/background4.png', 1),
+('Fundo 5', '/img/wallpappers/background5.jpg', 1),
+('Fundo 6', '/img/wallpappers/background6.png', 1),
+('Fundo 7', '/img/wallpappers/background7.png', 1),
+('Fundo 8', '/img/wallpappers/background8.jpg', 1),
+('Fundo 9', '/img/wallpappers/background9.png', 1);
 
 -- Tabela para guardar o wallpaper selecionado pela barbearia
 ALTER TABLE barbearia ADD COLUMN wallpaper_id INT DEFAULT NULL;
+
+-- Criação da tabela de imagens dos serviços
+CREATE TABLE IF NOT EXISTS servico_imagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    url TEXT NOT NULL,
+    ativo TINYINT(1) DEFAULT 1
+);
+
+-- Exemplos de imagens iniciais
+INSERT INTO servico_imagens (nome, url, ativo) VALUES
+('Barba', '/img/servicos/barba.jpg', 1),
+('Corte de Cabelo', '/img/servicos/corte-masculino.jpg', 1),
+('Corte + Barba', '/img/servicos/corte-barba.jpg', 1),
+('Bigodinho', '/img/servicos/bigodinho.jpg', 1),
+('Colorimetria + corte', '/img/servicos/colorimetria.jpg', 1),
+('Corte infantil', '/img/servicos/infantil.jpg', 1),
+('Barba raspada na máquina', '/img/servicos/maquina.jpg', 1),
+('Nenhuma', '/img/servicos/nenhuma.jpg', 1);
