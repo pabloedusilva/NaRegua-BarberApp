@@ -1,228 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>NaRégua - Dashboard do Barbeiro</title>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="stylesheet" href="css/dashboard.css">
-        <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Dashboard do Barbeiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+</head>
 
-    <body>
-        <div id="globalCopySuccessMsg" class="global-copy-success"
-            style="display:none;">
-            <i class="fas fa-check-circle"></i> Link copiado!
-        </div>
-        <header>
-            <div class="container">
-                <nav class="navbar">
-                    <div class="logo">
-                        <div class="logo-text">NA<span>RÉGUA</span><span
-                                class="highlight">.</span></div>
-                    </div>
-                    <div class="nav-links">
-                        <div class="notification-btn-wrapper">
-                            <button class="theme-toggle" id="notificationBtn"
-                                title="Notificações">
+<body>
+    <div id="globalCopySuccessMsg" class="global-copy-success" style="display:none;">
+        <i class="fas fa-check-circle"></i> Link copiado!
+    </div>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                </div>
+                <div class="nav-links">
+                    <div class="notification-btn-wrapper">
+                        <button class="theme-toggle" id="notificationBtn" title="Notificações">
                                 <i class="fas fa-bell"></i>
                                 <span id="notificationDot"></span>
                             </button>
-                        </div>
-                        <button class="theme-toggle" id="changePasswordBtn"
-                            title="Alterar senha">
+                    </div>
+                    <button class="theme-toggle" id="changePasswordBtn" title="Alterar senha">
                             <i class="fas fa-key"></i>
                         </button>
-                        <button class="theme-toggle" id="themeToggle">
+                    <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
-                    </div>
-                </nav>
-            </div>
-        </header>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-        <!-- Adicione logo após <body> -->
-        <div class="mac-sidebar">
-            <div class="mac-sidebar-logo">
-                <img
-                    src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg"
-                    alt="Logo">
-            </div>
-            <button class="mac-sidebar-btn active" data-section="painel"
-                title="Painel"><i class="fas fa-tachometer-alt"></i></button>
-            <button class="mac-sidebar-btn" data-section="agendamentos"
-                title="Agendamentos"><i
+    <!-- Adicione logo após <body> -->
+    <div class="mac-sidebar">
+        <div class="mac-sidebar-logo">
+            <img src="https://img.freepik.com/vetores-premium/polo-barber-vintage-ornament-ilustracao-vector_151511-32.jpg" alt="Logo">
+        </div>
+        <button class="mac-sidebar-btn active" data-section="painel" title="Painel"><i class="fas fa-tachometer-alt"></i></button>
+        <button class="mac-sidebar-btn" data-section="agendamentos" title="Agendamentos"><i
                     class="fas fa-calendar-alt"></i></button>
-            <button class="mac-sidebar-btn" data-section="servicos"
-                title="Serviços"><i class="fas fa-cut"></i></button>
-            <button class="mac-sidebar-btn" data-section="horarios"
-                title="Horários"><i class="fas fa-clock"></i></button>
-            <button class="mac-sidebar-btn" data-section="folgas"
-                title="Folgas"><i class="fas fa-calendar-times"></i></button>
-            <button class="mac-sidebar-btn" data-section="barbearia"
-                title="Barbearia"><i class="fas fa-store"></i></button>
-            <button class="mac-sidebar-btn" data-section="notificacoes"
-                title="Notificações"><i class="fas fa-bell"></i></button>
-            <button class="mac-sidebar-btn" data-section="compartilhar"
-                title="Compartilhar Link">
+        <button class="mac-sidebar-btn" data-section="servicos" title="Serviços"><i class="fas fa-cut"></i></button>
+        <button class="mac-sidebar-btn" data-section="horarios" title="Horários"><i class="fas fa-clock"></i></button>
+        <button class="mac-sidebar-btn" data-section="folgas" title="Folgas"><i class="fas fa-calendar-times"></i></button>
+        <button class="mac-sidebar-btn" data-section="barbearia" title="Barbearia"><i class="fas fa-store"></i></button>
+        <button class="mac-sidebar-btn" data-section="notificacoes" title="Notificações"><i class="fas fa-bell"></i></button>
+        <button class="mac-sidebar-btn" data-section="compartilhar" title="Compartilhar Link">
                 <i class="fas fa-share-alt"></i>
             </button>
-            <div class="mac-sidebar-bottom">
-                <button class="mac-sidebar-btn" id="logoutBtn" title="Sair"><i
+        <div class="mac-sidebar-bottom">
+            <button class="mac-sidebar-btn" id="logoutBtn" title="Sair"><i
                         class="fas fa-sign-out-alt"></i></button>
-            </div>
         </div>
-        <main class="container">
-            <section class="dashboard-section animate-fade-in"
-                style="padding-bottom: 0;">
-                <div class="dashboard-header"
-                    style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
-                    <h2 class="section-title" style="margin-bottom: 0;">
-                        <i class="fas fa-tachometer-alt"></i> Painel de Controle
-                    </h2>
-                    <span class="dashboard-date"
-                        style="font-size: 1.08rem; color: var(--primary-dark); font-weight: 600;">
+    </div>
+    <main class="container">
+        <section class="dashboard-section animate-fade-in" style="padding-bottom: 0;">
+            <div class="dashboard-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <i class="fas fa-tachometer-alt"></i> Painel de Controle
+                </h2>
+                <span class="dashboard-date" style="font-size: 1.08rem; color: var(--primary-dark); font-weight: 600;">
                         <i class="far fa-calendar-alt"></i>
                         <span id="dashboardTodayDate"></span>
-                    </span>
-                </div>
-                <div class="stats-container"
-                    style="gap: 24px; margin-bottom: 0;">
-                    <div class="stat-card stat-card--main">
-                        <div class="stat-icon"><i
-                                class="fas fa-calendar-day"></i></div>
-                        <div>
-                            <div class="stat-value"
-                                id="today-appointments">0</div>
-                            <div class="stat-label">Agendamentos de hoje</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i
-                                class="fas fa-calendar-week"></i></div>
-                        <div>
-                            <div class="stat-value"
-                                id="week-appointments">0</div>
-                            <div class="stat-label">Semana</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i
-                                class="fas fa-calendar"></i></div>
-                        <div>
-                            <div class="stat-value"
-                                id="month-appointments">0</div>
-                            <div class="stat-label">Mês</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i
-                                class="fas fa-users"></i></div>
-                        <div>
-                            <div class="stat-value" id="total-clients">0</div>
-                            <div class="stat-label">Clientes únicos</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i
-                                class="fas fa-list-ol"></i></div>
-                        <div>
-                            <div class="stat-value"
-                                id="total-appointments">0</div>
-                            <div class="stat-label">Total de agendamentos</div>
-                        </div>
+                </span>
+            </div>
+            <div class="stats-container" style="gap: 24px; margin-bottom: 0;">
+                <div class="stat-card stat-card--main">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                    <div>
+                        <div class="stat-value" id="today-appointments">0</div>
+                        <div class="stat-label">Agendamentos de hoje</div>
                     </div>
                 </div>
-            </section>
-
-            <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
-            <section class="dashboard-section animate-slide-up">
-                <div class="card-header">
-                    <h2 class="section-title"><i
-                            class="fas fa-calendar-alt"></i> Próximos
-                        Agendamentos
-                    </h2>
-                    <div class="appointments-filter">
-                        <button class="filter-btn active" data-filter="today"><i
-                                class="fas fa-calendar-day"></i> Hoje</button>
-                        <button class="filter-btn" data-filter="week"><i
-                                class="fas fa-calendar-week"></i>
-                            Semana</button>
-                        <button class="filter-btn" data-filter="month"><i
-                                class="fas fa-calendar"></i> Mês</button>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+                    <div>
+                        <div class="stat-value" id="week-appointments">0</div>
+                        <div class="stat-label">Semana</div>
                     </div>
                 </div>
-                <div class="appointments-list" id="filteredAppointmentsList">
-                    <!-- Agendamentos filtrados aparecerão aqui -->
-                </div>
-                <div id="lista-agendamentos"></div>
-            </section>
-
-            <section class="dashboard-section animate-slide-up"
-                id="services-section">
-                <div
-                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-                    <h2 class="section-title"><i class="fas fa-cut"></i>
-                        Serviços oferecidos</h2>
-                    <button id="addServiceBtn" class="edit-btn"
-                        style="margin-left:12px;">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-                <div id="servicesContainer" class="services-container"></div>
-            </section>
-
-            <section class="dashboard-section animate-slide-up">
-                <div class="card-header">
-                    <h2 class="section-title"><i class="fas fa-share-alt"></i>
-                        Compartilhar Link de Agendamento</h2>
-                </div>
-                <div class="share-link-container-modern">
-                    <div class="share-link-info">
-                        <div class="share-link-label">
-                            <i class="fas fa-link"></i> Link para agendamento
-                            online
-                        </div>
-                        <div class="share-link-field">
-                            <input type="text" id="bookingLink"
-                                class="share-link-input-modern" readonly
-                                value="https://seusite.com/agendar" />
-                            <button class="btn-copy-modern"
-                                id="copyBookingLinkBtn" title="Copiar link">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                    <div>
+                        <div class="stat-value" id="month-appointments">0</div>
+                        <div class="stat-label">Mês</div>
                     </div>
-                    <span class="copy-success-modern" id="copySuccessMsg"
-                        style="display:none;">
-                        <i class="fas fa-check-circle"></i> Link copiado!
-                    </span>
                 </div>
-            </section>
-
-            <section class="dashboard-section animate-slide-up"
-                id="horarios-section">
-                <div
-                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-                    <h2 class="section-title"><i class="fas fa-clock"></i>
-                        Horários de Atendimento</h2>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-clients">0</div>
+                        <div class="stat-label">Clientes únicos</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-list-ol"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-appointments">0</div>
+                        <div class="stat-label">Total de agendamentos</div>
+                    </div>
                 </div>
             </div>
-            <div class="working-hours" id="workingHoursGrid"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+        </section>
+
+        <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos
+                </h2>
+                <div class="appointments-filter">
+                    <button class="filter-btn active" data-filter="today"><i
+                                class="fas fa-calendar-day"></i> Hoje</button>
+                    <button class="filter-btn" data-filter="week"><i
+                                class="fas fa-calendar-week"></i>
+                            Semana</button>
+                    <button class="filter-btn" data-filter="month"><i
+                                class="fas fa-calendar"></i> Mês</button>
+                </div>
+            </div>
+            <div class="appointments-list" id="filteredAppointmentsList">
+                <!-- Agendamentos filtrados aparecerão aqui -->
+            </div>
+            <div id="lista-agendamentos"></div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up" id="services-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços oferecidos</h2>
+                <button id="addServiceBtn" class="edit-btn" style="margin-left:12px;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+            </div>
+            <div id="servicesContainer" class="services-container"></div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-share-alt"></i> Compartilhar Link de Agendamento</h2>
+            </div>
+            <div class="share-link-container-modern">
+                <div class="share-link-info">
+                    <div class="share-link-label">
+                        <i class="fas fa-link"></i> Link para agendamento online
+                    </div>
+                    <div class="share-link-field">
+                        <input type="text" id="bookingLink" class="share-link-input-modern" readonly value="https://seusite.com/agendar" />
+                        <button class="btn-copy-modern" id="copyBookingLinkBtn" title="Copiar link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                    </div>
+                </div>
+                <span class="copy-success-modern" id="copySuccessMsg" style="display:none;">
+                        <i class="fas fa-check-circle"></i> Link copiado!
+                    </span>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up" id="horarios-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
+            </div>
+            </div>
+            <div class="working-hours" id="workingHoursGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -230,27 +181,21 @@
                             </div>
                             <div class="day-title">Segunda-feira</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -258,27 +203,21 @@
                             </div>
                             <div class="day-title">Terça-feira</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -286,27 +225,21 @@
                             </div>
                             <div class="day-title">Quarta-feira</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -314,27 +247,21 @@
                             </div>
                             <div class="day-title">Quinta-feira</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -342,27 +269,21 @@
                             </div>
                             <div class="day-title">Sexta-feira</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -370,27 +291,21 @@
                             </div>
                             <div class="day-title">Sábado</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule"
-                    style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
-                    <div class="day-header"
-                        style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="day-off-toggle">
-                                <span class="day-off-label"
-                                    style="font-size:0.97rem;"></span>
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
@@ -398,17 +313,14 @@
                             </div>
                             <div class="day-title">Domingo</div>
                         </div>
-                        <button class="edit-btn" title="Editar horário"
-                            style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
                             <i class="fas fa-pen"
                                 style="color:#FFD700;font-size:1.1rem;"></i>
                         </button>
                     </div>
                     <div class="time-slots">
-                        <input class="input-horario-semana" data-dia="segunda"
-                            type="text" value="09:00-18:00">
-                        <input class="input-horario-semana" data-dia="terca"
-                            type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
             </div>
@@ -416,8 +328,7 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-times"></i>
-                    Dias Especiais de Folga
+                <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga
                 </h2>
                 <button class="edit-btn" id="addDayOffBtn">
                     <i class="fas fa-plus"></i> Adicionar
@@ -433,8 +344,7 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-store"></i>
-                    Informações da Barbearia</h2>
+                <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
                 <button class="edit-btn" id="editBarbershopInfoBtn">
                     <i class="fas fa-edit"></i> Editar
                 </button>
@@ -445,8 +355,7 @@
 
             <!-- NOVO: Escolha de Background -->
             <div class="barbershop-bg-chooser" style="margin: 28px 0 0 0;">
-                <div
-                    style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:1.08rem;">
+                <div style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:1.08rem;">
                     Escolha o plano de fundo do agendamento:
                 </div>
                 <div class="bg-chooser-list" id="bgChooserList"></div>
@@ -454,56 +363,34 @@
 
             <!-- Container de Profissionais -->
             <div class="professionals-section" style="margin-top:32px;">
-                <div
-                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-                    <h2 class="section-title" style="font-size:1.18rem;"><i
-                            class="fas fa-user-tie"></i> Profissionais</h2>
-                    <button id="editProfessionalsBtn" class="edit-btn"
-                        style="margin-left:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                    <h2 class="section-title" style="font-size:1.18rem;"><i class="fas fa-user-tie"></i> Profissionais</h2>
+                    <button id="editProfessionalsBtn" class="edit-btn" style="margin-left:12px;">
                         <i class="fas fa-add"></i> Adicionar
                     </button>
                 </div>
-                <div id="professionalsContainer" class="professionals-container"
-                    style="justify-content: center;">
+                <div id="professionalsContainer" class="professionals-container" style="justify-content: center;">
                     <!-- Profissionais serão listados aqui futuramente -->
                     <div class="professional-card" style="position:relative;">
-                        <button class="edit-professional-btn"
-                            title="Editar profissional"
-                            style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
+                        <button class="edit-professional-btn" title="Editar profissional" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
                             <i class="fas fa-pen"
                                 style="color:#666;font-size:1rem;"></i>
                         </button>
                         <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 32px; color: #aaa;"></i>
+                            <i class="fas fa-user" style="font-size: 32px; color: #aaa;"></i>
                         </div>
-                        <div class="professional-name">Exemplo
-                            Profissional</div>
+                        <div class="professional-name">Exemplo Profissional
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="dashboard-section animate-slide-up"
-            id="notificacoes-section" style="display:none;">
+        <section class="dashboard-section animate-slide-up" id="notificacoes-section" style="display:none;">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-bell"></i> Envio
-                    Manual de Notificação Push</h2>
+                <h2 class="section-title"><i class="fas fa-bell"></i> Envio de notificações</h2>
             </div>
-            <form id="pushForm" style="max-width:400px;margin:auto;">
-                <label for="title">Título:</label>
-                <input type="text" id="title" name="title" class="form-control"
-                    required>
-
-                <label for="body" style="margin-top:16px;">Mensagem:</label>
-                <textarea id="body" name="body" rows="4" class="form-control"
-                    required></textarea>
-
-                <button type="submit" class="btn btn-primary"
-                    style="margin-top:20px;">Enviar Notificação</button>
-            </form>
-            <div class="msg" id="msg"
-                style="margin-top:20px;font-weight:bold;"></div>
+            <!-- Aqui vai ir o container -->
         </section>
 
     </main>
@@ -513,63 +400,44 @@
     <!-- Modal de Edição da Barbearia -->
     <div id="editBarbershopModal" class="modal">
         <div class="modal-content" style="max-width:420px;">
-            <span class="close-modal"
-                id="closeEditBarbershopModal">&times;</span>
-            <h3 class="modal-title"><i class="fas fa-store"></i> Editar
-                Barbearia</h3>
+            <span class="close-modal" id="closeEditBarbershopModal">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-store"></i> Editar Barbearia
+            </h3>
             <form id="editBarbershopForm" autocomplete="off">
-                <div class="form-group"
-                    style="display:flex;flex-direction:column;align-items:center;">
-                    <label for="editBarbershopPhoto"
-                        style="align-self:flex-start;">Foto</label>
-                    <div id="barbershopPhotoPreview"
-                        style="width:110px;height:110px;border-radius:50%;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px #0001;margin-bottom:12px;position:relative;">
-                        <img id="barbershopPhotoImg" src alt="Pré-visualização"
-                            style="width:100%;height:100%;object-fit:cover;display:none;">
-                        <i id="barbershopPhotoIcon" class="fas fa-camera"
-                            style="font-size:2.2rem;color:#bbb;display:block;"></i>
+                <div class="form-group" style="display:flex;flex-direction:column;align-items:center;">
+                    <label for="editBarbershopPhoto" style="align-self:flex-start;">Foto</label>
+                    <div id="barbershopPhotoPreview" style="width:110px;height:110px;border-radius:50%;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px #0001;margin-bottom:12px;position:relative;">
+                        <img id="barbershopPhotoImg" src alt="Pré-visualização" style="width:100%;height:100%;object-fit:cover;display:none;">
+                        <i id="barbershopPhotoIcon" class="fas fa-camera" style="font-size:2.2rem;color:#bbb;display:block;"></i>
                     </div>
-                    <input type="file" id="barbershopPhotoInput"
-                        accept="image/*" style="display:none;">
-                    <input type="text" class="form-control"
-                        id="editBarbershopPhoto" maxlength="255"
-                        placeholder="Ou cole uma URL de imagem"
-                        style="margin-top:10px;">
-                    <button type="button" class="btn btn-primary"
-                        id="barbershopPhotoBtn"
-                        style="margin-top:10px;width:100%;">Adicionar
+                    <input type="file" id="barbershopPhotoInput" accept="image/*" style="display:none;">
+                    <input type="text" class="form-control" id="editBarbershopPhoto" maxlength="255" placeholder="Ou cole uma URL de imagem" style="margin-top:10px;">
+                    <button type="button" class="btn btn-primary" id="barbershopPhotoBtn" style="margin-top:10px;width:100%;">Adicionar
                         Imagem</button>
                 </div>
                 <div class="form-group">
                     <label for="editBarbershopName">Nome</label>
-                    <input type="text" class="form-control"
-                        id="editBarbershopName" required maxlength="100">
+                    <input type="text" class="form-control" id="editBarbershopName" required maxlength="100">
                 </div>
                 <div class="form-group">
                     <label for="editBarbershopWhatsapp">WhatsApp</label>
-                    <input type="text" class="form-control"
-                        id="editBarbershopWhatsapp" maxlength="30">
+                    <input type="text" class="form-control" id="editBarbershopWhatsapp" maxlength="30">
                 </div>
                 <div class="form-group">
                     <label for="editBarbershopInstagram">Instagram</label>
-                    <input type="text" class="form-control"
-                        id="editBarbershopInstagram" maxlength="100">
+                    <input type="text" class="form-control" id="editBarbershopInstagram" maxlength="100">
                 </div>
                 <div class="form-group">
                     <label for="editBarbershopAddress">Endereço</label>
-                    <input type="text" class="form-control"
-                        id="editBarbershopAddress" maxlength="255">
+                    <input type="text" class="form-control" id="editBarbershopAddress" maxlength="255">
                 </div>
                 <div class="form-group">
                     <label for="editBarbershopCityState">Cidade/Estado</label>
-                    <input type="text" class="form-control"
-                        id="editBarbershopCityState" maxlength="100">
+                    <input type="text" class="form-control" id="editBarbershopCityState" maxlength="100">
                 </div>
-                <div id="editBarbershopMsg"
-                    style="margin:10px 0 0 0;font-size:0.98rem;"></div>
+                <div id="editBarbershopMsg" style="margin:10px 0 0 0;font-size:0.98rem;"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        id="cancelEditBarbershop">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditBarbershop">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Salvar
                         Alterações</button>
                 </div>
@@ -579,31 +447,26 @@
     <div id="addProfessionalModal" class="modal">
         <div class="modal-content" style="max-width:410px;">
             <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-user-tie"></i>
-                    Adicionar Profissional</h3>
+                <h3 class="modal-title"><i class="fas fa-user-tie"></i> Adicionar Profissional</h3>
                 <button class="close-modal" type="button">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="avatar-upload">
                     <div class="avatar-preview">
-                        <i class="fas fa-user"
-                            style="font-size: 40px; color: #aaa;"></i>
+                        <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
                     </div>
                     <button class="avatar-upload-btn" type="button">
                         <i class="fas fa-camera"></i> Adicionar Foto
                     </button>
-                    <input type="file" id="avatarInput" accept="image/*"
-                        style="display: none;">
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Nome do Profissional</label>
-                    <input type="text" class="form-control"
-                        placeholder="Ex: João Silva">
+                    <input type="text" class="form-control" placeholder="Ex: João Silva">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary"
-                    type="button">Cancelar</button>
+                <button class="btn btn-secondary" type="button">Cancelar</button>
                 <button class="btn btn-primary" type="button">Adicionar
                     Profissional</button>
             </div>
@@ -613,32 +476,25 @@
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="modal">
         <div class="modal-content" style="max-width:420px;">
-            <span class="close-modal"
-                id="closeNotificationsModal">&times;</span>
-            <h3 class="modal-title" style="margin-bottom:18px;"><i
-                    class="fas fa-bell"></i> Notificações</h3>
-            <div id="notificationsList"
-                style="display:flex;flex-direction:column;gap:16px;min-height:80px;"></div>
+            <span class="close-modal" id="closeNotificationsModal">&times;</span>
+            <h3 class="modal-title" style="margin-bottom:18px;"><i class="fas fa-bell"></i> Notificações</h3>
+            <div id="notificationsList" style="display:flex;flex-direction:column;gap:16px;min-height:80px;"></div>
         </div>
     </div>
 
     <!-- Modal de edição de horários -->
     <div id="horarioModal" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:420px;">
-            <span class="close" id="closeHorarioModal"
-                style="float:right;font-size:1.5rem;cursor:pointer;">&times;</span>
-            <h3 id="modalHorarioTitle" style="margin-bottom:18px;">Editar
-                Horários
+            <span class="close" id="closeHorarioModal" style="float:right;font-size:1.5rem;cursor:pointer;">&times;</span>
+            <h3 id="modalHorarioTitle" style="margin-bottom:18px;">Editar Horários
             </h3>
             <form id="horarioForm">
                 <input type="hidden" id="modalDiaSemana">
                 <div id="turnosContainer"></div>
-                <button type="button" id="addTurnoBtn" class="btn btn-primary"
-                    style="width:100%;margin:14px 0 10px 0; background-color: var(--white); color: var(--gray-dark);">
+                <button type="button" id="addTurnoBtn" class="btn btn-primary" style="width:100%;margin:14px 0 10px 0; background-color: var(--white); color: var(--gray-dark);">
                     <i class="fas fa-plus"></i> Adicionar turno
                 </button>
-                <button type="submit" class="btn btn-primary"
-                    style="width:100%;">Salvar</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar</button>
             </form>
         </div>
     </div>
@@ -646,8 +502,7 @@
     <div id="changePasswordModal" class="modal">
         <div class="modal-content">
             <!-- Botão X no topo direito -->
-            <button class="close-modal" aria-label="Fechar" type="button"
-                style="position:absolute;top:12px;right:18px;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
+            <button class="close-modal" aria-label="Fechar" type="button" style="position:absolute;top:12px;right:18px;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
             <div class="modal-header" style="padding-right:32px;">
                 <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
                 </h3>
@@ -655,177 +510,155 @@
             <div class="modal-body">
                 <form id="changePasswordForm" autocomplete="off">
                     <div class="form-group senha-group">
-                        <input type="password" class="form-control"
-                            id="currentPassword" placeholder="Senha atual"
-                            required>
-                    </button>
-                </div>
-                <div class="form-group senha-group">
-                    <input type="password" class="form-control" id="newPassword"
-                        placeholder="Nova senha" required>
-                    <button type="button" class="password-eye-btn" tabindex="-1"
-                        aria-label="Mostrar senha">
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
+                        </button>
+                    </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
                         <i class="fas fa-eye"></i>
                     </button>
-                </div>
-                <div class="form-group senha-group">
-                    <input type="password" class="form-control"
-                        id="confirmPassword" placeholder="Confirmar nova senha"
-                        required>
-                    <button type="button" class="password-eye-btn" tabindex="-1"
-                        aria-label="Mostrar senha">
+                    </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
                         <i class="fas fa-eye"></i>
                     </button>
+                    </div>
+                </form>
+                <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button">Cancelar</button>
+                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de adicionar serviços -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content" style="max-width:410px;">
+            <span class="close-modal" id="closeAddServiceModal">&times;</span>
+            <h3>Adicionar novo serviço</h3>
+            <form id="addServiceForm">
+                <div class="form-group">
+                    <label class="form-label" for="addServiceName">Nome do
+                    serviço</label>
+                    <input type="text" class="form-control" id="addServiceName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServiceTime">Tempo
+                    estimado</label>
+                    <input type="text" class="form-control" id="addServiceTime" placeholder="Ex: 30min" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServicePrice">Preço
+                    (R$)</label>
+                    <input type="number" step="0.01" min="0" class="form-control" id="addServicePrice" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Escolha uma imagem para o
+                    serviço</label>
+                    <div id="serviceImageGallery" class="service-image-gallery"></div>
+                    <input type="hidden" id="addServiceImage" name="imagem">
+                </div>
+                <div class="modal-footer">
+                    <div id="addServiceMsg" style="margin-bottom:10px;font-size:0.98rem; justify-content: center; align-items: center; display: flex"></div>
+                    <button type="submit" class="btn btn-primary">Salvar
+                    serviço</button>
                 </div>
             </form>
-            <div id="changePasswordError"
-                style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
-            <div id="changePasswordSuccess"
-                style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" type="button">Cancelar</button>
-            <button class="btn btn-primary" type="submit"
-                form="changePasswordForm">Salvar Nova Senha</button>
         </div>
     </div>
-</div>
 
-<!-- Modal de adicionar serviços -->
-<div id="addServiceModal" class="modal">
-    <div class="modal-content" style="max-width:410px;">
-        <span class="close-modal" id="closeAddServiceModal">&times;</span>
-        <h3>Adicionar novo serviço</h3>
-        <form id="addServiceForm">
-            <div class="form-group">
-                <label class="form-label" for="addServiceName">Nome do
-                    serviço</label>
-                <input type="text" class="form-control" id="addServiceName"
-                    required>
+    <!-- Modal de edição de serviço -->
+    <div id="editServiceModal" class="modal">
+        <div class="modal-content" style="max-width: 410px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-pen"></i> Editar Serviço
+                </h3>
+                <button class="close-modal" id="closeEditServiceModal">&times;</button>
             </div>
-            <div class="form-group">
-                <label class="form-label" for="addServiceTime">Tempo
+            <form id="editServiceForm" autocomplete="off">
+                <input type="hidden" id="editServiceId">
+                <div class="form-group">
+                    <label class="form-label" for="editServiceName">Nome do
+                    serviço</label>
+                    <input type="text" class="form-control" id="editServiceName" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServiceTime">Tempo
                     estimado</label>
-                <input type="text" class="form-control" id="addServiceTime"
-                    placeholder="Ex: 30min" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="addServicePrice">Preço
+                    <input type="text" class="form-control" id="editServiceTime" required maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServicePrice">Preço
                     (R$)</label>
-                <input type="number" step="0.01" min="0" class="form-control"
-                    id="addServicePrice" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Escolha uma imagem para o
+                    <input type="number" class="form-control" id="editServicePrice" required min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Escolha uma imagem para o
                     serviço</label>
-                <div id="serviceImageGallery"
-                    class="service-image-gallery"></div>
-                <input type="hidden" id="addServiceImage" name="imagem">
-            </div>
-            <div class="modal-footer">
-                <div id="addServiceMsg"
-                    style="margin-bottom:10px;font-size:0.98rem; justify-content: center; align-items: center; display: flex"></div>
-                <button type="submit" class="btn btn-primary">Salvar
-                    serviço</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal de edição de serviço -->
-<div id="editServiceModal" class="modal">
-    <div class="modal-content" style="max-width: 410px;">
-        <div class="modal-header">
-            <h3 class="modal-title"><i class="fas fa-pen"></i> Editar Serviço
-            </h3>
-            <button class="close-modal"
-                id="closeEditServiceModal">&times;</button>
-        </div>
-        <form id="editServiceForm" autocomplete="off">
-            <input type="hidden" id="editServiceId">
-            <div class="form-group">
-                <label class="form-label" for="editServiceName">Nome do
-                    serviço</label>
-                <input type="text" class="form-control" id="editServiceName"
-                    required maxlength="100">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="editServiceTime">Tempo
-                    estimado</label>
-                <input type="text" class="form-control" id="editServiceTime"
-                    required maxlength="30">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="editServicePrice">Preço
-                    (R$)</label>
-                <input type="number" class="form-control" id="editServicePrice"
-                    required min="0" step="0.01">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Escolha uma imagem para o
-                    serviço</label>
-                <div id="editServiceImageGallery"
-                    class="service-image-gallery"></div>
-                <input type="hidden" id="editServiceImage" name="imagem">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                    id="cancelEditService">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar
+                    <div id="editServiceImageGallery" class="service-image-gallery"></div>
+                    <input type="hidden" id="editServiceImage" name="imagem">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelEditService">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar
                     Alterações</button>
-            </div>
-        </form>
-        <div id="editServiceMsg"
-            style="margin-top:10px;font-size:0.98rem;"></div>
-    </div>
-</div>
-
-<!-- Modal de Todos os Agendamentos -->
-<div id="allAppointmentsModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Todos os Agendamentos</h3>
-            <button class="close-modal">&times;</button>
+                </div>
+            </form>
+            <div id="editServiceMsg" style="margin-top:10px;font-size:0.98rem;"></div>
         </div>
-        <div class="modal-body">
-            <div class="tab-container">
-                <div class="tabs">
-                    <div class="tab active" data-tab="today">Hoje</div>
-                    <div class="tab" data-tab="week">Esta Semana</div>
-                    <div class="tab" data-tab="month">Este Mês</div>
-                </div>
+    </div>
 
-                <div class="tab-content active" id="today-tab">
-                    <div class="appointments-list">
-                        <!-- Agendamentos de hoje seriam listados aqui -->
+    <!-- Modal de Todos os Agendamentos -->
+    <div id="allAppointmentsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Todos os Agendamentos</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="today">Hoje</div>
+                        <div class="tab" data-tab="week">Esta Semana</div>
+                        <div class="tab" data-tab="month">Este Mês</div>
                     </div>
-                </div>
 
-                <div class="tab-content" id="week-tab">
-                    <div class="appointments-list">
-                        <!-- Agendamentos da semana seriam listados aqui -->
-                        </div </div>
-
-                    <div class="tab-content" id="month-tab">
+                    <div class="tab-content active" id="today-tab">
                         <div class="appointments-list">
-                            <!-- Agendamentos do mês seriam listados aqui -->
+                            <!-- Agendamentos de hoje seriam listados aqui -->
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="week-tab">
+                        <div class="appointments-list">
+                            <!-- Agendamentos da semana seriam listados aqui -->
+                        </div>
+
+                        <div class="tab-content" id="month-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos do mês seriam listados aqui -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Fechar</button>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal">Fechar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="copyright">
-            &copy; 2025 NaRégua. Todos os direitos reservados.
+        <!-- Footer -->
+        <footer>
+            <div class="copyright">
+                &copy; 2025 NaRégua. Todos os direitos reservados.
         </footer>
 
         <script src="js/dashboard.js"></script>
-    </body>
+</body>
 
 </html>

@@ -2394,7 +2394,7 @@ body.dark-mode .password-eye-btn {
 
 /* Botão de notificação */
 
-.send-push-btn {
+.send-notificacoes-btn {
     background: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
     color: #fff;
     border: none;
@@ -2411,8 +2411,8 @@ body.dark-mode .password-eye-btn {
     flex-shrink: 0;
 }
 
-.send-push-btn:hover,
-.send-push-btn:focus {
+.send-notificacoes-btn:hover,
+.send-notificacoes-btn:focus {
     background: linear-gradient(135deg, var(--primary-dark) 80%, var(--primary) 100%);
     box-shadow: 0 2px 8px rgba(26, 75, 140, 0.16);
     transform: scale(1.08);
@@ -2453,7 +2453,7 @@ body.dark-mode .password-eye-btn {
 
 /* Garante que o botão de notificação ocupe toda a largura da coluna se necessário */
 
-.appointment-notification-col .send-push-btn {
+.appointment-notification-col .send-notificacoes-btn {
     margin: 0;
 }
 
@@ -2690,19 +2690,12 @@ body.dark-mode .password-eye-btn {
         text-align: center;
         padding: 20px 10px;
     }
-    .barbershop-photo {
+    .barbershop-info>div:first-child {
         margin-bottom: 18px;
     }
-}
-
-#barbershopPhotoPreview {
-    border: 2px solid var(--primary-light);
-    transition: border-color 0.2s;
-}
-
-#barbershopPhotoPreview:hover {
-    border-color: var(--primary);
-    cursor: pointer;
+    .barbershop-info img {
+        margin: 0 auto;
+    }
 }
 
 
@@ -3221,7 +3214,9 @@ button:focus {
     font-weight: 600;
 }
 
+
 /* Galeria de imagem dos modais */
+
 .service-image-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -3229,6 +3224,7 @@ button:focus {
     margin: 10px 0 0 0;
     justify-content: center;
 }
+
 .service-image-gallery .gallery-img {
     width: 70px;
     height: 70px;
@@ -3239,6 +3235,7 @@ button:focus {
     transition: border 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px #0001;
 }
+
 .service-image-gallery .gallery-img.selected {
     border: 2.5px solid var(--primary);
     box-shadow: 0 4px 16px #dac02d33;

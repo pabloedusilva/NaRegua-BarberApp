@@ -3,7 +3,6 @@ const session = require('express-session');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
-const pushRoutes = require('./routes/push');
 
 const app = express();
 const port = 3000;
@@ -33,8 +32,6 @@ app.use('/dashboard', dashboardRoutes);
 // Rotas de agendamento
 app.use('/agendamento', agendamentoRoutes);
 
-// Rotas de push
-app.use('/push', pushRoutes); // ADICIONE ESTA LINHA
 
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));

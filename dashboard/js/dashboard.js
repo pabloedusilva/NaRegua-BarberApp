@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 'viewAllAppointments': 'allAppointmentsModal',
                 'addDayOffBtn': 'addDayOffModal',
                 'changePasswordBtn': 'changePasswordModal',
-                'viewPushHistoryBtn': 'pushHistoryModal'
             };
 
             // Open modals
@@ -337,15 +336,7 @@ item.innerHTML = `
     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
     <div class="appointment-status-group">
         <span class="appointment-status status-confirmed">Confirmado</span>
-        <button class="send-push-btn"
-            title="Enviar notificação de lembrete"
-            data-agendamento-id="${ag.id}"
-            data-nome="${ag.nome || ''}"
-            data-telefone="${ag.telefone || ''}"
-            data-servico="${ag.servico || ''}"
-            data-profissional="${ag.profissional || ''}"
-            data-data="${ag.data || ''}"
-            data-hora="${ag.hora || ''}">
+        <button class="send-notificacoes-btn" title="Notificar">
             <i class="fas fa-bell"></i>
         </button>
     </div>
@@ -494,15 +485,7 @@ function fetchAppointments(filter) {
                                     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
                                     <div class="appointment-status-group">
                                         <span class="appointment-status status-confirmed">Confirmado</span>
-                                        <button class="send-push-btn"
-                                            title="Enviar notificação de lembrete"
-                                            data-agendamento-id="${ag.id}"
-                                            data-nome="${ag.nome || ''}"
-                                            data-telefone="${ag.telefone || ''}"
-                                            data-servico="${ag.servico || ''}"
-                                            data-profissional="${ag.profissional || ''}"
-                                            data-data="${ag.data || ''}"
-                                            data-hora="${ag.hora || ''}">
+                                        <button class="send-notificacoes-btn" title="Notificar">
                                             <i class="fas fa-bell"></i>
                                         </button>
                                     </div>
@@ -529,15 +512,7 @@ function fetchAppointments(filter) {
                                     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
                                     <div class="appointment-status-group">
                                         <span class="appointment-status status-confirmed">Confirmado</span>
-                                        <button class="send-push-btn"
-                                            title="Enviar notificação de lembrete"
-                                            data-agendamento-id="${ag.id}"
-                                            data-nome="${ag.nome || ''}"
-                                            data-telefone="${ag.telefone || ''}"
-                                            data-servico="${ag.servico || ''}"
-                                            data-profissional="${ag.profissional || ''}"
-                                            data-data="${ag.data || ''}"
-                                            data-hora="${ag.hora || ''}">
+                                        <button class="send-notificacoes-btn" title="Notificar">
                                             <i class="fas fa-bell"></i>
                                         </button>
                                     </div>
@@ -604,15 +579,7 @@ function renderAgendamentosAgrupados(agendamentos) {
     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
     <div class="appointment-status-group">
         <span class="appointment-status status-confirmed">Confirmado</span>
-        <button class="send-push-btn"
-            title="Enviar notificação de lembrete"
-            data-agendamento-id="${ag.id}"
-            data-nome="${ag.nome || ''}"
-            data-telefone="${ag.telefone || ''}"
-            data-servico="${ag.servico || ''}"
-            data-profissional="${ag.profissional || ''}"
-            data-data="${ag.data || ''}"
-            data-hora="${ag.hora || ''}">
+        <button class="send-notificacoes-btn"
             <i class="fas fa-bell"></i>
         </button>
     </div>
@@ -1053,35 +1020,6 @@ if (editServiceImageInput && editServiceImagePreview) {
     }
 }
 
-// Enviar notificação push manual
-const pushForm = document.getElementById('pushForm');
-if (pushForm) {
-    pushForm.onsubmit = async function(e) {
-        e.preventDefault();
-        const title = document.getElementById('title').value.trim();
-        const body = document.getElementById('body').value.trim();
-        const msgDiv = document.getElementById('msg');
-        msgDiv.textContent = 'Enviando...';
-        try {
-            const res = await fetch('/push/manual', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title, body })
-            });
-            const data = await res.json();
-            if (data.success) {
-                msgDiv.textContent = `Notificação enviada para ${data.enviados} inscritos.`;
-            } else {
-                msgDiv.textContent = 'Erro: ' + (data.message || 'Falha ao enviar.');
-            }
-        } catch (err) {
-            msgDiv.textContent = 'Erro de conexão ou servidor.';
-        }
-    };
-}
-
 async function carregarHorariosSemana() {
     const res = await fetch('/dashboard/horarios-semana');
     const data = await res.json();
@@ -1444,57 +1382,12 @@ async function carregarNotificacoes() {
 // Atualizar dot de notificação ao abrir dashboard
 carregarNotificacoes();
 
-// Evento para enviar push manual para o usuário do agendamento
-document.addEventListener('click', async function(e) {
-    const btn = e.target.closest('.send-push-btn');
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.send-notificacoes-btn');
     if (!btn) return;
-
-    const nome = btn.getAttribute('data-nome') || 'Cliente';
-    const telefone = btn.getAttribute('data-telefone');
-    const servico = btn.getAttribute('data-servico');
-    const profissional = btn.getAttribute('data-profissional');
-    const dataAg = btn.getAttribute('data-data');
-    const hora = btn.getAttribute('data-hora');
-    const agendamentoId = btn.getAttribute('data-agendamento-id');
-
-    if (!telefone || !agendamentoId) {
-        alert('Não foi possível identificar o usuário deste agendamento.');
-        return;
-    }
-
-    if (!confirm(`Deseja enviar uma notificação de lembrete para ${nome} (${telefone}) sobre o agendamento de ${servico} às ${hora}?`)) {
-        return;
-    }
-
-    // Chama o endpoint backend para enviar push para este usuário
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    try {
-        const res = await fetch('/dashboard/enviar-push-agendamento', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                agendamentoId: agendamentoId,
-                nome,
-                telefone,
-                servico,
-                profissional,
-                data: dataAg,
-                hora
-            })
-        });
-        const data = await res.json();
-        if (data.success) {
-            alert('Notificação enviada com sucesso!');
-        } else {
-            alert(data.message || 'Erro ao enviar notificação.');
-        }
-    } catch (err) {
-        alert('Erro ao conectar ao servidor.');
-    }
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-bell"></i>';
+    // Botão permanece visível, mas não faz nada.
 });
+
         });
 
         const editProfessionalsBtn = document.getElementById('editProfessionalsBtn');
