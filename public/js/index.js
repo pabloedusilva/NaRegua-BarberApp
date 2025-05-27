@@ -593,22 +593,22 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }
                     return;
                 }
-                // Se ainda não pediu o nome, verifica no banco se já é usuário cadastrado
+                // Se ainda não pediu o nome, verifica no banco se já é cliente cadastrado
                 if (!aguardandoNome) {
                     phoneModalBtn.disabled = true;
                     try {
                         const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
                         const data = await res.json();
-                        if (data.success && (!data.agendamentos || data.agendamentos.length === 0)) {
-                            // Primeiro agendamento: pede o nome
+                        if (data.success && !data.cliente) {
+                            // Não existe cliente: pede o nome
                             userNameContainer.style.display = '';
                             aguardandoNome = true;
                             phoneModalBtn.disabled = false;
                             userName.focus();
                             atualizarEstadoBtn();
                             return;
-                        } else {
-                            // Já é usuário: agenda normalmente
+                        } else if (data.success && data.cliente) {
+                            // Já existe cliente: agenda normalmente
                             await fetch('/agendamento/novo', {
                                 method: 'POST',
                                 headers: {

@@ -51,16 +51,25 @@ router.post('/novo', async(req, res) => {
     }
 });
 
-// Buscar agendamentos por telefone
+// Buscar cliente por telefone (para saber se já existe cadastro) E LISTAR AGENDAMENTOS
 router.get('/meus', async(req, res) => {
     const { telefone } = req.query;
     try {
-        const [rows] = await db.query(
+        // Busca cliente
+        const [clientes] = await db.query(
+            'SELECT * FROM clientes WHERE telefone = ? LIMIT 1', [telefone]
+        );
+        // Busca agendamentos
+        const [agendamentos] = await db.query(
             'SELECT * FROM agendamentos WHERE telefone = ? ORDER BY data DESC, hora DESC', [telefone]
         );
-        res.json({ success: true, agendamentos: rows });
+        res.json({
+            success: true,
+            cliente: clientes.length > 0 ? clientes[0] : null,
+            agendamentos: agendamentos || []
+        });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao buscar agendamentos.' });
+        res.status(500).json({ success: false, message: 'Erro ao buscar cliente/agendamentos.' });
     }
 });
 
