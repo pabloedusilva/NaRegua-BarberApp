@@ -1918,6 +1918,19 @@ body.dark-mode .footer-admin-link-modern:focus {
     overflow-y: auto;
 }
 
+.my-appointments-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.my-appointments-list::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+.my-appointments-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .my-appointments-list li {
     background: var(--background);
     border-radius: 14px;
