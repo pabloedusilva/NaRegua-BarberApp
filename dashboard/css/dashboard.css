@@ -2259,6 +2259,25 @@ body.dark-mode .password-eye-btn {
     border-left-color: var(--primary-dark);
 }
 
+#notificationsList {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+#notificationsList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#notificationsList::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+#notificationsList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .notification-content {
     flex: 1;
     display: flex;
