@@ -826,7 +826,7 @@ input:checked+.slider:before {
 }
 
 .professional-actions .action-btn.delete-btn {
-    color: var(--primary-dark);
+    color: #c82333;
 }
 
 .professional-actions .action-btn:hover {
@@ -1799,11 +1799,15 @@ body.dark-mode .footer-admin-link-modern:focus {
    ========================= */
 
 .mac-sidebar {
+    width: 220px;
+    min-width: 220px;
+    max-width: 240px;
     position: fixed;
     top: 0;
     left: 0;
     width: 74px;
     height: 100vh;
+    padding-top: 32px !important;
     background: var(--header, #fff);
     box-shadow: 2px 0 16px rgba(0, 0, 0, 0.07);
     display: flex;
@@ -1814,23 +1818,27 @@ body.dark-mode .footer-admin-link-modern:focus {
     transition: background 0.3s;
 }
 
-.mac-sidebar-logo {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 18px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.mac-sidebar-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    width: 100%;
+    gap: 16px;
+    margin-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 8px;
+    box-sizing: border-box;
 }
 
-.mac-sidebar-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.mac-sidebar-label {
+    font-size: 1.07rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.01em;
+    opacity: 0.93;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    pointer-events: none;
+    transition: color 0.18s;
+    white-space: nowrap;
 }
 
 .mac-sidebar-btn {
@@ -1849,6 +1857,11 @@ body.dark-mode .footer-admin-link-modern:focus {
     cursor: pointer;
     outline: none;
     position: relative;
+}
+
+.mac-sidebar-btn.active+.mac-sidebar-label,
+.mac-sidebar-btn:focus+.mac-sidebar-label {
+    color: #fff;
 }
 
 .mac-sidebar-btn.active,
@@ -1885,8 +1898,63 @@ body.dark-mode .footer-admin-link-modern:focus {
     }
 }
 
-main.container {
-    flex: 1 0 auto;
+
+/* Hamburger: mais afastado do topo, acima da sidebar */
+
+.mac-sidebar-hamburger {
+    display: none;
+    position: fixed;
+    top: 18px;
+    /* diminua para 18px */
+    left: 18px;
+    z-index: 2001;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #dac02d22;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+
+/* Sidebar: espaço extra no topo para a logo */
+
+.mac-sidebar {
+    padding-top: 32px !important;
+    /* aumenta o topo */
+    /* ...existing code... */
+}
+
+
+/* Logo da sidebar: mais afastada do topo */
+
+.mac-sidebar-logo {
+    margin-top: 0 !important;
+    margin-bottom: 18px;
+    /* ...existing code... */
+}
+
+
+/* Em telas pequenas, hamburger aparece e sidebar tem padding-top menor */
+
+@media (max-width: 700px) {
+    .mac-sidebar-hamburger {
+        display: flex;
+        top: 18px;
+        left: 18px;
+    }
+    .mac-sidebar {
+        padding-top: 32px !important;
+    }
+    .mac-sidebar-logo {
+        margin-top: 0 !important;
+    }
 }
 
 
@@ -3258,4 +3326,300 @@ button:focus {
 .service-image-gallery .gallery-img.selected {
     border: 2.5px solid var(--primary);
     box-shadow: 0 4px 16px #dac02d33;
+}
+
+.alerta-promocao-container {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px #dac02d22;
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 28px;
+    max-width: 480px;
+}
+
+.alerta-promocao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.alerta-promocao-lista {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alerta-promocao-item {
+    background: linear-gradient(90deg, #fffbe6 60%, #fff692 100%);
+    border-left: 5px solid var(--primary);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px #dac02d11;
+    position: relative;
+    font-size: 1.01rem;
+}
+
+.alerta-promocao-item img {
+    max-width: 48px;
+    max-height: 48px;
+    border-radius: 8px;
+    margin-right: 8px;
+    box-shadow: 0 1px 6px #dac02d22;
+}
+
+.alerta-promocao-item .alerta-promocao-remove {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #c82333;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.18s;
+}
+
+.alerta-promocao-item .alerta-promocao-remove:hover {
+    color: #a3162d;
+}
+
+
+/* Modal bonito para exibir alerta/promo */
+
+.alerta-promocao-modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 30, 30, 0.38);
+    backdrop-filter: blur(2.5px);
+    align-items: center;
+    justify-content: center;
+    animation: modalBgFadeIn 0.35s;
+}
+
+.alerta-promocao-modal.active {
+    display: flex;
+}
+
+.alerta-promocao-modal-content {
+    background: linear-gradient(135deg, #fffbe6 85%, #dac02d 100%);
+    border-radius: 22px;
+    box-shadow: 0 8px 40px 0 #dac02d55, 0 1.5px 8px 0 #dac02d11;
+    padding: 38px 32px 24px 32px;
+    min-width: 320px;
+    max-width: 96vw;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: modalPopIn 0.38s cubic-bezier(.23, 1.12, .32, 1);
+    border: 2.5px solid #dac02d;
+    font-size: 1.08rem;
+    color: #222;
+}
+
+.alerta-promocao-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 1.3rem;
+    color: var(--primary-dark);
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s;
+    z-index: 2;
+}
+
+.alerta-promocao-close:hover {
+    color: #a3162d;
+}
+
+#alertaPromocaoImagem img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px #dac02d33;
+}
+
+.alerta-promocao-titulo {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.alerta-promocao-mensagem {
+    color: #222;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+
+/* --- Mac Sidebar Hamburger --- */
+
+.mac-sidebar-hamburger {
+    display: none;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 2001;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #dac02d22;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.mac-sidebar-hamburger span {
+    display: block;
+    width: 22px;
+    height: 3px;
+    background: var(--primary-dark);
+    border-radius: 2px;
+    transition: all 0.32s cubic-bezier(.23, 1.12, .32, 1);
+}
+
+.mac-sidebar-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mac-sidebar-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mac-sidebar-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* --- Sidebar responsiva e animada --- */
+
+.mac-sidebar {
+    transition: left 0.38s cubic-bezier(.23, 1.12, .32, 1), box-shadow 0.22s;
+}
+
+@media (max-width: 700px) {
+    .mac-sidebar {
+        left: -100vw;
+        box-shadow: none;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(6px);
+        transition: left 0.38s cubic-bezier(.23, 1.12, .32, 1), box-shadow 0.22s;
+    }
+    .mac-sidebar.open {
+        left: 0;
+        box-shadow: 2px 0 32px #dac02d33;
+    }
+    .mac-sidebar-hamburger {
+        display: flex;
+    }
+    body {
+        padding-left: 0 !important;
+    }
+}
+
+
+/* Overlay para fechar ao clicar fora */
+
+.mac-sidebar-overlay {
+    display: none;
+    position: fixed;
+    z-index: 800;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.32);
+    transition: opacity 0.3s;
+}
+
+.mac-sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+
+/* Minimalismo: oculta textos, só ícones, reduzido */
+
+.mac-sidebar .mac-sidebar-btn {
+    font-size: 1.35rem;
+    background: none;
+    border: none;
+    margin: 8px 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.13s;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.93;
+}
+
+.mac-sidebar .mac-sidebar-btn:focus {
+    outline: 2px solid var(--primary);
+}
+
+.mac-sidebar .mac-sidebar-btn i {
+    transition: transform 0.22s cubic-bezier(.23, 1.12, .32, 1);
+}
+
+.mac-sidebar .mac-sidebar-btn:hover i,
+.mac-sidebar .mac-sidebar-btn.active i {
+    transform: scale(1.18) rotate(-8deg);
+    filter: drop-shadow(0 2px 8px #dac02d33);
+}
+
+.mac-sidebar .mac-sidebar-btn.active {
+    background: var(--gold-gradient);
+    color: #fff;
+    box-shadow: 0 2px 12px #dac02d33;
+    transform: scale(1.08);
+}
+
+.mac-sidebar .mac-sidebar-btn:not(.active):hover {
+    background: var(--primary-light);
+    color: #fff;
+    transform: scale(1.04);
+}
+
+.mac-sidebar .mac-sidebar-bottom {
+    margin-top: auto;
+    margin-bottom: 8px;
+}
+
+.mac-sidebar-logo {
+    margin-bottom: 10px;
+    transition: transform 0.22s;
+}
+
+.mac-sidebar-logo img {
+    border-radius: 50%;
+    box-shadow: 0 2px 8px #dac02d33;
+    transition: box-shadow 0.22s;
+}
+
+.mac-sidebar-logo:hover img {
+    box-shadow: 0 4px 16px #dac02d66;
+    transform: scale(1.06);
 }

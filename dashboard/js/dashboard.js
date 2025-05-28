@@ -1756,6 +1756,145 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
 if (addServiceBtn && addServiceModal) {
     addServiceBtn.addEventListener('click', () => {
         carregarGaleriaImagensServico('serviceImageGallery', 'addServiceImage');
-        // ...restante do código...
+
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos
+    const form = document.getElementById('alertaPromocaoForm');
+    const lista = document.getElementById('alertaPromocaoLista');
+    const modal = document.getElementById('alertaPromocaoModal');
+    const modalClose = document.getElementById('alertaPromocaoClose');
+    const modalTitulo = document.getElementById('alertaPromocaoTitulo');
+    const modalMensagem = document.getElementById('alertaPromocaoMensagem');
+    const modalImagem = document.getElementById('alertaPromocaoImagem');
+
+    // Salva e carrega alertas/promos no localStorage (pode adaptar para backend se quiser)
+    function getAlertasPromos() {
+        try {
+            return JSON.parse(localStorage.getItem('alertasPromosDashboard') || '[]');
+        } catch {
+            return [];
+        }
+    }
+    function setAlertasPromos(arr) {
+        localStorage.setItem('alertasPromosDashboard', JSON.stringify(arr));
+    }
+
+    // Renderiza lista de alertas/promos no painel
+    function renderAlertasPromos() {
+        const arr = getAlertasPromos();
+        lista.innerHTML = '';
+        arr.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'alerta-promocao-item';
+            div.innerHTML = `
+                ${item.imagem ? `<img src="${item.imagem}" alt="Banner">` : ''}
+                <div>
+                    <div style="font-weight:700;color:var(--primary-dark);">${item.titulo}</div>
+                    <div style="color:#222;">${item.mensagem}</div>
+                </div>
+                <button class="alerta-promocao-remove" title="Remover" aria-label="Remover alerta">&times;</button>
+            `;
+            div.querySelector('.alerta-promocao-remove').onclick = () => {
+                const arr2 = getAlertasPromos();
+                arr2.splice(idx, 1);
+                setAlertasPromos(arr2);
+                renderAlertasPromos();
+            };
+            lista.appendChild(div);
+        });
+    }
+
+    // Adiciona novo alerta/promo
+    if (form) {
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            const titulo = document.getElementById('alertaTitulo').value.trim();
+            const mensagem = document.getElementById('alertaMensagem').value.trim();
+            const imagem = document.getElementById('alertaImagem').value.trim();
+            if (!titulo || !mensagem) return;
+            const arr = getAlertasPromos();
+            arr.unshift({ titulo, mensagem, imagem });
+            setAlertasPromos(arr);
+            renderAlertasPromos();
+            form.reset();
+        };
+    }
+
+    renderAlertasPromos();
+
+    // Exibe o modal de alerta/promo no início do site (apenas o mais recente)
+    function showAlertaPromoModal() {
+        const arr = getAlertasPromos();
+        if (arr.length === 0) return;
+        const item = arr[0];
+        modalTitulo.textContent = item.titulo;
+        modalMensagem.textContent = item.mensagem;
+        if (item.imagem) {
+            modalImagem.innerHTML = `<img src="${item.imagem}" alt="Banner">`;
+        } else {
+            modalImagem.innerHTML = '';
+        }
+        modal.classList.add('active');
+    }
+
+    // Só mostra o modal se não foi fechado nesta sessão
+    if (!sessionStorage.getItem('alertaPromoModalFechado')) {
+        setTimeout(showAlertaPromoModal, 600); // delay para UX
+    }
+
+    // Fecha o modal e não mostra de novo nesta sessão
+    modalClose.onclick = () => {
+        modal.classList.remove('active');
+        sessionStorage.setItem('alertaPromoModalFechado', '1');
+    };
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            sessionStorage.setItem('alertaPromoModalFechado', '1');
+        }
+    };
+});
+
+// ...existing code...
+
+// Sidebar hamburger responsivo e overlay
+const macSidebar = document.querySelector('.mac-sidebar');
+const macSidebarHamburger = document.getElementById('macSidebarHamburger');
+const macSidebarOverlay = document.getElementById('macSidebarOverlay');
+
+function openSidebar() {
+    macSidebar.classList.add('open');
+    macSidebarHamburger.classList.add('active');
+    macSidebarOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+    macSidebar.classList.remove('open');
+    macSidebarHamburger.classList.remove('active');
+    macSidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
+    macSidebarHamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (macSidebar.classList.contains('open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+    macSidebarOverlay.addEventListener('click', closeSidebar);
+    // Fecha ao clicar em qualquer botão da sidebar (opcional)
+    macSidebar.querySelectorAll('.mac-sidebar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth <= 700) closeSidebar();
+        });
+    });
+    // Fecha ao redimensionar para desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 700) closeSidebar();
     });
 }
