@@ -1898,13 +1898,41 @@ const macSidebarOverlay = document.getElementById('macSidebarOverlay');
 function openSidebar() {
     macSidebar.classList.add('open');
     macSidebarHamburger.classList.add('active');
-    macSidebarOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    // Overlay só aparece em telas pequenas
+    if (window.innerWidth <= 1024) {
+        macSidebarOverlay.classList.add('active');
+        macSidebarOverlay.style.display = 'block';
+    } else {
+        macSidebarOverlay.classList.remove('active');
+        macSidebarOverlay.style.display = 'none';
+    }
+function openSidebar() {
+    macSidebar.classList.add('open');
+    macSidebarHamburger.classList.add('active');
+    // Só bloqueia o body se o overlay estiver ativo (telas pequenas)
+    if (window.innerWidth <= 1024) {
+        macSidebarOverlay.classList.add('active');
+        macSidebarOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    } else {
+        macSidebarOverlay.classList.remove('active');
+        macSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = ''; // Libera o body em telas grandes
+    }
 }
 function closeSidebar() {
     macSidebar.classList.remove('open');
     macSidebarHamburger.classList.remove('active');
     macSidebarOverlay.classList.remove('active');
+    macSidebarOverlay.style.display = 'none';
+    document.body.style.overflow = ''; // Sempre libera o body ao fechar
+}
+}
+function closeSidebar() {
+    macSidebar.classList.remove('open');
+    macSidebarHamburger.classList.remove('active');
+    macSidebarOverlay.classList.remove('active');
+    macSidebarOverlay.style.display = 'none';
     document.body.style.overflow = '';
 }
 if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
@@ -1916,15 +1944,26 @@ if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
             openSidebar();
         }
     });
-    macSidebarOverlay.addEventListener('click', closeSidebar);
-    // Fecha ao clicar em qualquer botão da sidebar (opcional)
+    // Overlay só fecha a sidebar em telas pequenas
+    macSidebarOverlay.addEventListener('click', function() {
+        if (window.innerWidth <= 1024) {
+            closeSidebar();
+        }
+    });
+    // Fecha ao clicar em qualquer botão da sidebar em telas pequenas
     macSidebar.querySelectorAll('.mac-sidebar-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            if (window.innerWidth <= 700) closeSidebar();
+            if (window.innerWidth <= 1024) closeSidebar();
         });
     });
     // Fecha ao redimensionar para desktop
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 700) closeSidebar();
+        if (macSidebar.classList.contains('open')) {
+            if (window.innerWidth > 1024) {
+                macSidebarOverlay.style.display = 'none';
+            } else {
+                macSidebarOverlay.style.display = 'block';
+            }
+        }
     });
 }
