@@ -164,12 +164,13 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
+    position: relative;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+
 }
 
 .logo-icon {
@@ -352,6 +353,7 @@ header {
         align-items: flex-start;
         gap: 8px;
     }
+
     .card-header .edit-btn {
         align-self: flex-end;
         margin-left: 0;
@@ -498,19 +500,23 @@ header {
         flex-wrap: wrap;
         gap: 8px 10px;
     }
+
     .appointment-status,
     .send-push-btn {
         margin-left: 0;
         margin-top: 6px;
     }
+
     .appointment-details {
         flex-direction: column;
         align-items: flex-start;
     }
+
     .appointment-status {
         display: inline-flex;
         margin-right: 8px;
     }
+
     .send-push-btn {
         margin-top: 0;
         margin-left: 0;
@@ -557,6 +563,7 @@ header {
     .appointments-filter {
         gap: 5px;
     }
+
     .filter-btn {
         font-size: 0.95rem;
         padding: 6px 10px;
@@ -927,6 +934,7 @@ input:checked+.slider:before {
     from {
         background: rgba(30, 30, 30, 0.01);
     }
+
     to {
         background: rgba(30, 30, 30, 0.38);
     }
@@ -950,6 +958,7 @@ input:checked+.slider:before {
         opacity: 0;
         transform: translateY(40px) scale(0.97);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -1243,20 +1252,81 @@ input:checked+.slider:before {
     font-weight: 600;
 }
 
+@media (min-width: 701px) {
+    .navbar {
+        position: relative;
+        justify-content: flex-end;
+    }
+
+    .logo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: max-content;
+    }
+}
+
+/* Responsividade para telas médias e pequenas */
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: unset;
+        padding: 8px;
+    }
+    .logo {
+        position: static;
+        transform: none;
+        margin: 8px 0;
+        justify-content: center;
+        width: 100%;
+    }
+    .navbar-section {
+        justify-content: center;
+        width: 100%;
+    }
+    .nav-links {
+        justify-content: center;
+        width: 100%;
+        gap: 16px;
+        margin-top: 8px;
+    }
+}
+
 @media (max-width: 700px) {
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .logo {
+        position: static;
+        transform: none;
+        margin: 8px 0;
+        justify-content: center;
+    }
+
     .stats-container {
         grid-template-columns: 1fr 1fr;
         gap: 12px;
     }
+
     .stat-card {
         padding: 14px 8px;
         border-radius: 10px;
     }
+
     .stat-icon {
         width: 36px;
         height: 36px;
         font-size: 1.2rem;
     }
+
     .stat-value {
         font-size: 1.3rem;
     }
@@ -1280,9 +1350,11 @@ input:checked+.slider:before {
         border-radius: 16px !important;
         box-sizing: border-box;
     }
+
     .modal-title {
         font-size: 1.08rem !important;
     }
+
     .close-modal,
     .modal .close {
         top: 10px !important;
@@ -1291,11 +1363,13 @@ input:checked+.slider:before {
         height: 32px !important;
         font-size: 1.1rem !important;
     }
+
     .modal-footer {
         flex-direction: column;
         gap: 8px;
         align-items: stretch;
     }
+
     .btn,
     .modal .btn {
         width: 100%;
@@ -1304,13 +1378,16 @@ input:checked+.slider:before {
         font-size: 1rem;
         padding: 10px 0;
     }
+
     .form-group {
         margin-bottom: 14px;
     }
+
     .modal .form-control {
         font-size: 1rem;
         padding: 10px 10px;
     }
+
     .avatar-preview,
     #barbershopPhotoPreview {
         width: 80px !important;
@@ -1323,15 +1400,18 @@ input:checked+.slider:before {
         padding: 10px 2vw 10px 2vw !important;
         border-radius: 10px !important;
     }
+
     .modal-title {
         font-size: 1rem !important;
     }
+
     .close-modal,
     .modal .close {
         width: 28px !important;
         height: 28px !important;
         font-size: 1rem !important;
     }
+
     .avatar-preview,
     #barbershopPhotoPreview {
         width: 60px !important;
@@ -1546,19 +1626,23 @@ body.dark-mode .footer-admin-link-modern:focus {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+
     .services-container,
     .professionals-container,
     .stats-container {
         grid-template-columns: 1fr;
     }
+
     .navbar {
         flex-direction: column;
         gap: 15px;
     }
+
     .nav-links {
         width: 100%;
         justify-content: center;
     }
+
     .modal-content {
         width: 95%;
         padding: 20px;
@@ -1570,9 +1654,11 @@ body.dark-mode .footer-admin-link-modern:focus {
         flex-direction: column;
         gap: 5px;
     }
+
     .modal-footer {
         flex-direction: column;
     }
+
     .btn {
         width: 100%;
         margin-bottom: 10px;
@@ -1678,6 +1764,7 @@ body.dark-mode .footer-admin-link-modern:focus {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1689,16 +1776,19 @@ body.dark-mode .footer-admin-link-modern:focus {
         max-width: 100%;
         padding: 16px 8px 14px 8px;
     }
+
     .copy-success-modern {
         right: 12px;
         bottom: 4px;
         font-size: 0.97rem;
     }
+
     .btn-copy-modern {
         width: 46px;
         height: 42px;
         font-size: 1.18rem;
     }
+
     .share-link-input-modern {
         font-size: 1rem;
         padding: 10px 10px;
@@ -1839,7 +1929,7 @@ body.dark-mode .footer-admin-link-modern:focus {
     pointer-events: none;
     transition: color 0.18s;
     white-space: nowrap;
-    
+
 }
 
 .mac-sidebar-btn {
@@ -1888,10 +1978,12 @@ body.dark-mode .footer-admin-link-modern:focus {
     .mac-sidebar {
         width: 56px;
     }
+
     .mac-sidebar-logo {
         width: 36px;
         height: 36px;
     }
+
     .mac-sidebar-btn {
         width: 36px;
         height: 36px;
@@ -1927,18 +2019,8 @@ body.dark-mode .footer-admin-link-modern:focus {
 /* Sidebar: espaço extra no topo para a logo */
 
 .mac-sidebar {
-    padding-top: 32px !important;
-    /* aumenta o topo */
-    /* ...existing code... */
-}
+    padding-top: 70px !important;
 
-
-/* Logo da sidebar: mais afastada do topo */
-
-.mac-sidebar-logo {
-    margin-top: 0 !important;
-    margin-bottom: 18px;
-    /* ...existing code... */
 }
 
 
@@ -1950,11 +2032,9 @@ body.dark-mode .footer-admin-link-modern:focus {
         top: 18px;
         left: 18px;
     }
+
     .mac-sidebar {
-        padding-top: 32px !important;
-    }
-    .mac-sidebar-logo {
-        margin-top: 0 !important;
+        padding-top: 70px !important;
     }
 }
 
@@ -2019,6 +2099,7 @@ body.dark-mode .password-eye-btn {
         padding-right: 38px !important;
         font-size: 1em;
     }
+
     .password-eye-btn {
         right: 8px;
         font-size: 1em;
@@ -2032,6 +2113,7 @@ body.dark-mode .password-eye-btn {
         padding-right: 32px !important;
         font-size: 0.95em;
     }
+
     .password-eye-btn {
         right: 4px;
         font-size: 0.95em;
@@ -2131,6 +2213,7 @@ body.dark-mode .password-eye-btn {
     from {
         box-shadow: 0 6px 24px #dac02d33, 0 1.5px 8px 0 #dac02d11;
     }
+
     to {
         box-shadow: 0 12px 32px #dac02d66, 0 2px 12px 0 #dac02d22;
     }
@@ -2289,6 +2372,7 @@ body.dark-mode .password-eye-btn {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2415,6 +2499,7 @@ body.dark-mode .password-eye-btn {
         gap: 10px;
         padding: 14px 10px 12px 14px;
     }
+
     .delete-notification-btn {
         margin-left: 0;
         margin-top: 10px;
@@ -2515,6 +2600,7 @@ body.dark-mode .password-eye-btn {
         align-items: flex-start;
         gap: 8px 0;
     }
+
     .appointment-status-group {
         margin-left: 0;
         align-self: center;
@@ -2563,9 +2649,11 @@ body.dark-mode .password-eye-btn {
         text-align: center;
         padding: 20px 10px;
     }
+
     .barbershop-info>div:first-child {
         margin-bottom: 18px;
     }
+
     .barbershop-info img {
         margin: 0 auto;
     }
@@ -2652,9 +2740,11 @@ body.dark-mode .password-eye-btn {
         padding: 12px 6px 10px 6px;
         max-width: 100%;
     }
+
     .bg-chooser-list {
         gap: 10px;
     }
+
     .bg-chooser-item {
         width: 80px;
         height: 52px;
@@ -2778,9 +2868,11 @@ body.dark-mode .password-eye-btn {
         text-align: center;
         padding: 20px 10px;
     }
+
     .barbershop-info>div:first-child {
         margin-bottom: 18px;
     }
+
     .barbershop-info img {
         margin: 0 auto;
     }
@@ -3186,6 +3278,7 @@ button:focus {
 /* Responsividade refinada */
 
 @media (max-width: 900px) {
+
     .dashboard-section,
     .stat-card,
     .service-card,
@@ -3193,6 +3286,7 @@ button:focus {
     .modal-content {
         border-radius: 14px !important;
     }
+
     .section-title,
     .modal-title {
         font-size: 1.25rem;
@@ -3200,6 +3294,7 @@ button:focus {
 }
 
 @media (max-width: 600px) {
+
     .dashboard-section,
     .stat-card,
     .service-card,
@@ -3207,6 +3302,7 @@ button:focus {
     .modal-content {
         border-radius: 10px !important;
     }
+
     .section-title,
     .modal-title {
         font-size: 1.08rem;
@@ -3273,6 +3369,7 @@ button:focus {
         opacity: 0;
         transform: translateY(24px) scale(0.97);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -3525,13 +3622,16 @@ button:focus {
         backdrop-filter: blur(6px);
         transition: left 0.38s cubic-bezier(.23, 1.12, .32, 1), box-shadow 0.22s;
     }
+
     .mac-sidebar.open {
         left: 0;
         box-shadow: 2px 0 32px #dac02d33;
     }
+
     .mac-sidebar-hamburger {
         display: flex;
     }
+
     body {
         padding-left: 0 !important;
     }
