@@ -391,7 +391,13 @@ function showSection(sectionName) {
 }
 sidebarBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-        showSection(this.getAttribute('data-section'));
+        sidebarBtns.forEach(b => {
+            b.classList.remove('active');
+            if (b.nextElementSibling) b.nextElementSibling.classList.remove('active');
+        });
+        btn.classList.add('active');
+        if (btn.nextElementSibling) btn.nextElementSibling.classList.add('active');
+        showSection(btn.getAttribute('data-section'));
     });
 });
 // Inicializa mostrando o painel
@@ -1858,7 +1864,31 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 
-// ...existing code...
+// Faz os labels da sidebar funcionarem como os botões
+document.querySelectorAll('.mac-sidebar-item').forEach(item => {
+    const btn = item.querySelector('.mac-sidebar-btn');
+    const label = item.querySelector('.mac-sidebar-label');
+    if (btn && label) {
+        label.style.cursor = 'pointer';
+        label.addEventListener('click', function(e) {
+            e.preventDefault();
+            btn.focus(); // foca o botão
+            btn.click(); // dispara o clique do botão
+        });
+    }
+});
+
+// Permite que o .mac-sidebar-item seja clicável como o botão interno
+document.querySelectorAll('.mac-sidebar-item').forEach(item => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function(e) {
+        // Evita disparar duplo clique se clicar no botão
+        if (!e.target.classList.contains('mac-sidebar-btn')) {
+            const btn = item.querySelector('.mac-sidebar-btn');
+            if (btn) btn.click();
+        }
+    });
+});
 
 // Sidebar hamburger responsivo e overlay
 const macSidebar = document.querySelector('.mac-sidebar');
