@@ -1,275 +1,213 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>NaRégua - Agendamentos</title>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="stylesheet" href="css/index.css">
-        <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaRégua - Agendamentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+</head>
 
-    <body>
-        <header>
-            <div class="container">
-                <nav class="navbar">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <img src="img/sua-logo.png" alt="Logo NaRégua"
-                                style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
-                        </div>
-                        <div class="logo-text">NA<span>RÉGUA</span><span
-                                class="highlight">.</span></div>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="img/sua-logo.png" alt="Logo NaRégua" style="width: 40px; height: 40px; object-fit: contain; background: none; display: block;">
                     </div>
-                    <div class="nav-links">
-                        <a href="#" class="my-appointments">Meus
+                    <div class="logo-text">NA<span>RÉGUA</span><span class="highlight">.</span></div>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="my-appointments">Meus
                             agendamentos</a>
-                        <button class="theme-toggle" id="themeToggle">
+                    <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
-                    </div>
-                </nav>
-            </div>
-        </header>
-
-        <main class="container">
-            <!-- Informações da Barberaria -->
-            <section class="welcome-section animate-fade-in">
-                <div id="barbershopInfo"></div>
-            </section>
-
-            <section class="services-section animate-slide-up">
-            </section>
-
-            <section class="professionals-section animate-slide-up">
-                <h2 class="section-title"><i class="fas fa-user-tie"></i>
-                    Selecione o profissional</h2>
-                <div class="professional-list">
-                    <div class="professional-card selected"
-                        data-professional="Pablo barber">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Pablo barber</div>
-                    </div>
-
-                    <div class="professional-card"
-                        data-professional="Felipe silva">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Felipe silva</div>
-                    </div>
-
-                    <div class="professional-card"
-                        data-professional="Maria oliveira">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Maria oliveira</div>
-                    </div>
-
-                    <div class="professional-card"
-                        data-professional="Carlos santos">
-                        <div class="professional-avatar">
-                            <i class="fas fa-user"
-                                style="font-size: 24px; color: #aaa;"></i>
-                        </div>
-                        <div class="professional-name">Carlos santos</div>
-                    </div>
                 </div>
-            </section>
+            </nav>
+        </div>
+    </header>
 
-            <section class="calendar-section animate-fade-in"
-                id="calendar-section">
-                <h2 class="section-title"><i class="far fa-calendar-alt"></i>
-                    Selecione o horário de início</h2>
-                <button class="calendar-toggle-btn"
-                    id="calendarToggleBtn">Visualização semanal</button>
-                <div class="calendar-month">
-                    <div class="month-name">Maio 2025</div>
-                    <div class="calendar-nav">
-                        <button class="prev-month"><i
+    <main class="container">
+        <!-- Informações da Barberaria -->
+        <section class="welcome-section animate-fade-in">
+            <div id="barbershopInfo"></div>
+        </section>
+
+        <section class="services-section animate-slide-up">
+        </section>
+
+        <section class="professionals-section animate-slide-up">
+            <h2 class="section-title"><i class="fas fa-user-tie"></i> Selecione o profissional</h2>
+            <div class="professional-list">
+                <div class="professional-card selected" data-professional="Pablo barber">
+                    <div class="professional-img">
+                        <img src="img/sua-logo.png" alt="Avatar Pablo barber" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" />
+                    </div>
+                    <div class="professional-name">Pablo barber</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calendar-section animate-fade-in" id="calendar-section">
+            <h2 class="section-title"><i class="far fa-calendar-alt"></i> Selecione o horário de início</h2>
+            <button class="calendar-toggle-btn" id="calendarToggleBtn">Visualização semanal</button>
+            <div class="calendar-month">
+                <div class="month-name">Maio 2025</div>
+                <div class="calendar-nav">
+                    <button class="prev-month"><i
                                 class="fas fa-chevron-left"></i></button>
-                        <button class="next-month"><i
+                    <button class="next-month"><i
                                 class="fas fa-chevron-right"></i></button>
-                    </div>
                 </div>
-                <div class="calendar-days">
-                    <!-- Dias serão gerados dinamicamente pelo JavaScript -->
-                </div>
+            </div>
+            <div class="calendar-days">
+                <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+            </div>
+            <div class="time-slots">
                 <div class="time-slots">
-                    <div class="time-slots">
-                        <h3 class="time-slots-title">Horários disponíveis</h3>
-                        <div class="slots-container"></div>
-                    </div>
+                    <h3 class="time-slots-title">Horários disponíveis</h3>
+                    <div class="slots-container"></div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="confirmation-section animate-fade-in"
-                id="confirmation-section">
-                <h2 class="section-title"><i class="fas fa-check-circle"></i>
-                    Confirmar agendamento</h2>
+        <section class="confirmation-section animate-fade-in" id="confirmation-section">
+            <h2 class="section-title"><i class="fas fa-check-circle"></i> Confirmar agendamento</h2>
 
-                <div class="confirmation-details">
-                    <div class="detail-row">
-                        <div class="detail-label">Serviço:</div>
-                        <div class="detail-value"
-                            id="confirm-service">Barba</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Profissional:</div>
-                        <div class="detail-value"
-                            id="confirm-professional">Pablo barber</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Data:</div>
-                        <div class="detail-value"
-                            id="confirm-date">07/05/2025</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Horário:</div>
-                        <div class="detail-value" id="confirm-time">09:30</div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-label">Valor:</div>
-                        <div class="detail-value" id="confirm-price">R$ 20,00
-                        </div>
-                    </div>
+            <div class="confirmation-details">
+                <div class="detail-row">
+                    <div class="detail-label">Serviço:</div>
+                    <div class="detail-value" id="confirm-service">Barba</div>
                 </div>
 
-                <button class="confirm-button animate-pulse">Confirmar
+                <div class="detail-row">
+                    <div class="detail-label">Profissional:</div>
+                    <div class="detail-value" id="confirm-professional">Pablo barber</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Data:</div>
+                    <div class="detail-value" id="confirm-date">07/05/2025</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Horário:</div>
+                    <div class="detail-value" id="confirm-time">09:30</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Valor:</div>
+                    <div class="detail-value" id="confirm-price">R$ 20,00
+                    </div>
+                </div>
+            </div>
+
+            <button class="confirm-button animate-pulse">Confirmar
                     Agendamento</button>
-            </section>
-        </main>
+        </section>
+    </main>
 
-        <!-- Modais -->
+    <!-- Modais -->
 
-        <div id="customModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close"
-                    id="customModalClose">&times;</span>
-                <div class="custom-modal-icon" id="customModalIcon"></div>
-                <div class="custom-modal-message" id="customModalMessage"></div>
-                <button class="custom-modal-btn" id="customModalBtn">OK</button>
-            </div>
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="customModalClose">&times;</span>
+            <div class="custom-modal-icon" id="customModalIcon"></div>
+            <div class="custom-modal-message" id="customModalMessage"></div>
+            <button class="custom-modal-btn" id="customModalBtn">OK</button>
         </div>
-        <!-- Modal de "Meus agendamentos" -->
-        <div id="appointmentsModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close"
-                    id="appointmentsModalClose">&times;</span>
-                <div class="custom-modal-icon">
-                    <i class="fas fa-user-check"
-                        style="color:var(--primary);"></i>
-                </div>
-                <div class="custom-modal-message" style="margin-bottom:18px;">
-                    <!-- Remova o campo de nome, mantenha só o telefone -->
-                    <label for="appointmentsPhone"
-                        style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                    <input id="appointmentsPhone" type="tel"
-                        class="custom-modal-input" placeholder="(99) 99999-9999"
-                        autocomplete="off">
-                </div>
-                <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
+    </div>
+    <!-- Modal de "Meus agendamentos" -->
+    <div id="appointmentsModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="appointmentsModalClose">&times;</span>
+            <div class="custom-modal-icon">
+                <i class="fas fa-user-check" style="color:var(--primary);"></i>
+            </div>
+            <div class="custom-modal-message" style="margin-bottom:18px;">
+                <!-- Remova o campo de nome, mantenha só o telefone -->
+                <label for="appointmentsPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                <input id="appointmentsPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+            </div>
+            <button class="custom-modal-btn" id="appointmentsModalBtn">Ver
                     meus agendamentos</button>
-            </div>
         </div>
-        <!-- Modal de Login para Confirmação -->
-        <div id="phoneModal" class="custom-modal">
-            <div class="custom-modal-content">
-                <span class="custom-modal-close"
-                    id="phoneModalClose">&times;</span>
-                <div class="custom-modal-icon">
-                    <i class="fas fa-phone" style="color:var(--primary);"></i>
-                </div>
-                <p
-                    style="text-align: center; margin: 15px 0; color: var(--text); font-size: 16px;">
-                    Digite o número de telefone para continuar
-                </p>
-                <div class="custom-modal-message" style="margin-bottom:18px;">
-                    <label for="userPhone"
-                        style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
-                    <input id="userPhone" type="tel" class="custom-modal-input"
-                        placeholder="(99) 99999-9999" autocomplete="off">
-                    <div id="userNameContainer"
-                        style="display:none; margin-top:14px;">
-                        <label for="userName"
-                            style="display:block; margin-bottom:8px; font-weight:600;">Nome
+    </div>
+    <!-- Modal de Login para Confirmação -->
+    <div id="phoneModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" id="phoneModalClose">&times;</span>
+            <div class="custom-modal-icon">
+                <i class="fas fa-phone" style="color:var(--primary);"></i>
+            </div>
+            <p style="text-align: center; margin: 15px 0; color: var(--text); font-size: 16px;">
+                Digite o número de telefone para continuar
+            </p>
+            <div class="custom-modal-message" style="margin-bottom:18px;">
+                <label for="userPhone" style="display:block; margin-bottom:8px; font-weight:600;">Telefone</label>
+                <input id="userPhone" type="tel" class="custom-modal-input" placeholder="(99) 99999-9999" autocomplete="off">
+                <div id="userNameContainer" style="display:none; margin-top:14px;">
+                    <label for="userName" style="display:block; margin-bottom:8px; font-weight:600;">Nome
                             completo</label>
-                        <input id="userName" type="text"
-                            class="custom-modal-input" placeholder="Seu nome"
-                            autocomplete="off">
+                    <input id="userName" type="text" class="custom-modal-input" placeholder="Seu nome" autocomplete="off">
+                </div>
+            </div>
+            <button class="custom-modal-btn" id="phoneModalBtn" disabled>Continuar</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img src="https://static.vecteezy.com/system/resources/previews/010/995/281/original/logo-design-icon-symbol-lorem-ipsum-template-premium-premium-vector.jpg" alt="Logo NaRégua" class="logo-img">
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><i
+                                    class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i
+                                    class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
-                <button class="custom-modal-btn" id="phoneModalBtn"
-                    disabled>Continuar</button>
+
+                <div class="footer-contact">
+                    <h3 class="footer-title">Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> (31) 98507-9718
+                        </li>
+                        <li><i class="fas fa-envelope"></i> pablo.silva.edu@gmail.com
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-barber">
+                    <h3 class="footer-title">Barbeiro</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
+                </div>
             </div>
         </div>
+    </footer>
 
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-brand">
-                        <div class="logo">
-                            <div class="logo-icon">
-                                <img
-                                    src="https://static.vecteezy.com/system/resources/previews/010/995/281/original/logo-design-icon-symbol-lorem-ipsum-template-premium-premium-vector.jpg"
-                                    alt="Logo NaRégua" class="logo-img">
-                            </div>
-                        </div>
-                        <div class="social-links">
-                            <a href="#" aria-label="Instagram"><i
-                                    class="fab fa-instagram"></i></a>
-                            <a href="#" aria-label="WhatsApp"><i
-                                    class="fab fa-whatsapp"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="footer-contact">
-                        <h3 class="footer-title">Contato</h3>
-                        <ul class="footer-links">
-                            <li><i class="fas fa-phone"></i> (31) 98507-9718
-                            </li>
-                            <li><i class="fas fa-envelope"></i>
-                                pablo.silva.edu@gmail.com
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-barber">
-                        <h3 class="footer-title">Barbeiro</h3>
-                        <ul class="footer-links">
-                            <li>
-                                <i class="fas fa-user-shield"></i> Gerencie
-                                agendamentos, profissionais e horários.
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <div class="copyright">
-                        &copy; 2025 NaRégua. Todos os direitos reservados.
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <script src="js/index.js"></script>
-    </body>
+    <script src="js/index.js"></script>
+</body>
 
 </html>

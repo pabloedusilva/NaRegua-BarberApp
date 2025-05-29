@@ -772,7 +772,7 @@ header {
     /* Sombra */
 }
 
-.professional-avatar {
+.professional-img {
     width: 60px;
     /* Tamanho do avatar */
     height: 60px;
@@ -1406,7 +1406,7 @@ footer {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .footer-brand .logo-img {
@@ -1416,6 +1416,7 @@ footer {
     border-radius: 50%;
     display: block;
 }
+
 .footer-brand .logo-text {
     font-size: 22px;
     font-weight: 600;
@@ -1517,6 +1518,7 @@ footer {
 .dark-mode footer {
     background-color: var(--footer);
 }
+
 
 /* =========================
    Modal Personalizado
