@@ -1112,8 +1112,8 @@ function renderHorariosSemana() {
         `;
     });
     document.querySelectorAll('.edit-btn[data-dia]').forEach(btn => {
-    btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
-});
+        btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
+    });
 }
 
 // Modal: abrir para editar/adicionar turnos
@@ -1122,7 +1122,7 @@ function abrirModalHorario(diaKey) {
     modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
     turnosContainer.innerHTML = '';
     const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
-    const diaFechado = turnos.length === 0 || (turnos.length === 1 && turnos[0].fechado);
+    const diaFechado = turnos.length === 0;
 
     // Limpa botões antigos
     fecharDiaBtn.remove();
@@ -1155,15 +1155,14 @@ function abrirModalHorario(diaKey) {
                 <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
             </div>
         `;
+        // Remove todos os turnos do dia (fecha o dia)
         turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
-        turnosSemana.push({ dia_semana: diaKey, fechado: true });
         fecharDiaBtn.remove();
         turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
     };
 
     // Evento para abrir o dia
     abrirDiaBtn.onclick = () => {
-        turnosSemana = turnosSemana.filter(t => !(t.dia_semana === diaKey && t.fechado));
         turnosContainer.innerHTML = '';
         addTurnoRow();
         abrirDiaBtn.remove();
@@ -1214,7 +1213,7 @@ function abrirModalHorario(diaKey) {
 
     // Verifica se o dia está fechado (sem turnos e flag especial)
     const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
-    const diaFechado = turnos.length === 0 || (turnos.length === 1 && turnos[0].fechado);
+    const diaFechado = turnos.length === 0;
 
     // Limpa botões antigos
     fecharDiaBtn.remove();
@@ -1247,15 +1246,14 @@ function abrirModalHorario(diaKey) {
                 <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
             </div>
         `;
+        // Remove todos os turnos do dia (fecha o dia)
         turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
-        turnosSemana.push({ dia_semana: diaKey, fechado: true });
         fecharDiaBtn.remove();
         turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
     };
 
     // Evento para abrir o dia
     abrirDiaBtn.onclick = () => {
-        turnosSemana = turnosSemana.filter(t => !(t.dia_semana === diaKey && t.fechado));
         turnosContainer.innerHTML = '';
         addTurnoRow();
         abrirDiaBtn.remove();
@@ -1268,9 +1266,9 @@ horarioForm.onsubmit = async function(e) {
     e.preventDefault();
     const dia_semana = modalDiaSemana.value;
     let turnos = [];
-    // Se o dia está fechado, salva como fechado
+    // Se o dia está fechado, salva array vazio
     if (turnosContainer.textContent.includes('Fechado')) {
-        turnos = [{ fechado: true }];
+        turnos = [];
     } else {
         turnosContainer.querySelectorAll('.turno-row').forEach(row => {
             const inicio = row.querySelector('.turno-inicio').value;
@@ -1287,44 +1285,12 @@ horarioForm.onsubmit = async function(e) {
     horarioModal.style.display = 'none';
 };
 
-// ...no carregarHorariosTurnos, ajuste para considerar o flag fechado...
-async function carregarHorariosTurnos() {
-    const res = await fetch('/dashboard/horarios-turnos');
-    const data = await res.json();
-    if (data.success) {
-        // Se vier [{dia_semana, fechado:true}], trata como fechado
-        turnosSemana = data.turnos.map(t => {
-            if (t.fechado) return { dia_semana: t.dia_semana, fechado: true };
-            return t;
-        });
-        renderHorariosSemana();
-    }
-}
-
-// Salvar turnos do dia
-horarioForm.onsubmit = async function(e) {
-    e.preventDefault();
-    const dia_semana = modalDiaSemana.value;
-    const turnos = [];
-    turnosContainer.querySelectorAll('.turno-row').forEach(row => {
-        const inicio = row.querySelector('.turno-inicio').value;
-        const fim = row.querySelector('.turno-fim').value;
-        if (inicio && fim) turnos.push({ inicio, fim });
-    });
-    await fetch('/dashboard/horarios-turnos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dia_semana, turnos })
-    });
-    await carregarHorariosTurnos();
-    horarioModal.style.display = 'none';
-};
-
 // Carregar turnos do backend
 async function carregarHorariosTurnos() {
     const res = await fetch('/dashboard/horarios-turnos');
     const data = await res.json();
     if (data.success) {
+        // turnosSemana agora é só os turnos válidos (sem flag fechado)
         turnosSemana = data.turnos;
         renderHorariosSemana();
     }

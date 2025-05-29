@@ -325,11 +325,12 @@ router.get('/horarios-turnos', async(req, res) => {
         if (!turnosPorDia[t.dia_semana]) turnosPorDia[t.dia_semana] = [];
         turnosPorDia[t.dia_semana].push(t);
     });
+    // Para cada dia, retorna array de turnos OU array vazio se não houver turnos
     const turnos = diasSemana.map(dia => {
         if (turnosPorDia[dia] && turnosPorDia[dia].length > 0) {
-            return turnosPorDia[dia][0].turno_inicio ? turnosPorDia[dia] : [{ dia_semana: dia, fechado: true }];
+            return turnosPorDia[dia];
         } else {
-            return [{ dia_semana: dia, fechado: true }];
+            return [];
         }
     }).flat();
     res.json({ success: true, turnos });
@@ -345,6 +346,7 @@ router.post('/horarios-turnos', requireLogin, async(req, res) => {
             await db.query('INSERT INTO horarios_turnos (dia_semana, turno_inicio, turno_fim) VALUES ($1, $2, $3)', [dia_semana, t.inicio, t.fim]);
         }
     }
+    // Se turnos for vazio ou [{fechado:true}], não insere nada (dia fechado)
     res.json({ success: true });
 });
 
