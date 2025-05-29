@@ -439,19 +439,22 @@ router.post('/barbearia', async(req, res) => {
     const { nome, endereco, cidade_estado, whatsapp, instagram, foto } = req.body;
     try {
         // Garante que existe pelo menos um registro
-        const [rows] = await db.query('SELECT id FROM barbearia LIMIT 1');
+        const rows = await db`SELECT id FROM barbearia LIMIT 1`;
         if (rows.length === 0) {
-            await db.query(
-                'INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto) VALUES ($1, $2, $3, $4, $5, $6)', [nome, endereco, cidade_estado, whatsapp, instagram, foto]
-            );
+            await db`
+                INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto)
+                VALUES (${nome}, ${endereco}, ${cidade_estado}, ${whatsapp}, ${instagram}, ${foto})
+            `;
         } else {
-            await db.query(
-                'UPDATE barbearia SET nome=$1, endereco=$2, cidade_estado=$3, whatsapp=$4, instagram=$5, foto=$6 WHERE id=$7', [nome, endereco, cidade_estado, whatsapp, instagram, foto, rows[0].id]
-            );
+            await db`
+                UPDATE barbearia SET nome=${nome}, endereco=${endereco}, cidade_estado=${cidade_estado}, whatsapp=${whatsapp}, instagram=${instagram}, foto=${foto} WHERE id=${rows[0].id}
+            `;
         }
         res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao atualizar informações.' });
+        let msg = 'Erro ao atualizar informações.';
+        if (err && err.message) msg += ' ' + err.message;
+        res.status(500).json({ success: false, message: msg });
     }
 });
 
