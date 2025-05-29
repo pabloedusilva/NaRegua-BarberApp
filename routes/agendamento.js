@@ -6,40 +6,43 @@ const db = require('../db/neon');
 router.post('/novo', async(req, res) => {
     let { nome, telefone, servico, profissional, data, hora, preco, subscription } = req.body;
     try {
-        // Se nome não veio, busca o nome já cadastrado para esse telefone
-        if (!nome) {
-            const rows = await db `SELECT nome FROM agendamentos WHERE telefone = ${telefone} AND nome IS NOT NULL AND nome != '' ORDER BY id DESC LIMIT 1`;
-            if (rows.length > 0) nome = rows[0].nome;
+        // Verifica se o telefone já está cadastrado como cliente
+        let cliente = null;
+        if (telefone) {
+            const clientes = await db `SELECT * FROM clientes WHERE telefone = ${telefone} LIMIT 1`;
+            if (clientes.length > 0) {
+                cliente = clientes[0];
+                if (!nome) nome = cliente.nome;
+            }
+        }
+        // Se não existe cliente e não veio nome, retorna erro para pedir nome
+        if (!cliente && (!nome || nome.trim() === '')) {
+            return res.status(400).json({ success: false, message: 'Nome obrigatório para novo cliente.' });
+        }
+        // Se não existe cliente, cadastra
+        if (!cliente && telefone) {
+            await db `
+                INSERT INTO clientes (nome, telefone)
+                VALUES (${nome}, ${telefone})
+                ON CONFLICT (telefone) DO NOTHING
+            `;
         }
         // Salva o agendamento
-        const result = await db `
+        await db `
             INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
             VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
         `;
-
         // Cria notificação para dashboard
         await db `
             INSERT INTO notificacoes (titulo, mensagem, data)
             VALUES ('Novo agendamento', 'Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.', NOW())
         `;
-
-        const agendamentoId = result.insertId;
-
         // Salva a subscription (evita duplicidade)
         if (subscription && subscription.endpoint) {
-            // Remove subscriptions antigas para o mesmo endpoint
             await db `DELETE FROM subscriptions WHERE endpoint = ${subscription.endpoint}`;
             await db `
                 INSERT INTO subscriptions (agendamento_id, endpoint, p256dh, auth)
-                VALUES (${agendamentoId}, ${subscription.endpoint}, ${subscription.keys.p256dh}, ${subscription.keys.auth})
-            `;
-        }
-        // Salva ou atualiza o cliente
-        if (telefone) {
-            await db `
-                INSERT INTO clientes (nome, telefone)
-                VALUES (${nome}, ${telefone})
-                ON CONFLICT (telefone) DO UPDATE SET nome = COALESCE(NULLIF(EXCLUDED.nome, ''), clientes.nome)
+                VALUES (currval('agendamentos_id_seq'), ${subscription.endpoint}, ${subscription.keys.p256dh}, ${subscription.keys.auth})
             `;
         }
         res.json({ success: true });
