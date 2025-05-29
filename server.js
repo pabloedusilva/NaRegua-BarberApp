@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
+const db = require('./db/neon');
 
 const app = express();
 const port = 3000;
@@ -42,3 +43,6 @@ app.listen(port, () => {
     console.log(`Página inicial:        http://localhost:${port}/index`);
     console.log(`Dashboard:             http://localhost:${port}/dashboard/dashboard`);
 });
+
+// Exemplo de query adaptada:
+// const rows = await db`SELECT * FROM usuarios WHERE username = ${username}`;

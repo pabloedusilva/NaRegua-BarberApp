@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/mysql');
+const db = require('../db/neon');
 const webpush = require('web-push');
 
 const VAPID_PUBLIC_KEY = 'BElvOnVGxu5czvx63n1FEo3ea90bKMVWwxlky9nZBMNB39u97JOckXngiEKParctze7ciGdPvEZkSAnMSGGfo_s';
@@ -19,7 +19,7 @@ router.post('/manual', async(req, res) => {
         return res.status(400).json({ success: false, message: 'Título e corpo são obrigatórios.' });
     }
     try {
-        const [subs] = await db.query('SELECT id, endpoint, p256dh, auth FROM subscriptions');
+        const [subs] = await db `SELECT id, endpoint, p256dh, auth FROM subscriptions`;
         let enviados = 0;
         for (const sub of subs) {
             const subscription = {
@@ -38,7 +38,7 @@ router.post('/manual', async(req, res) => {
             } catch (err) {
                 // Remove subscription inválida
                 if (err.statusCode === 410 || err.statusCode === 404) {
-                    await db.query('DELETE FROM subscriptions WHERE id = ?', [sub.id]);
+                    await db `DELETE FROM subscriptions WHERE id = ${sub.id}`;
                 }
             }
         }

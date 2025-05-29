@@ -298,7 +298,19 @@ function atualizarTotalClientes() {
         .then(res => res.json())
         .then(data => {
             const clientEl = document.getElementById('total-clients');
-            if (clientEl) clientEl.textContent = data.total || 0;
+            if (clientEl) {
+                if (typeof data.total === 'number') {
+                    clientEl.textContent = data.total;
+                } else if (data && data.total) {
+                    clientEl.textContent = data.total;
+                } else {
+                    clientEl.textContent = '0';
+                }
+            }
+        })
+        .catch(() => {
+            const clientEl = document.getElementById('total-clients');
+            if (clientEl) clientEl.textContent = '0';
         });
 }
 atualizarTotalClientes();
@@ -1898,17 +1910,6 @@ const macSidebarOverlay = document.getElementById('macSidebarOverlay');
 function openSidebar() {
     macSidebar.classList.add('open');
     macSidebarHamburger.classList.add('active');
-    // Overlay só aparece em telas pequenas
-    if (window.innerWidth <= 1024) {
-        macSidebarOverlay.classList.add('active');
-        macSidebarOverlay.style.display = 'block';
-    } else {
-        macSidebarOverlay.classList.remove('active');
-        macSidebarOverlay.style.display = 'none';
-    }
-function openSidebar() {
-    macSidebar.classList.add('open');
-    macSidebarHamburger.classList.add('active');
     // Só bloqueia o body se o overlay estiver ativo (telas pequenas)
     if (window.innerWidth <= 1024) {
         macSidebarOverlay.classList.add('active');
@@ -1926,14 +1927,6 @@ function closeSidebar() {
     macSidebarOverlay.classList.remove('active');
     macSidebarOverlay.style.display = 'none';
     document.body.style.overflow = ''; // Sempre libera o body ao fechar
-}
-}
-function closeSidebar() {
-    macSidebar.classList.remove('open');
-    macSidebarHamburger.classList.remove('active');
-    macSidebarOverlay.classList.remove('active');
-    macSidebarOverlay.style.display = 'none';
-    document.body.style.overflow = '';
 }
 if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
     macSidebarHamburger.addEventListener('click', function(e) {

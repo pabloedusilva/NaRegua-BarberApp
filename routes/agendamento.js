@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/mysql');
+const db = require('../db/neon');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
@@ -8,42 +8,39 @@ router.post('/novo', async(req, res) => {
     try {
         // Se nome não veio, busca o nome já cadastrado para esse telefone
         if (!nome) {
-            const [rows] = await db.query('SELECT nome FROM agendamentos WHERE telefone = ? AND nome IS NOT NULL AND nome != "" ORDER BY id DESC LIMIT 1', [telefone]);
+            const rows = await db `SELECT nome FROM agendamentos WHERE telefone = ${telefone} AND nome IS NOT NULL AND nome != '' ORDER BY id DESC LIMIT 1`;
             if (rows.length > 0) nome = rows[0].nome;
         }
         // Salva o agendamento
-        const [result] = await db.query(
-            'INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco) VALUES (?, ?, ?, ?, ?, ?, ?)', [nome, telefone, servico, profissional, data, hora, preco]
-        );
+        const result = await db `
+            INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
+            VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
+        `;
 
         // Cria notificação para dashboard
-        await db.query(
-            'INSERT INTO notificacoes (titulo, mensagem, data) VALUES (?, ?, NOW())', [
-                'Novo agendamento',
-                `Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`
-            ]
-        );
+        await db `
+            INSERT INTO notificacoes (titulo, mensagem, data)
+            VALUES ('Novo agendamento', 'Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.', NOW())
+        `;
 
         const agendamentoId = result.insertId;
 
         // Salva a subscription (evita duplicidade)
         if (subscription && subscription.endpoint) {
             // Remove subscriptions antigas para o mesmo endpoint
-            await db.query('DELETE FROM subscriptions WHERE endpoint = ?', [subscription.endpoint]);
-            await db.query(
-                'INSERT INTO subscriptions (agendamento_id, endpoint, p256dh, auth) VALUES (?, ?, ?, ?)', [
-                    agendamentoId,
-                    subscription.endpoint,
-                    subscription.keys.p256dh,
-                    subscription.keys.auth
-                ]
-            );
+            await db `DELETE FROM subscriptions WHERE endpoint = ${subscription.endpoint}`;
+            await db `
+                INSERT INTO subscriptions (agendamento_id, endpoint, p256dh, auth)
+                VALUES (${agendamentoId}, ${subscription.endpoint}, ${subscription.keys.p256dh}, ${subscription.keys.auth})
+            `;
         }
         // Salva ou atualiza o cliente
         if (telefone) {
-            await db.query(
-                'INSERT INTO clientes (nome, telefone) VALUES (?, ?) ON DUPLICATE KEY UPDATE nome = IF(VALUES(nome) != "", VALUES(nome), nome)', [nome, telefone]
-            );
+            await db `
+                INSERT INTO clientes (nome, telefone)
+                VALUES (${nome}, ${telefone})
+                ON CONFLICT (telefone) DO UPDATE SET nome = COALESCE(NULLIF(EXCLUDED.nome, ''), clientes.nome)
+            `;
         }
         res.json({ success: true });
     } catch (err) {
@@ -56,13 +53,9 @@ router.get('/meus', async(req, res) => {
     const { telefone } = req.query;
     try {
         // Busca cliente
-        const [clientes] = await db.query(
-            'SELECT * FROM clientes WHERE telefone = ? LIMIT 1', [telefone]
-        );
+        const clientes = await db `SELECT * FROM clientes WHERE telefone = ${telefone} LIMIT 1`;
         // Busca agendamentos
-        const [agendamentos] = await db.query(
-            'SELECT * FROM agendamentos WHERE telefone = ? ORDER BY data DESC, hora DESC', [telefone]
-        );
+        const agendamentos = await db `SELECT * FROM agendamentos WHERE telefone = ${telefone} ORDER BY data DESC, hora DESC`;
         res.json({
             success: true,
             cliente: clientes.length > 0 ? clientes[0] : null,
@@ -77,7 +70,7 @@ router.get('/meus', async(req, res) => {
 router.delete('/excluir/:id', async(req, res) => {
     const { id } = req.params;
     try {
-        await db.query('DELETE FROM agendamentos WHERE id = ?', [id]);
+        await db `DELETE FROM agendamentos WHERE id = ${id}`;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao excluir agendamento.' });

@@ -1,3 +1,5 @@
+const db = require('../db/neon');
+
 function requireLogin(req, res, next) {
     if (req.session && req.session.user) {
         return next();
@@ -6,3 +8,6 @@ function requireLogin(req, res, next) {
 }
 
 module.exports = { requireLogin };
+
+// Exemplo de query adaptada:
+// const rows = await db`SELECT * FROM usuarios WHERE id = ${userId}`;
