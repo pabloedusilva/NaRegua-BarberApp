@@ -938,136 +938,181 @@ showCustomModal({
 
     // No carregamento da página, carregue os turnos:
     await carregarHorariosTurnos();
-});
 
-// Substitua os alerts por esta função e use-a nos lugares dos alerts
-function showCustomModal({
-    message,
-    icon = '',
-    btnText = 'OK',
-    onClose = null
-}) {
-    const modal = document.getElementById('customModal');
-    const modalMsg = document.getElementById('customModalMessage');
-    const modalIcon = document.getElementById('customModalIcon');
-    const modalBtn = document.getElementById('customModalBtn');
-    const modalClose = document.getElementById('customModalClose');
-
-    modalMsg.innerHTML = message;
-    modalIcon.innerHTML = icon;
-    modalBtn.textContent = btnText;
-
-    function closeModal() {
-        modal.classList.remove('active');
-        if (onClose) onClose();
+    // Função para carregar profissionais do backend e renderizar os cards
+    async function carregarProfissionais() {
+        const container = document.querySelector('.professional-list');
+        if (!container) return;
+        try {
+            const res = await fetch('/agendamento/profissionais');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.profissionais) && data.profissionais.length > 0) {
+                container.innerHTML = '';
+                data.profissionais.forEach((prof, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'professional-card' + (idx === 0 ? ' selected' : '');
+                    card.setAttribute('data-professional', prof.nome);
+                    card.innerHTML = `
+                        <div class="professional-img">
+                            <img src="${prof.avatar || 'img/sua-logo.png'}" alt="Avatar ${prof.nome}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" />
+                        </div>
+                        <div class="professional-name">${prof.nome}</div>
+                    `;
+                    container.appendChild(card);
+                });
+                // Seleção de profissional
+                const professionalCards = container.querySelectorAll('.professional-card');
+                professionalCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        professionalCards.forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedProfessional = this.getAttribute('data-professional');
+                        updateConfirmationDetails();
+                    });
+                });
+                // Define o primeiro como selecionado por padrão
+                selectedProfessional = data.profissionais[0].nome;
+                updateConfirmationDetails();
+            } else {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum profissional cadastrado.</div>';
+            }
+        } catch (err) {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar profissionais.</div>';
+        }
     }
 
-    modalBtn.onclick = closeModal;
-    modalClose.onclick = closeModal;
+    // Chamar carregarProfissionais ao carregar a página
+    carregarProfissionais();
 
-    modal.classList.add('active');
-}
+    // Substitua os alerts por esta função e use-a nos lugares dos alerts
+    function showCustomModal({
+        message,
+        icon = '',
+        btnText = 'OK',
+        onClose = null
+    }) {
+        const modal = document.getElementById('customModal');
+        const modalMsg = document.getElementById('customModalMessage');
+        const modalIcon = document.getElementById('customModalIcon');
+        const modalBtn = document.getElementById('customModalBtn');
+        const modalClose = document.getElementById('customModalClose');
 
-// Botão "Ver endereço" - mostrar/ocultar endereço
-const addressToggle = document.getElementById('addressToggle');
-const addressContent = document.getElementById('addressContent');
-if (addressToggle && addressContent) {
-    addressToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (addressContent.style.display === 'block') {
-            addressContent.style.display = 'none';
-            addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
-        } else {
-            addressContent.style.display = 'block';
-            addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
+        modalMsg.innerHTML = message;
+        modalIcon.innerHTML = icon;
+        modalBtn.textContent = btnText;
+
+        function closeModal() {
+            modal.classList.remove('active');
+            if (onClose) onClose();
         }
-    });
-}
 
-// Informações da Barbearia
-async function carregarBarbearia() {
-    const container = document.getElementById('barbershopInfo');
-    const welcomeSection = document.querySelector('.welcome-section');
-    try {
-        // Busca o wallpaper selecionado
-        const wallpaperRes = await fetch('/dashboard/wallpaper-selecionado');
-        const wallpaperData = await wallpaperRes.json();
-        let wallpaperUrl = wallpaperData.success && wallpaperData.wallpaper && wallpaperData.wallpaper.url ? wallpaperData.wallpaper.url : null;
+        modalBtn.onclick = closeModal;
+        modalClose.onclick = closeModal;
 
-        const res = await fetch('/dashboard/barbearia');
-        const data = await res.json();
-        if (data.success) {
-            const b = data.barbearia;
-            // Defina o background na seção welcome
-            if (welcomeSection) {
-                welcomeSection.style.backgroundImage = wallpaperUrl ? `url('${wallpaperUrl}')` : 'none';
+        modal.classList.add('active');
+    }
+
+    // Botão "Ver endereço" - mostrar/ocultar endereço
+    const addressToggle = document.getElementById('addressToggle');
+    const addressContent = document.getElementById('addressContent');
+    if (addressToggle && addressContent) {
+        addressToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (addressContent.style.display === 'block') {
+                addressContent.style.display = 'none';
+                addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
+            } else {
+                addressContent.style.display = 'block';
+                addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
             }
-            container.innerHTML = `
-                <div class="profile-pic">
-                    <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-                </div>
-                <div class="welcome-text">Seja bem vindo(a) ao</div>
-                <h1 class="barbershop-name">${b.nome}</h1>
-                <div class="social-icons-welcome">
-                    <a href="https://wa.me/${b.whatsapp}" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="https://instagram.com/${b.instagram}" target="_blank" class="social-icon-welcome" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-                <div class="address-container">
-                    <button class="address-toggle" id="addressToggle">
-                        <i class="fas fa-map-marker-alt"></i> Ver endereço
-                    </button>
-                    <div class="address-content" id="addressContent">
-                        <p>${b.endereco}</p>
-                        <p>${b.cidade_estado}</p>
-                        <a href="https://maps.google.com?q=${encodeURIComponent(b.endereco + ', ' + b.cidade_estado)}" target="_blank" class="map-link">
-                            <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+        });
+    }
+
+    // Informações da Barbearia
+    async function carregarBarbearia() {
+        const container = document.getElementById('barbershopInfo');
+        const welcomeSection = document.querySelector('.welcome-section');
+        try {
+            // Busca o wallpaper selecionado
+            const wallpaperRes = await fetch('/dashboard/wallpaper-selecionado');
+            const wallpaperData = await wallpaperRes.json();
+            let wallpaperUrl = wallpaperData.success && wallpaperData.wallpaper && wallpaperData.wallpaper.url ? wallpaperData.wallpaper.url : null;
+
+            const res = await fetch('/dashboard/barbearia');
+            const data = await res.json();
+            if (data.success) {
+                const b = data.barbearia;
+                // Defina o background na seção welcome
+                if (welcomeSection) {
+                    welcomeSection.style.backgroundImage = wallpaperUrl ? `url('${wallpaperUrl}')` : 'none';
+                }
+                container.innerHTML = `
+                    <div class="profile-pic">
+                        <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <div class="welcome-text">Seja bem vindo(a) ao</div>
+                    <h1 class="barbershop-name">${b.nome}</h1>
+                    <div class="social-icons-welcome">
+                        <a href="https://wa.me/${b.whatsapp}" target="_blank" class="social-icon-welcome" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://instagram.com/${b.instagram}" target="_blank" class="social-icon-welcome" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
                         </a>
                     </div>
-                </div>
-            `;
-            // Reaplica evento do botão de endereço
-            const addressToggle = document.getElementById('addressToggle');
-            const addressContent = document.getElementById('addressContent');
-            if (addressToggle && addressContent) {
-                addressToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (addressContent.style.display === 'block') {
-                        addressContent.style.display = 'none';
-                        addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
-                    } else {
-                        addressContent.style.display = 'block';
-                        addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
-                    }
-                });
+                    <div class="address-container">
+                        <button class="address-toggle" id="addressToggle">
+                            <i class="fas fa-map-marker-alt"></i> Ver endereço
+                        </button>
+                        <div class="address-content" id="addressContent">
+                            <p>${b.endereco}</p>
+                            <p>${b.cidade_estado}</p>
+                            <a href="https://maps.google.com?q=${encodeURIComponent(b.endereco + ', ' + b.cidade_estado)}" target="_blank" class="map-link">
+                                <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                            </a>
+                        </div>
+                    </div>
+                `;
+                // Reaplica evento do botão de endereço
+                const addressToggle = document.getElementById('addressToggle');
+                const addressContent = document.getElementById('addressContent');
+                if (addressToggle && addressContent) {
+                    addressToggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (addressContent.style.display === 'block') {
+                            addressContent.style.display = 'none';
+                            addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ver endereço';
+                        } else {
+                            addressContent.style.display = 'block';
+                            addressToggle.innerHTML = '<i class="fas fa-map-marker-alt"></i> Ocultar endereço';
+                        }
+                    });
+                }
+            } else {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
             }
-        } else {
-            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
+        } catch (err) {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
         }
-    } catch (err) {
-        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
     }
-}
-carregarBarbearia();
+    carregarBarbearia();
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Para todos os modais customizados
-    document.querySelectorAll('.custom-modal').forEach(function(modal) {
-        // Fecha ao clicar no X
-        const closeBtn = modal.querySelector('.custom-modal-close');
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.classList.remove('active');
-            };
-        }
-        // Fecha ao clicar fora do conteúdo
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.remove('active');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Para todos os modais customizados
+        document.querySelectorAll('.custom-modal').forEach(function(modal) {
+            // Fecha ao clicar no X
+            const closeBtn = modal.querySelector('.custom-modal-close');
+            if (closeBtn) {
+                closeBtn.onclick = function() {
+                    modal.classList.remove('active');
+                };
             }
+            // Fecha ao clicar fora do conteúdo
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
         });
     });
 });

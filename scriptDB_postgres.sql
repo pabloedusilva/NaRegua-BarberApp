@@ -113,7 +113,7 @@ INSERT INTO wallpapers (nome, url, ativo) VALUES
 ('Fundo 6', '/img/wallpappers/background6.png', TRUE),
 ('Fundo 7', '/img/wallpappers/background7.png', TRUE),
 ('Fundo 8', '/img/wallpappers/background8.jpg', TRUE),
-('Fundo 9', '/img/wallpappers/background9.png', TRUE)
+('Fundo 9', '/img/wallpappers/background9.png', TRUE),
 ('Fundo 10', '/img/wallpappers/background10.png', TRUE)
 ON CONFLICT DO NOTHING;
 
@@ -137,4 +137,17 @@ INSERT INTO servico_imagens (nome, url, ativo) VALUES
 ('Corte infantil', '/img/servicos/infantil.jpg', TRUE),
 ('Barba raspada na máquina', '/img/servicos/maquina.jpg', TRUE),
 ('Nenhuma', '/img/servicos/nenhuma.jpg', TRUE)
+ON CONFLICT DO NOTHING;
+
+-- Tabela de profissionais
+CREATE TABLE IF NOT EXISTS profissionais (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    avatar VARCHAR(255),
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+-- Exemplo de profissional
+INSERT INTO profissionais (nome, avatar, ativo) VALUES
+('Pablo barber', 'img/sua-logo.png', TRUE)
 ON CONFLICT DO NOTHING;

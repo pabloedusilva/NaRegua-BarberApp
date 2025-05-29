@@ -82,4 +82,14 @@ router.delete('/excluir/:id', async(req, res) => {
     }
 });
 
+// Rota pública para listar profissionais ativos
+router.get('/profissionais', async(req, res) => {
+    try {
+        const rows = await db `SELECT * FROM profissionais WHERE ativo = TRUE ORDER BY id ASC`;
+        res.json({ success: true, profissionais: rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar profissionais.' });
+    }
+});
+
 module.exports = router;
