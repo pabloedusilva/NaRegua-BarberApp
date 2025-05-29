@@ -343,18 +343,23 @@ router.post('/horarios-turnos', requireLogin, async(req, res) => {
 
 // Listar notificações (mais recentes primeiro)
 router.get('/notificacoes', requireLogin, async(req, res) => {
-    const [rows] = await db.query('SELECT * FROM notificacoes ORDER BY data DESC');
-    res.json({ success: true, notificacoes: rows });
+    try {
+        const rows = await db`SELECT * FROM notificacoes ORDER BY data DESC`;
+        res.json({ success: true, notificacoes: rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar notificações.' });
+    }
 });
 
 // Criar notificação
 router.post('/notificacoes', async(req, res) => {
     const { titulo, mensagem } = req.body;
-    'INSERT INTO notificacoes (titulo, mensagem, data) VALUES ($1, $2, NOW())', [
-        'Novo agendamento',
-        `Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`
-    ]
-    res.json({ success: true });
+    try {
+        await db.query('INSERT INTO notificacoes (titulo, mensagem, data) VALUES ($1, $2, NOW())', [titulo, mensagem]);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao criar notificação.' });
+    }
 });
 
 // Excluir (marcar como lida)

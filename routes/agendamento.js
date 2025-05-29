@@ -32,10 +32,12 @@ router.post('/novo', async(req, res) => {
             INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
             VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
         `;
-        // Cria notificação para dashboard
+        // Cria notificação para dashboard (data UTC, mensagem curta)
+        const titulo = 'Novo agendamento';
+        const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`;
         await db `
             INSERT INTO notificacoes (titulo, mensagem, data)
-            VALUES ('Novo agendamento', 'Novo agendamento para ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.', NOW())
+            VALUES (${titulo}, ${msg}, ${new Date().toISOString()})
         `;
         // Salva a subscription (evita duplicidade)
         if (subscription && subscription.endpoint) {
