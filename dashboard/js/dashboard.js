@@ -1374,21 +1374,79 @@ document.addEventListener('click', function(e) {
 
         });
 
-        const editProfessionalsBtn = document.getElementById('editProfessionalsBtn');
+        // Abrir modal
+const editProfessionalsBtn = document.getElementById('editProfessionalsBtn');
 const addProfessionalModal = document.getElementById('addProfessionalModal');
-
 if (editProfessionalsBtn && addProfessionalModal) {
     editProfessionalsBtn.addEventListener('click', () => {
         addProfessionalModal.style.display = 'flex';
+        document.getElementById('addProfessionalMsg').textContent = '';
+        document.getElementById('professionalNameInput').value = '';
+        document.getElementById('avatarPreview').innerHTML = `<i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>`;
+        avatarBase64 = '';
     });
 }
 
-document.querySelectorAll(' .btn.btn-secondary, #addProfessionalModal .btn.btn-secondary').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const modal = this.closest('.modal');
-        if (modal) modal.style.display = 'none';
-    });
-})
+// Fechar modal
+document.getElementById('closeAddProfessionalModal').onclick =
+document.getElementById('cancelAddProfessional').onclick = function() {
+    addProfessionalModal.style.display = 'none';
+};
+
+// Avatar preview e conversão para base64
+let avatarBase64 = '';
+const avatarInput = document.getElementById('avatarInput');
+const avatarUploadBtn = document.getElementById('avatarUploadBtn');
+const avatarPreview = document.getElementById('avatarPreview');
+
+avatarUploadBtn.onclick = () => avatarInput.click();
+avatarInput.onchange = function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        avatarBase64 = e.target.result;
+        avatarPreview.innerHTML = `<img src="${avatarBase64}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+};
+
+// Adicionar profissional
+document.getElementById('addProfessionalBtn').onclick = async function() {
+    const nome = document.getElementById('professionalNameInput').value.trim();
+    const msg = document.getElementById('addProfessionalMsg');
+    msg.textContent = '';
+    if (!nome) {
+        msg.style.color = 'var(--primary-dark)';
+        msg.textContent = 'Digite o nome do profissional.';
+        return;
+    }
+    this.disabled = true;
+    msg.textContent = 'Adicionando...';
+    try {
+        const res = await fetch('/dashboard/profissionais', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, avatar: avatarBase64 })
+        });
+        const data = await res.json();
+        if (data.success) {
+            msg.style.color = 'var(--success)';
+            msg.textContent = 'Profissional adicionado!';
+            setTimeout(() => {
+                addProfessionalModal.style.display = 'none';
+                carregarProfissionaisDashboard();
+            }, 900);
+        } else {
+            msg.style.color = 'var(--primary-dark)';
+            msg.textContent = data.message || 'Erro ao adicionar profissional.';
+        }
+    } catch {
+        msg.style.color = 'var(--primary-dark)';
+        msg.textContent = 'Erro ao conectar ao servidor.';
+    }
+    this.disabled = false;
+};
 
 
 // Informações da barbearia

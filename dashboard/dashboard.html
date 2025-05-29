@@ -486,31 +486,32 @@
             </form>
         </div>
     </div>
+    <!-- Modal de adicionar profissional -->
     <div id="addProfessionalModal" class="modal">
         <div class="modal-content" style="max-width:410px;">
             <div class="modal-header">
                 <h3 class="modal-title"><i class="fas fa-user-tie"></i> Adicionar Profissional</h3>
-                <button class="close-modal" type="button">&times;</button>
+                <button class="close-modal" id="closeAddProfessionalModal" type="button">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="avatar-upload">
-                    <div class="avatar-preview">
+                    <div class="avatar-preview" id="avatarPreview">
                         <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
                     </div>
-                    <button class="avatar-upload-btn" type="button">
-                        <i class="fas fa-camera"></i> Adicionar Foto
-                    </button>
+                    <button class="avatar-upload-btn" id="avatarUploadBtn" type="button">
+                    <i class="fas fa-camera"></i> Adicionar Foto
+                </button>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Nome do Profissional</label>
-                    <input type="text" class="form-control" placeholder="Ex: João Silva">
+                    <label class="form-label" for="professionalNameInput">Nome do Profissional</label>
+                    <input type="text" class="form-control" id="professionalNameInput" placeholder="Ex: João Silva" maxlength="100">
                 </div>
+                <div id="addProfessionalMsg" style="margin-top:8px;font-size:0.98rem;"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button">Cancelar</button>
-                <button class="btn btn-primary" type="button">Adicionar
-                    Profissional</button>
+                <button class="btn btn-secondary" id="cancelAddProfessional" type="button">Cancelar</button>
+                <button class="btn btn-primary" id="addProfessionalBtn" type="button">Adicionar Profissional</button>
             </div>
         </div>
     </div>

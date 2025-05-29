@@ -266,7 +266,7 @@ router.post('/servicos', requireLogin, async(req, res) => {
     // Se imagem for string vazia, salva como NULL
     if (!imagem || imagem.trim() === '') imagem = null;
     try {
-        await db`
+        await db `
             INSERT INTO servicos (nome, tempo, preco, imagem, ativo)
             VALUES (${nome}, ${tempo}, ${preco}, ${imagem}, TRUE)
         `;
@@ -353,7 +353,7 @@ router.post('/horarios-turnos', requireLogin, async(req, res) => {
 // Listar notificações (mais recentes primeiro)
 router.get('/notificacoes', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM notificacoes ORDER BY data DESC`;
+        const rows = await db `SELECT * FROM notificacoes ORDER BY data DESC`;
         res.json({ success: true, notificacoes: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar notificações.' });
@@ -439,14 +439,14 @@ router.post('/barbearia', async(req, res) => {
     const { nome, endereco, cidade_estado, whatsapp, instagram, foto } = req.body;
     try {
         // Garante que existe pelo menos um registro
-        const rows = await db`SELECT id FROM barbearia LIMIT 1`;
+        const rows = await db `SELECT id FROM barbearia LIMIT 1`;
         if (rows.length === 0) {
-            await db`
+            await db `
                 INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto)
                 VALUES (${nome}, ${endereco}, ${cidade_estado}, ${whatsapp}, ${instagram}, ${foto})
             `;
         } else {
-            await db`
+            await db `
                 UPDATE barbearia SET nome=${nome}, endereco=${endereco}, cidade_estado=${cidade_estado}, whatsapp=${whatsapp}, instagram=${instagram}, foto=${foto} WHERE id=${rows[0].id}
             `;
         }
@@ -511,6 +511,23 @@ router.get('/servico-imagens', async(req, res) => {
         res.json({ success: true, imagens: rows });
     } catch (err) {
         res.json({ success: false, error: 'Erro ao buscar imagens.' });
+    }
+});
+
+// Adicionar profissional
+router.post('/profissionais', requireLogin, async(req, res) => {
+    try {
+        const { nome, avatar } = req.body;
+        if (!nome || nome.trim().length < 2) {
+            return res.status(400).json({ success: false, message: 'Nome inválido.' });
+        }
+        await db `
+            INSERT INTO profissionais (nome, avatar, ativo)
+            VALUES (${nome.trim()}, ${avatar || null}, TRUE)
+        `;
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao adicionar profissional.' });
     }
 });
 
