@@ -1482,13 +1482,20 @@ editBarbershopForm.onsubmit = async function(e) {
     const instagram = document.getElementById('editBarbershopInstagram').value.trim();
     const endereco = document.getElementById('editBarbershopAddress').value.trim();
     const cidade_estado = document.getElementById('editBarbershopCityState').value.trim();
-    const foto = document.getElementById('editBarbershopPhoto').value.trim();
+    let foto = document.getElementById('editBarbershopPhoto').value.trim();
+
+    // Limita o campo foto a 255 caracteres
+    if (foto.length > 255) {
+        editBarbershopMsg.style.color = 'var(--primary-dark)';
+        editBarbershopMsg.textContent = 'A imagem é muito grande. Use uma URL de imagem ou uma imagem menor.';
+        return;
+    }
 
     try {
         const res = await fetch('/dashboard/barbearia', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ nome, whatsapp, instagram, endereco, cidade_estado, foto })
+            body: JSON.stringify({ nome, whatsapp, instagram, endereco, cidade_estado, foto })
         });
         const data = await res.json();
         if (data.success) {
