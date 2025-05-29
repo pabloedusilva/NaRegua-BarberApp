@@ -258,16 +258,23 @@ router.delete('/servicos/:id', async(req, res) => {
 });
 // Adicionar novo serviço
 router.post('/servicos', requireLogin, async(req, res) => {
-    const { nome, tempo, preco, imagem } = req.body;
+    let { nome, tempo, preco, imagem } = req.body;
     if (!nome || !tempo || !preco) return res.status(400).json({ success: false, message: 'Campos obrigatórios.' });
+    // Garante que preco é número
+    preco = Number(preco);
+    if (isNaN(preco)) return res.status(400).json({ success: false, message: 'Preço inválido.' });
+    // Se imagem for string vazia, salva como NULL
+    if (!imagem || imagem.trim() === '') imagem = null;
     try {
-        await db `
+        await db`
             INSERT INTO servicos (nome, tempo, preco, imagem, ativo)
-            VALUES (${nome}, ${tempo}, ${preco}, ${imagem}, 1)
+            VALUES (${nome}, ${tempo}, ${preco}, ${imagem}, TRUE)
         `;
         res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao adicionar serviço.' });
+        let msg = 'Erro ao adicionar serviço.';
+        if (err && err.message) msg += ' ' + err.message;
+        res.status(500).json({ success: false, message: msg });
     }
 });
 
