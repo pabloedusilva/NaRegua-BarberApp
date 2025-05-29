@@ -1933,3 +1933,47 @@ if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
         }
     });
 }
+
+// Função para carregar profissionais no dashboard (barbearia)
+async function carregarProfissionaisDashboard() {
+    const container = document.getElementById('professionalsContainer');
+    if (!container) return;
+    try {
+        const res = await fetch('/agendamento/profissionais');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.profissionais) && data.profissionais.length > 0) {
+            container.innerHTML = '';
+            data.profissionais.forEach(prof => {
+                const card = document.createElement('div');
+                card.className = 'professional-card';
+                card.style.position = 'relative';
+                card.innerHTML = `
+                    <button class="edit-professional-btn" title="Editar profissional" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
+                        <i class="fas fa-pen" style="color:#666;font-size:1rem;"></i>
+                    </button>
+                    <div class="professional-avatar">
+                        ${prof.avatar ? `<img src="${prof.avatar}" alt="Avatar ${prof.nome}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />` : `<i class='fas fa-user' style='font-size: 32px; color: #aaa;'></i>`}
+                    </div>
+                    <div class="professional-name">${prof.nome}</div>
+                `;
+                // Evento do botão de editar (pode ser expandido para abrir modal de edição)
+                card.querySelector('.edit-professional-btn').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Aqui pode abrir modal de edição, ex: openEditProfessionalModal(prof)
+                    alert('Funcionalidade de edição de profissional ainda não implementada.');
+                });
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum profissional cadastrado.</div>';
+        }
+    } catch (err) {
+        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar profissionais.</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ...existing code...
+    carregarProfissionaisDashboard();
+    // ...existing code...
+});
