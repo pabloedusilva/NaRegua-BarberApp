@@ -1886,6 +1886,11 @@ body.dark-mode .footer-admin-link-modern:focus {
     box-sizing: border-box;
 }
 
+.mac-sidebar-item:hover {
+    background: var(--hover, #f0f0f0);
+    border-radius: 12px;
+}
+
 .mac-sidebar-label {
     font-size: 1.07rem;
     font-weight: 600;
