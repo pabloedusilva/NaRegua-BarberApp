@@ -1993,6 +1993,18 @@ if (macSidebarHamburger && macSidebar && macSidebarOverlay) {
 }
 
 // Função para carregar profissionais no dashboard (barbearia)
+
+// Atualizar evento dos botões de editar após renderizar profissionais
+const _oldCarregarProfissionaisDashboard = carregarProfissionaisDashboard;
+carregarProfissionaisDashboard = async function() {
+  await _oldCarregarProfissionaisDashboard();
+  bindEditProfessionalBtns();
+};
+bindEditProfessionalBtns();
+
+document.addEventListener('DOMContentLoaded', function() {
+    carregarProfissionaisDashboard();
+});
 async function carregarProfissionaisDashboard() {
     const container = document.getElementById('professionalsContainer');
     if (!container) return;
@@ -2226,11 +2238,3 @@ closeEditProfessionalModal.onclick = cancelEditProfessional.onclick = function()
 editProfessionalModal.addEventListener('click', function(e) {
   if (e.target === editProfessionalModal) editProfessionalModal.style.display = 'none';
 });
-
-// Atualizar evento dos botões de editar após renderizar profissionais
-const _oldCarregarProfissionaisDashboard = carregarProfissionaisDashboard;
-carregarProfissionaisDashboard = async function() {
-  await _oldCarregarProfissionaisDashboard();
-  bindEditProfessionalBtns();
-};
-bindEditProfessionalBtns();
