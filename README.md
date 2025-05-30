@@ -1,3 +1,9 @@
+## Testes
+
+- **Dashboard:** https://naregua-barberapp-2.onrender.com/dashboard/dashboard
+- **Index:** https://naregua-barberapp-2.onrender.com/
+
+
 # NaRégua BarberApp
 
 Sistema completo de agendamento online para barbearias, com dashboard administrativa, notificações push, controle de serviços, profissionais, horários, folgas, autenticação, integração com WhatsApp e Instagram, **personalização visual com wallpapers dinâmicos**, preview de imagens, interface moderna e responsiva, e recursos avançados de personalização, segurança e automação.
