@@ -471,7 +471,7 @@ header {
 /* Status */
 
 .appointment-status {
-    background: var(--success);
+    background: rgb(25, 165, 25) !important;
     color: #fff !important;
     border-radius: 12px;
     padding: 2px 12px;
@@ -3185,7 +3185,6 @@ button:focus {
 /* Status badge mais elegante */
 
 .appointment-status {
-    background: var(--gold-gradient);
     color: #fff !important;
     font-weight: 700;
     border-radius: 16px;

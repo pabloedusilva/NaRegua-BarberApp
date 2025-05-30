@@ -531,4 +531,31 @@ router.post('/profissionais', requireLogin, async(req, res) => {
     }
 });
 
+// Atualizar profissional
+router.put('/profissionais/:id', requireLogin, async(req, res) => {
+    const { id } = req.params;
+    const { nome, avatar } = req.body;
+    if (!nome) return res.status(400).json({ success: false, message: 'Nome é obrigatório.' });
+    try {
+        await db `
+            UPDATE profissionais SET nome=${nome}, avatar=${avatar || null}
+            WHERE id=${id}
+        `;
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao atualizar profissional.' });
+    }
+});
+
+// Excluir profissional
+router.delete('/profissionais/:id', requireLogin, async(req, res) => {
+    const { id } = req.params;
+    try {
+        await db `DELETE FROM profissionais WHERE id=${id}`;
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao excluir profissional.' });
+    }
+});
+
 module.exports = router;

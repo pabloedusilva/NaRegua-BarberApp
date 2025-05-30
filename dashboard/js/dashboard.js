@@ -1694,7 +1694,7 @@ async function getServerDateTime() {
         if (data && data.iso) {
             return new Date(data.iso);
         }
-    } catch (err) {}
+    } catch ( err) {}
     // fallback: retorna null, nunca usa data local
     return null;
 }
@@ -2005,20 +2005,47 @@ async function carregarProfissionaisDashboard() {
                 const card = document.createElement('div');
                 card.className = 'professional-card';
                 card.style.position = 'relative';
+                card.setAttribute('data-id', prof.id);
                 card.innerHTML = `
-                    <button class="edit-professional-btn" title="Editar profissional" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;">
-                        <i class="fas fa-pen" style="color:#666;font-size:1rem;"></i>
-                    </button>
                     <div class="professional-avatar">
                         ${prof.avatar ? `<img src="${prof.avatar}" alt="Avatar ${prof.nome}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />` : `<i class='fas fa-user' style='font-size: 32px; color: #aaa;'></i>`}
                     </div>
-                    <div class="professional-name">${prof.nome}</div>
+                    <div class="professional-name" style="text-align:center;">${prof.nome}</div>
+                    <div class="professional-actions" style="display:flex;justify-content:center;gap:16px;margin-top:10px;">
+                        <button class="action-btn edit-professional-btn" title="Editar profissional" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fas fa-pen" style="color:#666;font-size:1.15rem;"></i>
+                        </button>
+                        <button class="action-btn delete-professional-btn" title="Excluir profissional" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fas fa-trash" style="color:#c82333;font-size:1.15rem;"></i>
+                        </button>
+                    </div>
                 `;
-                // Evento do botão de editar (pode ser expandido para abrir modal de edição)
+                // Evento do botão de editar
                 card.querySelector('.edit-professional-btn').addEventListener('click', function(e) {
                     e.stopPropagation();
-                    // Aqui pode abrir modal de edição, ex: openEditProfessionalModal(prof)
-                    alert('Funcionalidade de edição de profissional ainda não implementada.');
+                    openEditProfessionalModal({
+                        id: prof.id,
+                        nome: prof.nome,
+                        avatar: prof.avatar || ''
+                    });
+                });
+                // Evento do botão de excluir
+                card.querySelector('.delete-professional-btn').addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    if (!confirm('Tem certeza que deseja excluir este profissional?')) return;
+                    this.disabled = true;
+                    try {
+                        const res = await fetch(`/dashboard/profissionais/${prof.id}`, { method: 'DELETE' });
+                        const data = await res.json();
+                        if (data.success) {
+                            card.remove();
+                        } else {
+                            alert(data.message || 'Erro ao excluir profissional.');
+                        }
+                    } catch {
+                        alert('Erro ao conectar ao servidor.');
+                    }
+                    this.disabled = false;
                 });
                 container.appendChild(card);
             });
@@ -2030,8 +2057,180 @@ async function carregarProfissionaisDashboard() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // ...existing code...
-    carregarProfissionaisDashboard();
-    // ...existing code...
+// Modal de edição de profissional
+const editProfessionalModal = document.createElement('div');
+editProfessionalModal.id = 'editProfessionalModal';
+editProfessionalModal.className = 'modal';
+editProfessionalModal.innerHTML = `
+  <div class="modal-content" style="max-width:410px;">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fas fa-user-tie"></i> Editar Profissional</h3>
+      <button class="close-modal" id="closeEditProfessionalModal" type="button">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="avatar-upload">
+        <div class="avatar-preview" id="editAvatarPreview">
+          <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
+        </div>
+        <button class="avatar-upload-btn" id="editAvatarUploadBtn" type="button">
+          <i class="fas fa-camera"></i> Alterar Foto
+        </button>
+        <input type="file" id="editAvatarInput" accept="image/*" style="display: none;">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="editProfessionalNameInput">Nome do Profissional</label>
+        <input type="text" class="form-control" id="editProfessionalNameInput" maxlength="100">
+      </div>
+      <div id="editProfessionalMsg" style="margin-top:8px;font-size:0.98rem;"></div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:space-between;gap:10px;">
+      <button class="btn btn-secondary" id="cancelEditProfessional" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="saveEditProfessionalBtn" type="button">Salvar Alterações</button>
+    </div>
+  </div>
+`;
+document.body.appendChild(editProfessionalModal);
+
+let editProfessionalId = null;
+let editAvatarBase64 = '';
+
+// Abrir modal de edição ao clicar no botão de editar do card
+function openEditProfessionalModal(prof) {
+  editProfessionalId = prof.id;
+  document.getElementById('editProfessionalNameInput').value = prof.nome;
+  editAvatarBase64 = prof.avatar || '';
+  const preview = document.getElementById('editAvatarPreview');
+  if (prof.avatar) {
+    preview.innerHTML = `<img src="${prof.avatar}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
+  } else {
+    preview.innerHTML = '<i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>';
+  }
+  document.getElementById('editProfessionalMsg').textContent = '';
+  editProfessionalModal.style.display = 'flex';
+}
+
+// Evento do botão de editar do card
+function bindEditProfessionalBtns() {
+  document.querySelectorAll('.edit-professional-btn').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      const card = btn.closest('.professional-card');
+      const nome = card.querySelector('.professional-name').textContent;
+      const avatarImg = card.querySelector('.professional-avatar img');
+      const avatar = avatarImg ? avatarImg.src : '';
+      const id = card.getAttribute('data-id') || card.dataset.id || (card.profId || null);
+      // Busca o id real do profissional
+      let prof = { id, nome, avatar };
+      // Se o id não estiver no DOM, busca pelo nome (fallback)
+      if (!prof.id && window.__profissionaisDashboard) {
+        const found = window.__profissionaisDashboard.find(p => p.nome === nome);
+        if (found) prof.id = found.id;
+      }
+      openEditProfessionalModal(prof);
+    };
+  });
+}
+
+// Preview e upload de avatar
+const editAvatarInput = document.getElementById('editAvatarInput');
+const editAvatarUploadBtn = document.getElementById('editAvatarUploadBtn');
+const editAvatarPreview = document.getElementById('editAvatarPreview');
+editAvatarUploadBtn.onclick = () => editAvatarInput.click();
+editAvatarInput.onchange = function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    editAvatarBase64 = e.target.result;
+    editAvatarPreview.innerHTML = `<img src="${editAvatarBase64}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+// Salvar alterações
+const saveEditProfessionalBtn = document.getElementById('saveEditProfessionalBtn');
+saveEditProfessionalBtn.onclick = async function() {
+  const nome = document.getElementById('editProfessionalNameInput').value.trim();
+  const msg = document.getElementById('editProfessionalMsg');
+  msg.textContent = '';
+  if (!nome) {
+    msg.style.color = 'var(--primary-dark)';
+    msg.textContent = 'Digite o nome do profissional.';
+    return;
+  }
+  this.disabled = true;
+  msg.textContent = 'Salvando...';
+  try {
+    const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, avatar: editAvatarBase64 })
+    });
+    const data = await res.json();
+    if (data.success) {
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'Profissional atualizado!';
+      setTimeout(() => {
+        editProfessionalModal.style.display = 'none';
+        carregarProfissionaisDashboard();
+      }, 900);
+    } else {
+      msg.style.color = 'var(--primary-dark)';
+      msg.textContent = data.message || 'Erro ao atualizar profissional.';
+    }
+  } catch {
+    msg.style.color = 'var(--primary-dark)';
+    msg.textContent = 'Erro ao conectar ao servidor.';
+  }
+  this.disabled = false;
+};
+
+// Excluir profissional
+const deleteProfessionalBtn = document.getElementById('deleteProfessionalBtn');
+deleteProfessionalBtn.onclick = async function() {
+  if (!confirm('Tem certeza que deseja excluir este profissional?')) return;
+  const msg = document.getElementById('editProfessionalMsg');
+  msg.textContent = 'Excluindo...';
+  this.disabled = true;
+  try {
+    const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, {
+      method: 'DELETE'
+    });
+    const data = await res.json();
+    if (data.success) {
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'Profissional excluído!';
+      setTimeout(() => {
+        editProfessionalModal.style.display = 'none';
+        carregarProfissionaisDashboard();
+      }, 900);
+    } else {
+      msg.style.color = 'var(--primary-dark)';
+      msg.textContent = data.message || 'Erro ao excluir profissional.';
+    }
+  } catch {
+    msg.style.color = 'var(--primary-dark)';
+    msg.textContent = 'Erro ao conectar ao servidor.';
+  }
+  this.disabled = false;
+};
+
+// Fechar modal
+const closeEditProfessionalModal = document.getElementById('closeEditProfessionalModal');
+const cancelEditProfessional = document.getElementById('cancelEditProfessional');
+closeEditProfessionalModal.onclick = cancelEditProfessional.onclick = function() {
+  editProfessionalModal.style.display = 'none';
+};
+
+// Fechar ao clicar fora do modal
+editProfessionalModal.addEventListener('click', function(e) {
+  if (e.target === editProfessionalModal) editProfessionalModal.style.display = 'none';
 });
+
+// Atualizar evento dos botões de editar após renderizar profissionais
+const _oldCarregarProfissionaisDashboard = carregarProfissionaisDashboard;
+carregarProfissionaisDashboard = async function() {
+  await _oldCarregarProfissionaisDashboard();
+  bindEditProfessionalBtns();
+};
+bindEditProfessionalBtns();
