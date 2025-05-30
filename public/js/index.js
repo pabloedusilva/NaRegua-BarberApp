@@ -165,6 +165,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     // Atualizar os campos de confirmação
                     updateConfirmationDetails();
+                    // Recarregar horários disponíveis ao selecionar serviço
+                    if (selectedDate) {
+                        renderTimeSlots(getDiaSemana(selectedDate));
+                    }
                 });
             });
 
@@ -580,7 +584,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
         </div>
     `,
-                            icon: '', // Ícone já incluso acima
+                            icon: '', // Ícone já inclusos acima
                             btnText: 'Fechar',
                             onClose: function() {
                                 setTimeout(() => {
@@ -642,7 +646,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
         </div>
     `,
-                                icon: '', // Ícone já incluso acima
+                                icon: '', // Ícone já inclusos acima
                                 btnText: 'Fechar',
                                 onClose: function() {
                                     setTimeout(() => {
@@ -872,6 +876,24 @@ showCustomModal({
             slotsContainer.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Fechado</div>';
             return;
         }
+        // Pega a duração do serviço selecionado em minutos
+        let duracaoMin = 0;
+        if (selectedServiceTime) {
+            // Aceita formatos como '50min', '1h', '1h30min', '35min', etc
+            const match = selectedServiceTime.match(/(\d+)\s*h\s*(\d+)?\s*min?|^(\d+)\s*min/);
+            if (match) {
+                if (match[1]) { // Ex: 1h30min
+                    duracaoMin = parseInt(match[1], 10) * 60 + (match[2] ? parseInt(match[2], 10) : 0);
+                } else if (match[3]) { // Ex: 50min
+                    duracaoMin = parseInt(match[3], 10);
+                }
+            } else {
+                // fallback: tenta só número
+                duracaoMin = parseInt(selectedServiceTime, 10) || 0;
+            }
+        }
+        if (!duracaoMin || duracaoMin < 10) duracaoMin = 10; // fallback mínimo
+
         // Gera os horários de cada turno
         turnos.forEach(turno => {
             let inicio = turno.turno_inicio.slice(0, 5);
@@ -880,7 +902,14 @@ showCustomModal({
             let [hFim, mFim] = fim.split(':').map(Number);
             let tIni = hIni * 60 + mIni;
             let tFim = hFim * 60 + mFim;
-            for (let t = tIni; t < tFim; t += 10) { // intervalos de 10 minutos
+            let t = tIni;
+            while (t + duracaoMin <= tFim) {
+                // Arredonda para o próximo múltiplo de duracaoMin a partir do início
+                let diff = t - tIni;
+                if (diff % duracaoMin !== 0) {
+                    t += duracaoMin - (diff % duracaoMin);
+                    continue;
+                }
                 let h = Math.floor(t / 60);
                 let m = t % 60;
                 let horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
@@ -888,6 +917,7 @@ showCustomModal({
                 slotDiv.className = 'time-slot';
                 slotDiv.textContent = horaStr;
                 slotsContainer.appendChild(slotDiv);
+                t += duracaoMin;
             }
         });
         // Reaplica eventos de seleção
