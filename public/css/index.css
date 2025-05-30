@@ -237,6 +237,65 @@ header {
 }
 
 
+/* Banner Agendar Agora */
+
+.agendar-agora-banner-minimal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 28px 0 10px 0;
+    padding: 14px 0 10px 0;
+    border-radius: 14px;
+    min-height: 48px;
+    min-width: 80px;
+}
+
+.agendar-agora-down-float {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    animation: agendarSetaFloat 1.6s ease-in-out infinite;
+}
+
+.agendar-agora-down-float i {
+    color: var(--primary);
+    font-size: 2.1rem;
+    transition: color 0.2s;
+    filter: drop-shadow(0 2px 8px #dac02d22);
+}
+
+@keyframes agendarSetaFloat {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(12px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .agendar-agora-banner-minimal {
+        padding: 8px 0 5px 0;
+        margin: 12px 0 6px 0;
+        border-radius: 10px;
+        min-height: 36px;
+        min-width: 48px;
+    }
+    .agendar-agora-down-float {
+        height: 28px;
+        width: 28px;
+    }
+    .agendar-agora-down-float i {
+        font-size: 1.3rem;
+    }
+}
+
+
 /* Botão de alternância de tema */
 
 .theme-toggle {
