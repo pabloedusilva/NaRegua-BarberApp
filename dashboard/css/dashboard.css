@@ -2603,38 +2603,193 @@ body.dark-mode .password-eye-btn {
     }
 }
 
-@media (max-width: 600px) {
-    .barbershop-info {
-        flex-direction: column;
-        align-items: center !important;
-        text-align: center;
-        padding: 20px 10px;
-    }
-    .barbershop-info>div:first-child {
-        margin-bottom: 18px;
-    }
-    .barbershop-info img {
-        margin: 0 auto;
-    }
-}
-
 
 /* Informações da Barbearia */
 
 
 /* Container principal */
 
-.barbershop-info {
+
+/* NOVO DESIGN - Barbearia Moderno */
+
+.barbershop-info-modern {
     display: flex;
     align-items: flex-start;
-    gap: 32px;
-    background: var(--gray-light);
-    border-radius: 14px;
-    padding: 28px 32px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    gap: 36px;
+    border-radius: 22px;
+    padding: 38px 38px 32px 38px;
+    box-shadow: 0 8px 32px #dac02d22, 0 1.5px 8px 0 #dac02d11;
     margin-top: 18px;
-    flex-wrap: wrap;
-    border: 1.5px solid var(--primary-light);
+    margin-bottom: 18px;
+    border: 2.5px solid var(--primary-light);
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    animation: fadeInCard 0.7s cubic-bezier(.23, 1.12, .32, 1);
+}
+
+.barbershop-info-modern::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.barbershop-info-modern .barbershop-photo {
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.barbershop-info-modern .barbershop-photo-inner {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 24px #dac02d33;
+    background: #fff;
+    border: 4px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: border-color 0.22s, box-shadow 0.22s;
+}
+
+.barbershop-info-modern .barbershop-photo-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.barbershop-info-modern .barbershop-main {
+    flex: 1;
+    min-width: 220px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+}
+
+.barbershop-info-modern .barbershop-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.barbershop-info-modern .barbershop-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    letter-spacing: 0.5px;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 8px #dac02d22;
+}
+
+.barbershop-info-modern .barbershop-address-row,
+.barbershop-info-modern .barbershop-whatsapp-row,
+.barbershop-info-modern .barbershop-instagram-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.08rem;
+    margin-bottom: 4px;
+}
+
+.barbershop-info-modern .barbershop-address-row i {
+    color: #e74c3c;
+    font-size: 1.15em;
+}
+
+.barbershop-info-modern .barbershop-address-row span {
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.barbershop-info-modern .barbershop-whatsapp-row i {
+    color: #25d366;
+    font-size: 1.15em;
+}
+
+.barbershop-info-modern .barbershop-whatsapp-row a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.18s;
+}
+
+.barbershop-info-modern .barbershop-whatsapp-row a:hover {
+    color: #25d366;
+    text-decoration: underline;
+}
+
+.barbershop-info-modern .barbershop-instagram-row i {
+    color: #f874bf;
+    font-size: 1.15em;
+}
+
+.barbershop-info-modern .barbershop-instagram-row a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.18s;
+}
+
+.barbershop-info-modern .barbershop-instagram-row a:hover {
+    color: #f874bf;
+    text-decoration: underline;
+}
+
+.barbershop-info-modern .barbershop-extra {
+    margin-top: 10px;
+    font-size: 0.98rem;
+    color: var(--primary-dark);
+    opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+    .barbershop-info-modern {
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 10px 18px 10px;
+        gap: 18px;
+    }
+    .barbershop-info-modern .barbershop-photo-inner {
+        width: 90px;
+        height: 90px;
+    }
+    .barbershop-info-modern .barbershop-title {
+        font-size: 1.18rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .barbershop-info-modern {
+        flex-direction: column;
+        align-items: center;
+        padding: 16px 4px 12px 4px;
+        gap: 12px;
+        border-radius: 12px;
+    }
+    .barbershop-info-modern .barbershop-photo-inner {
+        width: 70px;
+        height: 70px;
+    }
+    .barbershop-info-modern .barbershop-title {
+        font-size: 1.05rem;
+    }
+    .barbershop-info-modern .barbershop-main {
+        gap: 6px;
+    }
 }
 
 
@@ -2645,7 +2800,7 @@ body.dark-mode .password-eye-btn {
     border-radius: 12px;
     padding: 22px 24px 18px 24px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-    border: 1.5px solid var(--primary-light);
+    border: 1.9px solid var(--primary-light);
     margin-top: 18px;
     max-width: 600px;
 }
@@ -2813,24 +2968,6 @@ body.dark-mode .password-eye-btn {
     color: var(--text);
     text-decoration: none;
     font-size: 1.05rem;
-}
-
-
-/* Responsivo: Centraliza logo e informações em telas pequenas */
-
-@media (max-width: 600px) {
-    .barbershop-info {
-        flex-direction: column;
-        align-items: center !important;
-        text-align: center;
-        padding: 20px 10px;
-    }
-    .barbershop-info>div:first-child {
-        margin-bottom: 18px;
-    }
-    .barbershop-info img {
-        margin: 0 auto;
-    }
 }
 
 

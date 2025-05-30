@@ -2226,15 +2226,3 @@ deleteProfessionalBtn.onclick = async function() {
   }
   this.disabled = false;
 };
-
-// Fechar modal
-const closeEditProfessionalModal = document.getElementById('closeEditProfessionalModal');
-const cancelEditProfessional = document.getElementById('cancelEditProfessional');
-closeEditProfessionalModal.onclick = cancelEditProfessional.onclick = function() {
-  editProfessionalModal.style.display = 'none';
-};
-
-// Fechar ao clicar fora do modal
-editProfessionalModal.addEventListener('click', function(e) {
-  if (e.target === editProfessionalModal) editProfessionalModal.style.display = 'none';
-});
