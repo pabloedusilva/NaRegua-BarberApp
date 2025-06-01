@@ -69,8 +69,10 @@ router.get('/total-agendamentos-mes', requireLogin, async(req, res) => {
         const hoje = new Date();
         const ano = hoje.getFullYear();
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        // Corrige o último dia do mês
+        const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
         const dataInicio = `${ano}-${mes}-01`;
-        const dataFim = `${ano}-${mes}-31`;
+        const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
         const rows = await db `
             SELECT COUNT(*) AS total
             FROM agendamentos
@@ -194,8 +196,10 @@ router.get('/agendamentos-mes', requireLogin, async(req, res) => {
         const hoje = new Date();
         const ano = hoje.getFullYear();
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        // Corrige o último dia do mês
+        const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
         const dataInicio = `${ano}-${mes}-01`;
-        const dataFim = `${ano}-${mes}-31`;
+        const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
         const rows = await db `
             SELECT * FROM agendamentos
             WHERE data >= ${dataInicio} AND data <= ${dataFim}
