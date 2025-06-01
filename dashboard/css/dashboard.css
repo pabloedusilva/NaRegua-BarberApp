@@ -578,7 +578,6 @@ header {
     flex-direction: column;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     transition: box-shadow 0.22s, transform 0.18s;
-    border: 1.5px solid var(--primary-light);
     min-width: 0;
     position: relative;
 }
@@ -843,13 +842,6 @@ input:checked+.slider:before {
 
 .working-hours {
     margin-top: 20px;
-}
-
-.day-schedule {
-    background-color: var(--gray-light);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
 }
 
 .day-header {
@@ -2618,10 +2610,8 @@ body.dark-mode .password-eye-btn {
     gap: 36px;
     border-radius: 22px;
     padding: 38px 38px 32px 38px;
-    box-shadow: 0 8px 32px #dac02d22, 0 1.5px 8px 0 #dac02d11;
     margin-top: 18px;
     margin-bottom: 18px;
-    border: 2.5px solid var(--primary-light);
     position: relative;
     overflow: hidden;
     min-height: 160px;
@@ -2796,44 +2786,114 @@ body.dark-mode .password-eye-btn {
 /* Background da barbearia */
 
 .barbershop-bg-chooser {
-    background: var(--gray-light);
-    border-radius: 12px;
-    padding: 22px 24px 18px 24px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-    border: 1.9px solid var(--primary-light);
-    margin-top: 18px;
-    max-width: 600px;
+    border-radius: 18px;
+    padding: 28px 32px 22px 32px;
+    margin-top: 24px;
+    max-width: 700px;
+    position: relative;
+    overflow: visible;
+    animation: fadeInCard 0.8s cubic-bezier(.23, 1.12, .32, 1);
+    transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+}
+
+@keyframes chooserGlow {
+    from {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.08);
+    }
 }
 
 .bg-chooser-list {
     display: flex;
-    gap: 18px;
+    gap: 28px;
     flex-wrap: wrap;
     justify-content: center;
-    /* Centraliza os cards no container */
+    margin-top: 10px;
+    z-index: 1;
+    position: relative;
 }
 
 .bg-chooser-item {
     position: relative;
-    width: 110px;
-    height: 70px;
-    border: 2.5px solid var(--gray);
-    border-radius: 10px;
+    width: 120px;
+    height: 80px;
+    border: 3px solid var(--gray);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 1px 6px #0001;
+    box-shadow: 0 2px 12px #dac02d22, 0 1.5px 8px 0 #dac02d11;
     cursor: pointer;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    background: #eee;
-    transition: border-color 0.22s, box-shadow 0.18s;
+    background: linear-gradient(120deg, #fffbe6 60%, #dac02d11 100%);
+    transition: border-color 0.22s, box-shadow 0.18s, transform 0.18s;
     padding: 0;
+    outline: none;
+    z-index: 1;
+    animation: chooserItemPop 0.7s cubic-bezier(.23, 1.12, .32, 1);
+}
+
+@keyframes chooserItemPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .bg-chooser-item.selected,
 .bg-chooser-item:focus {
     border-color: var(--primary);
-    box-shadow: 0 4px 16px rgba(218, 192, 45, 0.13);
+    box-shadow: 0 8px 32px #dac02d33, 0 2px 12px 0 #dac02d22;
+    transform: scale(1.08) rotate(-2deg);
+    z-index: 2;
+}
+
+.bg-chooser-item.selected::after,
+.bg-chooser-item:focus::after {
+    content: "Selecionado";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.93em;
+    font-weight: 700;
+    padding: 2px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #dac02d22;
+    letter-spacing: 0.03em;
+    z-index: 3;
+    animation: chooserBadgePop 0.5s;
+}
+
+@keyframes chooserBadgePop {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.bg-chooser-item:hover:not(.selected) {
+    border-color: var(--primary-light);
+    box-shadow: 0 4px 16px #dac02d22;
+    transform: scale(1.04) rotate(2deg);
+}
+
+.bg-chooser-item:active {
+    transform: scale(0.97) rotate(-1deg);
 }
 
 .bg-chooser-item img {
@@ -2842,11 +2902,83 @@ body.dark-mode .password-eye-btn {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 16px;
     z-index: 1;
     pointer-events: none;
     user-select: none;
     display: block;
+    filter: brightness(0.97) saturate(1.08) blur(0.2px);
+    transition: filter 0.2s;
+}
+
+.bg-chooser-item.selected img,
+.bg-chooser-item:focus img {
+    filter: brightness(1.05) saturate(1.15) blur(0);
+}
+
+.bg-chooser-item .chooser-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
+    color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.18rem;
+    box-shadow: 0 2px 8px #dac02d22;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s;
+    z-index: 4;
+    animation: chooserCheckPop 0.4s;
+}
+
+.bg-chooser-item.selected .chooser-check,
+.bg-chooser-item:focus .chooser-check {
+    opacity: 1;
+}
+
+@keyframes chooserCheckPop {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Pequenas partículas douradas animadas */
+
+.bg-chooser-item.selected::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, #dac02d 60%, transparent 100%);
+    opacity: 0.7;
+    border-radius: 50%;
+    animation: chooserSparkle 1.2s infinite alternate;
+    z-index: 3;
+}
+
+@keyframes chooserSparkle {
+    from {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.3);
+    }
 }
 
 @media (max-width: 600px) {
@@ -2855,11 +2987,24 @@ body.dark-mode .password-eye-btn {
         max-width: 100%;
     }
     .bg-chooser-list {
-        gap: 10px;
+        gap: 12px;
     }
     .bg-chooser-item {
         width: 80px;
         height: 52px;
+        border-radius: 10px;
+    }
+    .bg-chooser-item.selected::after,
+    .bg-chooser-item:focus::after {
+        font-size: 0.85em;
+        padding: 2px 10px;
+    }
+    .bg-chooser-item .chooser-check {
+        width: 20px;
+        height: 20px;
+        font-size: 1rem;
+        top: 6px;
+        right: 6px;
     }
 }
 
@@ -3030,7 +3175,7 @@ textarea {
     backdrop-filter: blur(8px);
     border-radius: 18px !important;
     box-shadow: var(--shadow-card);
-    border: 1.5px solid var(--primary-light);
+    border: 1.5px solid var(--gray)!important;
     transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
 }
 
@@ -3041,7 +3186,6 @@ body.dark-mode .professional-card,
 body.dark-mode .day-schedule,
 body.dark-mode .modal-content {
     background: var(--glass-dark-bg);
-    border: 1.5px solid var(--primary-dark);
 }
 
 
