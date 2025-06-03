@@ -496,6 +496,30 @@ document.addEventListener('DOMContentLoaded', async function() {
             const userPhone = document.getElementById('userPhone');
             const userNameContainer = document.getElementById('userNameContainer');
             const userName = document.getElementById('userName');
+            const notificationsOptIn = document.getElementById('notificationsOptIn');
+            const emailFieldContainer = document.getElementById('emailFieldContainer');
+            const userEmail = document.getElementById('userEmail');
+
+            // Função para validar e-mail
+            function validarEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            // Mostrar/esconder campo de e-mail ao marcar o checkbox
+            if (notificationsOptIn && emailFieldContainer && userEmail) {
+                notificationsOptIn.addEventListener('change', function() {
+                    if (this.checked) {
+                        emailFieldContainer.style.display = '';
+                        userEmail.required = true;
+                    } else {
+                        emailFieldContainer.style.display = 'none';
+                        userEmail.required = false;
+                        userEmail.value = '';
+                    }
+                    atualizarEstadoBtn();
+                });
+                userEmail.addEventListener('input', atualizarEstadoBtn);
+            }
 
             // Função para validar telefone (10 ou 11 dígitos)
             function validarTelefone(telefone) {
@@ -511,7 +535,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (userNameContainer.style.display !== 'none') {
                     nomeValido = !!userName.value.trim();
                 }
-                phoneModalBtn.disabled = !(telefoneValido && (userNameContainer.style.display === 'none' || nomeValido));
+                let emailValido = true;
+                if (notificationsOptIn && notificationsOptIn.checked) {
+                    emailValido = validarEmail(userEmail.value.trim());
+                    if (!emailValido && userEmail.value.trim() !== '') {
+                        userEmail.style.borderColor = 'var(--primary-dark)';
+                    } else {
+                        userEmail.style.borderColor = '';
+                    }
+                }
+                phoneModalBtn.disabled = !(telefoneValido && (userNameContainer.style.display === 'none' || nomeValido) && (!notificationsOptIn || !notificationsOptIn.checked || emailValido));
             }
             userPhone.addEventListener('input', atualizarEstadoBtn);
             if (userName) userName.addEventListener('input', atualizarEstadoBtn);
@@ -537,10 +570,70 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             phoneModalBtn.onclick = async function() {
-                const tel = userPhone.value.trim();
-                const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
-                if (!tel) {
-                    userPhone.style.borderColor = 'var(--primary-dark)';
+                    const tel = userPhone.value.trim();
+                    const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
+                    const email = (notificationsOptIn && notificationsOptIn.checked) ? userEmail.value.trim() : undefined;
+                    if (!tel) {
+                        userPhone.style.borderColor = 'var(--primary-dark)';
+                        return;
+                    }
+                    if (userNameContainer.style.display !== 'none') {
+                        if (!nome) {
+                            userName.style.borderColor = 'var(--primary-dark)';
+                            return;
+                        }
+                        if (notificationsOptIn && notificationsOptIn.checked && !validarEmail(userEmail.value.trim())) {
+                            userEmail.style.borderColor = 'var(--primary-dark)';
+                            return;
+                        }
+                        try {
+                            await fetch('/agendamento/novo', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    nome: nome,
+                                    telefone: tel,
+                                    servico: selectedService,
+                                    profissional: selectedProfessional,
+                                    data: selectedDate.split('/').reverse().join('-'),
+                                    hora: selectedTime,
+                                    preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                                    email: email || undefined
+                                })
+                            });
+                            phoneModal.classList.remove('active');
+                            showCustomModal({
+                                        message: `
+        <div class="confirmed-modal-content">
+            <div class="confirmed-modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmed-modal-title">Agendamento confirmado!</div>
+            <ul class="confirmed-modal-list">
+                <li><span>Serviço:</span> <strong>${selectedService}</strong></li>
+                <li><span>Profissional:</span> <strong>${selectedProfessional}</strong></li>
+                <li><span>Data:</span> <strong>${selectedDate}</strong></li>
+                <li><span>Horário:</span> <strong>${selectedTime}</strong></li>
+                <li><span>Valor:</span> <strong style="color:var(--success);">R$ ${selectedServicePrice}</strong></li>
+                <li><span>Telefone:</span> <strong>${tel}</strong></li>
+                ${email ? `<li><span>E-mail:</span> <strong>${email}</strong></li>` : ''}
+            </ul>
+            <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
+        </div>
+    `,
+                            icon: '',
+                            btnText: 'Fechar',
+                            onClose: function() {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 300);
+                            }
+                        });
+                    } catch (err) {
+                        alert('Erro ao agendar: ' + err.message);
+                    }
                     return;
                 }
                 // Se o campo de nome está visível, é porque já foi solicitado

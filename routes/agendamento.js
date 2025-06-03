@@ -4,7 +4,7 @@ const db = require('../db/neon');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
-    let { nome, telefone, servico, profissional, data, hora, preco, subscription } = req.body;
+    let { nome, telefone, servico, profissional, data, hora, preco, subscription, email } = req.body;
     try {
         // Verifica se o telefone já está cadastrado como cliente
         let cliente = null;
@@ -22,10 +22,13 @@ router.post('/novo', async(req, res) => {
         // Se não existe cliente, cadastra
         if (!cliente && telefone) {
             await db `
-                INSERT INTO clientes (nome, telefone)
-                VALUES (${nome}, ${telefone})
+                INSERT INTO clientes (nome, telefone, email)
+                VALUES (${nome}, ${telefone}, ${email || null})
                 ON CONFLICT (telefone) DO NOTHING
             `;
+        } else if (cliente && email && (!cliente.email || cliente.email !== email)) {
+            // Se já existe cliente mas não tem email salvo, ou mudou, atualiza
+            await db `UPDATE clientes SET email = ${email} WHERE telefone = ${telefone}`;
         }
         // Salva o agendamento
         await db `

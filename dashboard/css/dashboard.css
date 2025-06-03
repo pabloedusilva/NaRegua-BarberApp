@@ -1189,21 +1189,11 @@ input:checked+.slider:before {
     display: flex;
     align-items: center;
     gap: 18px;
-    background: var(--glass-bg);
     border-radius: 18px;
-    box-shadow: 0 4px 18px rgba(218, 192, 45, 0.07);
-    border: 2px solid var(--primary-light);
     padding: 22px 18px;
     min-width: 0;
     transition: box-shadow 0.22s, border-color 0.22s, transform 0.18s;
     position: relative;
-}
-
-.stat-card--main {
-    background: linear-gradient(90deg, #dac02d 0%, #f7e27c 100%);
-    color: var(--text);
-    border: 2.5px solid #dac02d;
-    box-shadow: 0 8px 32px #dac02d33;
 }
 
 .stat-icon {
