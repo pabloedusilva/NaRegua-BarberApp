@@ -57,7 +57,7 @@
    ========================= */
 
 .dark-mode {
-    --background: #121212;
+    --background: #000000;
     /* Fundo escuro */
     --text: #e0e0e0;
     /* Texto claro */
@@ -260,19 +260,15 @@ header {
    ========================= */
 
 .dashboard-section {
-    background-color: var(--card);
     border-radius: 10px;
     margin: 20px 0;
     padding: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: background-color 0.3s;
 }
 
 .section-title {
     font-size: 24px;
     font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--primary);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -323,6 +319,15 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.section-divider {
+    border: none;
+    border-top: 2px solid var(--gray);
+    margin: 32px 0 28px 0;
+    width: 100%;
+    opacity: 0.25;
+    background: none;
 }
 
 .edit-btn,
@@ -2711,7 +2716,6 @@ body.dark-mode .password-eye-btn {
 }
 
 .barbershop-info-modern .barbershop-whatsapp-row a {
-    color: var(--primary-dark);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.18s;
@@ -2719,7 +2723,6 @@ body.dark-mode .password-eye-btn {
 
 .barbershop-info-modern .barbershop-whatsapp-row a:hover {
     color: #25d366;
-    text-decoration: underline;
 }
 
 .barbershop-info-modern .barbershop-instagram-row i {
@@ -2728,7 +2731,6 @@ body.dark-mode .password-eye-btn {
 }
 
 .barbershop-info-modern .barbershop-instagram-row a {
-    color: var(--primary-dark);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.18s;
@@ -2736,7 +2738,6 @@ body.dark-mode .password-eye-btn {
 
 .barbershop-info-modern .barbershop-instagram-row a:hover {
     color: #f874bf;
-    text-decoration: underline;
 }
 
 .barbershop-info-modern .barbershop-extra {
@@ -3126,7 +3127,7 @@ body.dark-mode .password-eye-btn {
 :root {
     --gold-gradient: linear-gradient(90deg, #dac02d 0%, #f7e27c 100%);
     --glass-bg: rgba(255, 255, 255, 0.75);
-    --glass-dark-bg: rgba(30, 30, 30, 0.82);
+    --glass-dark-bg: rgba(14, 14, 14, 0.82);
     --shadow-strong: 0 8px 32px rgba(218, 192, 45, 0.13), 0 1.5px 8px 0 rgba(218, 192, 45, 0.07);
     --shadow-card: 0 6px 32px rgba(218, 192, 45, 0.10), 0 1.5px 8px 0 rgba(0, 0, 0, 0.06);
     --shadow-hover: 0 12px 32px rgba(218, 192, 45, 0.18), 0 2px 12px 0 rgba(0, 0, 0, 0.10);
