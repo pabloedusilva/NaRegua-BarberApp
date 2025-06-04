@@ -3,6 +3,10 @@
 - **Dashboard:** https://naregua-barberapp-2.onrender.com/dashboard/dashboard
 - **Index:** https://naregua-barberapp-2.onrender.com/
 
+## Logo
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/eda4e558-eddd-48f2-bdb6-89be7c141b70" alt="logo" width="400" height="400">
+</p>
 
 # NaRégua BarberApp
 
