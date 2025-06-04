@@ -36,11 +36,18 @@ router.post('/novo', async(req, res) => {
             INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
             VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
         `;
-        // Envia e-mail de confirmação se fornecido
-        if (email && email.includes('@')) {
+        // Envia e-mail de confirmação apenas se o cliente já existe e tem email cadastrado
+        let emailParaEnviar = null;
+        if (cliente && cliente.email && cliente.email.includes('@')) {
+            emailParaEnviar = cliente.email;
+        } else if (email && email.includes('@')) {
+            // fallback: se veio email no body (primeiro cadastro)
+            emailParaEnviar = email;
+        }
+        if (cliente && emailParaEnviar && emailParaEnviar.includes('@')) {
             try {
                 await sendConfirmationEmail({
-                    to: email,
+                    to: emailParaEnviar,
                     nome,
                     data: new Date(data).toLocaleDateString('pt-BR'),
                     hora,
