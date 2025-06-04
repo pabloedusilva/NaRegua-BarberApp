@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/neon');
+const { sendConfirmationEmail } = require('../utils/mailer');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
@@ -35,6 +36,22 @@ router.post('/novo', async(req, res) => {
             INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
             VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
         `;
+        // Envia e-mail de confirmação se fornecido
+        if (email && email.includes('@')) {
+            try {
+                await sendConfirmationEmail({
+                    to: email,
+                    nome,
+                    data: new Date(data).toLocaleDateString('pt-BR'),
+                    hora,
+                    profissional,
+                    servico
+                });
+            } catch (mailErr) {
+                // Não bloqueia o fluxo se o e-mail falhar
+                console.error('Erro ao enviar e-mail de confirmação:', mailErr);
+            }
+        }
         // Cria notificação para dashboard (data UTC, mensagem curta)
         const titulo = 'Novo agendamento';
         const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`;
