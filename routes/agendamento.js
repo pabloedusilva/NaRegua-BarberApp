@@ -36,15 +36,17 @@ router.post('/novo', async(req, res) => {
             INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, preco)
             VALUES (${nome}, ${telefone}, ${servico}, ${profissional}, ${data}, ${hora}, ${preco})
         `;
-        // Envia e-mail de confirmação apenas se o cliente já existe e tem email cadastrado
+        // Envia e-mail de confirmação
+        // 1. Se o cliente já existe e tem email cadastrado, envia para o email do banco
+        // 2. Se o cliente não existe, mas o usuário marcou para receber notificações e forneceu email válido, envia para esse email
         let emailParaEnviar = null;
         if (cliente && cliente.email && cliente.email.includes('@')) {
             emailParaEnviar = cliente.email;
-        } else if (email && email.includes('@')) {
-            // fallback: se veio email no body (primeiro cadastro)
+        } else if (!cliente && email && email.includes('@')) {
+            // Novo cliente, forneceu email para notificações
             emailParaEnviar = email;
         }
-        if (cliente && emailParaEnviar && emailParaEnviar.includes('@')) {
+        if (emailParaEnviar && emailParaEnviar.includes('@')) {
             try {
                 await sendConfirmationEmail({
                     to: emailParaEnviar,
