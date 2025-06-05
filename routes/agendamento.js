@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/neon');
-const { sendConfirmationEmail } = require('../utils/mailer');
+const { sendConfirmationEmail, sendBarberNotification } = require('../utils/mailer');
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
@@ -60,6 +60,21 @@ router.post('/novo', async(req, res) => {
                 // Não bloqueia o fluxo se o e-mail falhar
                 console.error('Erro ao enviar e-mail de confirmação:', mailErr);
             }
+        }
+        // Envia e-mail para o barbeiro
+        try {
+            await sendBarberNotification({
+                nome,
+                telefone,
+                servico,
+                profissional,
+                data: new Date(data).toLocaleDateString('pt-BR'),
+                hora,
+                preco,
+                email
+            });
+        } catch (err) {
+            console.error('Erro ao enviar e-mail para o barbeiro:', err);
         }
         // Cria notificação para dashboard (data UTC, mensagem curta)
         const titulo = 'Novo agendamento';

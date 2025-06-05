@@ -53,4 +53,46 @@ async function sendConfirmationEmail({ to, nome, data, hora, profissional, servi
     });
 }
 
-module.exports = { sendConfirmationEmail };
+// Envia e-mail para o barbeiro sempre que houver novo agendamento
+async function sendBarberNotification({ nome, telefone, servico, profissional, data, hora, preco, email }) {
+    const html = `
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#f9f9f9;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">
+            <div style="text-align:center;margin-bottom:18px;">
+                <img 
+                    src="https://github.com/user-attachments/assets/eda4e558-eddd-48f2-bdb6-89be7c141b70" 
+                    alt="NaRégua" 
+                    style="width:80px;height:80px;border-radius:50%;margin-bottom:8px;"
+                >
+                <h2 style="color:#007bff;margin:0 0 8px 0;">
+                    Novo Agendamento Recebido
+                </h2>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:18px 16px 12px 16px;margin-bottom:18px;box-shadow:0 1px 6px #0001;">
+                <p style="font-size:1.08rem;color:#222;margin:0 0 10px 0;">
+                    Olá, você recebeu um novo agendamento!
+                </p>
+                <ul style="list-style:none;padding:0;margin:0 0 10px 0;font-size:1.05rem;">
+                    <li><b>Cliente:</b> ${nome}</li>
+                    <li><b>Telefone:</b> ${telefone}</li>
+                    <li><b>Serviço:</b> ${servico}</li>
+                    <li><b>Profissional:</b> ${profissional}</li>
+                    <li><b>Data:</b> ${data}</li>
+                    <li><b>Horário:</b> ${hora}</li>
+                    <li><b>Preço:</b> R$ ${preco || '-'}</li>
+                    ${email ? `<li><b>Email do cliente:</b> ${email}</li>` : ''}
+                </ul>
+            </div>
+            <div style="text-align:center;color:#888;font-size:0.97rem;">
+                Notificação automática do sistema <b>NaRégua Barbearia</b>.
+            </div>
+        </div>
+    `;
+    await transporter.sendMail({
+        from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
+        to: 'pablo.silva.edu@gmail.com',
+        subject: 'Novo Agendamento Recebido - NaRégua Barbearia',
+        html
+    });
+}
+
+module.exports = { sendConfirmationEmail, sendBarberNotification };
