@@ -5,15 +5,6 @@ const { requireLogin } = require('../middleware/auth');
 const path = require('path');
 const webpush = require('web-push');
 
-const VAPID_PUBLIC_KEY = 'BElvOnVGxu5czvx63n1FEo3ea90bKMVWwxlky9nZBMNB39u97JOckXngiEKParctze7ciGdPvEZkSAnMSGGfo_s';
-const VAPID_PRIVATE_KEY = 'VOEEZ8ZZH3Hi8CnFMEPQJK_9qdTspZe65-oiqPOQr9o';
-
-webpush.setVapidDetails(
-    'mailto:seu@email.com',
-    VAPID_PUBLIC_KEY,
-    VAPID_PRIVATE_KEY
-);
-
 // Login (POST)
 router.post('/login', async(req, res) => {
     const { username, password } = req.body;
