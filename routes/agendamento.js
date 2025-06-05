@@ -136,4 +136,19 @@ router.get('/profissionais', async(req, res) => {
     }
 });
 
+// Rota para buscar agendamentos ocupados de um profissional em uma data
+router.get('/ocupados', async(req, res) => {
+    const { profissional, data } = req.query;
+    if (!profissional || !data) {
+        return res.status(400).json({ success: false, message: 'Profissional e data são obrigatórios.' });
+    }
+    try {
+        // Busca todos os agendamentos do profissional na data
+        const ags = await db `SELECT servico, hora FROM agendamentos WHERE profissional = ${profissional} AND data = ${data}`;
+        res.json({ success: true, agendamentos: ags });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao buscar horários ocupados.' });
+    }
+});
+
 module.exports = router;

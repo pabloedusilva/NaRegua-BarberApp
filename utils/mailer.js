@@ -1,5 +1,6 @@
 // utils/mailer.js
 const nodemailer = require('nodemailer');
+const db = require('../db/neon');
 
 // Configure o transporte SMTP (ajuste para seu provedor)
 const transporter = nodemailer.createTransport({
@@ -55,6 +56,16 @@ async function sendConfirmationEmail({ to, nome, data, hora, profissional, servi
 
 // Envia e-mail para o barbeiro sempre que houver novo agendamento
 async function sendBarberNotification({ nome, telefone, servico, profissional, data, hora, preco, email }) {
+    // Busca o e-mail de notificação da barbearia
+    let emailNotificacao = 'pablo.silva.edu@gmail.com';
+    try {
+        const rows = await db `SELECT email_notificacao FROM barbearia LIMIT 1`;
+        if (rows.length && rows[0].email_notificacao && rows[0].email_notificacao.includes('@')) {
+            emailNotificacao = rows[0].email_notificacao;
+        }
+    } catch (e) {
+        // fallback para padrão
+    }
     const html = `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#f9f9f9;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">
             <div style="text-align:center;margin-bottom:18px;">
@@ -92,7 +103,7 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
     `;
     await transporter.sendMail({
         from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
-        to: 'pablo.silva.edu@gmail.com',
+        to: emailNotificacao,
         subject: 'Novo Agendamento Recebido - NaRégua Barbearia',
         html
     });

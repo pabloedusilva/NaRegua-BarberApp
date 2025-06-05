@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const res = await fetch('/dashboard/servicos');
                     const data = await res.json();
                     if (data.success && Array.isArray(data.servicos)) {
+                        window.servicosList = data.servicos;
                         let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
                         <div class="service-list">`;
                         data.servicos.forEach(servico => {
@@ -960,7 +961,7 @@ showCustomModal({
     }
 
     // Função para exibir horários disponíveis do dia selecionado
-    function renderTimeSlots(diaSemana) {
+    async function renderTimeSlots(diaSemana) {
         const slotsContainer = document.querySelector('.slots-container');
         slotsContainer.innerHTML = '';
         // Filtra turnos do dia da semana selecionado
@@ -987,6 +988,50 @@ showCustomModal({
         }
         if (!duracaoMin || duracaoMin < 10) duracaoMin = 10; // fallback mínimo
 
+        // Buscar agendamentos ocupados do backend
+        let ocupados = [];
+        if (selectedProfessional && selectedDate) {
+            try {
+                const res = await fetch(`/agendamento/ocupados?profissional=${encodeURIComponent(selectedProfessional)}&data=${selectedDate.split('/').reverse().join('-')}`);
+                const data = await res.json();
+                if (data.success && Array.isArray(data.agendamentos)) {
+                    ocupados = data.agendamentos.map(ag => ({
+                        hora: ag.hora,
+                        servico: ag.servico
+                    }));
+                }
+            } catch (err) {
+                // Se falhar, não bloqueia todos
+            }
+        }
+
+        // Monta lista de horários ocupados considerando a duração de cada agendamento
+        let horariosOcupados = [];
+        ocupados.forEach(ag => {
+            // Descobre duração do serviço do agendamento (pode ser melhorado se backend retornar a duração)
+            let duracaoAg = duracaoMin;
+            if (ag.servico && window.servicosList) {
+                const serv = window.servicosList.find(s => s.nome === ag.servico);
+                if (serv && serv.tempo) {
+                    const match = serv.tempo.match(/(\d+)\s*h\s*(\d+)?\s*min?|^(\d+)\s*min/);
+                    if (match) {
+                        if (match[1]) {
+                            duracaoAg = parseInt(match[1], 10) * 60 + (match[2] ? parseInt(match[2], 10) : 0);
+                        } else if (match[3]) {
+                            duracaoAg = parseInt(match[3], 10);
+                        }
+                    } else {
+                        duracaoAg = parseInt(serv.tempo, 10) || duracaoMin;
+                    }
+                }
+            }
+            // Hora inicial do agendamento
+            const [h, m] = ag.hora.split(':').map(Number);
+            const ini = h * 60 + m;
+            const fim = ini + duracaoAg;
+            horariosOcupados.push({ ini, fim });
+        });
+
         // Gera os horários de cada turno
         turnos.forEach(turno => {
             let inicio = turno.turno_inicio.slice(0, 5);
@@ -1003,13 +1048,24 @@ showCustomModal({
                     t += duracaoMin - (diff % duracaoMin);
                     continue;
                 }
-                let h = Math.floor(t / 60);
-                let m = t % 60;
-                let horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-                const slotDiv = document.createElement('div');
-                slotDiv.className = 'time-slot';
-                slotDiv.textContent = horaStr;
-                slotsContainer.appendChild(slotDiv);
+                // Verifica se este horário está livre (não sobrepõe nenhum ocupado)
+                let livre = true;
+                for (const o of horariosOcupados) {
+                    // Se houver sobreposição, bloqueia
+                    if (!(t + duracaoMin <= o.ini || t >= o.fim)) {
+                        livre = false;
+                        break;
+                    }
+                }
+                if (livre) {
+                    let h = Math.floor(t / 60);
+                    let m = t % 60;
+                    let horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                    const slotDiv = document.createElement('div');
+                    slotDiv.className = 'time-slot';
+                    slotDiv.textContent = horaStr;
+                    slotsContainer.appendChild(slotDiv);
+                }
                 t += duracaoMin;
             }
         });

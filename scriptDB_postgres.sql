@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS barbearia (
     whatsapp VARCHAR(30) NOT NULL,
     instagram VARCHAR(100) NOT NULL,
     foto VARCHAR(255) DEFAULT NULL,
-    wallpaper_id INTEGER DEFAULT NULL
+    wallpaper_id INTEGER DEFAULT NULL,
+    email_notificacao VARCHAR(150) DEFAULT NULL
 );
 
 INSERT INTO barbearia (id, nome, endereco, cidade_estado, whatsapp, instagram, foto)

@@ -440,18 +440,18 @@ router.get('/barbearia', async(req, res) => {
 
 // Atualizar informações da barbearia
 router.post('/barbearia', async(req, res) => {
-    const { nome, endereco, cidade_estado, whatsapp, instagram, foto } = req.body;
+    const { nome, endereco, cidade_estado, whatsapp, instagram, foto, email_notificacao } = req.body;
     try {
         // Garante que existe pelo menos um registro
         const rows = await db `SELECT id FROM barbearia LIMIT 1`;
         if (rows.length === 0) {
             await db `
-                INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto)
-                VALUES (${nome}, ${endereco}, ${cidade_estado}, ${whatsapp}, ${instagram}, ${foto})
+                INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto, email_notificacao)
+                VALUES (${nome}, ${endereco}, ${cidade_estado}, ${whatsapp}, ${instagram}, ${foto}, ${email_notificacao})
             `;
         } else {
             await db `
-                UPDATE barbearia SET nome=${nome}, endereco=${endereco}, cidade_estado=${cidade_estado}, whatsapp=${whatsapp}, instagram=${instagram}, foto=${foto} WHERE id=${rows[0].id}
+                UPDATE barbearia SET nome=${nome}, endereco=${endereco}, cidade_estado=${cidade_estado}, whatsapp=${whatsapp}, instagram=${instagram}, foto=${foto}, email_notificacao=${email_notificacao} WHERE id=${rows[0].id}
             `;
         }
         res.json({ success: true });
