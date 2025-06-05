@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require('../db/neon');
 const { requireLogin } = require('../middleware/auth');
 const path = require('path');
-const webpush = require('web-push');
 
 // Login (POST)
 router.post('/login', async(req, res) => {
@@ -273,42 +272,6 @@ router.post('/servicos', requireLogin, async(req, res) => {
     }
 });
 
-// Endpoint para envio manual de push pela dashboard (apenas admin)
-router.post('/enviar-push', requireLogin, async(req, res) => {
-    const { title, body, url } = req.body;
-    if (!title || !body) {
-        return res.status(400).json({ success: false, message: 'Título e mensagem são obrigatórios.' });
-    }
-    try {
-        const [subs] = await db.query('SELECT id, endpoint, p256dh, auth FROM subscriptions');
-        let enviados = 0;
-        for (const sub of subs) {
-            const subscription = {
-                endpoint: sub.endpoint,
-                keys: {
-                    p256dh: sub.p256dh,
-                    auth: sub.auth
-                }
-            };
-            try {
-                await webpush.sendNotification(
-                    subscription,
-                    JSON.stringify({ title, body, url })
-                );
-                enviados++;
-            } catch (err) {
-                // Remove subscription inválida
-                if (err.statusCode === 410 || err.statusCode === 404) {
-                    await db.query('DELETE FROM subscriptions WHERE id = ?', [sub.id]);
-                }
-            }
-        }
-        res.json({ success: true, enviados });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao enviar notificações.' });
-    }
-});
-
 // Buscar todos os turnos
 router.get('/horarios-turnos', async(req, res) => {
     const diasSemana = [
@@ -370,49 +333,6 @@ router.post('/notificacoes', async(req, res) => {
 router.delete('/notificacoes/:id', requireLogin, async(req, res) => {
     await db.query('DELETE FROM notificacoes WHERE id = $1', [req.params.id]);
     res.json({ success: true });
-});
-
-// Endpoint para envio de push notification de agendamento
-router.post('/enviar-push-agendamento', requireLogin, async(req, res) => {
-    const { agendamentoId, nome, telefone, servico, profissional, data, hora } = req.body;
-    if (!agendamentoId) return res.status(400).json({ success: false, message: 'Agendamento não informado.' });
-
-    try {
-        // Busca a subscription do usuário deste agendamento
-        const [subs] = await db `
-            SELECT endpoint, p256dh, auth
-            FROM subscriptions
-            WHERE agendamento_id = ${agendamentoId}
-            ORDER BY criado_em DESC
-            LIMIT 1
-        `;
-        if (!subs.length) {
-            return res.status(404).json({ success: false, message: 'Usuário deste agendamento não possui push ativo.' });
-        }
-        const subscription = {
-            endpoint: subs[0].endpoint,
-            keys: {
-                p256dh: subs[0].p256dh,
-                auth: subs[0].auth
-            }
-        };
-
-        // Monta a mensagem personalizada
-        const pushPayload = JSON.stringify({
-            title: 'Lembrete de agendamento',
-            body: `Olá ${nome}, lembrete do seu agendamento de ${servico} com ${profissional} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`,
-        });
-
-        await webpush.sendNotification(subscription, pushPayload);
-
-        res.json({ success: true });
-    } catch (err) {
-        if (err.statusCode === 410 || err.statusCode === 404) {
-            // Subscription inválida, pode remover do banco
-            await db.query('DELETE FROM subscriptions WHERE agendamento_id = ?', [agendamentoId]);
-        }
-        res.status(500).json({ success: false, message: 'Erro ao enviar notificação.' });
-    }
 });
 
 // Buscar informações da barbearia
