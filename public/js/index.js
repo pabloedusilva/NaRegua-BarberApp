@@ -964,29 +964,25 @@ showCustomModal({
     async function renderTimeSlots(diaSemana) {
         const slotsContainer = document.querySelector('.slots-container');
         slotsContainer.innerHTML = '';
-        // Filtra turnos do dia da semana selecionado
         const turnos = turnosSemana.filter(t => t.dia_semana === diaSemana);
         if (turnos.length === 0) {
             slotsContainer.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Fechado</div>';
             return;
         }
-        // Pega a duração do serviço selecionado em minutos
         let duracaoMin = 0;
         if (selectedServiceTime) {
-            // Aceita formatos como '50min', '1h', '1h30min', '35min', etc
             const match = selectedServiceTime.match(/(\d+)\s*h\s*(\d+)?\s*min?|^(\d+)\s*min/);
             if (match) {
-                if (match[1]) { // Ex: 1h30min
+                if (match[1]) {
                     duracaoMin = parseInt(match[1], 10) * 60 + (match[2] ? parseInt(match[2], 10) : 0);
-                } else if (match[3]) { // Ex: 50min
+                } else if (match[3]) {
                     duracaoMin = parseInt(match[3], 10);
                 }
             } else {
-                // fallback: tenta só número
                 duracaoMin = parseInt(selectedServiceTime, 10) || 0;
             }
         }
-        if (!duracaoMin || duracaoMin < 10) duracaoMin = 10; // fallback mínimo
+        if (!duracaoMin || duracaoMin < 10) duracaoMin = 10;
 
         // Buscar agendamentos ocupados do backend
         let ocupados = [];
@@ -1000,15 +996,12 @@ showCustomModal({
                         servico: ag.servico
                     }));
                 }
-            } catch (err) {
-                // Se falhar, não bloqueia todos
-            }
+            } catch (err) {}
         }
 
-        // Monta lista de horários ocupados considerando a duração de cada agendamento
+        // Monta lista de intervalos ocupados [{ini, fim}]
         let horariosOcupados = [];
         ocupados.forEach(ag => {
-            // Descobre duração do serviço do agendamento (pode ser melhorado se backend retornar a duração)
             let duracaoAg = duracaoMin;
             if (ag.servico && window.servicosList) {
                 const serv = window.servicosList.find(s => s.nome === ag.servico);
@@ -1025,12 +1018,22 @@ showCustomModal({
                     }
                 }
             }
-            // Hora inicial do agendamento
             const [h, m] = ag.hora.split(':').map(Number);
             const ini = h * 60 + m;
             const fim = ini + duracaoAg;
             horariosOcupados.push({ ini, fim });
         });
+        // Ordena por início
+        horariosOcupados.sort((a, b) => a.ini - b.ini);
+
+        // Função para checar se um slot está livre
+        function slotLivre(tIni, tFim) {
+            for (const o of horariosOcupados) {
+                // Se houver qualquer sobreposição, bloqueia
+                if (tIni < o.fim && tFim > o.ini) return false;
+            }
+            return true;
+        }
 
         // Gera os horários de cada turno
         turnos.forEach(turno => {
@@ -1048,16 +1051,9 @@ showCustomModal({
                     t += duracaoMin - (diff % duracaoMin);
                     continue;
                 }
-                // Verifica se este horário está livre (não sobrepõe nenhum ocupado)
-                let livre = true;
-                for (const o of horariosOcupados) {
-                    // Se houver sobreposição, bloqueia
-                    if (!(t + duracaoMin <= o.ini || t >= o.fim)) {
-                        livre = false;
-                        break;
-                    }
-                }
-                if (livre) {
+                let slotIni = t;
+                let slotFim = t + duracaoMin;
+                if (slotLivre(slotIni, slotFim)) {
                     let h = Math.floor(t / 60);
                     let m = t % 60;
                     let horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
