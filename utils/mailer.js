@@ -63,7 +63,7 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
                     alt="NaRégua" 
                     style="width:80px;height:80px;border-radius:50%;margin-bottom:8px;"
                 >
-                <h2 style="color:#007bff;margin:0 0 8px 0;">
+                <h2 style="color:#fdcf00;margin:0 0 8px 0;">
                     Novo Agendamento Recebido
                 </h2>
             </div>
@@ -72,15 +72,18 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
                     Olá, você recebeu um novo agendamento!
                 </p>
                 <ul style="list-style:none;padding:0;margin:0 0 10px 0;font-size:1.05rem;">
-                    <li><b>Cliente:</b> ${nome}</li>
-                    <li><b>Telefone:</b> ${telefone}</li>
-                    <li><b>Serviço:</b> ${servico}</li>
-                    <li><b>Profissional:</b> ${profissional}</li>
-                    <li><b>Data:</b> ${data}</li>
-                    <li><b>Horário:</b> ${hora}</li>
-                    <li><b>Preço:</b> R$ ${preco || '-'}</li>
-                    ${email ? `<li><b>Email do cliente:</b> ${email}</li>` : ''}
+                    <li style="margin-bottom:6px;"><b>Cliente:</b> <span style='color:#28a745;font-weight: bold;'>${nome}</span></li>
+                    <li style="margin-bottom:6px;"><b>Telefone:</b> <span style='color:#222;'>${telefone}</span></li>
+                    <li style="margin-bottom:6px;"><b>Serviço:</b> <span style='color:#222;'>${servico}</span></li>
+                    <li style="margin-bottom:6px;"><b>Profissional:</b> <span style='color:#222;'>${profissional}</span></li>
+                    <li style="margin-bottom:6px;"><b>Data:</b> <span style='color:#222;'>${data}</span></li>
+                    <li style="margin-bottom:6px;"><b>Horário:</b> <span style='color:#222;'>${hora}</span></li>
+                    <li style="margin-bottom:6px;"><b>Preço:</b> <span style='color:#28a745;'>R$ ${preco || '-'}</span></li>
+                    ${email ? `<li style=\"margin-bottom:6px;\"><b>Email do cliente:</b> <span style='color:#222;'>${email}</span></li>` : ''}
                 </ul>
+                <p style="color:#555;font-size:0.98rem;margin:0;">
+                    Fique atento ao horário e prepare-se para o atendimento.
+                </p>
             </div>
             <div style="text-align:center;color:#888;font-size:0.97rem;">
                 Notificação automática do sistema <b>NaRégua Barbearia</b>.
