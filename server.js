@@ -44,6 +44,3 @@ app.listen(port, () => {
     console.log(`Página inicial:        http://localhost:${port}/index`);
     console.log(`Dashboard:             http://localhost:${port}/dashboard/dashboard`);
 });
-
-// Exemplo de query adaptada:
-// const rows = await db`SELECT * FROM usuarios WHERE username = ${username}`;

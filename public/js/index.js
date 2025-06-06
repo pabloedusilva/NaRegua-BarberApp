@@ -1066,6 +1066,19 @@ showCustomModal({
             return true;
         }
 
+        // === BLOQUEIO DE HORÁRIOS PASSADOS NO DIA ATUAL ===
+        let minutosLimiteHoje = null;
+        if (selectedDate && typeof dayjs !== 'undefined') {
+            // selectedDate: 'dd/mm/yyyy'
+            const [d, m, y] = selectedDate.split('/');
+            const dataSelecionada = dayjs(`${y}-${m}-${d}`);
+            const serverNow = await getServerDateTime();
+            if (dataSelecionada.isSame(serverNow, 'day')) {
+                minutosLimiteHoje = serverNow.hour() * 60 + serverNow.minute();
+            }
+        }
+        // ================================================
+
         // Gera os horários de cada turno
         turnos.forEach(turno => {
             let inicio = turno.turno_inicio.slice(0, 5);
@@ -1084,6 +1097,11 @@ showCustomModal({
                 }
                 let slotIni = t;
                 let slotFim = t + duracaoMin;
+                // BLOQUEIA slots anteriores ao horário real no dia de hoje
+                if (minutosLimiteHoje !== null && slotIni < minutosLimiteHoje) {
+                    t += duracaoMin;
+                    continue;
+                }
                 if (slotLivre(slotIni, slotFim)) {
                     let h = Math.floor(t / 60);
                     let m = t % 60;
