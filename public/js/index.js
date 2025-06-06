@@ -1290,4 +1290,16 @@ showCustomModal({
             });
         });
     });
+
+    // Garantir fechamento correto do phoneModal
+    if (phoneModal && phoneModalClose) {
+        phoneModalClose.onclick = function() {
+            phoneModal.classList.remove('active');
+        };
+        phoneModal.addEventListener('click', function(e) {
+            if (e.target === phoneModal) {
+                phoneModal.classList.remove('active');
+            }
+        });
+    }
 });
