@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db/neon');
 const { requireLogin } = require('../middleware/auth');
 const path = require('path');
+const dayjs = require('dayjs');
 
 // Login (POST)
 router.post('/login', async(req, res) => {
@@ -373,13 +374,9 @@ router.post('/barbearia', async(req, res) => {
     }
 });
 
+// Rota para fornecer data/hora do servidor em tempo real
 router.get('/servertime', (req, res) => {
-    // Retorna a data/hora do servidor em UTC
-    const now = new Date();
-    res.json({
-        iso: now.toISOString(),
-        timestamp: now.getTime()
-    });
+    res.json({ iso: dayjs().toISOString() });
 });
 
 // Rota para buscar total de clientes

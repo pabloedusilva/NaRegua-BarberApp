@@ -1,3 +1,31 @@
+// Adiciona suporte a dayjs (data/hora em tempo real)
+if (typeof dayjs === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js';
+    script.onload = function() {
+        if (typeof dayjs !== 'undefined') {
+            window.dayjs = dayjs;
+        }
+    };
+    document.head.appendChild(script);
+}
+
+// Função para buscar data/hora do servidor e garantir precisão com dayjs
+async function getServerDateTime() {
+    try {
+        const res = await fetch('/dashboard/servertime');
+        const data = await res.json();
+        if (data && data.iso && typeof dayjs !== 'undefined') {
+            return dayjs(data.iso);
+        } else if (data && data.iso) {
+            return new Date(data.iso);
+        }
+    } catch (err) {}
+    // fallback: retorna dayjs() local
+    if (typeof dayjs !== 'undefined') return dayjs();
+    return new Date();
+}
+
 // Função para formatar a data no formato brasileiro (DD/MM/AAAA)
 function formatarDataBR(dataISO) {
     if (!dataISO) return '';
@@ -902,12 +930,15 @@ showCustomModal({
         try {
             const res = await fetch('/dashboard/servertime');
             const data = await res.json();
-            if (data && data.iso) {
+            if (data && data.iso && typeof dayjs !== 'undefined') {
+                return dayjs(data.iso);
+            } else if (data && data.iso) {
                 return new Date(data.iso);
             }
         } catch (err) {}
-        // fallback: retorna null, nunca usa data local
-        return null;
+        // fallback: retorna dayjs() local
+        if (typeof dayjs !== 'undefined') return dayjs();
+        return new Date();
     }
 
     // Variável global para data/hora do servidor
@@ -939,7 +970,7 @@ showCustomModal({
     // SUBSTITUIR USO DE new Date() por serverDate
     // =========================
     // Exemplo: dentro de renderCalendar, use:
-    // const today = serverDate;
+    // const today = (typeof dayjs !== 'undefined') ? dayjs(serverDate) : new Date(serverDate);
     // ...existing code...
     // Em qualquer lugar que precise da data "real", use serverDate
     // =========================
