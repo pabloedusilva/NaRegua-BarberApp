@@ -1,5 +1,10 @@
 let serverNow = null;
 
+// Carrega utilitário de alerta customizado
+const script = document.createElement('script');
+script.src = '/js/custom-alert.js';
+document.head.appendChild(script);
+
 async function getServerTime() {
     try {
         const res = await fetch('/dashboard/servertime');
@@ -690,13 +695,21 @@ filterBtns.forEach(btn => {
                 });
             });
             container.querySelectorAll('.service-action-btn.delete-btn').forEach(btn => {
-                btn.addEventListener('click', async function() {
+                btn.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
                     if (confirm('Tem certeza que deseja excluir este serviço?')) {
-                        await fetch(`/dashboard/servicos/${id}`, {
+                        fetch(`/dashboard/servicos/${id}`, {
                             method: 'DELETE'
-                        });
-                        renderDashboardServices();
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                renderDashboardServices();
+                            } else {
+                                showCustomAlert(data.message || 'Erro ao excluir serviço.');
+                            }
+                        })
+                        .catch(() => showCustomAlert('Erro ao conectar ao servidor.'));
                     }
                 });
             });
@@ -802,10 +815,10 @@ fetch(`/dashboard/servicos/${id}`, { method: 'DELETE' })
                     if (data.success) {
                         renderDashboardServices();
                     } else {
-                        alert(data.message || 'Erro ao excluir serviço.');
+                        showCustomAlert(data.message || 'Erro ao excluir serviço.');
                     }
                 })
-                .catch(() => alert('Erro ao conectar ao servidor.'));
+                .catch(() => showCustomAlert('Erro ao conectar ao servidor.'));
             }
         }
     });
@@ -1517,10 +1530,10 @@ document.getElementById('editBarbershopInfoBtn').onclick = async function() {
             document.getElementById('editBarbershopMsg').textContent = '';
             document.getElementById('editBarbershopModal').style.display = 'flex';
         } else {
-            alert('Informações da barbearia não cadastradas.');
+            showCustomAlert('Informações da barbearia não cadastradas.');
         }
     } catch (err) {
-        alert('Erro ao carregar informações da barbearia.');
+        showCustomAlert('Erro ao carregar informações da barbearia.');
     }
 };
 
@@ -1610,10 +1623,10 @@ document.getElementById('editBarbershopInfoBtn').onclick = async function() {
             document.getElementById('editBarbershopMsg').textContent = '';
             document.getElementById('editBarbershopModal').style.display = 'flex';
         } else {
-            alert('Informações da barbearia não cadastradas.');
+            showCustomAlert('Informações da barbearia não cadastradas.');
         }
     } catch (err) {
-        alert('Erro ao carregar informações da barbearia.');
+        showCustomAlert('Erro ao carregar informações da barbearia.');
     }
 };
 
@@ -1679,6 +1692,8 @@ async function carregarWallpapers() {
             });
         } else {
             list.innerHTML = 'Nenhum wallpaper cadastrado.';
+       
+
         }
     } catch (err) {
         list.innerHTML = 'Erro ao carregar wallpapers.';
@@ -1688,6 +1703,7 @@ carregarWallpapers();
 
 // Função para buscar a data/hora do servidor em tempo real (NUNCA do dispositivo)
 async function getServerDateTime() {
+
     try {
         const res = await fetch('/dashboard/servertime');
         const data = await res.json();
@@ -2041,23 +2057,28 @@ async function carregarProfissionaisDashboard() {
                         avatar: prof.avatar || ''
                     });
                 });
-                // Evento do botão de excluir
-                card.querySelector('.delete-professional-btn').addEventListener('click', async function(e) {
+                // Evento do botão de excluir (na listagem de profissionais)
+                card.querySelector('.delete-professional-btn').addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (!confirm('Tem certeza que deseja excluir este profissional?')) return;
-                    this.disabled = true;
-                    try {
-                        const res = await fetch(`/dashboard/profissionais/${prof.id}`, { method: 'DELETE' });
-                        const data = await res.json();
-                        if (data.success) {
-                            card.remove();
-                        } else {
-                            alert(data.message || 'Erro ao excluir profissional.');
-                        }
-                    } catch {
-                        alert('Erro ao conectar ao servidor.');
-                    }
-                    this.disabled = false;
+                    const self = this;
+                    window.showCustomAlert(
+                        'Tem certeza que deseja excluir este profissional?',
+                        function() {
+                            self.disabled = true;
+                            fetch(`/dashboard/profissionais/${prof.id}`, { method: 'DELETE' })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        card.remove();
+                                    } else {
+                                        showCustomAlert(data.message || 'Erro ao excluir profissional.');
+                                    }
+                                })
+                                .catch(() => showCustomAlert('Erro ao conectar ao servidor.'))
+                                .finally(() => { self.disabled = false; });
+                        },
+                        { btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
+                    );
                 });
                 container.appendChild(card);
             });
@@ -2199,30 +2220,36 @@ saveEditProfessionalBtn.onclick = async function() {
 
 // Excluir profissional
 const deleteProfessionalBtn = document.getElementById('deleteProfessionalBtn');
-deleteProfessionalBtn.onclick = async function() {
-  if (!confirm('Tem certeza que deseja excluir este profissional?')) return;
-  const msg = document.getElementById('editProfessionalMsg');
-  msg.textContent = 'Excluindo...';
-  this.disabled = true;
-  try {
-    const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, {
-      method: 'DELETE'
-    });
-    const data = await res.json();
-    if (data.success) {
-      msg.style.color = 'var(--success)';
-      msg.textContent = 'Profissional excluído!';
-      setTimeout(() => {
-        editProfessionalModal.style.display = 'none';
-        carregarProfissionaisDashboard();
-      }, 900);
-    } else {
-      msg.style.color = 'var(--primary-dark)';
-      msg.textContent = data.message || 'Erro ao excluir profissional.';
-    }
-  } catch {
-    msg.style.color = 'var(--primary-dark)';
-    msg.textContent = 'Erro ao conectar ao servidor.';
-  }
-  this.disabled = false;
-};
+if (deleteProfessionalBtn) {
+    deleteProfessionalBtn.onclick = function() {
+        const self = this;
+        window.showCustomAlert(
+            'Tem certeza que deseja excluir este profissional?',
+            async function() {
+                const msg = document.getElementById('editProfessionalMsg');
+                msg.textContent = 'Excluindo...';
+                self.disabled = true;
+                try {
+                    const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) {
+                        msg.style.color = 'var(--success)';
+                        msg.textContent = 'Profissional excluído!';
+                        setTimeout(() => {
+                            editProfessionalModal.style.display = 'none';
+                            carregarProfissionaisDashboard();
+                        }, 900);
+                    } else {
+                        msg.style.color = 'var(--primary-dark)';
+                        msg.textContent = data.message || 'Erro ao excluir profissional.';
+                    }
+                } catch {
+                    msg.style.color = 'var(--primary-dark)';
+                    msg.textContent = 'Erro ao conectar ao servidor.';
+                }
+                self.disabled = false;
+            },
+            { btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
+        );
+    };
+}

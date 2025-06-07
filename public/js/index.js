@@ -1,3 +1,8 @@
+// Carrega utilitário de alerta customizado
+const script = document.createElement('script');
+script.src = '/js/custom-alert.js';
+document.head.appendChild(script);
+
 // Adiciona suporte a dayjs (data/hora em tempo real)
 if (typeof dayjs === 'undefined') {
     const script = document.createElement('script');

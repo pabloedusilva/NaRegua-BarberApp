@@ -1,3 +1,8 @@
+// Carrega utilitário de alerta customizado
+const script = document.createElement('script');
+script.src = '/js/custom-alert.js';
+document.head.appendChild(script);
+
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle theme
     let themeToggle = document.getElementById('themeToggle');
@@ -78,10 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = '/dashboard/dashboard';
             } else {
                 const data = await res.json();
-                alert(data.message || 'Usuário ou senha inválidos');
+                showCustomAlert(data.message || 'Usuário ou senha inválidos');
             }
         } catch (err) {
-            alert('Erro ao conectar ao servidor.');
+            showCustomAlert('Erro ao conectar ao servidor.');
         }
     });
 
@@ -95,12 +100,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmPassword = document.getElementById('register-confirm-password').value;
 
         if (password !== confirmPassword) {
-            alert('As senhas não coincidem!');
+            showCustomAlert('As senhas não coincidem!');
             return;
         }
-
         // Simulação de cadastro bem-sucedido
-        alert('Cadastro realizado com sucesso! Redirecionando para o login...');
+        showCustomAlert('Cadastro realizado com sucesso! Redirecionando para o login...');
 
         // Mudar para a aba de login após cadastro
         document.querySelector('.auth-tab[data-tab="login"]').click();
