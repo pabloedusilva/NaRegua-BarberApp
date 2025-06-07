@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = '/dashboard/dashboard';
             } else {
                 const data = await res.json();
-                showCustomAlert(data.message || 'Usuário ou senha inválidos');
+                showCustomAlert(data.message || 'Usuário ou senha inválidos', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>' });
             }
         } catch (err) {
-            showCustomAlert('Erro ao conectar ao servidor.');
+            showCustomAlert('Erro ao conectar ao servidor.', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>' });
         }
     });
 
@@ -100,11 +100,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmPassword = document.getElementById('register-confirm-password').value;
 
         if (password !== confirmPassword) {
-            showCustomAlert('As senhas não coincidem!');
+            showCustomAlert('As senhas não coincidem!', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>' });
             return;
         }
         // Simulação de cadastro bem-sucedido
-        showCustomAlert('Cadastro realizado com sucesso! Redirecionando para o login...');
+        showCustomAlert('Cadastro realizado com sucesso! Redirecionando para o login...', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>' });
 
         // Mudar para a aba de login após cadastro
         document.querySelector('.auth-tab[data-tab="login"]').click();

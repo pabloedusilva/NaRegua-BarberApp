@@ -10,10 +10,7 @@
         <span class="custom-alert-close" id="customAlertClose" title="Fechar">&times;</span>
         <div class="custom-alert-icon" id="customAlertIcon"></div>
         <span id="customAlertMessage"></span>
-        <div class="custom-alert-btns" style="display:flex;gap:16px;justify-content:center;margin-top:18px;">
-          <button id="customAlertConfirmBtn">Excluir</button>
-          <button id="customAlertCancelBtn" class="btn-cancel">Cancelar</button>
-        </div>
+        <div class="custom-alert-btns" id="customAlertBtns" style="display:flex;gap:16px;justify-content:center;margin-top:18px;"></div>
       </div>
     `;
     document.body.appendChild(modal);
@@ -39,21 +36,40 @@
     document.head.appendChild(style);
     window.showCustomAlert = function(message, onConfirm, options = {}) {
         const msg = document.getElementById('customAlertMessage');
-        const confirmBtn = document.getElementById('customAlertConfirmBtn');
-        const cancelBtn = document.getElementById('customAlertCancelBtn');
         const closeBtn = document.getElementById('customAlertClose');
         const iconDiv = document.getElementById('customAlertIcon');
+        const btnsDiv = document.getElementById('customAlertBtns');
         modal.classList.add('active');
         msg.textContent = message;
         iconDiv.innerHTML = options.icon || '';
-        confirmBtn.textContent = options.btnText || 'Excluir';
-        cancelBtn.textContent = options.cancelText || 'Cancelar';
-        confirmBtn.focus();
+        btnsDiv.innerHTML = '';
+        let confirmBtn, cancelBtn, okBtn;
+        // Modal de confirmação (exclusão)
+        if (options.type === 'confirm') {
+            confirmBtn = document.createElement('button');
+            confirmBtn.id = 'customAlertConfirmBtn';
+            confirmBtn.textContent = options.btnText || 'Excluir';
+            cancelBtn = document.createElement('button');
+            cancelBtn.id = 'customAlertCancelBtn';
+            cancelBtn.className = 'btn-cancel';
+            cancelBtn.textContent = options.cancelText || 'Cancelar';
+            btnsDiv.appendChild(confirmBtn);
+            btnsDiv.appendChild(cancelBtn);
+            confirmBtn.focus();
+        } else {
+            // Modal simples (erro, alerta, etc)
+            okBtn = document.createElement('button');
+            okBtn.id = 'customAlertOkBtn';
+            okBtn.textContent = options.btnText || 'OK';
+            btnsDiv.appendChild(okBtn);
+            okBtn.focus();
+        }
 
         function close() {
             modal.classList.remove('active');
-            confirmBtn.removeEventListener('click', confirmHandler);
-            cancelBtn.removeEventListener('click', cancelHandler);
+            if (confirmBtn) confirmBtn.removeEventListener('click', confirmHandler);
+            if (cancelBtn) cancelBtn.removeEventListener('click', cancelHandler);
+            if (okBtn) okBtn.removeEventListener('click', okHandler);
             closeBtn.removeEventListener('click', cancelHandler);
             document.removeEventListener('keydown', escListener);
             modal.removeEventListener('click', outsideHandler);
@@ -70,13 +86,23 @@
             close();
         }
 
+        function okHandler(e) {
+            e.preventDefault();
+            close();
+            if (typeof onConfirm === 'function') onConfirm();
+        }
+
         function escListener(e) { if (e.key === 'Escape') close(); }
 
         function outsideHandler(e) { if (e.target === modal) close(); }
-
-        confirmBtn.addEventListener('click', confirmHandler);
-        cancelBtn.addEventListener('click', cancelHandler);
-        closeBtn.addEventListener('click', cancelHandler);
+        if (options.type === 'confirm') {
+            confirmBtn.addEventListener('click', confirmHandler);
+            cancelBtn.addEventListener('click', cancelHandler);
+            closeBtn.addEventListener('click', cancelHandler);
+        } else {
+            okBtn.addEventListener('click', okHandler);
+            closeBtn.addEventListener('click', okHandler);
+        }
         document.addEventListener('keydown', escListener);
         modal.addEventListener('click', outsideHandler);
     };
