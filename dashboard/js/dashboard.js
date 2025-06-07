@@ -1693,7 +1693,6 @@ async function carregarWallpapers() {
         } else {
             list.innerHTML = 'Nenhum wallpaper cadastrado.';
        
-
         }
     } catch (err) {
         list.innerHTML = 'Erro ao carregar wallpapers.';
@@ -2077,7 +2076,7 @@ async function carregarProfissionaisDashboard() {
                                 .catch(() => showCustomAlert('Erro ao conectar ao servidor.'))
                                 .finally(() => { self.disabled = false; });
                         },
-                        { btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
+                        { type: 'delete-professional', btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
                     );
                 });
                 container.appendChild(card);
@@ -2215,7 +2214,6 @@ saveEditProfessionalBtn.onclick = async function() {
     msg.style.color = 'var(--primary-dark)';
     msg.textContent = 'Erro ao conectar ao servidor.';
   }
-  this.disabled = false;
 };
 
 // Excluir profissional
@@ -2225,31 +2223,21 @@ if (deleteProfessionalBtn) {
         const self = this;
         window.showCustomAlert(
             'Tem certeza que deseja excluir este profissional?',
-            async function() {
-                const msg = document.getElementById('editProfessionalMsg');
-                msg.textContent = 'Excluindo...';
+            function() {
                 self.disabled = true;
-                try {
-                    const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, { method: 'DELETE' });
-                    const data = await res.json();
-                    if (data.success) {
-                        msg.style.color = 'var(--success)';
-                        msg.textContent = 'Profissional excluído!';
-                        setTimeout(() => {
-                            editProfessionalModal.style.display = 'none';
-                            carregarProfissionaisDashboard();
-                        }, 900);
-                    } else {
-                        msg.style.color = 'var(--primary-dark)';
-                        msg.textContent = data.message || 'Erro ao excluir profissional.';
-                    }
-                } catch {
-                    msg.style.color = 'var(--primary-dark)';
-                    msg.textContent = 'Erro ao conectar ao servidor.';
-                }
-                self.disabled = false;
+                fetch(`/dashboard/profissionais/${prof.id}`, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            card.remove();
+                        } else {
+                            showCustomAlert(data.message || 'Erro ao excluir profissional.');
+                        }
+                    })
+                    .catch(() => showCustomAlert('Erro ao conectar ao servidor.'))
+                    .finally(() => { self.disabled = false; });
             },
-            { btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
+            { type: 'delete-professional', btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
         );
     };
 }

@@ -44,8 +44,8 @@
         iconDiv.innerHTML = options.icon || '';
         btnsDiv.innerHTML = '';
         let confirmBtn, cancelBtn, okBtn;
-        // Modal de confirmação (exclusão)
-        if (options.type === 'confirm') {
+        // Modal de exclusão de profissional: dois botões (Excluir/Cancelar)
+        if (options.type === 'delete-professional') {
             confirmBtn = document.createElement('button');
             confirmBtn.id = 'customAlertConfirmBtn';
             confirmBtn.textContent = options.btnText || 'Excluir';
@@ -57,7 +57,7 @@
             btnsDiv.appendChild(cancelBtn);
             confirmBtn.focus();
         } else {
-            // Modal simples (erro, alerta, etc)
+            // Todos os outros modais: apenas um botão OK
             okBtn = document.createElement('button');
             okBtn.id = 'customAlertOkBtn';
             okBtn.textContent = options.btnText || 'OK';
@@ -71,6 +71,7 @@
             if (cancelBtn) cancelBtn.removeEventListener('click', cancelHandler);
             if (okBtn) okBtn.removeEventListener('click', okHandler);
             closeBtn.removeEventListener('click', cancelHandler);
+            closeBtn.removeEventListener('click', okHandler);
             document.removeEventListener('keydown', escListener);
             modal.removeEventListener('click', outsideHandler);
         }
@@ -95,7 +96,8 @@
         function escListener(e) { if (e.key === 'Escape') close(); }
 
         function outsideHandler(e) { if (e.target === modal) close(); }
-        if (options.type === 'confirm') {
+
+        if (options.type === 'delete-professional') {
             confirmBtn.addEventListener('click', confirmHandler);
             cancelBtn.addEventListener('click', cancelHandler);
             closeBtn.addEventListener('click', cancelHandler);
