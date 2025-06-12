@@ -879,7 +879,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
         ul.innerHTML = ags.map(ag => `
-            <li>
+            <li data-id="${ag.id}">
                 <div class="my-appointments-row">
                     <span class="my-appointments-service"><i class="fas fa-cut"></i> ${ag.servico}</span>
                     <span class="my-appointments-prof"><i class="fas fa-user-tie"></i> ${ag.profissional}</span>
@@ -893,12 +893,54 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <span class="my-appointments-status status-${ag._status}">
                         ${ag._status === 'confirmed' ? 'Confirmado' : ag._status === 'cancelled' ? 'Cancelado' : 'Concluído'}
                     </span>
-                    <button class="delete-appointment-btn" data-id="${ag.id}">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
+                    ${ag._status === 'confirmed' ? `<button class="delete-appointment-btn" data-id="${ag.id}"><i class="fas fa-trash"></i> Cancelar</button>` : ''}
                 </div>
             </li>
         `).join('');
+        // Reaplica eventos de cancelar SEMPRE após renderizar
+        document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+            btn.onclick = async function() {
+                const id = this.getAttribute('data-id');
+                try {
+                    const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
+                    const result = await res.json();
+                    if (result.success) {
+                        // Atualiza status visualmente sem remover o item e sem fechar o modal
+                        const li = this.closest('li');
+                        if (li) {
+                            // Atualiza status
+                            const statusSpan = li.querySelector('.my-appointments-status');
+                            if (statusSpan) {
+                                statusSpan.className = 'my-appointments-status status-cancelled';
+                                statusSpan.textContent = 'Cancelado';
+                            }
+                            // Remove o botão de cancelar
+                            this.remove();
+                        }
+                        showCustomModal({
+                            message: 'Agendamento cancelado com sucesso!',
+                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                            btnText: 'Fechar',
+                            onClose: null // Não fecha o modal de agendamentos
+                        });
+                    } else {
+                        showCustomModal({
+                            message: 'Erro ao cancelar agendamento.',
+                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                            btnText: 'Fechar',
+                            onClose: null
+                        });
+                    }
+                } catch (err) {
+                    showCustomModal({
+                        message: 'Erro ao conectar ao servidor.',
+                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                        btnText: 'Fechar',
+                        onClose: null
+                    });
+                }
+            };
+        });
     }
     // Inicializa lista
     renderMyAppointmentsList('all');
@@ -915,18 +957,26 @@ document.addEventListener('DOMContentLoaded', async function() {
             btn.onclick = async function() {
                 const id = this.getAttribute('data-id');
                 try {
-                    const res = await fetch(`/agendamento/excluir/${id}`, { method: 'DELETE' });
+                    const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
                     const result = await res.json();
                     if (result.success) {
-                        this.closest('li').remove();
+                        // Atualiza status visualmente sem remover o item
+                        const statusSpan = this.parentElement.querySelector('.my-appointments-status');
+                        if (statusSpan) {
+                            statusSpan.className = 'my-appointments-status status-cancelled';
+                            statusSpan.textContent = 'Cancelado';
+                        }
+                        // Desabilita o botão após cancelar
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-ban"></i> Cancelado';
                         showCustomModal({
-                            message: 'Agendamento excluído com sucesso!',
+                            message: 'Agendamento cancelado com sucesso!',
                             icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
                             btnText: 'Fechar'
                         });
                     } else {
                         showCustomModal({
-                            message: 'Erro ao excluir agendamento.',
+                            message: 'Erro ao cancelar agendamento.',
                             icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
                             btnText: 'Fechar'
                         });
@@ -1015,16 +1065,6 @@ showCustomModal({
     window.addEventListener('DOMContentLoaded', atualizarDataServidor);
     // Atualiza a cada 30 segundos para garantir precisão
     setInterval(atualizarDataServidor, 30000);
-
-    // =========================
-    // SUBSTITUIR USO DE new Date() por serverDate
-    // =========================
-    // Exemplo: dentro de renderCalendar, use:
-    // const today = (typeof dayjs !== 'undefined') ? dayjs(serverDate) : new Date(serverDate);
-    // ...existing code...
-    // Em qualquer lugar que precise da data "real", use serverDate
-    // =========================
-    // FIM BLOCO DATA SERVIDOR
 
     // Função para carregar turnos do backend
     async function carregarHorariosTurnos() {

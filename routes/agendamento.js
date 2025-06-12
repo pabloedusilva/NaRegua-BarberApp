@@ -115,14 +115,14 @@ router.get('/meus', async(req, res) => {
     }
 });
 
-// Excluir agendamento por ID
-router.delete('/excluir/:id', async(req, res) => {
+// Cancelar agendamento por ID (atualiza status para 'cancelado')
+router.patch('/cancelar/:id', async(req, res) => {
     const { id } = req.params;
     try {
-        await db `DELETE FROM agendamentos WHERE id = ${id}`;
+        await db `UPDATE agendamentos SET status = 'cancelado' WHERE id = ${id}`;
         res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao excluir agendamento.' });
+        res.status(500).json({ success: false, message: 'Erro ao cancelar agendamento.' });
     }
 });
 
