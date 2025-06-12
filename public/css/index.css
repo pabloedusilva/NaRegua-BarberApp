@@ -2052,6 +2052,60 @@ footer {
 }
 
 
+/* STATUS DE AGENDAMENTO */
+.status-confirmed {
+    background: #19a519 !important;
+    color: #fff !important;
+}
+.status-cancelled {
+    background: #e74c3c !important;
+    color: #fff !important;
+}
+.status-completed {
+    background: #888 !important;
+    color: #fff !important;
+}
+
+/* Filtro de status em meus agendamentos */
+.my-appointments-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    justify-content: flex-end;
+}
+.my-appointments-filter label {
+    font-weight: 500;
+    color: var(--primary-dark);
+    font-size: 1em;
+}
+.my-appointments-filter select {
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 1em;
+    background: var(--gray-light);
+    color: var(--text);
+}
+
+.my-appointments-status {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.98em;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 2px 10px;
+    margin-left: 6px;
+    margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+    .my-appointments-filter {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+}
+
 /* =========================
    Responsividade Geral
    ========================= */

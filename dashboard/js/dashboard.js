@@ -331,15 +331,52 @@ function carregarAgendamentosHoje() {
                 todayCountEl.textContent = data.agendamentos ? data.agendamentos.length : 0;
             }
 
-            // (Opcional) Exibir lista dos agendamentos do dia
+            // Filtro de status
             const container = document.getElementById('todayAppointmentsList');
             if (container) {
                 container.innerHTML = '';
-                if (data.agendamentos && data.agendamentos.length > 0) {
-                    data.agendamentos.forEach(ag => {
-                        const item = document.createElement('div');
-                        item.className = 'appointment-item';
-item.innerHTML = `
+                // Adiciona filtro select
+                let filterDiv = document.getElementById('todayAppointmentsFilter');
+                if (!filterDiv) {
+                    filterDiv = document.createElement('div');
+                    filterDiv.id = 'todayAppointmentsFilter';
+                    filterDiv.className = 'dashboard-appointments-filter';
+                    filterDiv.innerHTML = `
+                        <label for="todayAppointmentsStatusFilter">Filtrar:</label>
+                        <select id="todayAppointmentsStatusFilter">
+                            <option value="all">Todos</option>
+                            <option value="confirmed">Confirmados</option>
+                            <option value="cancelled">Cancelados</option>
+                            <option value="completed">Concluídos</option>
+                        </select>
+                    `;
+                    container.parentNode.insertBefore(filterDiv, container);
+                }
+                function renderTodayAppointmentsList(statusFilter) {
+                    container.innerHTML = '';
+                    if (data.agendamentos && data.agendamentos.length > 0) {
+                        // Determina status
+                        const now = new Date();
+                        let ags = data.agendamentos.map(ag => {
+                            let status = 'confirmed';
+                            if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
+                            else {
+                                const agDate = new Date(ag.data + 'T' + (ag.hora || '00:00'));
+                                if (agDate < now) status = 'completed';
+                            }
+                            return { ...ag, _status: status };
+                        });
+                        if (statusFilter && statusFilter !== 'all') {
+                            ags = ags.filter(ag => ag._status === statusFilter);
+                        }
+                        if (ags.length === 0) {
+                            container.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                            return;
+                        }
+                        ags.forEach(ag => {
+                            const item = document.createElement('div');
+                            item.className = 'appointment-item';
+                            item.innerHTML = `
     <div class="appointment-card">
     <div class="appointment-header">
         <span class="appointment-client">
@@ -352,18 +389,30 @@ item.innerHTML = `
     <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
     <div class="appointment-status-group">
-        <span class="appointment-status status-confirmed">Confirmado</span>
+        <span class="appointment-status status-${ag._status}">
+            ${ag._status === 'confirmed' ? 'Confirmado' : ag._status === 'cancelled' ? 'Cancelado' : 'Concluído'}
+        </span>
         <button class="send-notificacoes-btn" title="Notificar">
             <i class="fas fa-bell"></i>
         </button>
     </div>
 </div>
 </div>
-                        `;
-                        container.appendChild(item);
+                            `;
+                            container.appendChild(item);
+                        });
+                    } else {
+                        container.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento para hoje.</div>`;
+                    }
+                }
+                // Inicializa lista
+                renderTodayAppointmentsList('all');
+                // Filtro
+                const statusFilterEl = document.getElementById('todayAppointmentsStatusFilter');
+                if (statusFilterEl) {
+                    statusFilterEl.addEventListener('change', function() {
+                        renderTodayAppointmentsList(this.value);
                     });
-                } else {
-                    container.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento para hoje.</div>`;
                 }
             }
         })
@@ -417,139 +466,139 @@ sidebarBtns.forEach(btn => {
         showSection(btn.getAttribute('data-section'));
     });
 });
-// Inicializa mostrando o painel
-showSection('painel');
+    // Inicializa mostrando o painel
+    showSection('painel');
 
-document.querySelectorAll('.password-eye-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = this.parentNode.querySelector('input');
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.firstElementChild.classList.remove('fa-eye');
-            this.firstElementChild.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            this.firstElementChild.classList.remove('fa-eye-slash');
-            this.firstElementChild.classList.add('fa-eye');
-        }
-    });
-});
-
-const filterBtns = document.querySelectorAll('.filter-btn');
-const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
-
-function fetchAppointments(filter) {
-    let url = '';
-    if (filter === 'today') url = '/dashboard/agendamentos-hoje';
-    else if (filter === 'week') url = '/dashboard/agendamentos-semana';
-    else if (filter === 'month') url = '/dashboard/agendamentos-mes';
-
-    const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
-    filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
-
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            let ags = data.agendamentos || [];
-            if (ags.length === 0) {
-                filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
-                return;
+    document.querySelectorAll('.password-eye-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('input');
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.firstElementChild.classList.remove('fa-eye');
+                this.firstElementChild.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                this.firstElementChild.classList.remove('fa-eye-slash');
+                this.firstElementChild.classList.add('fa-eye');
             }
-            // Agrupa por data
-            const grupos = {};
-            ags.forEach(ag => {
-                const dataStr = ag.data;
-                if (!grupos[dataStr]) grupos[dataStr] = [];
-                grupos[dataStr].push(ag);
-            });
-            const datasOrdenadas = Object.keys(grupos).sort();
-
-            filteredAppointmentsList.innerHTML = '';
-            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-            datasOrdenadas.forEach(dataStr => {
-                // Cabeçalho do dia
-                const dataObj = new Date(dataStr);
-                const header = document.createElement('div');
-                header.className = 'dia-header';
-                header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
-                filteredAppointmentsList.appendChild(header);
-
-                // Lista de agendamentos do dia
-                let agsDia = grupos[dataStr].slice();
-                // Se for hoje, destacar o próximo agendamento futuro
-                if (filter === 'today') {
-                    // Ordena por hora crescente
-                    agsDia.sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
-                    // Pega o próximo agendamento futuro
-                    let now = new Date();
-                    let idxProximo = agsDia.findIndex(ag => {
-                        if (!ag.hora) return false;
-                        const [h, m] = ag.hora.split(':');
-                        const agDate = new Date();
-                        agDate.setHours(Number(h), Number(m), 0, 0);
-                        return agDate > now;
-                    });
-                    if (idxProximo === -1) idxProximo = 0; // Se todos já passaram, destaca o primeiro
-                    agsDia.forEach((ag, idx) => {
-                        const item = document.createElement('div');
-                        item.className = 'appointment-item';
-                        if (idx === idxProximo) item.classList.add('next-appointment');
-                        item.innerHTML = `
-                            <div class="appointment-card">
-                                <div class="appointment-header">
-                                    <span class="appointment-client">
-                                        <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
-                                    </span>
-                                </div>
-                                <div class="appointment-details">
-                                    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                                    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                                    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                                    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                                    <div class="appointment-status-group">
-                                        <span class="appointment-status status-confirmed">Confirmado</span>
-                                        <button class="send-notificacoes-btn" title="Notificar">
-                                            <i class="fas fa-bell"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        filteredAppointmentsList.appendChild(item);
-                    });
-                } else {
-                    agsDia.forEach(ag => {
-                        const item = document.createElement('div');
-                        item.className = 'appointment-item';
-                        item.innerHTML = `
-                            <div class="appointment-card">
-                                <div class="appointment-header">
-                                    <span class="appointment-client">
-                                        <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
-                                    </span>
-                                </div>
-                                <div class="appointment-details">
-                                    <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                                    <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                                    <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                                    <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                                    <div class="appointment-status-group">
-                                        <span class="appointment-status status-confirmed">Confirmado</span>
-                                        <button class="send-notificacoes-btn" title="Notificar">
-                                            <i class="fas fa-bell"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        filteredAppointmentsList.appendChild(item);
-                    });
-                }
-            });
-        })
-        .catch(() => {
-            filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
+
+    function fetchAppointments(filter) {
+        let url = '';
+        if (filter === 'today') url = '/dashboard/agendamentos-hoje';
+        else if (filter === 'week') url = '/dashboard/agendamentos-semana';
+        else if (filter === 'month') url = '/dashboard/agendamentos-mes';
+
+        const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
+        filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                let ags = data.agendamentos || [];
+                if (ags.length === 0) {
+                    filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                    return;
+                }
+                // Agrupa por data
+                const grupos = {};
+                ags.forEach(ag => {
+                    const dataStr = ag.data;
+                    if (!grupos[dataStr]) grupos[dataStr] = [];
+                    grupos[dataStr].push(ag);
+                });
+                const datasOrdenadas = Object.keys(grupos).sort();
+
+                filteredAppointmentsList.innerHTML = '';
+                const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+                datasOrdenadas.forEach(dataStr => {
+                    // Cabeçalho do dia
+                    const dataObj = new Date(dataStr);
+                    const header = document.createElement('div');
+                    header.className = 'dia-header';
+                    header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
+                    filteredAppointmentsList.appendChild(header);
+
+                    // Lista de agendamentos do dia
+                    let agsDia = grupos[dataStr].slice();
+                    // Se for hoje, destacar o próximo agendamento futuro
+                    if (filter === 'today') {
+                        // Ordena por hora crescente
+                        agsDia.sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
+                        // Pega o próximo agendamento futuro
+                        let now = new Date();
+                        let idxProximo = agsDia.findIndex(ag => {
+                            if (!ag.hora) return false;
+                            const [h, m] = ag.hora.split(':');
+                            const agDate = new Date();
+                            agDate.setHours(Number(h), Number(m), 0, 0);
+                            return agDate > now;
+                        });
+                        if (idxProximo === -1) idxProximo = 0; // Se todos já passaram, destaca o primeiro
+                        agsDia.forEach((ag, idx) => {
+                            const item = document.createElement('div');
+                            item.className = 'appointment-item';
+                            if (idx === idxProximo) item.classList.add('next-appointment');
+                            item.innerHTML = `
+                                <div class="appointment-card">
+                                    <div class="appointment-header">
+                                        <span class="appointment-client">
+                                            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+                                        </span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                        <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                        <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                        <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                        <div class="appointment-status-group">
+                                            <span class="appointment-status status-confirmed">Confirmado</span>
+                                            <button class="send-notificacoes-btn" title="Notificar">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            filteredAppointmentsList.appendChild(item);
+                        });
+                    } else {
+                        agsDia.forEach(ag => {
+                            const item = document.createElement('div');
+                            item.className = 'appointment-item';
+                            item.innerHTML = `
+                                <div class="appointment-card">
+                                    <div class="appointment-header">
+                                        <span class="appointment-client">
+                                            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+                                        </span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                        <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                        <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                        <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                        <div class="appointment-status-group">
+                                            <span class="appointment-status status-confirmed">Confirmado</span>
+                                            <button class="send-notificacoes-btn" title="Notificar">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            filteredAppointmentsList.appendChild(item);
+                        });
+                    }
+                });
+            })
+            .catch(() => {
+                filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
+            });
 }
 
 // Função para obter o nome do dia da semana em português
@@ -1658,7 +1707,7 @@ async function carregarWallpapers() {
     try {
         const res = await fetch('/dashboard/wallpapers');
         const data = await res.json();
-        if (data.success && Array.isArray(data.wallpapers)) {
+               if (data.success && Array.isArray(data.wallpapers)) {
             list.innerHTML = '';
             // Busca o wallpaper atualmente selecionado
             const selectedRes = await fetch('/dashboard/wallpaper-selecionado');

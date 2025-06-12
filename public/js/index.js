@@ -835,26 +835,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <i class="fas fa-calendar-check"></i>
             </div>
             <div class="my-appointments-title">Meus agendamentos${nomeCliente ? `, ${nomeCliente}` : ''}</div>
-            <ul class="my-appointments-list">
-                ${data.agendamentos.map(ag => `
-                    <li>
-                        <div class="my-appointments-row">
-                            <span class="my-appointments-service"><i class="fas fa-cut"></i> ${ag.servico}</span>
-                            <span class="my-appointments-prof"><i class="fas fa-user-tie"></i> ${ag.profissional}</span>
-                        </div>
-                        <div class="my-appointments-row">
-<span class="my-appointments-date"><i class="far fa-calendar-alt"></i> ${formatarDataBR(ag.data)}</span>
-                            <span class="my-appointments-time"><i class="far fa-clock"></i> ${ag.hora}</span>
-                        </div>
-                        <div class="my-appointments-row">
-                            <span class="my-appointments-price"><i class="fas fa-money-bill-wave"></i> R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
-                            <button class="delete-appointment-btn" data-id="${ag.id}">
-                                <i class="fas fa-trash"></i> Excluir
-                            </button>
-                        </div>
-                    </li>
-                `).join('')}
-            </ul>
+            <div class="my-appointments-filter">
+                <label for="myAppointmentsStatusFilter">Filtrar:</label>
+                <select id="myAppointmentsStatusFilter">
+                    <option value="all">Todos</option>
+                    <option value="confirmed">Confirmados</option>
+                    <option value="cancelled">Cancelados</option>
+                    <option value="completed">Concluídos</option>
+                </select>
+            </div>
+            <ul class="my-appointments-list"></ul>
         </div>
     `;
     appointmentsModal.classList.remove('active');
@@ -864,7 +854,62 @@ document.addEventListener('DOMContentLoaded', async function() {
         btnText: 'Fechar'
     });
 
-                // Ativar botões de exclusão
+    // Renderização dinâmica da lista com filtro
+    function renderMyAppointmentsList(statusFilter) {
+        const ul = document.querySelector('.my-appointments-list');
+        if (!ul) return;
+        let ags = data.agendamentos.slice();
+        const now = new Date();
+        ags = ags.map(ag => {
+            // Determina status
+            let status = 'confirmed';
+            if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
+            else {
+                // Se já passou do dia/hora, é concluído
+                const agDate = new Date(ag.data + 'T' + (ag.hora || '00:00'));
+                if (agDate < now) status = 'completed';
+            }
+            return { ...ag, _status: status };
+        });
+        if (statusFilter && statusFilter !== 'all') {
+            ags = ags.filter(ag => ag._status === statusFilter);
+        }
+        if (ags.length === 0) {
+            ul.innerHTML = '<li style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</li>';
+            return;
+        }
+        ul.innerHTML = ags.map(ag => `
+            <li>
+                <div class="my-appointments-row">
+                    <span class="my-appointments-service"><i class="fas fa-cut"></i> ${ag.servico}</span>
+                    <span class="my-appointments-prof"><i class="fas fa-user-tie"></i> ${ag.profissional}</span>
+                </div>
+                <div class="my-appointments-row">
+                    <span class="my-appointments-date"><i class="far fa-calendar-alt"></i> ${formatarDataBR(ag.data)}</span>
+                    <span class="my-appointments-time"><i class="far fa-clock"></i> ${ag.hora}</span>
+                </div>
+                <div class="my-appointments-row">
+                    <span class="my-appointments-price"><i class="fas fa-money-bill-wave"></i> R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}</span>
+                    <span class="my-appointments-status status-${ag._status}">
+                        ${ag._status === 'confirmed' ? 'Confirmado' : ag._status === 'cancelled' ? 'Cancelado' : 'Concluído'}
+                    </span>
+                    <button class="delete-appointment-btn" data-id="${ag.id}">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            </li>
+        `).join('');
+    }
+    // Inicializa lista
+    renderMyAppointmentsList('all');
+    // Filtro
+    const statusFilterEl = document.getElementById('myAppointmentsStatusFilter');
+    if (statusFilterEl) {
+        statusFilterEl.addEventListener('change', function() {
+            renderMyAppointmentsList(this.value);
+        });
+    }
+    // Ativar botões de exclusão
     setTimeout(() => {
         document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
             btn.onclick = async function() {

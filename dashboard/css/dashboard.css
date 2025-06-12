@@ -3581,7 +3581,6 @@ button:focus {
     color: var(--primary-light);
     opacity: 0.7;
     font-weight: 500;
-    letter-spacing: 0.01em;
 }
 
 
@@ -3942,4 +3941,46 @@ button:focus {
 .mac-sidebar-logo:hover img {
     box-shadow: 0 4px 16px #dac02d66;
     transform: scale(1.06);
+}
+
+/* STATUS DE AGENDAMENTO NO DASHBOARD */
+.status-confirmed {
+    background: #19a519 !important;
+    color: #fff !important;
+}
+.status-cancelled {
+    background: #e74c3c !important;
+    color: #fff !important;
+}
+.status-completed {
+    background: #888 !important;
+    color: #fff !important;
+}
+
+.dashboard-appointments-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    justify-content: flex-end;
+}
+.dashboard-appointments-filter label {
+    font-weight: 500;
+    color: var(--primary-dark);
+    font-size: 1em;
+}
+.dashboard-appointments-filter select {
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 1em;
+    background: var(--gray-light);
+    color: var(--text);
+}
+
+@media (max-width: 600px) {
+    .dashboard-appointments-filter {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
 }
