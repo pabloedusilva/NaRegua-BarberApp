@@ -159,14 +159,24 @@
             <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos
                 </h2>
-                <div class="appointments-filter">
-                    <button class="filter-btn active" data-filter="today"><i
-                                class="fas fa-calendar-day"></i> Hoje</button>
-                    <button class="filter-btn" data-filter="week"><i
-                                class="fas fa-calendar-week"></i>
-                            Semana</button>
-                    <button class="filter-btn" data-filter="month"><i
-                                class="fas fa-calendar"></i> Mês</button>
+                <div class="appointments-filter" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <div style="display:flex;gap:4px;">
+                        <button class="filter-btn active" data-filter="today"><i
+                                    class="fas fa-calendar-day"></i> Hoje</button>
+                        <button class="filter-btn" data-filter="week"><i
+                                    class="fas fa-calendar-week"></i> Semana</button>
+                        <button class="filter-btn" data-filter="month"><i
+                                    class="fas fa-calendar"></i> Mês</button>
+                    </div>
+                    <div class="dashboard-appointments-filter">
+                        <label for="dashboardAppointmentsStatusFilter">Status:</label>
+                        <select id="dashboardAppointmentsStatusFilter">
+                            <option value="all">Todos</option>
+                            <option value="confirmed">Confirmados</option>
+                            <option value="cancelled">Cancelados</option>
+                            <option value="completed">Concluídos</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="appointments-list" id="filteredAppointmentsList">
