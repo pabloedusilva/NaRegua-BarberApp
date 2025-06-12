@@ -859,15 +859,38 @@ document.addEventListener('DOMContentLoaded', async function() {
         const ul = document.querySelector('.my-appointments-list');
         if (!ul) return;
         let ags = data.agendamentos.slice();
-        const now = new Date();
+        const now = (window.serverDate && typeof window.serverDate === 'object' && typeof window.serverDate.valueOf === 'function') ? new Date(window.serverDate.valueOf()) : new Date();
         ags = ags.map(ag => {
             // Determina status
             let status = 'confirmed';
             if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
             else {
-                // Se já passou do dia/hora, é concluído
+                // Busca tempo do serviço
+                let duracaoMin = 0;
+                if (window.servicosList && ag.servico) {
+                    const serv = window.servicosList.find(s => s.nome === ag.servico);
+                    if (serv && serv.tempo) {
+                        const match = serv.tempo.match(/(\d+)\s*h\s*(\d+)?\s*min?|^(\d+)\s*min/);
+                        if (match) {
+                            if (match[1]) {
+                                duracaoMin = parseInt(match[1], 10) * 60 + (match[2] ? parseInt(match[2], 10) : 0);
+                            } else if (match[3]) {
+                                duracaoMin = parseInt(match[3], 10);
+                            }
+                        } else {
+                            duracaoMin = parseInt(serv.tempo, 10) || 0;
+                        }
+                    }
+                }
+                if (!duracaoMin || duracaoMin < 1) duracaoMin = 0; // fallback seguro
+                // Calcula data/hora de fim
                 const agDate = new Date(ag.data + 'T' + (ag.hora || '00:00'));
-                if (agDate < now) status = 'completed';
+                let agEnd = new Date(agDate);
+                if (duracaoMin > 0) {
+                    agEnd.setMinutes(agEnd.getMinutes() + duracaoMin);
+                }
+                // Se já passou do horário de fim, é concluído
+                if (agEnd < now) status = 'completed';
             }
             return { ...ag, _status: status };
         });
