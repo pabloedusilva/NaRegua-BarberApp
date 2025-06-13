@@ -103,6 +103,8 @@ router.get('/meus', async(req, res) => {
     try {
         // Busca cliente
         const clientes = await db `SELECT * FROM clientes WHERE telefone = ${telefone} LIMIT 1`;
+        // Atualiza status para concluido de todos os agendamentos já passados e não cancelados
+        await db `UPDATE agendamentos SET status = 'concluido' WHERE telefone = ${telefone} AND status IS DISTINCT FROM 'cancelado' AND status IS DISTINCT FROM 'concluido' AND (data < CURRENT_DATE OR (data = CURRENT_DATE AND hora <= to_char(NOW(), 'HH24:MI')))`;
         // Busca agendamentos
         const agendamentos = await db `SELECT * FROM agendamentos WHERE telefone = ${telefone} ORDER BY data DESC, hora DESC`;
         res.json({
