@@ -126,6 +126,17 @@ router.patch('/cancelar/:id', async(req, res) => {
     }
 });
 
+// Marcar agendamento como concluído por ID (atualiza status para 'concluido')
+router.patch('/concluir/:id', async(req, res) => {
+    const { id } = req.params;
+    try {
+        await db `UPDATE agendamentos SET status = 'concluido' WHERE id = ${id}`;
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Erro ao concluir agendamento.' });
+    }
+});
+
 // Rota pública para listar profissionais ativos
 router.get('/profissionais', async(req, res) => {
     try {
