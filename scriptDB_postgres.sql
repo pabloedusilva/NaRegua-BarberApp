@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     data DATE NOT NULL,
     hora VARCHAR(10) NOT NULL,
     preco NUMERIC(10,2) NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) NOT NULL DEFAULT 'Ativo',
+    duracao_minutos INTEGER
 );
 
 -- Tabela de serviços
