@@ -860,18 +860,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!ul) return;
         let ags = data.agendamentos.slice();
         const now = new Date();
-        ags = ags.map(ag => {
-            // Determina status
-            let status = 'confirmed';
-            if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
-            else if (ag.status && ag.status.toLowerCase() === 'concluido') status = 'completed';
-            else {
-                // Se já passou do dia/hora, é concluído
-                const agDate = new Date(ag.data + 'T' + (ag.hora || '00:00'));
-                if (agDate < now) status = 'completed';
-            }
-            return { ...ag, _status: status };
-        });
+ags = ags.map(ag => {
+    let status = 'confirmed';
+    if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
+    else if (ag.status && ag.status.toLowerCase() === 'concluido') status = 'completed';
+    else {
+        // Corrigido: só marca como concluído se data+hora < agora
+        const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
+        if (agDateTime.getTime() < Date.now()) status = 'completed';
+    }
+    return { ...ag, _status: status };
+});
         // Atualiza status no banco se necessário
         ags.forEach(async ag => {
             if (ag._status === 'completed' && (!ag.status || ag.status.toLowerCase() !== 'concluido')) {

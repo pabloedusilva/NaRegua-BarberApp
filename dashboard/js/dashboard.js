@@ -357,15 +357,16 @@ function carregarAgendamentosHoje() {
                     if (data.agendamentos && data.agendamentos.length > 0) {
                         // Determina status
                         const now = new Date();
-                        let ags = data.agendamentos.map(ag => {
-                            let status = 'confirmed';
-                            if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
-                            else {
-                                const agDate = new Date(ag.data + 'T' + (ag.hora || '00:00'));
-                                if (agDate < now) status = 'completed';
-                            }
-                            return { ...ag, _status: status };
-                        });
+                       let ags = data.agendamentos.map(ag => {
+    let status = 'confirmed';
+    if (ag.status && ag.status.toLowerCase() === 'cancelado') status = 'cancelled';
+    else {
+        // Corrigido: só marca como concluído se data+hora < agora
+        const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
+        if (agDateTime.getTime() < Date.now()) status = 'completed';
+    }
+    return { ...ag, _status: status };
+});
                         if (statusFilter && statusFilter !== 'all') {
                             ags = ags.filter(ag => ag._status === statusFilter);
                         }
