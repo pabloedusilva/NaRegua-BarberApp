@@ -494,118 +494,99 @@ sidebarBtns.forEach(btn => {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
 
-    function fetchAppointments(filter) {
-        let url = '';
-        if (filter === 'today') url = '/dashboard/agendamentos-hoje';
-        else if (filter === 'week') url = '/dashboard/agendamentos-semana';
-        else if (filter === 'month') url = '/dashboard/agendamentos-mes';
+   function fetchAppointments(filter) {
+    let url = '';
+    if (filter === 'today') url = '/dashboard/agendamentos-hoje';
+    else if (filter === 'week') url = '/dashboard/agendamentos-semana';
+    else if (filter === 'month') url = '/dashboard/agendamentos-mes';
 
-        const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
-        filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+    const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
+    filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                let ags = data.agendamentos || [];
-                if (ags.length === 0) {
-                    filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
-                    return;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            let ags = data.agendamentos || [];
+            // --- NOVO: Determina status visual igual ao banco ---
+            ags = ags.map(ag => {
+                let status = 'confirmed';
+                if (ag.status && ag.status.toLowerCase() === 'cancelado') {
+                    status = 'cancelled';
+                } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
+                    status = 'completed';
+                } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
+                    status = 'confirmed';
+                } else {
+                    // fallback: se passou do horário, marca como completed
+                    const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
+                    if (agDateTime.getTime() < Date.now()) status = 'completed';
                 }
-                // Agrupa por data
-                const grupos = {};
-                ags.forEach(ag => {
-                    const dataStr = ag.data;
-                    if (!grupos[dataStr]) grupos[dataStr] = [];
-                    grupos[dataStr].push(ag);
-                });
-                const datasOrdenadas = Object.keys(grupos).sort();
-
-                filteredAppointmentsList.innerHTML = '';
-                const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-                datasOrdenadas.forEach(dataStr => {
-                    // Cabeçalho do dia
-                    const dataObj = new Date(dataStr);
-                    const header = document.createElement('div');
-                    header.className = 'dia-header';
-                    header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
-                    filteredAppointmentsList.appendChild(header);
-
-                    // Lista de agendamentos do dia
-                    let agsDia = grupos[dataStr].slice();
-                    // Se for hoje, destacar o próximo agendamento futuro
-                    if (filter === 'today') {
-                        // Ordena por hora crescente
-                        agsDia.sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
-                        // Pega o próximo agendamento futuro
-                        let now = new Date();
-                        let idxProximo = agsDia.findIndex(ag => {
-                            if (!ag.hora) return false;
-                            const [h, m] = ag.hora.split(':');
-                            const agDate = new Date();
-                            agDate.setHours(Number(h), Number(m), 0, 0);
-                            return agDate > now;
-                        });
-                        if (idxProximo === -1) idxProximo = 0; // Se todos já passaram, destaca o primeiro
-                        agsDia.forEach((ag, idx) => {
-                            const item = document.createElement('div');
-                            item.className = 'appointment-item';
-                            if (idx === idxProximo) item.classList.add('next-appointment');
-                            item.innerHTML = `
-                                <div class="appointment-card">
-                                    <div class="appointment-header">
-                                        <span class="appointment-client">
-                                            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
-                                        </span>
-                                    </div>
-                                    <div class="appointment-details">
-                                        <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                                        <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                                        <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                                        <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                                        <div class="appointment-status-group">
-                                            <span class="appointment-status status-confirmed">Confirmado</span>
-                                            <button class="send-notificacoes-btn" title="Notificar">
-                                                <i class="fas fa-bell"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            filteredAppointmentsList.appendChild(item);
-                        });
-                    } else {
-                        agsDia.forEach(ag => {
-                            const item = document.createElement('div');
-                            item.className = 'appointment-item';
-                            item.innerHTML = `
-                                <div class="appointment-card">
-                                    <div class="appointment-header">
-                                        <span class="appointment-client">
-                                            <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
-                                        </span>
-                                    </div>
-                                    <div class="appointment-details">
-                                        <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                                        <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                                        <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                                        <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                                        <div class="appointment-status-group">
-                                            <span class="appointment-status status-confirmed">Confirmado</span>
-                                            <button class="send-notificacoes-btn" title="Notificar">
-                                                <i class="fas fa-bell"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            filteredAppointmentsList.appendChild(item);
-                        });
-                    }
-                });
-            })
-            .catch(() => {
-                filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
+                return { ...ag, _status: status };
             });
+
+            // --- NOVO: Filtro de status pelo select ---
+            const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
+            let statusFilter = statusFilterEl ? statusFilterEl.value : 'all';
+            if (statusFilter && statusFilter !== 'all') {
+                ags = ags.filter(ag => ag._status === statusFilter);
+            }
+
+            if (ags.length === 0) {
+                filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                return;
+            }
+
+            // --- Agrupa por data ---
+            const grupos = {};
+            ags.forEach(ag => {
+                const dataStr = ag.data;
+                if (!grupos[dataStr]) grupos[dataStr] = [];
+                grupos[dataStr].push(ag);
+            });
+            const datasOrdenadas = Object.keys(grupos).sort();
+
+            filteredAppointmentsList.innerHTML = '';
+            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
+            datasOrdenadas.forEach(dataStr => {
+                const dataObj = new Date(dataStr);
+                const header = document.createElement('div');
+                header.className = 'dia-header';
+                header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
+                filteredAppointmentsList.appendChild(header);
+
+                grupos[dataStr].forEach(ag => {
+                    const item = document.createElement('div');
+                    item.className = 'appointment-item';
+                    item.innerHTML = `
+                        <div class="appointment-card">
+                            <div class="appointment-header">
+                                <span class="appointment-client">
+                                    <i class="fas fa-user"></i> ${ag.nome || 'Cliente'}
+                                </span>
+                            </div>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                <div class="appointment-status-group">
+                                    <span class="appointment-status status-${ag._status}">
+                                        ${ag._status === 'confirmed' ? 'Confirmado' : ag._status === 'cancelled' ? 'Cancelado' : 'Concluído'}
+                                    </span>
+                                    <button class="send-notificacoes-btn" title="Notificar">
+                                        <i class="fas fa-bell"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    filteredAppointmentsList.appendChild(item);
+                });
+            });
+        })
+        .catch(() => {
+            filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
+        });
 }
 
 // Função para obter o nome do dia da semana em português
@@ -1440,7 +1421,6 @@ document.addEventListener('click', function(e) {
     if (!btn) return;
     // Botão permanece visível, mas não faz nada.
 });
-
         });
 
         // Abrir modal
@@ -1514,7 +1494,6 @@ document.getElementById('addProfessionalBtn').onclick = async function() {
         msg.style.color = 'var(--primary-dark)';
         msg.textContent = 'Erro ao conectar ao servidor.';
     }
-    this.disabled = false;
 };
 
 
@@ -2297,3 +2276,19 @@ if (deleteProfessionalBtn) {
         );
     };
 }
+
+// Função para aplicar as alterações do código
+function applyCodeChanges() {
+    // --- NOVO: Atualiza a lista de agendamentos ao mudar o filtro de status
+    const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
+    if (statusFilterEl) {
+        statusFilterEl.addEventListener('change', function() {
+            // Mantém o filtro de período (hoje, semana, mês) selecionado
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const period = activeBtn ? activeBtn.dataset.filter : 'today';
+            fetchAppointments(period);
+        });
+    }
+}
+
+applyCodeChanges();
