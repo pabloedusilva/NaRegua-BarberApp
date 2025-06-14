@@ -5,6 +5,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
 const db = require('./db/neon');
 const dayjs = require('dayjs');
+require('./utils/cron');
 
 const app = express();
 const port = 3000;
