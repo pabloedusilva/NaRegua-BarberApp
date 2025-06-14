@@ -363,13 +363,8 @@ function carregarAgendamentosHoje() {
         status = 'cancelled';
     } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
         status = 'completed';
-    } else {
-        // Monta a data/hora completa do agendamento
-        const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
-        // Só marca como concluído se o horário já passou
-        if (agDateTime.getTime() < Date.now()) {
-            status = 'completed';
-        }
+    } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
+        status = 'confirmed';
     }
     return { ...ag, _status: status };
 });

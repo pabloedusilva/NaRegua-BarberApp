@@ -26,6 +26,10 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     duracao_minutos INTEGER
 );
 
+ALTER TABLE agendamentos
+    ALTER COLUMN hora TYPE TIME
+    USING hora::time;
+
 -- Tabela de serviços
 CREATE TABLE IF NOT EXISTS servicos (
     id SERIAL PRIMARY KEY,

@@ -859,23 +859,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         const ul = document.querySelector('.my-appointments-list');
         if (!ul) return;
         let ags = data.agendamentos.slice();
-        const now = new Date();
-ags = ags.map(ag => {
-    let status = 'confirmed';
-    if (ag.status && ag.status.toLowerCase() === 'cancelado') {
-        status = 'cancelled';
-    } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
-        status = 'completed';
-    } else {
-        // Monta a data/hora completa do agendamento
-        const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
-        // Só marca como concluído se o horário já passou
-        if (agDateTime.getTime() < Date.now()) {
+
+    // Use apenas o status do banco
+    ags = ags.map(ag => {
+        let status = 'confirmed';
+        if (ag.status && ag.status.toLowerCase() === 'cancelado') {
+            status = 'cancelled';
+        } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
             status = 'completed';
+        } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
+            status = 'confirmed';
         }
-    }
-    return { ...ag, _status: status };
-});
+        return { ...ag, _status: status };
+    });
         // Atualiza status no banco se necessário
         ags.forEach(async ag => {
             if (ag._status === 'completed' && (!ag.status || ag.status.toLowerCase() !== 'concluido')) {
