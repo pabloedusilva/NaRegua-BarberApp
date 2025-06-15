@@ -39,21 +39,21 @@ async function atualizarStatusAgendamentos() {
     }
 }
 
-// Função para enviar lembrete 1h antes do agendamento
+// Função para enviar lembrete 1h antes do agendamento (baseado em diferença de minutos)
 async function enviarLembretesAgendamentos() {
     try {
         const now = dayjs().tz(BRAZIL_TZ);
         const dataHoje = now.format('YYYY-MM-DD');
-        const horaAlvo = now.add(1, 'hour').format('HH:mm:ss');
-        // Busca agendamentos para daqui a 1 hora (status confirmado, não cancelado/concluido, lembrete ainda não enviado)
+        const horaAgora = now.format('HH:mm:ss');
+        // Busca agendamentos para daqui a 1 hora (tolerância de 1 minuto)
         const rows = await db `
             SELECT a.*, c.email as cliente_email FROM agendamentos a
             LEFT JOIN clientes c ON a.telefone = c.telefone
             WHERE a.status = 'confirmado'
               AND a.data = ${dataHoje}
-              AND a.hora = ${horaAlvo}
               AND a.id NOT IN (SELECT agendamento_id FROM lembretes_enviados)
               AND c.email IS NOT NULL AND c.email != ''
+              AND ABS(EXTRACT(EPOCH FROM (a.hora::time - ${horaAgora}::time))/60) BETWEEN 59 AND 61
         `;
         for (const ag of rows) {
             try {
