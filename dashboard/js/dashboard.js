@@ -412,10 +412,11 @@ function carregarAgendamentosHoje() {
                     }
                 }
                 // Inicializa lista
-                renderTodayAppointmentsList('all');
+                renderTodayAppointmentsList('confirmed'); // Mostra confirmados inicialmente
                 // Filtro
                 const statusFilterEl = document.getElementById('todayAppointmentsStatusFilter');
                 if (statusFilterEl) {
+                    statusFilterEl.value = 'confirmed'; // Seleciona o filtro visualmente
                     statusFilterEl.addEventListener('change', function() {
                         renderTodayAppointmentsList(this.value);
                     });
@@ -525,7 +526,7 @@ sidebarBtns.forEach(btn => {
 
             // --- NOVO: Filtro de status pelo select ---
             const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
-            let statusFilter = statusFilterEl ? statusFilterEl.value : 'all';
+            let statusFilter = statusFilterEl ? statusFilterEl.value : 'confirmed';
             if (statusFilter && statusFilter !== 'all') {
                 ags = ags.filter(ag => ag._status === statusFilter);
             }
@@ -587,6 +588,24 @@ sidebarBtns.forEach(btn => {
             filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
 }
+
+// Filtro inicial: hoje + confirmados
+fetchAppointments('today');
+const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
+if (statusFilterEl) {
+    statusFilterEl.value = 'confirmed'; // Seleciona "Confirmados" no select
+}
+
+// Troca de filtro
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        fetchAppointments(this.dataset.filter);
+        // Sempre que trocar o filtro de período, mantenha o status como "Confirmados"
+        if (statusFilterEl) statusFilterEl.value = 'confirmed';
+    });
+});
 
 // Função para obter o nome do dia da semana em português
 function diaSemanaExtenso(dataStr) {
@@ -1692,7 +1711,7 @@ async function carregarWallpapers() {
     try {
         const res = await fetch('/dashboard/wallpapers');
         const data = await res.json();
-               if (data.success && Array.isArray(data.wallpapers)) {
+        if (data.success && Array.isArray(data.wallpapers)) {
             list.innerHTML = '';
                        // Busca o wallpaper atualmente selecionado
             const selectedRes = await fetch('/dashboard/wallpaper-selecionado');
