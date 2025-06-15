@@ -4,6 +4,10 @@ const db = require('../db/neon');
 const { requireLogin } = require('../middleware/auth');
 const path = require('path');
 const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Login (POST)
 router.post('/login', async(req, res) => {
@@ -374,9 +378,13 @@ router.post('/barbearia', async(req, res) => {
     }
 });
 
-// Rota para fornecer data/hora do servidor em tempo real
+// Rota para fornecer data/hora do servidor em tempo real (corrigida para horário do Brasil)
 router.get('/servertime', (req, res) => {
-    res.json({ iso: dayjs().toISOString() });
+    const nowBrazil = dayjs().tz('America/Sao_Paulo');
+    res.json({
+        iso: nowBrazil.format(), // ISO já no fuso do Brasil
+        br: nowBrazil.format('YYYY-MM-DD HH:mm:ss')
+    });
 });
 
 // Rota para buscar total de clientes

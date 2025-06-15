@@ -3,24 +3,34 @@ const script = document.createElement('script');
 script.src = '/js/custom-alert.js';
 document.head.appendChild(script);
 
-// Adiciona suporte a dayjs (data/hora em tempo real)
+// Adiciona suporte a dayjs (data/hora em tempo real e timezone Brasil)
 if (typeof dayjs === 'undefined') {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js';
     script.onload = function() {
         if (typeof dayjs !== 'undefined') {
             window.dayjs = dayjs;
+            // Carrega plugins de timezone
+            const scriptTz = document.createElement('script');
+            scriptTz.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/plugin/timezone.js';
+            document.head.appendChild(scriptTz);
+            const scriptUtc = document.createElement('script');
+            scriptUtc.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/plugin/utc.js';
+            document.head.appendChild(scriptUtc);
         }
     };
     document.head.appendChild(script);
 }
 
-// Função para buscar data/hora do servidor e garantir precisão com dayjs
+// Função para buscar data/hora do servidor e garantir precisão com dayjs (sempre Brasil)
 async function getServerDateTime() {
     try {
         const res = await fetch('/dashboard/servertime');
         const data = await res.json();
         if (data && data.iso && typeof dayjs !== 'undefined') {
+            if (dayjs.tz) {
+                return dayjs.tz(data.iso, 'America/Sao_Paulo');
+            }
             return dayjs(data.iso);
         } else if (data && data.iso) {
             return new Date(data.iso);
@@ -1041,7 +1051,7 @@ showCustomModal({
             const res = await fetch('/dashboard/servertime');
             const data = await res.json();
             if (data && data.iso && typeof dayjs !== 'undefined') {
-                return dayjs(data.iso);
+                return dayjs.tz(data.iso, 'America/Sao_Paulo');
             } else if (data && data.iso) {
                 return new Date(data.iso);
             }

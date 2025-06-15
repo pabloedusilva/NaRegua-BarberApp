@@ -5,6 +5,11 @@ const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
 const db = require('./db/neon');
 const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const BRAZIL_TZ = 'America/Sao_Paulo';
 require('./utils/cron');
 
 const app = express();
@@ -38,6 +43,16 @@ app.use('/agendamento', agendamentoRoutes);
 
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Exemplo de endpoint para testar o horário do servidor no fuso do Brasil
+app.get('/api/server-time', (req, res) => {
+    const now = dayjs().tz(BRAZIL_TZ);
+    res.json({
+        iso: now.toISOString(),
+        br: now.format('YYYY-MM-DD HH:mm:ss'),
+        tz: BRAZIL_TZ
+    });
+});
 
 // Iniciar servidor
 app.listen(port, () => {

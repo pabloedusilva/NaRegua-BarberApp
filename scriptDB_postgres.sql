@@ -159,3 +159,13 @@ CREATE TABLE IF NOT EXISTS profissionais (
 INSERT INTO profissionais (nome, avatar, ativo) VALUES
 ('Pablo barber', 'img/sua-logo.png', TRUE)
 ON CONFLICT DO NOTHING;
+
+
+-- Criação da tabela de controle de lembretes enviados
+CREATE TABLE IF NOT EXISTS lembretes_enviados (
+    id SERIAL PRIMARY KEY,
+    agendamento_id INTEGER NOT NULL,
+    enviado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Adicione um índice para evitar duplicidade
+CREATE UNIQUE INDEX IF NOT EXISTS idx_lembrete_agendamento ON lembretes_enviados(agendamento_id);

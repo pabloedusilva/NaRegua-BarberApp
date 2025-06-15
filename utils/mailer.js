@@ -109,4 +109,46 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
     });
 }
 
-module.exports = { sendConfirmationEmail, sendBarberNotification };
+// Envia e-mail de lembrete 1h antes do agendamento
+async function sendReminderEmail({ to, nome, data, hora, profissional, servico }) {
+    const html = `
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#fffbe6;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">
+            <div style="text-align:center;margin-bottom:18px;">
+                <img 
+                    src="https://github.com/user-attachments/assets/eda4e558-eddd-48f2-bdb6-89be7c141b70" 
+                    alt="NaRégua" 
+                    style="width:80px;height:80px;border-radius:50%;margin-bottom:8px;"
+                >
+                <h2 style="color:#fdcf00;margin:0 0 8px 0;">
+                    Lembrete de Agendamento
+                </h2>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:18px 16px 12px 16px;margin-bottom:18px;box-shadow:0 1px 6px #0001;">
+                <p style="font-size:1.08rem;color:#222;margin:0 0 10px 0;">
+                    Olá <b>${nome}</b>, este é um lembrete do seu agendamento na <b>NaRégua Barbearia</b>!
+                </p>
+                <ul style="list-style:none;padding:0;margin:0 0 10px 0;font-size:1.05rem;">
+                    <li><b>Serviço:</b> ${servico}</li>
+                    <li><b>Profissional:</b> ${profissional}</li>
+                    <li><b>Data:</b> ${data}</li>
+                    <li><b>Horário:</b> ${hora}</li>
+                </ul>
+                <p style="color:#555;font-size:0.98rem;margin:0;">
+                    Chegue com antecedência para garantir o melhor atendimento. Se precisar reagendar, entre em contato conosco.
+                </p>
+            </div>
+            <div style="text-align:center;color:#888;font-size:0.97rem;">
+                Esperamos por você!<br>
+                <b>NaRégua Barbearia</b>
+            </div>
+        </div>
+    `;
+    await transporter.sendMail({
+        from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
+        to,
+        subject: 'Lembrete: Seu agendamento é daqui a 1 hora! - NaRégua Barbearia',
+        html
+    });
+}
+
+module.exports = { sendConfirmationEmail, sendBarberNotification, sendReminderEmail };

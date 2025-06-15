@@ -10,7 +10,11 @@ async function getServerTime() {
         const res = await fetch('/dashboard/servertime');
         const data = await res.json();
         if (data && data.iso) {
-            serverNow = new Date(data.iso);
+            if (typeof dayjs !== 'undefined' && dayjs.tz) {
+                serverNow = dayjs.tz(data.iso, 'America/Sao_Paulo').toDate();
+            } else {
+                serverNow = new Date(data.iso);
+            }
         } else {
             serverNow = new Date(); // fallback
         }
@@ -1690,7 +1694,7 @@ async function carregarWallpapers() {
         const data = await res.json();
                if (data.success && Array.isArray(data.wallpapers)) {
             list.innerHTML = '';
-            // Busca o wallpaper atualmente selecionado
+                       // Busca o wallpaper atualmente selecionado
             const selectedRes = await fetch('/dashboard/wallpaper-selecionado');
             const selectedData = await selectedRes.json();
             const selectedId = selectedData.success && selectedData.wallpaper ? selectedData.wallpaper.id : null;
