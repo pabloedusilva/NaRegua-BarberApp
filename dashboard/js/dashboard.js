@@ -593,7 +593,7 @@ sidebarBtns.forEach(btn => {
 fetchAppointments('today');
 const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
 if (statusFilterEl) {
-    statusFilterEl.value = 'confirmed'; // Seleciona "Confirmados" no select
+    statusFilterEl.value = 'confirmed'; // Só aqui!
 }
 
 // Troca de filtro
@@ -602,8 +602,6 @@ filterBtns.forEach(btn => {
         filterBtns.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         fetchAppointments(this.dataset.filter);
-        // Sempre que trocar o filtro de período, mantenha o status como "Confirmados"
-        if (statusFilterEl) statusFilterEl.value = 'confirmed';
     });
 });
 
@@ -2221,7 +2219,7 @@ const editAvatarInput = document.getElementById('editAvatarInput');
 const editAvatarUploadBtn = document.getElementById('editAvatarUploadBtn');
 const editAvatarPreview = document.getElementById('editAvatarPreview');
 editAvatarUploadBtn.onclick = () => editAvatarInput.click();
-editAvatarInput.onchange = function() {
+editAvatarInput.onchange = function(e) {
   const file = this.files[0];
   if (!file) return;
   const reader = new FileReader();
