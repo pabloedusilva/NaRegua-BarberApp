@@ -618,6 +618,29 @@ sidebarBtns.forEach(btn => {
         });
 }
 
+// Função utilitária para converter hora (HH:mm:ss) em minutos totais
+function horaParaMinutos(hora) {
+    if (!hora) return 0;
+    const [h, m, s] = hora.split(':').map(Number);
+    return h * 60 + m + (s ? s/60 : 0);
+}
+
+// Função para aplicar as alterações do código
+function applyCodeChanges() {
+    // Atualiza a lista de agendamentos ao mudar o filtro de status
+    const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
+    if (statusFilterEl) {
+        statusFilterEl.addEventListener('change', function() {
+            // Descobre qual botão de período está ativo (hoje, semana, mês)
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const period = activeBtn ? activeBtn.dataset.filter : 'today';
+            fetchAppointments(period); // Atualiza imediatamente
+        });
+    }
+}
+
+applyCodeChanges();
+
 // Filtro inicial: hoje + confirmados
 fetchAppointments('today');
 const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
@@ -2321,26 +2344,3 @@ if (deleteProfessionalBtn) {
         );
     };
 }
-
-// Função utilitária para converter hora (HH:mm:ss) em minutos totais
-function horaParaMinutos(hora) {
-    if (!hora) return 0;
-    const [h, m, s] = hora.split(':').map(Number);
-    return h * 60 + m + (s ? s/60 : 0);
-}
-
-// Função para aplicar as alterações do código
-function applyCodeChanges() {
-    // --- NOVO: Atualiza a lista de agendamentos ao mudar o filtro de status
-    const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
-    if (statusFilterEl) {
-        statusFilterEl.addEventListener('change', function() {
-            // Mantém o filtro de período (hoje, semana, mês) selecionado
-            const activeBtn = document.querySelector('.filter-btn.active');
-            const period = activeBtn ? activeBtn.dataset.filter : 'today';
-            fetchAppointments(period);
-        });
-    }
-}
-
-applyCodeChanges();
