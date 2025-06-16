@@ -360,7 +360,7 @@ function carregarAgendamentosHoje() {
                     container.innerHTML = '';
                     if (data.agendamentos && data.agendamentos.length > 0) {
                         // Determina status
-                        const now = new Date();
+                        const now = serverNow;
                        ags = ags.map(ag => {
     let status = 'confirmed';
     if (ag.status && ag.status.toLowerCase() === 'cancelado') {
@@ -558,7 +558,7 @@ sidebarBtns.forEach(btn => {
                 let nextAppointmentId = null;
                 if (filter === 'today') {
                     // Use serverNow se disponível, senão Date.now()
-                    const now = (typeof serverNow === 'object' && serverNow instanceof Date) ? serverNow : new Date();
+                    const now = serverNow;
                     const nowStr = now.toTimeString().slice(0,8); // HH:mm:ss
                     const nowMin = horaParaMinutos(nowStr);
                     const agsHoje = grupos[dataStr]

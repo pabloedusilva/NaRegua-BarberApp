@@ -1069,16 +1069,15 @@ showCustomModal({
         serverDate = await getServerDateTime();
         if (!serverDate) {
             // fallback: mostra mensagem de erro
-            showCustomModal({
-                message: 'Erro ao obter data/hora do servidor. Atualize a página.',
-                icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                btnText: 'Fechar'
-            });
+            if (window.showCustomAlert) {
+                showCustomAlert('Erro ao obter data/hora do servidor. Atualize a página.');
+            }
             return;
         }
         // Atualiza o calendário e outros componentes dependentes da data
-        renderCalendar(serverDate);
-        // Se quiser atualizar outros componentes, chame aqui
+        if (typeof renderCalendar === 'function') {
+            renderCalendar(serverDate);
+        }
     }
 
     // Inicializa a data do servidor ao carregar a página
