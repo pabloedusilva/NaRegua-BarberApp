@@ -49,7 +49,7 @@ async function enviarLembretesAgendamentos() {
         const rows = await db `
             SELECT a.*, c.email as cliente_email FROM agendamentos a
             LEFT JOIN clientes c ON a.telefone = c.telefone
-            WHERE a.status = 'confirmado'
+            WHERE LOWER(a.status) = 'confirmado'
               AND a.data = ${dataHoje}
               AND a.id NOT IN (SELECT agendamento_id FROM lembretes_enviados)
               AND c.email IS NOT NULL AND c.email != ''
@@ -65,14 +65,13 @@ async function enviarLembretesAgendamentos() {
                     profissional: ag.profissional,
                     servico: ag.servico
                 });
-                // Marca que o lembrete foi enviado para não enviar de novo
                 await db `INSERT INTO lembretes_enviados (agendamento_id, enviado_em) VALUES (${ag.id}, NOW())`;
             } catch (err) {
-                console.error('Erro ao enviar lembrete para', ag.cliente_email, err);
+                console.error(`[ERRO] Falha ao enviar lembrete para ${ag.cliente_email} (agendamento ${ag.id}):`, err);
             }
         }
     } catch (err) {
-        console.error('Erro ao buscar agendamentos para lembrete:', err);
+        console.error('[ERRO] Falha geral ao buscar/enviar lembretes:', err);
     }
 }
 

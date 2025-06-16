@@ -13,7 +13,22 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// SMTP config validation
+function validateSMTPEnv() {
+    const required = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'];
+    let ok = true;
+    for (const v of required) {
+        if (!process.env[v] || process.env[v].includes('seu-email')) {
+            ok = false;
+        }
+    }
+    return ok;
+}
+
 async function sendConfirmationEmail({ to, nome, data, hora, profissional, servico }) {
+    if (!validateSMTPEnv()) {
+        return;
+    }
     const html = `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#f9f9f9;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">
             <div style="text-align:center;margin-bottom:18px;">
@@ -46,16 +61,24 @@ async function sendConfirmationEmail({ to, nome, data, hora, profissional, servi
             </div>
         </div>
     `;
-    await transporter.sendMail({
-        from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
-        to,
-        subject: 'Confirmação de Agendamento - NaRégua Barbearia',
-        html
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
+            to,
+            subject: 'Confirmação de Agendamento - NaRégua Barbearia',
+            html
+        });
+        return info;
+    } catch (err) {
+        throw err;
+    }
 }
 
 // Envia e-mail para o barbeiro sempre que houver novo agendamento
 async function sendBarberNotification({ nome, telefone, servico, profissional, data, hora, preco, email }) {
+    if (!validateSMTPEnv()) {
+        return;
+    }
     // Busca o e-mail de notificação da barbearia
     let emailNotificacao = 'pablo.silva.edu@gmail.com';
     try {
@@ -101,16 +124,24 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
             </div>
         </div>
     `;
-    await transporter.sendMail({
-        from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
-        to: emailNotificacao,
-        subject: 'Novo Agendamento Recebido - NaRégua Barbearia',
-        html
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
+            to: emailNotificacao,
+            subject: 'Novo Agendamento Recebido - NaRégua Barbearia',
+            html
+        });
+        return info;
+    } catch (err) {
+        throw err;
+    }
 }
 
 // Envia e-mail de lembrete 1h antes do agendamento
 async function sendReminderEmail({ to, nome, data, hora, profissional, servico }) {
+    if (!validateSMTPEnv()) {
+        return;
+    }
     const html = `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#fffbe6;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">
             <div style="text-align:center;margin-bottom:18px;">
@@ -143,12 +174,17 @@ async function sendReminderEmail({ to, nome, data, hora, profissional, servico }
             </div>
         </div>
     `;
-    await transporter.sendMail({
-        from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
-        to,
-        subject: 'Lembrete: Seu agendamento é daqui a 1 hora! - NaRégua Barbearia',
-        html
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: process.env.SMTP_FROM || 'NaRégua Barbearia <seu-email@gmail.com>',
+            to,
+            subject: 'Lembrete: Seu agendamento é daqui a 1 hora! - NaRégua Barbearia',
+            html
+        });
+        return info;
+    } catch (err) {
+        throw err;
+    }
 }
 
 module.exports = { sendConfirmationEmail, sendBarberNotification, sendReminderEmail };
