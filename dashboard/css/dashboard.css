@@ -2134,8 +2134,8 @@ body.dark-mode .password-eye-btn {
 /* Destaque para o próximo agendamento do dia */
 
 .next-appointment {
-    border: 2.5px solid var(--primary);
-    background: linear-gradient(90deg, #fffbe6 60%, #fff692 100%);
+    border: 2.5px solid var(--primary) !important;
+    background: linear-gradient(90deg, #fffbe6 60%, #fff692 100%) !important;
     box-shadow: 0 6px 24px #dac02d33, 0 1.5px 8px 0 #dac02d11;
     position: relative;
     z-index: 1;
@@ -3943,15 +3943,19 @@ button:focus {
     transform: scale(1.06);
 }
 
+
 /* STATUS DE AGENDAMENTO NO DASHBOARD */
+
 .status-confirmed {
     background: #19a519 !important;
     color: #fff !important;
 }
+
 .status-cancelled {
     background: #e74c3c !important;
     color: #fff !important;
 }
+
 .status-completed {
     background: #888 !important;
     color: #fff !important;
@@ -3964,11 +3968,13 @@ button:focus {
     margin-bottom: 12px;
     justify-content: flex-end;
 }
+
 .dashboard-appointments-filter label {
     font-weight: 500;
     color: var(--primary-dark);
     font-size: 1em;
 }
+
 .dashboard-appointments-filter select {
     padding: 4px 12px;
     border-radius: 8px;

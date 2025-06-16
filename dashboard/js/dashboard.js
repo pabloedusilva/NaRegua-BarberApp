@@ -507,7 +507,7 @@ sidebarBtns.forEach(btn => {
         .then(res => res.json())
         .then(data => {
             let ags = data.agendamentos || [];
-            // --- NOVO: Determina status visual igual ao banco ---
+            // Determina status visual igual ao banco
             ags = ags.map(ag => {
                 let status = 'confirmed';
                 if (ag.status && ag.status.toLowerCase() === 'cancelado') {
@@ -524,7 +524,7 @@ sidebarBtns.forEach(btn => {
                 return { ...ag, _status: status };
             });
 
-            // --- NOVO: Filtro de status pelo select ---
+            // Filtro de status pelo select
             const statusFilterEl = document.getElementById('dashboardAppointmentsStatusFilter');
             let statusFilter = statusFilterEl ? statusFilterEl.value : 'confirmed';
             if (statusFilter && statusFilter !== 'all') {
@@ -536,7 +536,7 @@ sidebarBtns.forEach(btn => {
                 return;
             }
 
-            // --- Agrupa por data ---
+            // Agrupa por data
             const grupos = {};
             ags.forEach(ag => {
                 const dataStr = ag.data;
@@ -546,7 +546,7 @@ sidebarBtns.forEach(btn => {
             const datasOrdenadas = Object.keys(grupos).sort();
 
             filteredAppointmentsList.innerHTML = '';
-            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
+            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
             datasOrdenadas.forEach(dataStr => {
                 const dataObj = new Date(dataStr);
                 const header = document.createElement('div');
@@ -554,9 +554,38 @@ sidebarBtns.forEach(btn => {
                 header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
                 filteredAppointmentsList.appendChild(header);
 
+                // --- CORRIGIDO: Destacar o próximo agendamento confirmado de hoje ---
+                let nextAppointmentId = null;
+                if (filter === 'today') {
+                    // Use serverNow se disponível, senão Date.now()
+                    const now = (typeof serverNow === 'object' && serverNow instanceof Date) ? serverNow : new Date();
+                    const nowStr = now.toTimeString().slice(0,8); // HH:mm:ss
+                    const nowMin = horaParaMinutos(nowStr);
+                    const agsHoje = grupos[dataStr]
+                        .filter(ag => ag._status === 'confirmed')
+                        .filter(ag => {
+                            const agMin = horaParaMinutos(ag.hora);
+                            return agMin >= nowMin;
+                        })
+                        .sort((a, b) => horaParaMinutos(a.hora) - horaParaMinutos(b.hora));
+                    console.log('Agora:', nowStr, 'Min:', nowMin);
+                    console.log('Agendamentos futuros hoje:', agsHoje.map(a => ({id: a.id, hora: a.hora})));
+                    if (agsHoje.length > 0) {
+                        nextAppointmentId = agsHoje[0].id;
+                        console.log('nextAppointmentId calculado:', nextAppointmentId);
+                    } else {
+                        console.log('Nenhum próximo agendamento futuro encontrado para hoje.');
+                    }
+                }
+
                 grupos[dataStr].forEach(ag => {
                     const item = document.createElement('div');
                     item.className = 'appointment-item';
+                    // Aplica destaque se for o próximo confirmado de hoje
+                    if (nextAppointmentId && ag.id === nextAppointmentId) {
+                        console.log('>> Destacando agendamento', ag);
+                        item.classList.add('next-appointment');
+                    }
                     item.innerHTML = `
                         <div class="appointment-card">
                             <div class="appointment-header">
@@ -2291,6 +2320,13 @@ if (deleteProfessionalBtn) {
             { type: 'delete-professional', btnText: 'Excluir', cancelText: 'Cancelar', icon: '<i class="fas fa-trash-alt" style="color:var(--primary-dark);"></i>' }
         );
     };
+}
+
+// Função utilitária para converter hora (HH:mm:ss) em minutos totais
+function horaParaMinutos(hora) {
+    if (!hora) return 0;
+    const [h, m, s] = hora.split(':').map(Number);
+    return h * 60 + m + (s ? s/60 : 0);
 }
 
 // Função para aplicar as alterações do código
