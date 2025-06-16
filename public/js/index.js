@@ -965,12 +965,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Inicializa lista
     renderMyAppointmentsList('all');
     // Filtro
-    const statusFilterEl = document.getElementById('myAppointmentsStatusFilter');
-    if (statusFilterEl) {
-        statusFilterEl.addEventListener('change', function() {
-            renderMyAppointmentsList(this.value);
-        });
-    }
+const statusFilterEl = document.getElementById('myAppointmentsStatusFilter');
+if (statusFilterEl) {
+    statusFilterEl.value = 'confirmed'; // Deixa "Confirmados" selecionado visualmente
+    renderMyAppointmentsList('confirmed'); // Mostra confirmados inicialmente
+    statusFilterEl.addEventListener('change', function() {
+        renderMyAppointmentsList(this.value);
+    });
+}
     // Ativar botões de exclusão
     setTimeout(() => {
         document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
