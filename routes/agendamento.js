@@ -84,7 +84,9 @@ router.post('/novo', async(req, res) => {
         }
         // Cria notificação para dashboard (data UTC, mensagem curta)
         const titulo = 'Novo agendamento';
-        const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`;
+        const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${
+            dayjs.tz(data, BRAZIL_TZ).format('DD/MM/YYYY')
+        } às ${hora}.`;
         // Use data/hora do Brasil
         const nowBrazil = dayjs().tz(BRAZIL_TZ).format('YYYY-MM-DD HH:mm:ss');
         await db `
