@@ -178,8 +178,45 @@ document.addEventListener('DOMContentLoaded', async function() {
                 '25/12': 'Natal'
             };
 
+            // =========================
+            // DATA/HORA GLOBAL DO SERVIDOR (padronizado com dashboard)
+            // =========================
+            let serverNow = null;
+
+            async function fetchServerNow() {
+                try {
+                    const res = await fetch('/api/server-time');
+                    const data = await res.json();
+                    if (data && data.iso && typeof dayjs !== 'undefined' && dayjs.tz) {
+                        return dayjs.tz(data.iso, 'America/Sao_Paulo');
+                    } else if (data && data.iso && typeof dayjs !== 'undefined') {
+                        return dayjs(data.iso);
+                    } else if (data && data.iso) {
+                        return new Date(data.iso);
+                    }
+                } catch (err) {}
+                if (typeof dayjs !== 'undefined') return dayjs();
+                return new Date();
+            }
+
+            async function atualizarServerNow() {
+                serverNow = await fetchServerNow();
+            }
+
+            // Atualiza ao carregar e a cada 30s
+            window.addEventListener('DOMContentLoaded', atualizarServerNow);
+            setInterval(atualizarServerNow, 30000);
+
+            // Helper para obter a data/hora "agora" SEMPRE do servidor
+            function getNow() {
+                if (!serverNow) return new Date();
+                if (typeof serverNow === 'function') return serverNow();
+                if (serverNow.clone) return serverNow.clone();
+                return new Date(serverNow);
+            }
+
             // Inicializar calendário
-            let currentDate = new Date();
+            let currentDate = getNow();
             renderCalendar(currentDate);
 
             // Selecionar serviço
@@ -266,7 +303,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             function renderCalendar(date) {
                 const year = date.getFullYear();
                 const month = date.getMonth();
-                const today = new Date();
+                const today = getNow();
+                today.setHours(0, 0, 0, 0);
 
                 const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -332,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const lastDayIndex = lastDay.getDay();
                     const nextDays = 7 - lastDayIndex - 1;
 
-                    const today = new Date();
+                    const today = getNow();
                     today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
                     for (let i = firstDayIndex; i > 0; i--) {
