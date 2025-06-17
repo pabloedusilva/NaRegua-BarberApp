@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/neon');
 const { sendConfirmationEmail, sendBarberNotification } = require('../utils/mailer');
+const dayjs = require('dayjs');
+const timezone = require('dayjs/plugin/timezone');
+const utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const BRAZIL_TZ = 'America/Sao_Paulo';
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
@@ -79,9 +85,11 @@ router.post('/novo', async(req, res) => {
         // Cria notificação para dashboard (data UTC, mensagem curta)
         const titulo = 'Novo agendamento';
         const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${new Date(data).toLocaleDateString('pt-BR')} às ${hora}.`;
+        // Use data/hora do Brasil
+        const nowBrazil = dayjs().tz(BRAZIL_TZ).format('YYYY-MM-DD HH:mm:ss');
         await db `
             INSERT INTO notificacoes (titulo, mensagem, data)
-            VALUES (${titulo}, ${msg}, ${new Date().toISOString()})
+            VALUES (${titulo}, ${msg}, ${nowBrazil})
         `;
         // Salva a subscription (evita duplicidade)
         if (subscription && subscription.endpoint) {

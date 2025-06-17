@@ -1446,13 +1446,17 @@ async function carregarNotificacoes() {
             data.notificacoes.forEach(n => {
                 const item = document.createElement('div');
                 item.className = 'notification-item';
-                // Corrige bug de fuso horário: mostra sempre a data correta em Brasília (UTC-3)
-                let dataNotificacao = new Date(n.data);
-                // Se a data vier como string sem fuso, trata como local. Se vier como UTC, ajusta:
-                // Força para UTC e soma 3 horas (Brasília)
-                let dataBrasilia = new Date(dataNotificacao.getTime() + (3 * 60 * 60 * 1000));
-                // Se já estiver correta, não haverá efeito colateral
-                let dataFormatada = dataBrasilia.toLocaleString('pt-BR');
+                // NOVO: Usa dayjs.tz para garantir fuso de Brasília
+                let dataFormatada = '';
+                if (n.data) {
+                    if (typeof dayjs !== 'undefined' && dayjs.tz) {
+                        dataFormatada = dayjs.tz(n.data, 'America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss');
+                    } else {
+                        // fallback
+                        const d = new Date(n.data);
+                        dataFormatada = d.toLocaleString('pt-BR');
+                    }
+                }
                 item.innerHTML = `
                     <div class="notification-content">
                         <div class="notification-title"><i class="fas fa-bell"></i> ${n.titulo}</div>

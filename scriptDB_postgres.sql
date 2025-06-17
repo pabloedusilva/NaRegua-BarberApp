@@ -78,6 +78,9 @@ CREATE TABLE IF NOT EXISTS notificacoes (
     lida BOOLEAN DEFAULT FALSE
 );
 
+ALTER TABLE notificacoes ADD COLUMN IF NOT EXISTS data_agendamento DATE;
+ALTER TABLE notificacoes ADD COLUMN IF NOT EXISTS hora_agendamento TIME;
+
 -- Tabela de barbearias
 CREATE TABLE IF NOT EXISTS barbearia (
     id SERIAL PRIMARY KEY,
