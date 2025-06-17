@@ -618,6 +618,13 @@ sidebarBtns.forEach(btn => {
         });
 }
 
+// Helper para obter a data/hora "agora" SEMPRE do servidor
+function getNow() {
+    if (serverNow && typeof serverNow.getTime === 'function') return new Date(serverNow.getTime());
+    if (serverNow && typeof serverNow.clone === 'function') return serverNow.clone();
+    return new Date();
+}
+
 // Função utilitária para converter hora (HH:mm:ss) em minutos totais
 function horaParaMinutos(hora) {
     if (!hora) return 0;

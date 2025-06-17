@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             async function fetchServerNow() {
                 try {
-                    const res = await fetch('/api/server-time');
+                    const res = await fetch('/dashboard/servertime');
                     const data = await res.json();
                     if (data && data.iso && typeof dayjs !== 'undefined' && dayjs.tz) {
                         return dayjs.tz(data.iso, 'America/Sao_Paulo');
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     days += '<div class="week-days">';
 
                     // Gerar os 7 dias da semana
-                    const today = new Date();
+                    const today = getNow();
                     today.setHours(0, 0, 0, 0);
 
                     const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
