@@ -125,7 +125,11 @@ INSERT INTO wallpapers (nome, url, ativo) VALUES
 ('Fundo 7', '/img/wallpappers/background7.png', TRUE),
 ('Fundo 8', '/img/wallpappers/background8.jpg', TRUE),
 ('Fundo 9', '/img/wallpappers/background9.png', TRUE),
-('Fundo 10', '/img/wallpappers/background10.png', TRUE)
+('Fundo 10', '/img/wallpappers/background10.png', TRUE),
+('Fundo 11', '/img/wallpappers/background11.png', TRUE),
+('Fundo 12', '/img/wallpappers/background12.png', TRUE),
+('Fundo 13', '/img/wallpappers/background13.png', TRUE)
+
 ON CONFLICT DO NOTHING;
 
 -- Tabela para guardar o wallpaper selecionado pela barbearia (já incluído em barbearia)
