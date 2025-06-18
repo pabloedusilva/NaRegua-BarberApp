@@ -1889,14 +1889,10 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
     const input = document.getElementById(inputId);
     if (!gallery || !input) return;
 
-    // Agora busca da rota correta
     let imagens = [];
     try {
-        const res = await fetch('/dashboard/servico-imagens');
-        const data = await res.json();
-        if (data.success && Array.isArray(data.imagens)) {
-            imagens = data.imagens;
-        }
+        const res = await fetch('/api/imagens-servicos');
+        imagens = await res.json();
     } catch (e) {
         gallery.innerHTML = '<div style="color:#b00;">Erro ao carregar imagens.</div>';
         return;
@@ -1908,25 +1904,33 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
     }
 
     gallery.innerHTML = '';
-    imagens.forEach(img => {
+    imagens.forEach(url => {
         const el = document.createElement('img');
-        el.src = img.url;
-        el.alt = img.nome || 'Imagem';
-        el.className = 'gallery-img' + (img.url === selectedUrl ? ' selected' : '');
-        el.title = img.nome || '';
+        el.src = url;
+        el.alt = 'Imagem do serviço';
+        el.className = 'gallery-img' + (url === selectedUrl ? ' selected' : '');
+        el.title = url.split('/').pop();
+        el.onerror = function() {
+            el.style.opacity = 0.3;
+            el.title = 'Erro ao carregar imagem';
+        };
         el.onclick = () => {
             gallery.querySelectorAll('.gallery-img').forEach(i => i.classList.remove('selected'));
             el.classList.add('selected');
-            input.value = img.url;
+            input.value = url;
         };
         gallery.appendChild(el);
     });
 
-    if (selectedUrl) {
+    // Seleção inicial
+    if (selectedUrl && imagens.includes(selectedUrl)) {
         input.value = selectedUrl;
+        const selectedImg = gallery.querySelector(`img[src='${selectedUrl}']`);
+        if (selectedImg) selectedImg.classList.add('selected');
     } else {
-        input.value = imagens[0].url;
-        gallery.querySelector('.gallery-img').classList.add('selected');
+        input.value = imagens[0];
+        const firstImg = gallery.querySelector('.gallery-img');
+        if (firstImg) firstImg.classList.add('selected');
     }
 }
 

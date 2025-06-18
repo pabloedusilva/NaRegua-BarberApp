@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
+const imagensRoutes = require('./routes/imagens');
 const db = require('./db/neon');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
@@ -40,6 +41,8 @@ app.use('/dashboard', dashboardRoutes);
 // Rotas de agendamento
 app.use('/agendamento', agendamentoRoutes);
 
+// Rotas de imagens
+app.use('/api', imagensRoutes);
 
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));

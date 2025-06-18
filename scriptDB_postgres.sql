@@ -128,7 +128,8 @@ INSERT INTO wallpapers (nome, url, ativo) VALUES
 ('Fundo 10', '/img/wallpappers/background10.png', TRUE),
 ('Fundo 11', '/img/wallpappers/background11.png', TRUE),
 ('Fundo 12', '/img/wallpappers/background12.png', TRUE),
-('Fundo 13', '/img/wallpappers/background13.png', TRUE)
+('Fundo 13', '/img/wallpappers/background13.png', TRUE),
+('Fundo 14', '/img/wallpappers/background14.png', TRUE)
 
 ON CONFLICT DO NOTHING;
 
