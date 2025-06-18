@@ -80,14 +80,18 @@ async function sendBarberNotification({ nome, telefone, servico, profissional, d
         return;
     }
     // Busca o e-mail de notificação da barbearia
-    let emailNotificacao = 'pablo.silva.edu@gmail.com';
+    let emailNotificacao = null;
     try {
         const rows = await db `SELECT email_notificacao FROM barbearia LIMIT 1`;
         if (rows.length && rows[0].email_notificacao && rows[0].email_notificacao.includes('@')) {
             emailNotificacao = rows[0].email_notificacao;
         }
     } catch (e) {
-        // fallback para padrão
+        // fallback: não envia se não encontrar
+    }
+    if (!emailNotificacao) {
+        // Não envia se não houver e-mail válido no banco
+        return;
     }
     const html = `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#f9f9f9;border-radius:12px;padding:32px 24px 24px 24px;box-shadow:0 2px 16px #0001;">

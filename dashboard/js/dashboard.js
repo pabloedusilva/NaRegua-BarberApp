@@ -1283,7 +1283,7 @@ function abrirModalHorario(diaKey) {
         // Remove todos os turnos do dia (fecha o dia)
         turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
         fecharDiaBtn.remove();
-        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextElementSibling);
     };
 
     // Evento para abrir o dia
@@ -1291,7 +1291,7 @@ function abrirModalHorario(diaKey) {
         turnosContainer.innerHTML = '';
         addTurnoRow();
         abrirDiaBtn.remove();
-        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextElementSibling);
     };
 }
 
@@ -1374,7 +1374,7 @@ function abrirModalHorario(diaKey) {
         // Remove todos os turnos do dia (fecha o dia)
         turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
         fecharDiaBtn.remove();
-        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextElementSibling);
     };
 
     // Evento para abrir o dia
@@ -1382,7 +1382,7 @@ function abrirModalHorario(diaKey) {
         turnosContainer.innerHTML = '';
         addTurnoRow();
         abrirDiaBtn.remove();
-        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextElementSibling);
     };
 }
 
@@ -1641,6 +1641,8 @@ document.getElementById('editBarbershopInfoBtn').onclick = async function() {
             document.getElementById('editBarbershopAddress').value = b.endereco || '';
             document.getElementById('editBarbershopCityState').value = b.cidade_estado || '';
             document.getElementById('editBarbershopPhoto').value = b.foto || '';
+            document.getElementById('editBarbershopNotificationEmail').value = b.email_notificacao || '';
+            updateBarbershopPhotoPreview(b.foto || '');
             document.getElementById('editBarbershopMsg').textContent = '';
             document.getElementById('editBarbershopModal').style.display = 'flex';
         } else {
@@ -1668,6 +1670,7 @@ editBarbershopForm.onsubmit = async function(e) {
     const endereco = document.getElementById('editBarbershopAddress').value.trim();
     const cidade_estado = document.getElementById('editBarbershopCityState').value.trim();
     let foto = document.getElementById('editBarbershopPhoto').value.trim();
+    const email_notificacao = document.getElementById('editBarbershopNotificationEmail').value.trim();
 
     // Limita o campo foto a 255 caracteres
     if (foto.length > 255) {
@@ -1680,7 +1683,7 @@ editBarbershopForm.onsubmit = async function(e) {
         const res = await fetch('/dashboard/barbearia', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome, whatsapp, instagram, endereco, cidade_estado, foto })
+            body: JSON.stringify({ nome, whatsapp, instagram, endereco, cidade_estado, foto, email_notificacao })
         });
         const data = await res.json();
         if (data.success) {
@@ -1733,6 +1736,7 @@ document.getElementById('editBarbershopInfoBtn').onclick = async function() {
             document.getElementById('editBarbershopAddress').value = b.endereco || '';
             document.getElementById('editBarbershopCityState').value = b.cidade_estado || '';
             document.getElementById('editBarbershopPhoto').value = b.foto || '';
+            document.getElementById('editBarbershopNotificationEmail').value = b.email_notificacao || '';
             updateBarbershopPhotoPreview(b.foto || '');
             document.getElementById('editBarbershopMsg').textContent = '';
             document.getElementById('editBarbershopModal').style.display = 'flex';
