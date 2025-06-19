@@ -145,14 +145,22 @@ CREATE TABLE IF NOT EXISTS servico_imagens (
 );
 
 INSERT INTO servico_imagens (nome, url, ativo) VALUES
-('Barba', '/img/servicos/barba.jpg', TRUE),
-('Corte de Cabelo', '/img/servicos/corte-masculino.jpg', TRUE),
-('Corte + Barba', '/img/servicos/corte-barba.jpg', TRUE),
-('Bigodinho', '/img/servicos/bigodinho.jpg', TRUE),
-('Colorimetria + corte', '/img/servicos/colorimetria.jpg', TRUE),
-('Corte infantil', '/img/servicos/infantil.jpg', TRUE),
-('Barba raspada na máquina', '/img/servicos/maquina.jpg', TRUE),
-('Nenhuma', '/img/servicos/nenhuma.jpg', TRUE)
+('no-imagem', '/img/servicos/no-imagem.png', TRUE),
+('americano1', '/img/servicos/americano1.png', TRUE),
+('americano2', '/img/servicos/americano2.png', TRUE),
+('barba-cabelo', '/img/servicos/barba-cabelo.png', TRUE),
+('barba_maquina', '/img/servicos/barba_maquina.png', TRUE),
+('bigodinho', '/img/servicos/bigodinho.png', TRUE),
+('colorido1', '/img/servicos/colorido1.png', TRUE),
+('colorido2', '/img/servicos/colorido2.png', TRUE),
+('corte-de-cabelo', '/img/servicos/corte-de-cabelo.png', TRUE),
+('corte-do-jaca', '/img/servicos/corte-do-jaca.png', TRUE),
+('corte-infantil', '/img/servicos/corte-infantil.png', TRUE),
+('low-fade', '/img/servicos/low-fade.png', TRUE),
+('moicano1', '/img/servicos/moicano1.png', TRUE),
+('nevou', '/img/servicos/nevou.png', TRUE),
+('pigmentacao', '/img/servicos/pigmentacao.png', TRUE),
+('reflexo', '/img/servicos/reflexo.png', TRUE)
 ON CONFLICT DO NOTHING;
 
 -- Tabela de profissionais
