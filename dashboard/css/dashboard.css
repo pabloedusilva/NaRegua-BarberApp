@@ -1654,12 +1654,13 @@ body.dark-mode .footer-admin-link-modern:focus {
     width: 100%;
     gap: 0;
     position: relative;
+    flex-direction: row;
 }
 
 .share-link-input-modern {
     border: none;
-    border-radius: 10px 0 0 10px;
-    padding: 14px 16px;
+    border-radius: 50%;
+    padding: 14px 16px 14px 18px;
     font-size: 1.12rem;
     background: var(--gray-light);
     color: var(--primary-light);
@@ -1668,28 +1669,25 @@ body.dark-mode .footer-admin-link-modern:focus {
     width: 100%;
     font-family: 'Inter', Arial, sans-serif;
     letter-spacing: 0.01em;
-    transition: box-shadow 0.2s;
-}
-
-.share-link-input-modern:focus {
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
 }
 
 .btn-copy-modern {
     background: var(--primary);
     color: #fff;
     border: none;
-    border-radius: 0 10px 10px 0;
-    width: 54px;
-    height: 48px;
-    font-size: 1.45rem;
+    border-radius: 50% !important;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.35rem;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
     cursor: pointer;
     transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
-    margin-left: -10px;
+    margin-left: 10px;
     color: #fdcf00;
 }
 
@@ -1698,6 +1696,7 @@ body.dark-mode .footer-admin-link-modern:focus {
     background: var(--primary-dark);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
     transform: scale(1.07);
+    color: #fffbe7;
 }
 
 .copy-success-modern {

@@ -1146,7 +1146,14 @@ showCustomModal({
         slotsContainer.innerHTML = '';
         const turnos = turnosSemana.filter(t => t.dia_semana === diaSemana);
         if (turnos.length === 0) {
-            slotsContainer.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Fechado</div>';
+            slotsContainer.innerHTML = `
+              <div style="display:flex;justify-content:center;align-items:center;height:100px;width:100%;">
+                <div style="color:#b71c1c;border-radius:12px;padding:18px 28px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:180px;max-width:90vw;">
+                  <i class='fas fa-store-slash' style='font-size:1.5rem;color:#b71c1c;margin-bottom:2px;opacity:0.7;'></i>
+                  <span style="font-size:1.05rem;font-weight:500;letter-spacing:0.2px;">Fechado</span>
+                </div>
+              </div>
+            `;
             return;
         }
         let duracaoMin = 0;
