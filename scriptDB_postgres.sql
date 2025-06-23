@@ -185,3 +185,10 @@ CREATE TABLE IF NOT EXISTS lembretes_enviados (
 );
 -- Adicione um índice para evitar duplicidade
 CREATE UNIQUE INDEX IF NOT EXISTS idx_lembrete_agendamento ON lembretes_enviados(agendamento_id);
+
+-- Tabela de folgas especiais
+CREATE TABLE IF NOT EXISTS folgas_especiais (
+    id SERIAL PRIMARY KEY,
+    data DATE NOT NULL UNIQUE,
+    motivo VARCHAR(150)
+);

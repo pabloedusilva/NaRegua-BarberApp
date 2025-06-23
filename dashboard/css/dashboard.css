@@ -3945,3 +3945,135 @@
         top: 6px;
         right: 6px;
     }
+
+    .special-days-off-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+}
+.special-day-off-item {
+    background: var(--card, #fff);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px #dac02d11;
+    border: 1.5px solid var(--primary-light, #dac02d);
+    font-size: 1.08rem;
+    animation: fadeIn 0.5s;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+.special-day-off-date {
+    font-weight: 600;
+    color: var(--primary-dark, #816a02);
+    margin-right: 8px;
+}
+.special-day-off-reason {
+    color: #888;
+    font-size: 0.98em;
+    margin-left: 6px;
+}
+.special-day-off-remove {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.special-day-off-remove:hover {
+    background: #c0392b;
+}
+.special-day-off-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 18px;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.special-day-off-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+#specialDayOffDate,
+#specialDayOffReason {
+    width: 100%;
+    max-width: 320px;
+    min-width: 0;
+    text-align: center;
+    font-size: 1.06em;
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1.2px solid var(--primary-light);
+    background: var(--white);
+    transition: border 0.18s;
+}
+
+#specialDayOffDate:focus,
+#specialDayOffReason:focus {
+    border: 1.5px solid var(--primary-dark);
+    outline: none;
+}
+
+.special-day-off-btn {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.08em;
+    font-weight: 700;
+    border-radius: 22px;
+    box-shadow: var(--primary-glow);
+    background: var(--gold-gradient);
+    color: #fff !important;
+    transition: background 0.22s, box-shadow 0.22s, transform 0.13s;
+    padding: 10px 0;
+}
+
+.special-day-off-btn:hover {
+    background: linear-gradient(90deg, #f7e27c 0%, #dac02d 100%);
+    color: #816a02 !important;
+    box-shadow: 0 0 24px 4px #dac02d55;
+    transform: scale(1.04);
+}
+
+/* Responsivo: mobile first */
+@media (max-width: 600px) {
+    .special-day-off-form {
+        max-width: 98vw;
+        padding: 0 2vw;
+    }
+    .special-day-off-fields {
+        gap: 10px;
+    }
+    #specialDayOffDate,
+    #specialDayOffReason,
+    .special-day-off-btn {
+        width: 100%;
+        font-size: 1em;
+    }
+}
