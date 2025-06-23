@@ -3930,3 +3930,18 @@
             margin-bottom: 10px;
         }
     }
+    
+    .day.folga-especial {
+        background: #ffeaea;
+        color: #e74c3c;
+        border: 2px solid #e74c3c;
+        position: relative;
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    
+    .day.folga-especial i {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+    }

@@ -382,14 +382,13 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga
-                </h2>
-                <button class="edit-btn" id="addDayOffBtn">
-                    <i class="fas fa-plus"></i> Adicionar
-                </button>
+                <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga</h2>
             </div>
+            <form id="addSpecialDayOffForm" style="display:flex;gap:12px;align-items:center;margin-bottom:18px;">
+                <input type="date" id="specialDayOffDate" class="form-control" required style="max-width:180px;">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar</button>
+            </form>
             <div class="special-days-off-list" id="specialDaysOffList">
-                <!-- Dias de folga adicionados aparecerão aqui -->
                 <div class="special-day-off-empty" id="specialDayOffEmpty">
                     Nenhum dia de folga especial cadastrado.
                 </div>
