@@ -1,7 +1,9 @@
 ## Testes
 
-- **Dashboard:** https://naregua-barberapp-2.onrender.com/dashboard/dashboard
-- **Index:** https://naregua-barberapp-2.onrender.com/
+- **Dashboard:** https://naregua-barberapp.onrender.com/dashboard/dashboard
+- **Index:** https://naregua-barberapp.onrender.com/
+
+
 
 ## Logo
 <p align="center">
