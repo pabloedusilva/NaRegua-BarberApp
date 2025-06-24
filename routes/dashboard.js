@@ -10,10 +10,10 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 // Login (POST)
-router.post('/login', async (req, res) => {
+router.post('/login', async(req, res) => {
     const { username, password } = req.body;
     try {
-        const rows = await db`SELECT * FROM usuarios WHERE username = ${username} AND password = ${password} LIMIT 1`;
+        const rows = await db `SELECT * FROM usuarios WHERE username = ${username} AND password = ${password} LIMIT 1`;
         if (rows.length > 0) {
             if (rows[0].role !== 'admin') {
                 return res.status(403).json({ success: false, message: 'Acesso restrito a administradores.' });
@@ -49,9 +49,9 @@ router.get('/login', (req, res) => {
 });
 
 // Rota para buscar total de agendamentos
-router.get('/total-agendamentos', requireLogin, async (req, res) => {
+router.get('/total-agendamentos', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT COUNT(*) AS total FROM agendamentos`;
+        const rows = await db `SELECT COUNT(*) AS total FROM agendamentos`;
         res.json({ total: rows[0].total });
     } catch (err) {
         res.status(500).json({ message: 'Erro ao buscar total de agendamentos.' });
@@ -59,7 +59,7 @@ router.get('/total-agendamentos', requireLogin, async (req, res) => {
 });
 
 // Rota para buscar total de agendamentos do mês atual
-router.get('/total-agendamentos-mes', requireLogin, async (req, res) => {
+router.get('/total-agendamentos-mes', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
         const ano = hoje.getFullYear();
@@ -68,7 +68,7 @@ router.get('/total-agendamentos-mes', requireLogin, async (req, res) => {
         const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
         const dataInicio = `${ano}-${mes}-01`;
         const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
-        const rows = await db`
+        const rows = await db `
             SELECT COUNT(*) AS total
             FROM agendamentos
             WHERE data >= ${dataInicio} AND data <= ${dataFim}
@@ -80,14 +80,14 @@ router.get('/total-agendamentos-mes', requireLogin, async (req, res) => {
 });
 
 // Rota para buscar agendamentos do dia atual
-router.get('/agendamentos-hoje', requireLogin, async (req, res) => {
+router.get('/agendamentos-hoje', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
         const ano = hoje.getFullYear();
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
         const dia = String(hoje.getDate()).padStart(2, '0');
         const dataHoje = `${ano}-${mes}-${dia}`;
-        const rows = await db`
+        const rows = await db `
             SELECT * FROM agendamentos
             WHERE data = ${dataHoje}
             ORDER BY hora ASC
@@ -99,9 +99,9 @@ router.get('/agendamentos-hoje', requireLogin, async (req, res) => {
 });
 
 // Rota pública para buscar serviços (para o frontend)
-router.get('/servicos', async (req, res) => {
+router.get('/servicos', async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM servicos WHERE ativo = TRUE ORDER BY id ASC`;
+        const rows = await db `SELECT * FROM servicos WHERE ativo = TRUE ORDER BY id ASC`;
         res.json({ success: true, servicos: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar serviços.' });
@@ -109,13 +109,13 @@ router.get('/servicos', async (req, res) => {
 });
 
 // Rota para alterar senha do usuário logado
-router.post('/alterar-senha', requireLogin, async (req, res) => {
+router.post('/alterar-senha', requireLogin, async(req, res) => {
     const { atual, nova } = req.body;
     const userId = req.session.user.id;
 
     try {
         // Verifica se a senha atual está correta
-        const rows = await db`
+        const rows = await db `
             SELECT * FROM usuarios
             WHERE id = ${userId} AND password = ${atual}
         `;
@@ -124,7 +124,7 @@ router.post('/alterar-senha', requireLogin, async (req, res) => {
         }
 
         // Atualiza a senha
-        await db`UPDATE usuarios SET password = ${nova} WHERE id = ${userId}`;
+        await db `UPDATE usuarios SET password = ${nova} WHERE id = ${userId}`;
         return res.json({ success: true, message: 'Senha alterada com sucesso!' });
     } catch (err) {
         return res.status(500).json({ success: false, message: 'Erro ao alterar senha.' });
@@ -132,7 +132,7 @@ router.post('/alterar-senha', requireLogin, async (req, res) => {
 });
 
 // Atualiza o contador de agendamentos da semana (segunda a domingo da semana atual)
-router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
+router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
         // Pega o dia da semana (0=domingo, 1=segunda, ...)
@@ -147,7 +147,7 @@ router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
         const dataInicio = inicioSemana.toISOString().slice(0, 10);
         const dataFim = fimSemana.toISOString().slice(0, 10);
 
-        const rows = await db`
+        const rows = await db `
             SELECT COUNT(*) AS total
             FROM agendamentos
             WHERE data >= ${dataInicio} AND data <= ${dataFim}
@@ -159,7 +159,7 @@ router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
 });
 
 // Agendamentos da semana atual (segunda a domingo da semana corrente)
-router.get('/agendamentos-semana', requireLogin, async (req, res) => {
+router.get('/agendamentos-semana', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
         // Pega o dia da semana (0=domingo, 1=segunda, ...)
@@ -174,7 +174,7 @@ router.get('/agendamentos-semana', requireLogin, async (req, res) => {
         const dataInicio = inicioSemana.toISOString().slice(0, 10);
         const dataFim = fimSemana.toISOString().slice(0, 10);
 
-        const rows = await db`
+        const rows = await db `
             SELECT * FROM agendamentos
             WHERE data >= ${dataInicio} AND data <= ${dataFim}
             ORDER BY data ASC, hora ASC
@@ -186,7 +186,7 @@ router.get('/agendamentos-semana', requireLogin, async (req, res) => {
 });
 
 // Agendamentos do mês atual
-router.get('/agendamentos-mes', requireLogin, async (req, res) => {
+router.get('/agendamentos-mes', requireLogin, async(req, res) => {
     try {
         const hoje = new Date();
         const ano = hoje.getFullYear();
@@ -195,7 +195,7 @@ router.get('/agendamentos-mes', requireLogin, async (req, res) => {
         const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
         const dataInicio = `${ano}-${mes}-01`;
         const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
-        const rows = await db`
+        const rows = await db `
             SELECT * FROM agendamentos
             WHERE data >= ${dataInicio} AND data <= ${dataFim}
             ORDER BY data ASC, hora ASC
@@ -207,9 +207,9 @@ router.get('/agendamentos-mes', requireLogin, async (req, res) => {
 });
 
 // Rota para listar todos os serviços (inclusive inativos) para a dashboard
-router.get('/servicos-admin', requireLogin, async (req, res) => {
+router.get('/servicos-admin', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM servicos ORDER BY id ASC`;
+        const rows = await db `SELECT * FROM servicos ORDER BY id ASC`;
         res.json({ success: true, servicos: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar serviços.' });
@@ -217,11 +217,11 @@ router.get('/servicos-admin', requireLogin, async (req, res) => {
 });
 
 // Rota para ativar/desativar serviço
-router.post('/servicos/:id/ativo', requireLogin, async (req, res) => {
+router.post('/servicos/:id/ativo', requireLogin, async(req, res) => {
     const { ativo } = req.body;
     const { id } = req.params;
     try {
-        await db`UPDATE servicos SET ativo = ${ativo ? 1 : 0} WHERE id = ${id}`;
+        await db `UPDATE servicos SET ativo = ${ativo ? 1 : 0} WHERE id = ${id}`;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao atualizar serviço.' });
@@ -229,12 +229,12 @@ router.post('/servicos/:id/ativo', requireLogin, async (req, res) => {
 });
 
 // Atualizar serviço
-router.put('/servicos/:id', async (req, res) => {
+router.put('/servicos/:id', async(req, res) => {
     const { id } = req.params;
     const { nome, tempo, preco, imagem } = req.body;
     if (!nome || !tempo || !preco) return res.status(400).json({ success: false, message: 'Campos obrigatórios.' });
     try {
-        await db`
+        await db `
             UPDATE servicos
             SET nome=${nome}, tempo=${tempo}, preco=${preco}, imagem=${imagem}
             WHERE id=${id}
@@ -246,17 +246,17 @@ router.put('/servicos/:id', async (req, res) => {
 });
 
 // Excluir serviço
-router.delete('/servicos/:id', async (req, res) => {
+router.delete('/servicos/:id', async(req, res) => {
     const { id } = req.params;
     try {
-        await db`DELETE FROM servicos WHERE id=${id}`;
+        await db `DELETE FROM servicos WHERE id=${id}`;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao excluir serviço.' });
     }
 });
 // Adicionar novo serviço
-router.post('/servicos', requireLogin, async (req, res) => {
+router.post('/servicos', requireLogin, async(req, res) => {
     let { nome, tempo, preco, imagem } = req.body;
     if (!nome || !tempo || !preco) return res.status(400).json({ success: false, message: 'Campos obrigatórios.' });
     // Garante que preco é número
@@ -265,7 +265,7 @@ router.post('/servicos', requireLogin, async (req, res) => {
     // Se imagem for string vazia, salva como NULL
     if (!imagem || imagem.trim() === '') imagem = null;
     try {
-        await db`
+        await db `
             INSERT INTO servicos (nome, tempo, preco, imagem, ativo)
             VALUES (${nome}, ${tempo}, ${preco}, ${imagem}, TRUE)
         `;
@@ -278,11 +278,11 @@ router.post('/servicos', requireLogin, async (req, res) => {
 });
 
 // Buscar todos os turnos
-router.get('/horarios-turnos', async (req, res) => {
+router.get('/horarios-turnos', async(req, res) => {
     const diasSemana = [
         'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'
     ];
-    const rows = await db`SELECT * FROM horarios_turnos`;
+    const rows = await db `SELECT * FROM horarios_turnos`;
     const turnosPorDia = {};
     rows.forEach(t => {
         if (!turnosPorDia[t.dia_semana]) turnosPorDia[t.dia_semana] = [];
@@ -300,7 +300,7 @@ router.get('/horarios-turnos', async (req, res) => {
 });
 
 // Salvar turnos de um dia (substitui todos os turnos do dia)
-router.post('/horarios-turnos', requireLogin, async (req, res) => {
+router.post('/horarios-turnos', requireLogin, async(req, res) => {
     const { dia_semana, turnos } = req.body; // turnos: [{inicio, fim}, ...]
     if (!dia_semana || !Array.isArray(turnos)) return res.status(400).json({ success: false });
     await db.query('DELETE FROM horarios_turnos WHERE dia_semana = $1', [dia_semana]);
@@ -314,9 +314,9 @@ router.post('/horarios-turnos', requireLogin, async (req, res) => {
 });
 
 // Listar notificações (mais recentes primeiro)
-router.get('/notificacoes', requireLogin, async (req, res) => {
+router.get('/notificacoes', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM notificacoes ORDER BY data DESC`;
+        const rows = await db `SELECT * FROM notificacoes ORDER BY data DESC`;
         res.json({ success: true, notificacoes: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar notificações.' });
@@ -324,7 +324,7 @@ router.get('/notificacoes', requireLogin, async (req, res) => {
 });
 
 // Criar notificação
-router.post('/notificacoes', async (req, res) => {
+router.post('/notificacoes', async(req, res) => {
     const { titulo, mensagem } = req.body;
     try {
         await db.query('INSERT INTO notificacoes (titulo, mensagem, data) VALUES ($1, $2, NOW())', [titulo, mensagem]);
@@ -335,15 +335,15 @@ router.post('/notificacoes', async (req, res) => {
 });
 
 // Excluir (marcar como lida)
-router.delete('/notificacoes/:id', requireLogin, async (req, res) => {
+router.delete('/notificacoes/:id', requireLogin, async(req, res) => {
     await db.query('DELETE FROM notificacoes WHERE id = $1', [req.params.id]);
     res.json({ success: true });
 });
 
 // Buscar informações da barbearia
-router.get('/barbearia', async (req, res) => {
+router.get('/barbearia', async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM barbearia LIMIT 1`;
+        const rows = await db `SELECT * FROM barbearia LIMIT 1`;
         if (rows.length > 0) {
             res.json({ success: true, barbearia: rows[0] });
         } else {
@@ -355,18 +355,18 @@ router.get('/barbearia', async (req, res) => {
 });
 
 // Atualizar informações da barbearia
-router.post('/barbearia', async (req, res) => {
+router.post('/barbearia', async(req, res) => {
     const { nome, endereco, cidade_estado, whatsapp, instagram, foto, email_notificacao } = req.body;
     try {
         // Garante que existe pelo menos um registro
-        const rows = await db`SELECT id FROM barbearia LIMIT 1`;
+        const rows = await db `SELECT id FROM barbearia LIMIT 1`;
         if (rows.length === 0) {
-            await db`
+            await db `
                 INSERT INTO barbearia (nome, endereco, cidade_estado, whatsapp, instagram, foto, email_notificacao)
                 VALUES (${nome}, ${endereco}, ${cidade_estado}, ${whatsapp}, ${instagram}, ${foto}, ${email_notificacao})
             `;
         } else {
-            await db`
+            await db `
                 UPDATE barbearia SET nome=${nome}, endereco=${endereco}, cidade_estado=${cidade_estado}, whatsapp=${whatsapp}, instagram=${instagram}, foto=${foto}, email_notificacao=${email_notificacao} WHERE id=${rows[0].id}
             `;
         }
@@ -388,9 +388,9 @@ router.get('/servertime', (req, res) => {
 });
 
 // Rota para buscar total de clientes
-router.get('/total-clientes', requireLogin, async (req, res) => {
+router.get('/total-clientes', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT COUNT(*) AS total FROM clientes`;
+        const rows = await db `SELECT COUNT(*) AS total FROM clientes`;
         res.json({ total: rows[0].total });
     } catch (err) {
         res.status(500).json({ message: 'Erro ao buscar total de clientes.' });
@@ -398,21 +398,21 @@ router.get('/total-clientes', requireLogin, async (req, res) => {
 });
 
 // Listar wallpapers
-router.get('/wallpapers', async (req, res) => {
-    const rows = await db`SELECT * FROM wallpapers WHERE ativo = TRUE`;
+router.get('/wallpapers', async(req, res) => {
+    const rows = await db `SELECT * FROM wallpapers WHERE ativo = TRUE`;
     res.json({ success: true, wallpapers: rows });
 });
 
 // Salvar wallpaper selecionado
-router.post('/wallpaper-selecionado', async (req, res) => {
+router.post('/wallpaper-selecionado', async(req, res) => {
     const { wallpaper_id } = req.body;
-    await db`UPDATE barbearia SET wallpaper_id = ${wallpaper_id}`;
+    await db `UPDATE barbearia SET wallpaper_id = ${wallpaper_id}`;
     res.json({ success: true });
 });
 
 // Obter wallpaper selecionado
-router.get('/wallpaper-selecionado', async (req, res) => {
-    const rows = await db`
+router.get('/wallpaper-selecionado', async(req, res) => {
+    const rows = await db `
         SELECT w.* FROM barbearia b
         LEFT JOIN wallpapers w ON b.wallpaper_id = w.id
         LIMIT 1
@@ -425,7 +425,7 @@ router.get('/wallpaper-selecionado', async (req, res) => {
 });
 
 // Endpoint para listar imagens de serviço
-router.get('/servico-imagens', async (req, res) => {
+router.get('/servico-imagens', async(req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM servico_imagens WHERE ativo = TRUE');
         res.json({ success: true, imagens: rows });
@@ -435,13 +435,13 @@ router.get('/servico-imagens', async (req, res) => {
 });
 
 // Adicionar profissional
-router.post('/profissionais', requireLogin, async (req, res) => {
+router.post('/profissionais', requireLogin, async(req, res) => {
     try {
         const { nome, avatar } = req.body;
         if (!nome || nome.trim().length < 2) {
             return res.status(400).json({ success: false, message: 'Nome inválido.' });
         }
-        await db`
+        await db `
             INSERT INTO profissionais (nome, avatar, ativo)
             VALUES (${nome.trim()}, ${avatar || null}, TRUE)
         `;
@@ -452,12 +452,12 @@ router.post('/profissionais', requireLogin, async (req, res) => {
 });
 
 // Atualizar profissional
-router.put('/profissionais/:id', requireLogin, async (req, res) => {
+router.put('/profissionais/:id', requireLogin, async(req, res) => {
     const { id } = req.params;
     const { nome, avatar } = req.body;
     if (!nome) return res.status(400).json({ success: false, message: 'Nome é obrigatório.' });
     try {
-        await db`
+        await db `
             UPDATE profissionais SET nome=${nome}, avatar=${avatar || null}
             WHERE id=${id}
         `;
@@ -468,20 +468,19 @@ router.put('/profissionais/:id', requireLogin, async (req, res) => {
 });
 
 // Excluir profissional
-router.delete('/profissionais/:id', requireLogin, async (req, res) => {
+router.delete('/profissionais/:id', requireLogin, async(req, res) => {
     const { id } = req.params;
     try {
-        await db`DELETE FROM profissionais WHERE id=${id}`;
+        await db `DELETE FROM profissionais WHERE id=${id}`;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao excluir profissional.' });
     }
 });
 
-// Listar dias de folga especiais
-router.get('/folgas-especiais', requireLogin, async (req, res) => {
+router.get('/folgas-especiais', requireLogin, async(req, res) => {
     try {
-        const rows = await db`SELECT * FROM folgas_especiais ORDER BY data ASC`;
+        const rows = await db `SELECT * FROM folgas_especiais ORDER BY data ASC`;
         res.json({ success: true, folgas: rows });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao buscar folgas especiais.' });
@@ -489,26 +488,28 @@ router.get('/folgas-especiais', requireLogin, async (req, res) => {
 });
 
 // Adicionar dia de folga especial
-router.post('/folgas-especiais', requireLogin, async (req, res) => {
+router.post('/folgas-especiais', requireLogin, async(req, res) => {
     const { data, motivo } = req.body;
-    if (!data) return res.status(400).json({ success: false, message: 'Data obrigatória.' });
     try {
-        await db`INSERT INTO folgas_especiais (data, motivo) VALUES (${data}, ${motivo || null}) ON CONFLICT (data) DO NOTHING`;
-        // Busca a lista atualizada após inserir
-        const rows = await db`SELECT * FROM folgas_especiais ORDER BY data ASC`;
-        res.json({ success: true, folgas: rows });
+        await db `
+            INSERT INTO folgas_especiais (data, motivo)
+            VALUES (${data}, ${motivo})
+            ON CONFLICT (data) DO NOTHING
+        `;
+        res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao adicionar folga especial.' });
+        res.status(400).json({ success: false, message: err.message || 'Erro ao adicionar folga.' });
     }
 });
 
-// Remover dia de folga especial
-router.delete('/folgas-especiais/:id', requireLogin, async (req, res) => {
+// Remover folga especial
+router.delete('/folgas-especiais/:id', requireLogin, async(req, res) => {
+    const { id } = req.params;
     try {
-        await db`DELETE FROM folgas_especiais WHERE id = ${req.params.id}`;
+        await db `DELETE FROM folgas_especiais WHERE id = ${id}`;
         res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Erro ao remover folga especial.' });
+        res.status(400).json({ success: false, message: err.message || 'Erro ao remover folga.' });
     }
 });
 
