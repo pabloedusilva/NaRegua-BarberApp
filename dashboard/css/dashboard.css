@@ -1005,7 +1005,7 @@
         animation: modalPopIn 0.38s cubic-bezier(.23, 1.12, .32, 1);
         border: 2.5px solid var(--primary-light);
         transition: box-shadow 0.2s, border-color 0.2s;
-        box-sizing: border-box ;
+        box-sizing: border-box;
     }
 
     @keyframes modalPopIn {
@@ -1018,6 +1018,10 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+    }
+
+    body:not(.dark-mode) .modal-content {
+        background: #fff !important;
     }
 
     .modal-header {
