@@ -1193,32 +1193,29 @@ showCustomModal({
             const fim = ini + duracaoAg;
             horariosOcupados.push({ ini, fim });
         });
-        // Ordena por início
         horariosOcupados.sort((a, b) => a.ini - b.ini);
 
-        // Função para checar se um slot está livre
         function slotLivre(tIni, tFim) {
             for (const o of horariosOcupados) {
-                // Se houver qualquer sobreposição, bloqueia
                 if (tIni < o.fim && tFim > o.ini) return false;
             }
             return true;
         }
 
-        // === BLOQUEIO DE HORÁRIOS PASSADOS NO DIA ATUAL ===
+        // BLOQUEIO DE HORÁRIOS PASSADOS USANDO window.serverTime()
         let minutosLimiteHoje = null;
-        if (selectedDate && typeof dayjs !== 'undefined') {
-            // selectedDate: 'dd/mm/yyyy'
+        let isHoje = false;
+        if (selectedDate && typeof window.serverTime === 'function') {
             const [d, m, y] = selectedDate.split('/');
-            const dataSelecionada = dayjs(`${y}-${m}-${d}`);
-            const serverNow = await getServerDateTime();
-            if (dataSelecionada.isSame(serverNow, 'day')) {
-                minutosLimiteHoje = serverNow.hour() * 60 + serverNow.minute();
+            const dataSelecionada = new Date(`${y}-${m}-${d}T00:00:00`);
+            const agora = window.serverTime();
+            const hoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+            if (dataSelecionada.getTime() === hoje.getTime()) {
+                minutosLimiteHoje = agora.getHours() * 60 + agora.getMinutes();
+                isHoje = true;
             }
         }
-        // ================================================
 
-        // Gera os horários de cada turno
         turnos.forEach(turno => {
             let inicio = turno.turno_inicio.slice(0, 5);
             let fim = turno.turno_fim.slice(0, 5);
@@ -1228,7 +1225,6 @@ showCustomModal({
             let tFim = hFim * 60 + mFim;
             let t = tIni;
             while (t + duracaoMin <= tFim) {
-                // Arredonda para o próximo múltiplo de duracaoMin a partir do início
                 let diff = t - tIni;
                 if (diff % duracaoMin !== 0) {
                     t += duracaoMin - (diff % duracaoMin);
@@ -1237,7 +1233,7 @@ showCustomModal({
                 let slotIni = t;
                 let slotFim = t + duracaoMin;
                 // BLOQUEIA slots anteriores ao horário real no dia de hoje
-                if (minutosLimiteHoje !== null && slotIni < minutosLimiteHoje) {
+                if (isHoje && minutosLimiteHoje !== null && slotIni < minutosLimiteHoje) {
                     t += duracaoMin;
                     continue;
                 }
@@ -1253,7 +1249,6 @@ showCustomModal({
                 t += duracaoMin;
             }
         });
-        // Reaplica eventos de seleção
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', function() {
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
@@ -1287,11 +1282,15 @@ showCustomModal({
     }
 
     // No evento de clique do dia do calendário, chame renderTimeSlots:
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', async function(e) {
         if (e.target.classList.contains('day') && !e.target.classList.contains('past-day')) {
             const dateStr = e.target.getAttribute('data-date');
             selectedDate = dateStr;
             updateConfirmationDetails();
+            // Aguarda atualização do horário do servidor antes de renderizar os horários
+            if (typeof atualizarDataServidor === 'function') {
+                await atualizarDataServidor();
+            }
             // Chame renderTimeSlots com o dia da semana do dia selecionado
             renderTimeSlots(getDiaSemana(dateStr));
             // Mostre a seção de confirmação se quiser
