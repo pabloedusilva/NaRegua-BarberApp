@@ -501,19 +501,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             .then(res => res.json())
             .then(data => {
                 let ags = data.agendamentos || [];
-                // Determina status visual igual ao banco
+                // Padroniza status para minúsculo e define _status
                 ags = ags.map(ag => {
                     let status = 'confirmed';
-                    if (ag.status && ag.status.toLowerCase() === 'cancelado') {
-                        status = 'cancelled';
-                    } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
-                        status = 'completed';
-                    } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
-                        status = 'confirmed';
-                    } else {
-                        // fallback: se passou do horário, marca como completed
-                        const agDateTime = new Date(`${ag.data}T${(ag.hora || '00:00')}:00`);
-                        if (agDateTime.getTime() < Date.now()) status = 'completed';
+                    if (ag.status) {
+                        const s = ag.status.toLowerCase();
+                        if (s === 'cancelado') status = 'cancelled';
+                        else if (s === 'concluido') status = 'completed';
+                        else if (s === 'confirmado') status = 'confirmed';
                     }
                     return { ...ag, _status: status };
                 });
@@ -548,11 +543,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
                     filteredAppointmentsList.appendChild(header);
 
-                    // --- CORRIGIDO: Destacar o próximo agendamento confirmado de hoje ---
+                    // Destaca o próximo agendamento confirmado de hoje
                     let nextAppointmentId = null;
                     if (filter === 'today') {
-                        // Use serverNow se disponível, senão Date.now()
-                        const now = serverNow;
+                        const now = window.serverTime ? window.serverTime() : new Date();
                         const nowStr = now.toTimeString().slice(0, 8); // HH:mm:ss
                         const nowMin = horaParaMinutos(nowStr);
                         const agsHoje = grupos[dataStr]
@@ -562,22 +556,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 return agMin >= nowMin;
                             })
                             .sort((a, b) => horaParaMinutos(a.hora) - horaParaMinutos(b.hora));
-                        console.log('Agora:', nowStr, 'Min:', nowMin);
-                        console.log('Agendamentos futuros hoje:', agsHoje.map(a => ({ id: a.id, hora: a.hora })));
                         if (agsHoje.length > 0) {
                             nextAppointmentId = agsHoje[0].id;
-                            console.log('nextAppointmentId calculado:', nextAppointmentId);
-                        } else {
-                            console.log('Nenhum próximo agendamento futuro encontrado para hoje.');
                         }
                     }
 
                     grupos[dataStr].forEach(ag => {
                         const item = document.createElement('div');
                         item.className = 'appointment-item';
-                        // Aplica destaque se for o próximo confirmado de hoje
                         if (nextAppointmentId && ag.id === nextAppointmentId) {
-                            console.log('>> Destacando agendamento', ag);
                             item.classList.add('next-appointment');
                         }
                         item.innerHTML = `
@@ -708,7 +695,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
     <div class="appointment-status-group">
         <span class="appointment-status status-confirmed">Confirmado</span>
-        <button class="send-notificacoes-btn"
+        <button class="send-notificacoes-btn" title="Notificar">
             <i class="fas fa-bell"></i>
         </button>
     </div>
