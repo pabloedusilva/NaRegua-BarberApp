@@ -33,7 +33,7 @@
     /* Fundo dos cards */
     --header: var(--white);
     /* Fundo do header */
-    --footer: var(--accent);
+    --footer: var(--gray);
     /* Fundo do footer */
     --footer-text: var(--white);
     /* Texto do footer */
@@ -435,7 +435,7 @@ body {
 footer {
     background-color: var(--footer);
     /* Fundo do footer */
-    color: var(--footer-text);
+    color: var(--text);
     /* Cor do texto */
     padding: 30px 0;
     margin-top: auto;
