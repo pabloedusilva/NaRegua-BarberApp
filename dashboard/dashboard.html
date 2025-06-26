@@ -11,7 +11,7 @@
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link rel="stylesheet" href="css/dashboard.css">
-        <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+        <link rel="icon" type="image/x-icon" href="img/favicon.png">
     </head>
 
     <body>
@@ -96,11 +96,11 @@
                     <span class="mac-sidebar-label">Barbearia</span>
                 </div>
                 <div class="mac-sidebar-item">
-                    <button class="mac-sidebar-btn" data-section="notificacoes"
-                        title="Notificações">
+                    <button class="mac-sidebar-btn" data-section="alertas"
+                        title="Alertas">
                         <i class="fas fa-bell"></i>
                     </button>
-                    <span class="mac-sidebar-label">Notificações</span>
+                    <span class="mac-sidebar-label">Alertas</span>
                 </div>
                 <div class="mac-sidebar-item">
                     <button class="mac-sidebar-btn" data-section="compartilhar"
@@ -549,30 +549,10 @@
         </section>
 
         <section class="dashboard-section animate-slide-up"
-            id="notificacoes-section" style="display:none;">
+            id="alertas-section" style="display:none;">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-bell"></i> Envio de
-                    notificações
+                <h2 class="section-title"><i class="fas fa-bullhorn"></i> Alertas e Promoções
                 </h2>
-            </div>
-            <div class="alerta-promocao-container">
-                <h3 class="section-title" style="margin-bottom:10px;"><i
-                        class="fas fa-bullhorn"></i> Alertas & Promoções</h3>
-                <form id="alertaPromocaoForm" class="alerta-promocao-form">
-                    <input type="text" id="alertaTitulo" class="form-control"
-                        placeholder="Título do alerta ou promoção"
-                        maxlength="80" required>
-                    <textarea id="alertaMensagem" class="form-control"
-                        placeholder="Mensagem (ex: Dias 29 e 30 não haverá atendimento)"
-                        rows="2" maxlength="200" required></textarea>
-                    <input type="url" id="alertaImagem" class="form-control"
-                        placeholder="URL da imagem (opcional)">
-                    <button type="submit" class="btn btn-primary"
-                        style="margin-top:8px;"><i class="fas fa-plus"></i>
-                        Adicionar</button>
-                </form>
-                <div id="alertaPromocaoLista"
-                    class="alerta-promocao-lista"></div>
             </div>
         </section>
 

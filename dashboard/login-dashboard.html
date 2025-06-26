@@ -1,135 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NaRégua - Login/Cadastro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="css/login-dashboard.css">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>NaRégua - Login/Cadastro</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <link rel="stylesheet" href="css/login-dashboard.css">
+        <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    </head>
 
-<body>
-    <main class="container">
-        <div class="auth-container">
-            <div class="auth-card animate__animated animate__fadeIn">
-                <div class="auth-tabs">
-                    <div class="auth-tab active" data-tab="login">Entrar</div>
-                    <div class="auth-tab" data-tab="register">Criar conta
+    <body>
+        <main class="container">
+            <div class="auth-container">
+                <div class="auth-card animate__animated animate__fadeIn">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active"
+                            data-tab="login">Entrar</div>
+                        <div class="auth-tab" data-tab="register">Criar conta
+                        </div>
                     </div>
-                </div>
 
-                <!-- Login Form -->
-                <div class="auth-content active" id="login-content">
-                    <div class="auth-body">
-                        <form id="loginForm">
-                            <div class="form-group">
-                                <label class="form-label" for="login-username">Nome de
+                    <!-- Login Form -->
+                    <div class="auth-content active" id="login-content">
+                        <div class="auth-body">
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="login-username">Nome de
                                         usuário</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" class="form-control" id="login-username" placeholder="Seu nome de usuário" required>
+                                    <div class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" class="form-control"
+                                            id="login-username"
+                                            placeholder="Seu nome de usuário"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="login-password">Senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="login-password" placeholder="Sua senha" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="login-password">Senha</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="login-password"
+                                            placeholder="Sua senha" required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <button type="submit" class="btn btn-primary">Entrar</button>
+                                <button type="submit"
+                                    class="btn btn-primary">Entrar</button>
 
-                            <div class="auth-footer">
-                                <a href="#">Esqueceu sua senha?</a>
-                            </div>
-                        </form>
+                                <div class="auth-footer">
+                                    <a href="#">Esqueceu sua senha?</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Register Form -->
-                <div class="auth-content" id="register-content">
-                    <div class="auth-body">
-                        <form id="registerForm">
-                            <div class="form-group">
-                                <label class="form-label" for="register-name">Nome
+                    <!-- Register Form -->
+                    <div class="auth-content" id="register-content">
+                        <div class="auth-body">
+                            <form id="registerForm">
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-name">Nome
                                         completo</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" class="form-control" id="register-name" placeholder="Seu nome completo" required>
+                                    <div class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" class="form-control"
+                                            id="register-name"
+                                            placeholder="Seu nome completo"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-email">E-mail</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-envelope"></i>
-                                    <input type="email" class="form-control" id="register-email" placeholder="seu@email.com" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-email">E-mail</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" class="form-control"
+                                            id="register-email"
+                                            placeholder="seu@email.com"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-phone">Telefone</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-phone"></i>
-                                    <input type="tel" class="form-control" id="register-phone" placeholder="(00) 00000-0000" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-phone">Telefone</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" class="form-control"
+                                            id="register-phone"
+                                            placeholder="(00) 00000-0000"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-password">Senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="register-password" placeholder="Crie uma senha forte" required>
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-password">Senha</label>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="register-password"
+                                            placeholder="Crie uma senha forte"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="register-confirm-password">Confirmar
+                                <div class="form-group">
+                                    <label class="form-label"
+                                        for="register-confirm-password">Confirmar
                                         senha</label>
-                                <div class="input-icon">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-control" id="register-confirm-password" placeholder="Digite a senha novamente" required>
+                                    <div class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password"
+                                            class="form-control"
+                                            id="register-confirm-password"
+                                            placeholder="Digite a senha novamente"
+                                            required>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <button type="submit" class="btn btn-primary">Criar conta</button>
-                        </form>
+                                <button type="submit"
+                                    class="btn btn-primary">Criar conta</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <footer>
-        <div class="container">
-            <div class="copyright">
-                &copy; 2025 NaRégua. Todos os direitos reservados.
+        <footer>
+            <div class="container">
+                <div class="copyright">
+                    &copy; 2025 NaRégua. Todos os direitos reservados.
+                </div>
+            </div>
+        </footer>
+
+        <div id="forgotModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeForgotModal">&times;</span>
+                <h3>Recuperar acesso</h3>
+                <p>Entre em contato com o administrador para recuperar sua
+                    senha:
+                </p>
+                <div class="modal-actions">
+                    <a href="https://wa.me/5599999999999" target="_blank"
+                        class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="mailto:admin@naregua.com" class="btn btn-email">
+                        <i class="fas fa-envelope"></i> E-mail
+                    </a>
+                </div>
             </div>
         </div>
-    </footer>
-
-    <div id="forgotModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeForgotModal">&times;</span>
-            <h3>Recuperar acesso</h3>
-            <p>Entre em contato com o administrador para recuperar sua senha:
-            </p>
-            <div class="modal-actions">
-                <a href="https://wa.me/5599999999999" target="_blank" class="btn btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </a>
-                <a href="mailto:admin@naregua.com" class="btn btn-email">
-                    <i class="fas fa-envelope"></i> E-mail
-                </a>
-            </div>
-        </div>
-    </div>
-    <script src="js/login-dashboard.js"></script>
-</body>
+        <script src="js/login-dashboard.js"></script>
+    </body>
 
 </html>
