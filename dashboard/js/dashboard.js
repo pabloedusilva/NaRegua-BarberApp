@@ -1,4 +1,4 @@
-let serverNow = null;
+// Remover serverNow global
 
 // Carrega utilitário de alerta customizado
 const script = document.createElement('script');
@@ -12,7 +12,7 @@ document.head.appendChild(serverTimeScript);
 
 // Aguarda sincronização da hora do servidor antes de executar o restante
 document.addEventListener('DOMContentLoaded', async function () {
-    if (typeof window.startServerTimeSync === 'function') {
+    if (typeof window.startServerTime === 'function') {
         await new Promise(resolve => setTimeout(resolve, 500));
     }
 
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Setar data mínima para hoje
     if (dayOffDate) {
-        const today = serverNow;
+        const today = (typeof window.serverTime === 'function' ? window.serverTime() : new Date());
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');

@@ -9,7 +9,7 @@ serverTimeScript.src = '/js/server-time.js';
 document.head.appendChild(serverTimeScript);
 
 // Aguarda sincronização da hora do servidor antes de executar o restante
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     // Aguarda o utilitário carregar e sincronizar
     if (typeof window.startServerTimeSync === 'function') {
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -59,19 +59,19 @@ function animateWeekTransition(direction, callback) {
     }, 450); // Duração igual ao CSS transition
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
-            // Carregar serviços do backend
-            const servicesSection = document.querySelector('.services-section');
-            if (servicesSection) {
-                try {
-                    const res = await fetch('/dashboard/servicos');
-                    const data = await res.json();
-                    if (data.success && Array.isArray(data.servicos)) {
-                        window.servicosList = data.servicos;
-                        let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
+document.addEventListener('DOMContentLoaded', async function () {
+    // Carregar serviços do backend
+    const servicesSection = document.querySelector('.services-section');
+    if (servicesSection) {
+        try {
+            const res = await fetch('/dashboard/servicos');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.servicos)) {
+                window.servicosList = data.servicos;
+                let html = `<h2 class="section-title"><i class="fas fa-cut"></i> Serviços</h2>
                         <div class="service-list">`;
-                        data.servicos.forEach(servico => {
-                            html += `
+                data.servicos.forEach(servico => {
+                    html += `
                             <div class="service-item">
                                 <img class="service-image" src="${servico.imagem || 'img/servicos/default.jpg'}" alt="${servico.nome}">
                                 <div class="service-info">
@@ -90,587 +90,587 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 </button>
                             </div>
                             `;
-                        });
-                        html += `</div>`;
-                        servicesSection.innerHTML = html;
-                    } else {
-                        servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
-                    }
-                } catch (err) {
-                    servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
-                }
-            }
-
-            // Variáveis para armazenar as seleções
-            let selectedService = '';
-            let selectedServicePrice = '';
-            let selectedServiceTime = '';
-            let selectedProfessional = 'Pablo barber';
-            let selectedDate = null;
-            let selectedTime = '';
-            let currentSelectedButton = null;
-            let calendarMode = 'month'; // Pode ser 'month' ou 'week'
-            let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
-
-            // Elementos da página
-            const calendarSection = document.getElementById('calendar-section');
-            const confirmationSection = document.getElementById('confirmation-section');
-            const calendarDaysContainer = document.querySelector('.calendar-days');
-            const monthNameElement = document.querySelector('.month-name');
-            const calendarToggleBtn = document.getElementById('calendarToggleBtn');
-
-            // Elementos do tema
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = themeToggle.querySelector('i');
-
-            // Verificar preferência de tema no localStorage
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            if (currentTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            }
-
-            // Alternar tema
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-
-                if (document.body.classList.contains('dark-mode')) {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-
-            // Feriados (pode ser expandido)
-            const holidays = {
-                '1/1': 'Ano Novo',
-                '21/4': 'Tiradentes',
-                '1/5': 'Dia do Trabalho',
-                '7/9': 'Independência',
-                '12/10': 'Nossa Senhora Aparecida',
-                '2/11': 'Finados',
-                '15/11': 'Proclamação da República',
-                '25/12': 'Natal'
-            };
-
-            // =========================
-            // DATA/HORA GLOBAL DO SERVIDOR (padronizado com dashboard)
-            // =========================
-            let serverNow = null;
-
-            async function fetchServerNow() {
-                try {
-                    const res = await fetch('/dashboard/servertime');
-                    const data = await res.json();
-                    if (data && data.iso && typeof dayjs !== 'undefined' && dayjs.tz) {
-                        return dayjs.tz(data.iso, 'America/Sao_Paulo');
-                    } else if (data && data.iso && typeof dayjs !== 'undefined') {
-                        return dayjs(data.iso);
-                    } else if (data && data.iso) {
-                        return new Date(data.iso);
-                    }
-                } catch (err) {}
-                if (typeof dayjs !== 'undefined') return dayjs();
-                return new Date();
-            }
-
-            async function atualizarServerNow() {
-                serverNow = await fetchServerNow();
-            }
-
-            // Atualiza ao carregar e a cada 30s
-            window.addEventListener('DOMContentLoaded', atualizarServerNow);
-            setInterval(atualizarServerNow, 30000);
-
-            // Helper para obter a data/hora "agora" SEMPRE do servidor
-            function getNow() {
-                if (!serverNow) return new Date();
-                if (typeof serverNow === 'function') return serverNow();
-                if (serverNow.clone) return serverNow.clone();
-                return new Date(serverNow);
-            }
-
-            // Inicializar calendário
-            let currentDate = getNow();
-            if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
-                currentDate = currentDate.toDate();
-            }
-            renderCalendar(currentDate);
-
-            // Selecionar serviço
-            const bookButtons = document.querySelectorAll('.book-button');
-            bookButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remover seleção anterior
-                    if (currentSelectedButton) {
-                        currentSelectedButton.classList.remove('selected');
-                    }
-
-                    // Adicionar seleção atual
-                    this.classList.add('selected');
-                    currentSelectedButton = this;
-
-                    selectedService = this.getAttribute('data-service');
-                    selectedServicePrice = this.getAttribute('data-price');
-                    selectedServiceTime = this.getAttribute('data-time');
-
-                    // Mostrar a seção de calendário
-                    calendarSection.style.display = 'block';
-
-                    // Scroll para o calendário
-                    calendarSection.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-
-                    // Atualizar os campos de confirmação
-                    updateConfirmationDetails();
-                    // Recarregar horários disponíveis ao selecionar serviço
-                    if (selectedDate) {
-                        renderTimeSlots(getDiaSemana(selectedDate));
-                    }
                 });
+                html += `</div>`;
+                servicesSection.innerHTML = html;
+            } else {
+                servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+            }
+        } catch (err) {
+            servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+        }
+    }
+
+    // Variáveis para armazenar as seleções
+    let selectedService = '';
+    let selectedServicePrice = '';
+    let selectedServiceTime = '';
+    let selectedProfessional = 'Pablo barber';
+    let selectedDate = null;
+    let selectedTime = '';
+    let currentSelectedButton = null;
+    let calendarMode = 'month'; // Pode ser 'month' ou 'week'
+    let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
+
+    // Elementos da página
+    const calendarSection = document.getElementById('calendar-section');
+    const confirmationSection = document.getElementById('confirmation-section');
+    const calendarDaysContainer = document.querySelector('.calendar-days');
+    const monthNameElement = document.querySelector('.month-name');
+    const calendarToggleBtn = document.getElementById('calendarToggleBtn');
+
+    // Elementos do tema
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+
+    // Verificar preferência de tema no localStorage
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+
+    // Alternar tema
+    themeToggle.addEventListener('click', function () {
+        document.body.classList.toggle('dark-mode');
+
+        if (document.body.classList.contains('dark-mode')) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Feriados (pode ser expandido)
+    const holidays = {
+        '1/1': 'Ano Novo',
+        '21/4': 'Tiradentes',
+        '1/5': 'Dia do Trabalho',
+        '7/9': 'Independência',
+        '12/10': 'Nossa Senhora Aparecida',
+        '2/11': 'Finados',
+        '15/11': 'Proclamação da República',
+        '25/12': 'Natal'
+    };
+
+    // =========================
+    // DATA/HORA GLOBAL DO SERVIDOR (padronizado com dashboard)
+    // =========================
+    let serverNow = null;
+
+    async function fetchServerNow() {
+        try {
+            const res = await fetch('/dashboard/servertime');
+            const data = await res.json();
+            if (data && data.iso && typeof dayjs !== 'undefined' && dayjs.tz) {
+                return dayjs.tz(data.iso, 'America/Sao_Paulo');
+            } else if (data && data.iso && typeof dayjs !== 'undefined') {
+                return dayjs(data.iso);
+            } else if (data && data.iso) {
+                return new Date(data.iso);
+            }
+        } catch (err) { }
+        if (typeof dayjs !== 'undefined') return dayjs();
+        return new Date();
+    }
+
+    async function atualizarServerNow() {
+        serverNow = await fetchServerNow();
+    }
+
+    // Atualiza ao carregar e a cada 30s
+    window.addEventListener('DOMContentLoaded', atualizarServerNow);
+    setInterval(atualizarServerNow, 30000);
+
+    // Helper para obter a data/hora "agora" SEMPRE do servidor
+    function getNow() {
+        if (!serverNow) return new Date();
+        if (typeof serverNow === 'function') return serverNow();
+        if (serverNow.clone) return serverNow.clone();
+        return new Date(serverNow);
+    }
+
+    // Inicializar calendário
+    let currentDate = getNow();
+    if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
+        currentDate = currentDate.toDate();
+    }
+    renderCalendar(currentDate);
+
+    // Selecionar serviço
+    const bookButtons = document.querySelectorAll('.book-button');
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Remover seleção anterior
+            if (currentSelectedButton) {
+                currentSelectedButton.classList.remove('selected');
+            }
+
+            // Adicionar seleção atual
+            this.classList.add('selected');
+            currentSelectedButton = this;
+
+            selectedService = this.getAttribute('data-service');
+            selectedServicePrice = this.getAttribute('data-price');
+            selectedServiceTime = this.getAttribute('data-time');
+
+            // Mostrar a seção de calendário
+            calendarSection.style.display = 'block';
+
+            // Scroll para o calendário
+            calendarSection.scrollIntoView({
+                behavior: 'smooth'
             });
 
-            // Selecionar profissional
-            const professionalCards = document.querySelectorAll('.professional-card');
-            professionalCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    // Remover seleção anterior
-                    professionalCards.forEach(c => c.classList.remove('selected'));
+            // Atualizar os campos de confirmação
+            updateConfirmationDetails();
+            // Recarregar horários disponíveis ao selecionar serviço
+            if (selectedDate) {
+                renderTimeSlots(getDiaSemana(selectedDate));
+            }
+        });
+    });
 
-                    // Adicionar seleção atual
-                    this.classList.add('selected');
+    // Selecionar profissional
+    const professionalCards = document.querySelectorAll('.professional-card');
+    professionalCards.forEach(card => {
+        card.addEventListener('click', function () {
+            // Remover seleção anterior
+            professionalCards.forEach(c => c.classList.remove('selected'));
 
-                    // Guardar o profissional selecionado
-                    selectedProfessional = this.getAttribute('data-professional');
+            // Adicionar seleção atual
+            this.classList.add('selected');
 
-                    // Atualizar os campos de confirmação
-                    updateConfirmationDetails();
-                });
-            });
+            // Guardar o profissional selecionado
+            selectedProfessional = this.getAttribute('data-professional');
 
-            // Navegação do calendário
-            const prevMonthButton = document.querySelector('.prev-month');
-            const nextMonthButton = document.querySelector('.next-month');
+            // Atualizar os campos de confirmação
+            updateConfirmationDetails();
+        });
+    });
 
-            prevMonthButton.addEventListener('click', function() {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar(currentDate);
-            });
+    // Navegação do calendário
+    const prevMonthButton = document.querySelector('.prev-month');
+    const nextMonthButton = document.querySelector('.next-month');
 
-            nextMonthButton.addEventListener('click', function() {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar(currentDate);
-            });
+    prevMonthButton.addEventListener('click', function () {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate);
+    });
 
-            // Alternar visualização do calendário
-            calendarToggleBtn.addEventListener('click', function() {
-                if (calendarMode === 'month') {
-                    calendarMode = 'week';
-                    calendarSection.classList.add('calendar-compact');
-                    calendarToggleBtn.textContent = 'Visualização mensal';
-                } else {
-                    calendarMode = 'month';
-                    calendarSection.classList.remove('calendar-compact');
-                    calendarToggleBtn.textContent = 'Visualização semanal';
+    nextMonthButton.addEventListener('click', function () {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate);
+    });
+
+    // Alternar visualização do calendário
+    calendarToggleBtn.addEventListener('click', function () {
+        if (calendarMode === 'month') {
+            calendarMode = 'week';
+            calendarSection.classList.add('calendar-compact');
+            calendarToggleBtn.textContent = 'Visualização mensal';
+        } else {
+            calendarMode = 'month';
+            calendarSection.classList.remove('calendar-compact');
+            calendarToggleBtn.textContent = 'Visualização semanal';
+        }
+        renderCalendar(currentDate);
+    });
+
+    // Renderizar calendário
+    function renderCalendar(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const today = getNow();
+        today.setHours(0, 0, 0, 0);
+
+        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+
+        monthNameElement.textContent = `${monthNames[month]} ${year}`;
+
+        let days = '';
+        const dayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+
+        if (calendarMode === 'week') {
+            // Encontrar o início da semana (domingo)
+            let weekStart = new Date(date);
+            weekStart.setDate(date.getDate() - date.getDay());
+
+            // Cabeçalho dos dias da semana
+            days += '<div class="calendar-week-view">';
+            days += '<div class="week-navigation">';
+            days += '<button class="prev-week"><i class="fas fa-chevron-left"></i></button>';
+            days += '<div class="week-days">';
+
+            // Gerar os 7 dias da semana
+            const today = getNow();
+            today.setHours(0, 0, 0, 0);
+
+            const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+            for (let i = 0; i < 7; i++) {
+                const weekDay = new Date(weekStart);
+                weekDay.setDate(weekStart.getDate() + i);
+                weekDay.setHours(0, 0, 0, 0);
+
+                let dayClass = 'day';
+                if (weekDay < today) {
+                    dayClass += ' past-day';
                 }
-                renderCalendar(currentDate);
-            });
+                if (
+                    weekDay.getDate() === today.getDate() &&
+                    weekDay.getMonth() === today.getMonth() &&
+                    weekDay.getFullYear() === today.getFullYear()
+                ) {
+                    dayClass += ' today';
+                }
 
-            // Renderizar calendário
-            function renderCalendar(date) {
-                const year = date.getFullYear();
-                const month = date.getMonth();
-                const today = getNow();
-                today.setHours(0, 0, 0, 0);
-
-                const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-                ];
-
-                monthNameElement.textContent = `${monthNames[month]} ${year}`;
-
-                let days = '';
-                const dayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-
-                if (calendarMode === 'week') {
-                    // Encontrar o início da semana (domingo)
-                    let weekStart = new Date(date);
-                    weekStart.setDate(date.getDate() - date.getDay());
-
-                    // Cabeçalho dos dias da semana
-                    days += '<div class="calendar-week-view">';
-                    days += '<div class="week-navigation">';
-                    days += '<button class="prev-week"><i class="fas fa-chevron-left"></i></button>';
-                    days += '<div class="week-days">';
-
-                    // Gerar os 7 dias da semana
-                    const today = getNow();
-                    today.setHours(0, 0, 0, 0);
-
-                    const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-                    for (let i = 0; i < 7; i++) {
-                        const weekDay = new Date(weekStart);
-                        weekDay.setDate(weekStart.getDate() + i);
-                        weekDay.setHours(0, 0, 0, 0);
-
-                        let dayClass = 'day';
-                        if (weekDay < today) {
-                            dayClass += ' past-day';
-                        }
-                        if (
-                            weekDay.getDate() === today.getDate() &&
-                            weekDay.getMonth() === today.getMonth() &&
-                            weekDay.getFullYear() === today.getFullYear()
-                        ) {
-                            dayClass += ' today';
-                        }
-
-                        // Adicione o nome do dia acima do número
-                        days += `<div class="day-column">
+                // Adicione o nome do dia acima do número
+                days += `<div class="day-column">
                                     <div class="week-day-name">${weekDayNames[i]}</div>
                                     <div class="${dayClass}" data-date="${weekDay.toLocaleDateString('pt-BR')}">${weekDay.getDate()}</div>
                                 </div>`;
-                    }
+            }
 
-                    days += '</div>';
-                    days += '<button class="next-week"><i class="fas fa-chevron-right"></i></button>';
-                    days += '</div></div>';
-                } else {
-                    // Código existente do calendário mensal
-                    dayNames.forEach(day => {
-                        days += `<div class="day-header">${day}</div>`;
-                    });
-                    const firstDay = new Date(year, month, 1);
-                    const lastDay = new Date(year, month + 1, 0);
-                    const prevLastDay = new Date(year, month, 0).getDate();
-                    const firstDayIndex = firstDay.getDay();
-                    const lastDayIndex = lastDay.getDay();
-                    const nextDays = 7 - lastDayIndex - 1;
+            days += '</div>';
+            days += '<button class="next-week"><i class="fas fa-chevron-right"></i></button>';
+            days += '</div></div>';
+        } else {
+            // Código existente do calendário mensal
+            dayNames.forEach(day => {
+                days += `<div class="day-header">${day}</div>`;
+            });
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0).getDate();
+            const firstDayIndex = firstDay.getDay();
+            const lastDayIndex = lastDay.getDay();
+            const nextDays = 7 - lastDayIndex - 1;
 
-                    const today = getNow();
-                    today.setHours(0, 0, 0, 0); // Garante comparação só por data
+            const today = getNow();
+            today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
-                    for (let i = firstDayIndex; i > 0; i--) {
-                        const prevMonthDate = new Date(year, month - 1, prevLastDay - i + 1);
-                        const dateStr = `${String(prevLastDay - i + 1).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
-                        days += `<div class="day disabled prev-month-day" 
+            for (let i = firstDayIndex; i > 0; i--) {
+                const prevMonthDate = new Date(year, month - 1, prevLastDay - i + 1);
+                const dateStr = `${String(prevLastDay - i + 1).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+                days += `<div class="day disabled prev-month-day" 
                             data-date="${dateStr}" 
                             data-month="${month === 0 ? 12 : month}"
                             data-year="${month === 0 ? year - 1 : year}">
                             ${prevLastDay - i + 1}
                         </div>`;
-                    }
-                    for (let i = 1; i <= lastDay.getDate(); i++) {
-                        const dayDate = new Date(year, month, i);
-                        dayDate.setHours(0, 0, 0, 0);
+            }
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dayDate = new Date(year, month, i);
+                dayDate.setHours(0, 0, 0, 0);
 
-                        let dayClass = 'day';
-                        if (dayDate < today) {
-                            dayClass += ' past-day';
-                        }
-                        const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-                        if (isToday) dayClass += ' today';
-                        if (selectedDate) {
-                            const [sd, sm, sy] = selectedDate.split('/');
-                            if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
-                                dayClass += ' selected';
-                            }
-                        }
-                        const dateStr = `${String(i).padStart(2, '0')}/${String(month+1).padStart(2, '0')}/${year}`;
-                        // Ao criar cada dia:
-                        if (selectedDate === dateStr) {
-                            dayClass += ' selected';
-                        }
-                        days += `<div class="${dayClass}" data-date="${dateStr}">${i}</div>`;
+                let dayClass = 'day';
+                if (dayDate < today) {
+                    dayClass += ' past-day';
+                }
+                const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                if (isToday) dayClass += ' today';
+                if (selectedDate) {
+                    const [sd, sm, sy] = selectedDate.split('/');
+                    if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
+                        dayClass += ' selected';
                     }
-                    for (let i = 1; i <= nextDays; i++) {
-                        const nextMonthDate = new Date(year, month + 1, i);
-                        const dateStr = `${String(i).padStart(2, '0')}/${String(month + 2).padStart(2, '0')}/${month === 11 ? year + 1 : year}`;
-                        days += `<div class="day disabled next-month-day" 
+                }
+                const dateStr = `${String(i).padStart(2, '0')}/${String(month + 1).padStart(2, '0')}/${year}`;
+                // Ao criar cada dia:
+                if (selectedDate === dateStr) {
+                    dayClass += ' selected';
+                }
+                days += `<div class="${dayClass}" data-date="${dateStr}">${i}</div>`;
+            }
+            for (let i = 1; i <= nextDays; i++) {
+                const nextMonthDate = new Date(year, month + 1, i);
+                const dateStr = `${String(i).padStart(2, '0')}/${String(month + 2).padStart(2, '0')}/${month === 11 ? year + 1 : year}`;
+                days += `<div class="day disabled next-month-day" 
                             data-date="${dateStr}"
                             data-month="${month === 11 ? 1 : month + 2}"
                             data-year="${month === 11 ? year + 1 : year}">
                             ${i}
                         </div>`;
-                    }
-                }
-
-                calendarDaysContainer.innerHTML = days;
-
-                // Adicionar event listeners para os botões de navegação semanal
-                if (calendarMode === 'week') {
-                    document.querySelector('.prev-week').addEventListener('click', () => {
-                        animateWeekTransition('right', () => {
-                            currentDate.setDate(currentDate.getDate() - 7);
-                            renderCalendar(currentDate);
-                        });
-                    });
-
-                    document.querySelector('.next-week').addEventListener('click', () => {
-                        animateWeekTransition('left', () => {
-                            currentDate.setDate(currentDate.getDate() + 7);
-                            renderCalendar(currentDate);
-                        });
-                    });
-
-                    // Após renderizar, marque a semana como ativa para a transição inicial
-                    setTimeout(() => {
-                        const weekDays = document.querySelector('.week-days');
-                        if (weekDays) weekDays.classList.add('active');
-                    }, 10);
-                }
-
-                // Adicionar event listeners para os dias
-                const dayElements = document.querySelectorAll('.day');
-                dayElements.forEach(day => {
-                    day.addEventListener('click', function() {
-                        // Se for um dia do mês anterior
-                        if (this.classList.contains('prev-month-day')) {
-                            currentDate.setMonth(currentDate.getMonth() - 1);
-                            renderCalendar(currentDate);
-
-                            setTimeout(() => {
-                                const dayToSelect = this.textContent.trim();
-                                const newDays = document.querySelectorAll('.day:not(.disabled)');
-                                newDays.forEach(newDay => {
-                                    if (newDay.textContent.trim() === dayToSelect) {
-                                        newDay.click();
-                                        newDay.scrollIntoView({
-                                            behavior: 'smooth',
-                                            block: 'center'
-                                        });
-                                    }
-                                });
-                            }, 100);
-                            return;
-                        }
-
-                        // Se for um dia do próximo mês
-                        if (this.classList.contains('next-month-day')) {
-                            currentDate.setMonth(currentDate.getMonth() + 1);
-                            renderCalendar(currentDate);
-
-                            setTimeout(() => {
-                                const dayToSelect = this.textContent.trim();
-                                const newDays = document.querySelectorAll('.day:not(.disabled)');
-                                newDays.forEach(newDay => {
-                                    if (newDay.textContent.trim() === dayToSelect) {
-                                        newDay.click();
-                                        newDay.scrollIntoView({
-                                            behavior: 'smooth',
-                                            block: 'center'
-                                        });
-                                    }
-                                });
-                            }, 100);
-                            return;
-                        }
-
-                        // Código existente para dias normais
-                        dayElements.forEach(d => d.classList.remove('selected'));
-                        this.classList.add('selected');
-
-                        const dateStr = this.getAttribute('data-date');
-                        const [d, m, y] = dateStr.split('/');
-                        selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
-
-                        updateConfirmationDetails();
-                        confirmationSection.style.display = 'block';
-                    });
-                });
-
-                document.querySelectorAll('.day').forEach(dayEl => {
-                    // Para modo mensal
-                    if (dayEl.hasAttribute('data-day')) {
-                        const year = Number(dayEl.getAttribute('data-year'));
-                        const month = Number(dayEl.getAttribute('data-month')) - 1;
-                        const day = Number(dayEl.getAttribute('data-day'));
-                        const dateObj = new Date(year, month, day);
-                        const weekDay = dateObj.getDay();
-                        if (weekDay === 0) dayEl.classList.add('sunday');
-                        if (weekDay === 6) dayEl.classList.add('saturday');
-                    }
-                    // Para modo semanal
-                    if (dayEl.hasAttribute('data-date')) {
-                        const [d, m, y] = dayEl.getAttribute('data-date').split('/');
-                        const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
-                        const weekDay = dateObj.getDay();
-                        if (weekDay === 0) dayEl.classList.add('sunday');
-                        if (weekDay === 6) dayEl.classList.add('saturday');
-                    }
-                });
-
-                document.querySelectorAll('.day').forEach(dayEl => {
-                    dayEl.addEventListener('click', function() {
-                        if (this.classList.contains('past-day')) {
-                            document.querySelector('.time-slots').style.display = 'none';
-                            return;
-                        }
-                        // ...código normal para dias válidos...
-                        document.querySelector('.time-slots').style.display = '';
-                    });
-                });
             }
+        }
 
-            // Selecionar horário
-            const timeSlots = document.querySelectorAll('.time-slot');
-            timeSlots.forEach(slot => {
-                slot.addEventListener('click', function() {
-                    // Remover seleção anterior
-                    timeSlots.forEach(s => s.classList.remove('selected'));
+        calendarDaysContainer.innerHTML = days;
 
-                    // Adicionar seleção atual
-                    this.classList.add('selected');
-
-                    // Guardar o horário selecionado
-                    selectedTime = this.textContent;
-
-                    // Mostrar a seção de confirmação
-                    confirmationSection.style.display = 'block';
-
-                    // Atualizar os campos de confirmação
-                    updateConfirmationDetails();
-
-                    // Scroll para a confirmação
-                    confirmationSection.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+        // Adicionar event listeners para os botões de navegação semanal
+        if (calendarMode === 'week') {
+            document.querySelector('.prev-week').addEventListener('click', () => {
+                animateWeekTransition('right', () => {
+                    currentDate.setDate(currentDate.getDate() - 7);
+                    renderCalendar(currentDate);
                 });
             });
 
-            // Atualizar detalhes de confirmação
-            function updateConfirmationDetails() {
-                document.getElementById('confirm-service').textContent = selectedService || '-';
-                document.getElementById('confirm-professional').textContent = selectedProfessional || '-';
-                document.getElementById('confirm-date').textContent = selectedDate || '-';
-                document.getElementById('confirm-time').textContent = selectedTime || '-';
-                document.getElementById('confirm-price').textContent = selectedServicePrice ? `R$ ${selectedServicePrice}` : '-';
-            }
-
-            // Botão de confirmação final
-            const confirmButton = document.querySelector('.confirm-button');
-            const phoneModal = document.getElementById('phoneModal');
-            const phoneModalClose = document.getElementById('phoneModalClose');
-            const phoneModalBtn = document.getElementById('phoneModalBtn');
-            const userPhone = document.getElementById('userPhone');
-            const userNameContainer = document.getElementById('userNameContainer');
-            const userName = document.getElementById('userName');
-            const notificationsOptIn = document.getElementById('notificationsOptIn');
-            const emailFieldContainer = document.getElementById('emailFieldContainer');
-            const userEmail = document.getElementById('userEmail');
-
-            // Função para validar e-mail
-            function validarEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            }
-
-            // Mostrar/esconder campo de e-mail ao marcar o checkbox
-            if (notificationsOptIn && emailFieldContainer && userEmail) {
-                notificationsOptIn.addEventListener('change', function() {
-                    if (this.checked) {
-                        emailFieldContainer.style.display = '';
-                        userEmail.required = true;
-                    } else {
-                        emailFieldContainer.style.display = 'none';
-                        userEmail.required = false;
-                        userEmail.value = '';
-                    }
-                    atualizarEstadoBtn();
+            document.querySelector('.next-week').addEventListener('click', () => {
+                animateWeekTransition('left', () => {
+                    currentDate.setDate(currentDate.getDate() + 7);
+                    renderCalendar(currentDate);
                 });
-                userEmail.addEventListener('input', atualizarEstadoBtn);
-            }
+            });
 
-            // Função para validar telefone (10 ou 11 dígitos)
-            function validarTelefone(telefone) {
-                return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
-            }
+            // Após renderizar, marque a semana como ativa para a transição inicial
+            setTimeout(() => {
+                const weekDays = document.querySelector('.week-days');
+                if (weekDays) weekDays.classList.add('active');
+            }, 10);
+        }
 
-            let aguardandoNome = false;
+        // Adicionar event listeners para os dias
+        const dayElements = document.querySelectorAll('.day');
+        dayElements.forEach(day => {
+            day.addEventListener('click', function () {
+                // Se for um dia do mês anterior
+                if (this.classList.contains('prev-month-day')) {
+                    currentDate.setMonth(currentDate.getMonth() - 1);
+                    renderCalendar(currentDate);
 
-            // Atualiza o estado do botão
-            function atualizarEstadoBtn() {
-                const telefoneValido = validarTelefone(userPhone.value.trim());
-                let nomeValido = true;
-                if (userNameContainer.style.display !== 'none') {
-                    nomeValido = !!userName.value.trim();
-                }
-                let emailValido = true;
-                if (notificationsOptIn && notificationsOptIn.checked) {
-                    emailValido = validarEmail(userEmail.value.trim());
-                    if (!emailValido && userEmail.value.trim() !== '') {
-                        userEmail.style.borderColor = 'var(--primary-dark)';
-                    } else {
-                        userEmail.style.borderColor = '';
-                    }
-                }
-                phoneModalBtn.disabled = !(telefoneValido && (userNameContainer.style.display === 'none' || nomeValido) && (!notificationsOptIn || !notificationsOptIn.checked || emailValido));
-            }
-            userPhone.addEventListener('input', atualizarEstadoBtn);
-            if (userName) userName.addEventListener('input', atualizarEstadoBtn);
-
-            // Sempre que abrir o modal, reseta o fluxo
-            if (confirmButton) {
-                confirmButton.addEventListener('click', function() {
-                    if (selectedService && selectedProfessional && selectedDate && selectedTime) {
-                        phoneModal.classList.add('active');
-                        userPhone.value = '';
-                        userName.value = '';
-                        userNameContainer.style.display = 'none';
-                        phoneModalBtn.disabled = true;
-                        aguardandoNome = false;
-                    } else {
-                        showCustomModal({
-                            message: 'Por favor, complete todas as informações para agendar.',
-                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                            btnText: 'OK'
+                    setTimeout(() => {
+                        const dayToSelect = this.textContent.trim();
+                        const newDays = document.querySelectorAll('.day:not(.disabled)');
+                        newDays.forEach(newDay => {
+                            if (newDay.textContent.trim() === dayToSelect) {
+                                newDay.click();
+                                newDay.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center'
+                                });
+                            }
                         });
-                    }
+                    }, 100);
+                    return;
+                }
+
+                // Se for um dia do próximo mês
+                if (this.classList.contains('next-month-day')) {
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    renderCalendar(currentDate);
+
+                    setTimeout(() => {
+                        const dayToSelect = this.textContent.trim();
+                        const newDays = document.querySelectorAll('.day:not(.disabled)');
+                        newDays.forEach(newDay => {
+                            if (newDay.textContent.trim() === dayToSelect) {
+                                newDay.click();
+                                newDay.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center'
+                                });
+                            }
+                        });
+                    }, 100);
+                    return;
+                }
+
+                // Código existente para dias normais
+                dayElements.forEach(d => d.classList.remove('selected'));
+                this.classList.add('selected');
+
+                const dateStr = this.getAttribute('data-date');
+                const [d, m, y] = dateStr.split('/');
+                selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+
+                updateConfirmationDetails();
+                confirmationSection.style.display = 'block';
+            });
+        });
+
+        document.querySelectorAll('.day').forEach(dayEl => {
+            // Para modo mensal
+            if (dayEl.hasAttribute('data-day')) {
+                const year = Number(dayEl.getAttribute('data-year'));
+                const month = Number(dayEl.getAttribute('data-month')) - 1;
+                const day = Number(dayEl.getAttribute('data-day'));
+                const dateObj = new Date(year, month, day);
+                const weekDay = dateObj.getDay();
+                if (weekDay === 0) dayEl.classList.add('sunday');
+                if (weekDay === 6) dayEl.classList.add('saturday');
+            }
+            // Para modo semanal
+            if (dayEl.hasAttribute('data-date')) {
+                const [d, m, y] = dayEl.getAttribute('data-date').split('/');
+                const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
+                const weekDay = dateObj.getDay();
+                if (weekDay === 0) dayEl.classList.add('sunday');
+                if (weekDay === 6) dayEl.classList.add('saturday');
+            }
+        });
+
+        document.querySelectorAll('.day').forEach(dayEl => {
+            dayEl.addEventListener('click', function () {
+                if (this.classList.contains('past-day')) {
+                    document.querySelector('.time-slots').style.display = 'none';
+                    return;
+                }
+                // ...código normal para dias válidos...
+                document.querySelector('.time-slots').style.display = '';
+            });
+        });
+    }
+
+    // Selecionar horário
+    const timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', function () {
+            // Remover seleção anterior
+            timeSlots.forEach(s => s.classList.remove('selected'));
+
+            // Adicionar seleção atual
+            this.classList.add('selected');
+
+            // Guardar o horário selecionado
+            selectedTime = this.textContent;
+
+            // Mostrar a seção de confirmação
+            confirmationSection.style.display = 'block';
+
+            // Atualizar os campos de confirmação
+            updateConfirmationDetails();
+
+            // Scroll para a confirmação
+            confirmationSection.scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Atualizar detalhes de confirmação
+    function updateConfirmationDetails() {
+        document.getElementById('confirm-service').textContent = selectedService || '-';
+        document.getElementById('confirm-professional').textContent = selectedProfessional || '-';
+        document.getElementById('confirm-date').textContent = selectedDate || '-';
+        document.getElementById('confirm-time').textContent = selectedTime || '-';
+        document.getElementById('confirm-price').textContent = selectedServicePrice ? `R$ ${selectedServicePrice}` : '-';
+    }
+
+    // Botão de confirmação final
+    const confirmButton = document.querySelector('.confirm-button');
+    const phoneModal = document.getElementById('phoneModal');
+    const phoneModalClose = document.getElementById('phoneModalClose');
+    const phoneModalBtn = document.getElementById('phoneModalBtn');
+    const userPhone = document.getElementById('userPhone');
+    const userNameContainer = document.getElementById('userNameContainer');
+    const userName = document.getElementById('userName');
+    const notificationsOptIn = document.getElementById('notificationsOptIn');
+    const emailFieldContainer = document.getElementById('emailFieldContainer');
+    const userEmail = document.getElementById('userEmail');
+
+    // Função para validar e-mail
+    function validarEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Mostrar/esconder campo de e-mail ao marcar o checkbox
+    if (notificationsOptIn && emailFieldContainer && userEmail) {
+        notificationsOptIn.addEventListener('change', function () {
+            if (this.checked) {
+                emailFieldContainer.style.display = '';
+                userEmail.required = true;
+            } else {
+                emailFieldContainer.style.display = 'none';
+                userEmail.required = false;
+                userEmail.value = '';
+            }
+            atualizarEstadoBtn();
+        });
+        userEmail.addEventListener('input', atualizarEstadoBtn);
+    }
+
+    // Função para validar telefone (10 ou 11 dígitos)
+    function validarTelefone(telefone) {
+        return /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(telefone.replace(/\s/g, ''));
+    }
+
+    let aguardandoNome = false;
+
+    // Atualiza o estado do botão
+    function atualizarEstadoBtn() {
+        const telefoneValido = validarTelefone(userPhone.value.trim());
+        let nomeValido = true;
+        if (userNameContainer.style.display !== 'none') {
+            nomeValido = !!userName.value.trim();
+        }
+        let emailValido = true;
+        if (notificationsOptIn && notificationsOptIn.checked) {
+            emailValido = validarEmail(userEmail.value.trim());
+            if (!emailValido && userEmail.value.trim() !== '') {
+                userEmail.style.borderColor = 'var(--primary-dark)';
+            } else {
+                userEmail.style.borderColor = '';
+            }
+        }
+        phoneModalBtn.disabled = !(telefoneValido && (userNameContainer.style.display === 'none' || nomeValido) && (!notificationsOptIn || !notificationsOptIn.checked || emailValido));
+    }
+    userPhone.addEventListener('input', atualizarEstadoBtn);
+    if (userName) userName.addEventListener('input', atualizarEstadoBtn);
+
+    // Sempre que abrir o modal, reseta o fluxo
+    if (confirmButton) {
+        confirmButton.addEventListener('click', function () {
+            if (selectedService && selectedProfessional && selectedDate && selectedTime) {
+                phoneModal.classList.add('active');
+                userPhone.value = '';
+                userName.value = '';
+                userNameContainer.style.display = 'none';
+                phoneModalBtn.disabled = true;
+                aguardandoNome = false;
+            } else {
+                showCustomModal({
+                    message: 'Por favor, complete todas as informações para agendar.',
+                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                    btnText: 'OK'
                 });
             }
+        });
+    }
 
-            phoneModalBtn.onclick = async function() {
-                    const tel = userPhone.value.trim();
-                    const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
-                    const email = (notificationsOptIn && notificationsOptIn.checked) ? userEmail.value.trim() : undefined;
-                    if (!tel) {
-                        userPhone.style.borderColor = 'var(--primary-dark)';
-                        return;
-                    }
-                    if (userNameContainer.style.display !== 'none') {
-                        if (!nome) {
-                            userName.style.borderColor = 'var(--primary-dark)';
-                            return;
-                        }
-                        if (notificationsOptIn && notificationsOptIn.checked && !validarEmail(userEmail.value.trim())) {
-                            userEmail.style.borderColor = 'var(--primary-dark)';
-                            return;
-                        }
-                        try {
-                            await fetch('/agendamento/novo', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    nome: nome,
-                                    telefone: tel,
-                                    servico: selectedService,
-                                    profissional: selectedProfessional,
-                                    data: selectedDate.split('/').reverse().join('-'),
-                                    hora: selectedTime,
-                                    preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
-                                    email: email || undefined
-                                })
-                            });
-                            phoneModal.classList.remove('active');
-                            showCustomModal({
-                                        message: `
+    phoneModalBtn.onclick = async function () {
+        const tel = userPhone.value.trim();
+        const nome = userNameContainer.style.display !== 'none' ? userName.value.trim() : '';
+        const email = (notificationsOptIn && notificationsOptIn.checked) ? userEmail.value.trim() : undefined;
+        if (!tel) {
+            userPhone.style.borderColor = 'var(--primary-dark)';
+            return;
+        }
+        if (userNameContainer.style.display !== 'none') {
+            if (!nome) {
+                userName.style.borderColor = 'var(--primary-dark)';
+                return;
+            }
+            if (notificationsOptIn && notificationsOptIn.checked && !validarEmail(userEmail.value.trim())) {
+                userEmail.style.borderColor = 'var(--primary-dark)';
+                return;
+            }
+            try {
+                await fetch('/agendamento/novo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: nome,
+                        telefone: tel,
+                        servico: selectedService,
+                        profissional: selectedProfessional,
+                        data: selectedDate.split('/').reverse().join('-'),
+                        hora: selectedTime,
+                        preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim(),
+                        email: email || undefined
+                    })
+                });
+                phoneModal.classList.remove('active');
+                showCustomModal({
+                    message: `
         <div class="confirmed-modal-content">
             <div class="confirmed-modal-icon">
                 <i class="fas fa-check-circle"></i>
@@ -688,44 +688,44 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
         </div>
     `,
-                            icon: '',
-                            btnText: 'Fechar',
-                            onClose: function() {
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 300);
-                            }
-                        });
-                    } catch (err) {
-                        alert('Erro ao agendar: ' + err.message);
+                    icon: '',
+                    btnText: 'Fechar',
+                    onClose: function () {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 300);
                     }
-                    return;
-                }
-                // Se o campo de nome está visível, é porque já foi solicitado
-                if (userNameContainer.style.display !== 'none') {
-                    if (!nome) {
-                        userName.style.borderColor = 'var(--primary-dark)';
-                        return;
-                    }
-                    try {
-                        await fetch('/agendamento/novo', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                nome: nome,
-                                telefone: tel,
-                                servico: selectedService,
-                                profissional: selectedProfessional,
-                                data: selectedDate.split('/').reverse().join('-'),
-                                hora: selectedTime,
-                                preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
-                            })
-                        });
-                        phoneModal.classList.remove('active');
-                        showCustomModal({
-                            message: `
+                });
+            } catch (err) {
+                alert('Erro ao agendar: ' + err.message);
+            }
+            return;
+        }
+        // Se o campo de nome está visível, é porque já foi solicitado
+        if (userNameContainer.style.display !== 'none') {
+            if (!nome) {
+                userName.style.borderColor = 'var(--primary-dark)';
+                return;
+            }
+            try {
+                await fetch('/agendamento/novo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: nome,
+                        telefone: tel,
+                        servico: selectedService,
+                        profissional: selectedProfessional,
+                        data: selectedDate.split('/').reverse().join('-'),
+                        hora: selectedTime,
+                        preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
+                    })
+                });
+                phoneModal.classList.remove('active');
+                showCustomModal({
+                    message: `
         <div class="confirmed-modal-content">
             <div class="confirmed-modal-icon">
                 <i class="fas fa-check-circle"></i>
@@ -742,53 +742,53 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
         </div>
     `,
-                            icon: '', // Ícone já inclusos acima
-                            btnText: 'Fechar',
-                            onClose: function() {
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 300);
-                            }
-                        });
-                    } catch (err) {
-                        alert('Erro ao agendar: ' + err.message);
+                    icon: '', // Ícone já inclusos acima
+                    btnText: 'Fechar',
+                    onClose: function () {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 300);
                     }
+                });
+            } catch (err) {
+                alert('Erro ao agendar: ' + err.message);
+            }
+            return;
+        }
+        // Se ainda não pediu o nome, verifica no banco se já é cliente cadastrado
+        if (!aguardandoNome) {
+            phoneModalBtn.disabled = true;
+            try {
+                const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+                const data = await res.json();
+                if (data.success && !data.cliente) {
+                    // Não existe cliente: pede o nome
+                    userNameContainer.style.display = '';
+                    aguardandoNome = true;
+                    phoneModalBtn.disabled = false;
+                    userName.focus();
+                    atualizarEstadoBtn();
                     return;
-                }
-                // Se ainda não pediu o nome, verifica no banco se já é cliente cadastrado
-                if (!aguardandoNome) {
-                    phoneModalBtn.disabled = true;
-                    try {
-                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
-                        const data = await res.json();
-                        if (data.success && !data.cliente) {
-                            // Não existe cliente: pede o nome
-                            userNameContainer.style.display = '';
-                            aguardandoNome = true;
-                            phoneModalBtn.disabled = false;
-                            userName.focus();
-                            atualizarEstadoBtn();
-                            return;
-                        } else if (data.success && data.cliente) {
-                            // Já existe cliente: agenda normalmente
-                            await fetch('/agendamento/novo', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    nome: '', // backend irá buscar o nome já cadastrado
-                                    telefone: tel,
-                                    servico: selectedService,
-                                    profissional: selectedProfessional,
-                                    data: selectedDate.split('/').reverse().join('-'),
-                                    hora: selectedTime,
-                                    preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
-                                })
-                            });
-                            phoneModal.classList.remove('active');
-                            showCustomModal({
-                                message: `<div class="confirmed-modal-content">
+                } else if (data.success && data.cliente) {
+                    // Já existe cliente: agenda normalmente
+                    await fetch('/agendamento/novo', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nome: '', // backend irá buscar o nome já cadastrado
+                            telefone: tel,
+                            servico: selectedService,
+                            profissional: selectedProfessional,
+                            data: selectedDate.split('/').reverse().join('-'),
+                            hora: selectedTime,
+                            preco: selectedServicePrice.replace('R$', '').replace(',', '.').trim()
+                        })
+                    });
+                    phoneModal.classList.remove('active');
+                    showCustomModal({
+                        message: `<div class="confirmed-modal-content">
             <div class="confirmed-modal-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
@@ -804,63 +804,63 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="confirmed-modal-thanks">Obrigado por agendar conosco!<br></div>
         </div>
     `,
-                                icon: '', // Ícone já inclusos acima
-                                btnText: 'Fechar',
-                                onClose: function() {
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 300);
-                                }
-                            });
+                        icon: '', // Ícone já inclusos acima
+                        btnText: 'Fechar',
+                        onClose: function () {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 300);
                         }
-                    } catch (err) {
-                        alert('Erro ao verificar telefone: ' + err.message);
-                        phoneModalBtn.disabled = false;
-                    }
+                    });
                 }
-            };
+            } catch (err) {
+                alert('Erro ao verificar telefone: ' + err.message);
+                phoneModalBtn.disabled = false;
+            }
+        }
+    };
 
-            // Código para o modal de "Meus agendamentos"
-            const myAppointmentsBtn = document.querySelector('.my-appointments');
-            const appointmentsModal = document.getElementById('appointmentsModal');
-            const appointmentsModalClose = document.getElementById('appointmentsModalClose');
-            const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
-            const appointmentsPhone = document.getElementById('appointmentsPhone');
+    // Código para o modal de "Meus agendamentos"
+    const myAppointmentsBtn = document.querySelector('.my-appointments');
+    const appointmentsModal = document.getElementById('appointmentsModal');
+    const appointmentsModalClose = document.getElementById('appointmentsModalClose');
+    const appointmentsModalBtn = document.getElementById('appointmentsModalBtn');
+    const appointmentsPhone = document.getElementById('appointmentsPhone');
 
-            // Abrir modal ao clicar em "Meus agendamentos"
-            myAppointmentsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                appointmentsModal.classList.add('active');
-                appointmentsPhone.value = '';
-                appointmentsPhone.focus();
-            });
+    // Abrir modal ao clicar em "Meus agendamentos"
+    myAppointmentsBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        appointmentsModal.classList.add('active');
+        appointmentsPhone.value = '';
+        appointmentsPhone.focus();
+    });
 
-            // Fechar modal
-            appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
+    // Fechar modal
+    appointmentsModalClose.onclick = () => appointmentsModal.classList.remove('active');
 
-            // Fechar ao clicar fora do conteúdo
-            appointmentsModal.onclick = function(e) {
-                if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
-            };
+    // Fechar ao clicar fora do conteúdo
+    appointmentsModal.onclick = function (e) {
+        if (e.target === appointmentsModal) appointmentsModal.classList.remove('active');
+    };
 
-            // Ação do botão do modal
-            appointmentsModalBtn.onclick = async function() {
-                    const tel = appointmentsPhone.value.trim();
+    // Ação do botão do modal
+    appointmentsModalBtn.onclick = async function () {
+        const tel = appointmentsPhone.value.trim();
 
-                    appointmentsPhone.style.borderColor = '';
+        appointmentsPhone.style.borderColor = '';
 
-                    if (!tel) {
-                        appointmentsPhone.style.borderColor = 'var(--primary-dark)';
-                        return;
-                    }
+        if (!tel) {
+            appointmentsPhone.style.borderColor = 'var(--primary-dark)';
+            return;
+        }
 
-                    // Buscar agendamentos do usuário
-                    try {
-                        const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
-                        const data = await res.json();
-                        if (data.success && data.agendamentos.length > 0) {
-                            const nomeCliente = data.agendamentos[0].nome ? data.agendamentos[0].nome.split(' ')[0] : '';
-                            let html = `
+        // Buscar agendamentos do usuário
+        try {
+            const res = await fetch(`/agendamento/meus?telefone=${encodeURIComponent(tel)}`);
+            const data = await res.json();
+            if (data.success && data.agendamentos.length > 0) {
+                const nomeCliente = data.agendamentos[0].nome ? data.agendamentos[0].nome.split(' ')[0] : '';
+                let html = `
         <div class="my-appointments-modal">
             <div class="my-appointments-icon">
                 <i class="fas fa-calendar-check"></i>
@@ -878,48 +878,48 @@ document.addEventListener('DOMContentLoaded', async function() {
             <ul class="my-appointments-list"></ul>
         </div>
     `;
-    appointmentsModal.classList.remove('active');
-    showCustomModal({
-        message: html,
-        icon: '',
-        btnText: 'Fechar'
-    });
+                appointmentsModal.classList.remove('active');
+                showCustomModal({
+                    message: html,
+                    icon: '',
+                    btnText: 'Fechar'
+                });
 
-    // Renderização dinâmica da lista com filtro
-    function renderMyAppointmentsList(statusFilter) {
-        const ul = document.querySelector('.my-appointments-list');
-        if (!ul) return;
-        let ags = data.agendamentos.slice();
+                // Renderização dinâmica da lista com filtro
+                function renderMyAppointmentsList(statusFilter) {
+                    const ul = document.querySelector('.my-appointments-list');
+                    if (!ul) return;
+                    let ags = data.agendamentos.slice();
 
-    // Use apenas o status do banco
-    ags = ags.map(ag => {
-        let status = 'confirmed';
-        if (ag.status && ag.status.toLowerCase() === 'cancelado') {
-            status = 'cancelled';
-        } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
-            status = 'completed';
-        } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
-            status = 'confirmed';
-        }
-        return { ...ag, _status: status };
-    });
-        // Atualiza status no banco se necessário
-        ags.forEach(async ag => {
-            if (ag._status === 'completed' && (!ag.status || ag.status.toLowerCase() !== 'concluido')) {
-                // Atualiza no banco
-                try {
-                    await fetch(`/agendamento/concluir/${ag.id}`, { method: 'PATCH' });
-                } catch (e) {}
-            }
-        });
-        if (statusFilter && statusFilter !== 'all') {
-            ags = ags.filter(ag => ag._status === statusFilter);
-        }
-        if (ags.length === 0) {
-            ul.innerHTML = '<li style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</li>';
-            return;
-        }
-        ul.innerHTML = ags.map(ag => `
+                    // Use apenas o status do banco
+                    ags = ags.map(ag => {
+                        let status = 'confirmed';
+                        if (ag.status && ag.status.toLowerCase() === 'cancelado') {
+                            status = 'cancelled';
+                        } else if (ag.status && ag.status.toLowerCase() === 'concluido') {
+                            status = 'completed';
+                        } else if (ag.status && ag.status.toLowerCase() === 'confirmado') {
+                            status = 'confirmed';
+                        }
+                        return { ...ag, _status: status };
+                    });
+                    // Atualiza status no banco se necessário
+                    ags.forEach(async ag => {
+                        if (ag._status === 'completed' && (!ag.status || ag.status.toLowerCase() !== 'concluido')) {
+                            // Atualiza no banco
+                            try {
+                                await fetch(`/agendamento/concluir/${ag.id}`, { method: 'PATCH' });
+                            } catch (e) { }
+                        }
+                    });
+                    if (statusFilter && statusFilter !== 'all') {
+                        ags = ags.filter(ag => ag._status === statusFilter);
+                    }
+                    if (ags.length === 0) {
+                        ul.innerHTML = '<li style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</li>';
+                        return;
+                    }
+                    ul.innerHTML = ags.map(ag => `
             <li data-id="${ag.id}">
                 <div class="my-appointments-row">
                     <span class="my-appointments-service"><i class="fas fa-cut"></i> ${ag.servico}</span>
@@ -938,107 +938,107 @@ document.addEventListener('DOMContentLoaded', async function() {
                 </div>
             </li>
         `).join('');
-        // Reaplica eventos de cancelar SEMPRE após renderizar
-        document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
-            btn.onclick = async function() {
-                const id = this.getAttribute('data-id');
-                try {
-                    const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
-                    const result = await res.json();
-                    if (result.success) {
-                        // Atualiza status visualmente sem remover o item e sem fechar o modal
-                        const li = this.closest('li');
-                        if (li) {
-                            // Atualiza status
-                            const statusSpan = li.querySelector('.my-appointments-status');
-                            if (statusSpan) {
-                                statusSpan.className = 'my-appointments-status status-cancelled';
-                                statusSpan.textContent = 'Cancelado';
+                    // Reaplica eventos de cancelar SEMPRE após renderizar
+                    document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+                        btn.onclick = async function () {
+                            const id = this.getAttribute('data-id');
+                            try {
+                                const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
+                                const result = await res.json();
+                                if (result.success) {
+                                    // Atualiza status visualmente sem remover o item e sem fechar o modal
+                                    const li = this.closest('li');
+                                    if (li) {
+                                        // Atualiza status
+                                        const statusSpan = li.querySelector('.my-appointments-status');
+                                        if (statusSpan) {
+                                            statusSpan.className = 'my-appointments-status status-cancelled';
+                                            statusSpan.textContent = 'Cancelado';
+                                        }
+                                        // Remove o botão de cancelar
+                                        this.remove();
+                                    }
+                                    showCustomModal({
+                                        message: 'Agendamento cancelado com sucesso!',
+                                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                        btnText: 'Fechar',
+                                        onClose: null // Não fecha o modal de agendamentos
+                                    });
+                                } else {
+                                    showCustomModal({
+                                        message: 'Erro ao cancelar agendamento.',
+                                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                        btnText: 'Fechar',
+                                        onClose: null
+                                    });
+                                }
+                            } catch (err) {
+                                showCustomModal({
+                                    message: 'Erro ao conectar ao servidor.',
+                                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                    btnText: 'Fechar',
+                                    onClose: null
+                                });
                             }
-                            // Remove o botão de cancelar
-                            this.remove();
-                        }
-                        showCustomModal({
-                            message: 'Agendamento cancelado com sucesso!',
-                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                            btnText: 'Fechar',
-                            onClose: null // Não fecha o modal de agendamentos
-                        });
-                    } else {
-                        showCustomModal({
-                            message: 'Erro ao cancelar agendamento.',
-                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                            btnText: 'Fechar',
-                            onClose: null
-                        });
-                    }
-                } catch (err) {
-                    showCustomModal({
-                        message: 'Erro ao conectar ao servidor.',
-                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                        btnText: 'Fechar',
-                        onClose: null
+                        };
                     });
                 }
-            };
-        });
-    }
-    // Inicializa lista
-    renderMyAppointmentsList('all');
-    // Filtro
-const statusFilterEl = document.getElementById('myAppointmentsStatusFilter');
-if (statusFilterEl) {
-    statusFilterEl.value = 'confirmed'; // Deixa "Confirmados" selecionado visualmente
-    renderMyAppointmentsList('confirmed'); // Mostra confirmados inicialmente
-    statusFilterEl.addEventListener('change', function() {
-        renderMyAppointmentsList(this.value);
-    });
-}
-    // Ativar botões de exclusão
-    setTimeout(() => {
-        document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
-            btn.onclick = async function() {
-                const id = this.getAttribute('data-id');
-                try {
-                    const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
-                    const result = await res.json();
-                    if (result.success) {
-                        // Atualiza status visualmente sem remover o item
-                        const statusSpan = this.parentElement.querySelector('.my-appointments-status');
-                        if (statusSpan) {
-                            statusSpan.className = 'my-appointments-status status-cancelled';
-                            statusSpan.textContent = 'Cancelado';
-                        }
-                        // Desabilita o botão após cancelar
-                        this.disabled = true;
-                        this.innerHTML = '<i class="fas fa-ban"></i> Cancelado';
-                        showCustomModal({
-                            message: 'Agendamento cancelado com sucesso!',
-                            icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
-                            btnText: 'Fechar'
-                        });
-                    } else {
-                        showCustomModal({
-                            message: 'Erro ao cancelar agendamento.',
-                            icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                            btnText: 'Fechar'
-                        });
-                    }
-                } catch (err) {
-                    showCustomModal({
-                        message: 'Erro ao conectar ao servidor.',
-                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
-                        btnText: 'Fechar'
+                // Inicializa lista
+                renderMyAppointmentsList('all');
+                // Filtro
+                const statusFilterEl = document.getElementById('myAppointmentsStatusFilter');
+                if (statusFilterEl) {
+                    statusFilterEl.value = 'confirmed'; // Deixa "Confirmados" selecionado visualmente
+                    renderMyAppointmentsList('confirmed'); // Mostra confirmados inicialmente
+                    statusFilterEl.addEventListener('change', function () {
+                        renderMyAppointmentsList(this.value);
                     });
                 }
-            };
-        });
-    }, 100);
+                // Ativar botões de exclusão
+                setTimeout(() => {
+                    document.querySelectorAll('.delete-appointment-btn').forEach(btn => {
+                        btn.onclick = async function () {
+                            const id = this.getAttribute('data-id');
+                            try {
+                                const res = await fetch(`/agendamento/cancelar/${id}`, { method: 'PATCH' });
+                                const result = await res.json();
+                                if (result.success) {
+                                    // Atualiza status visualmente sem remover o item
+                                    const statusSpan = this.parentElement.querySelector('.my-appointments-status');
+                                    if (statusSpan) {
+                                        statusSpan.className = 'my-appointments-status status-cancelled';
+                                        statusSpan.textContent = 'Cancelado';
+                                    }
+                                    // Desabilita o botão após cancelar
+                                    this.disabled = true;
+                                    this.innerHTML = '<i class="fas fa-ban"></i> Cancelado';
+                                    showCustomModal({
+                                        message: 'Agendamento cancelado com sucesso!',
+                                        icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>',
+                                        btnText: 'Fechar'
+                                    });
+                                } else {
+                                    showCustomModal({
+                                        message: 'Erro ao cancelar agendamento.',
+                                        icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                        btnText: 'Fechar'
+                                    });
+                                }
+                            } catch (err) {
+                                showCustomModal({
+                                    message: 'Erro ao conectar ao servidor.',
+                                    icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>',
+                                    btnText: 'Fechar'
+                                });
+                            }
+                        };
+                    });
+                }, 100);
 
             } else {
                 appointmentsModal.classList.remove('active');
-showCustomModal({
-    message: `
+                showCustomModal({
+                    message: `
         <div class="no-appointments-modal">
             <div class="no-appointments-icon">
                 <i class="far fa-calendar-times"></i>
@@ -1050,9 +1050,9 @@ showCustomModal({
             </div>
         </div>
     `,
-    icon: '',
-    btnText: 'Fechar'
-});
+                    icon: '',
+                    btnText: 'Fechar'
+                });
             }
         } catch (err) {
             appointmentsModal.classList.remove('active');
@@ -1078,7 +1078,7 @@ showCustomModal({
             } else if (data && data.iso) {
                 return new Date(data.iso);
             }
-        } catch (err) {}
+        } catch (err) { }
         // fallback: retorna dayjs() local
         if (typeof dayjs !== 'undefined') return dayjs();
         return new Date();
@@ -1166,7 +1166,7 @@ showCustomModal({
                         servico: ag.servico
                     }));
                 }
-            } catch (err) {}
+            } catch (err) { }
         }
 
         // Monta lista de intervalos ocupados [{ini, fim}]
@@ -1250,7 +1250,7 @@ showCustomModal({
             }
         });
         document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.addEventListener('click', function() {
+            slot.addEventListener('click', function () {
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
                 this.classList.add('selected');
                 selectedTime = this.textContent;
@@ -1282,7 +1282,7 @@ showCustomModal({
     }
 
     // No evento de clique do dia do calendário, chame renderTimeSlots:
-    document.addEventListener('click', async function(e) {
+    document.addEventListener('click', async function (e) {
         if (e.target.classList.contains('day') && !e.target.classList.contains('past-day')) {
             const dateStr = e.target.getAttribute('data-date');
             selectedDate = dateStr;
@@ -1325,7 +1325,7 @@ showCustomModal({
                 // Seleção de profissional
                 const professionalCards = container.querySelectorAll('.professional-card');
                 professionalCards.forEach(card => {
-                    card.addEventListener('click', function() {
+                    card.addEventListener('click', function () {
                         professionalCards.forEach(c => c.classList.remove('selected'));
                         this.classList.add('selected');
                         selectedProfessional = this.getAttribute('data-professional');
@@ -1378,7 +1378,7 @@ showCustomModal({
     const addressToggle = document.getElementById('addressToggle');
     const addressContent = document.getElementById('addressContent');
     if (addressToggle && addressContent) {
-        addressToggle.addEventListener('click', function(e) {
+        addressToggle.addEventListener('click', function (e) {
             e.preventDefault();
             if (addressContent.style.display === 'block') {
                 addressContent.style.display = 'none';
@@ -1439,7 +1439,7 @@ showCustomModal({
                 const addressToggle = document.getElementById('addressToggle');
                 const addressContent = document.getElementById('addressContent');
                 if (addressToggle && addressContent) {
-                    addressToggle.addEventListener('click', function(e) {
+                    addressToggle.addEventListener('click', function (e) {
                         e.preventDefault();
                         if (addressContent.style.display === 'block') {
                             addressContent.style.display = 'none';
@@ -1459,18 +1459,18 @@ showCustomModal({
     }
     carregarBarbearia();
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Para todos os modais customizados
-        document.querySelectorAll('.custom-modal').forEach(function(modal) {
+        document.querySelectorAll('.custom-modal').forEach(function (modal) {
             // Fecha ao clicar no X
             const closeBtn = modal.querySelector('.custom-modal-close');
             if (closeBtn) {
-                closeBtn.onclick = function() {
+                closeBtn.onclick = function () {
                     modal.classList.remove('active');
                 };
             }
             // Fecha ao clicar fora do conteúdo
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal) {
                     modal.classList.remove('active');
                 }
@@ -1480,10 +1480,10 @@ showCustomModal({
 
     // Garantir fechamento correto do phoneModal
     if (phoneModal && phoneModalClose) {
-        phoneModalClose.onclick = function() {
+        phoneModalClose.onclick = function () {
             phoneModal.classList.remove('active');
         };
-        phoneModal.addEventListener('click', function(e) {
+        phoneModal.addEventListener('click', function (e) {
             if (e.target === phoneModal) {
                 phoneModal.classList.remove('active');
             }
