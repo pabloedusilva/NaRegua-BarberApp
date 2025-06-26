@@ -1,9 +1,7 @@
-/*
-  =============================
-  VARIÁVEIS DE CORES GLOBAIS
-  =============================
-  Todas as cores principais do site ficam aqui para facilitar manutenção e personalização.
-*/
+/* =========================
+   Variáveis Globais (Cores)
+   ========================= */
+
 :root {
     --primary: #dac02d;
     /* Dourado principal */
@@ -57,12 +55,10 @@
 }
 
 
-/*
-  =============================
-  TEMA ESCURO
-  =============================
-  Sobrescreve variáveis para modo escuro.
-*/
+/* =========================
+   Tema Escuro
+   ========================= */
+
 .dark-mode {
     --background: #121212;
     /* Fundo escuro */
@@ -95,12 +91,10 @@
 }
 
 
-/*
-  =============================
-  RESET E BASE
-  =============================
-  Reset de margens, paddings e fonte padrão para todo o site.
-*/
+/* =========================
+   Reset e Base
+   ========================= */
+
 * {
     margin: 0;
     /* Remove margens padrão */
@@ -133,12 +127,10 @@ body {
 }
 
 
-/*
-  =============================
-  HEADER E NAVEGAÇÃO
-  =============================
-  Estilos do topo, logo, navegação e botão de tema.
-*/
+/* =========================
+   Header (Cabeçalho)
+   ========================= */
+
 header {
     background-color: var(--header);
     /* Fundo do header */
@@ -245,44 +237,8 @@ header {
 }
 
 
-.theme-toggle {
-    background: none;
-    /* Sem fundo */
-    border: none;
-    /* Sem borda */
-    font-size: 20px;
-    /* Tamanho do ícone */
-    cursor: pointer;
-    /* Muda cursor */
-    color: var(--text);
-    /* Cor do ícone */
-    transition: transform 0.3s;
-    /* Animação ao girar */
-    width: 40px;
-    /* Tamanho do botão */
-    height: 40px;
-    display: flex;
-    /* Centraliza ícone */
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    /* Botão redondo */
-}
+/* Banner Agendar Agora */
 
-.theme-toggle:hover {
-    background-color: var(--hover);
-    /* Fundo ao passar mouse */
-    transform: rotate(30deg);
-    /* Gira ícone */
-}
-
-
-/*
-  =============================
-  BANNER AGENDAR AGORA
-  =============================
-  Banner e seta animada para incentivar o agendamento.
-*/
 .agendar-agora-banner-minimal {
     display: flex;
     align-items: center;
@@ -340,12 +296,44 @@ header {
 }
 
 
-/*
-  =============================
-  SEÇÃO DE BOAS-VINDAS
-  =============================
-  Estilos para a área de boas-vindas, foto, nome e redes sociais.
-*/
+/* Botão de alternância de tema */
+
+.theme-toggle {
+    background: none;
+    /* Sem fundo */
+    border: none;
+    /* Sem borda */
+    font-size: 20px;
+    /* Tamanho do ícone */
+    cursor: pointer;
+    /* Muda cursor */
+    color: var(--text);
+    /* Cor do ícone */
+    transition: transform 0.3s;
+    /* Animação ao girar */
+    width: 40px;
+    /* Tamanho do botão */
+    height: 40px;
+    display: flex;
+    /* Centraliza ícone */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Botão redondo */
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover);
+    /* Fundo ao passar mouse */
+    transform: rotate(30deg);
+    /* Gira ícone */
+}
+
+
+/* =========================
+   Seção de Boas-vindas
+   ========================= */
+
 .welcome-section {
     position: relative;
     /* Para overlay */
@@ -435,9 +423,8 @@ header {
 }
 
 
-/*
-  Ícones sociais e endereço
-*/
+/* Ícones sociais e endereço */
+
 .social-icons-welcome {
     display: flex;
     /* Layout flexível */
@@ -501,9 +488,10 @@ header {
 
 @media (max-width: 768px) {
     .social-icon-welcome {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
+        width: 38px;
+        /* Menor em telas pequenas */
+        height: 38px;
+        font-size: 18px;
     }
 }
 
@@ -582,12 +570,10 @@ header {
 }
 
 
-/*
-  =============================
-  SEÇÃO DE SERVIÇOS
-  =============================
-  Cards de serviços, detalhes, botões e responsividade.
-*/
+/* =========================
+   Seção de Serviços
+   ========================= */
+
 .services-section {
     background-color: var(--card);
     /* Fundo do card */
@@ -766,12 +752,10 @@ header {
 }
 
 
-/*
-  =============================
-  SELEÇÃO DE PROFISSIONAIS
-  =============================
-  Cards de profissionais, seleção e responsividade.
-*/
+/* =========================
+   Seleção de Profissionais
+   ========================= */
+
 .professionals-section {
     background-color: var(--card);
     /* Fundo do card */
@@ -871,12 +855,10 @@ header {
 }
 
 
-/*
-  =============================
-  CALENDÁRIO DE AGENDAMENTO
-  =============================
-  Estilos para calendário mensal, semanal e responsividade.
-*/
+/* =========================
+   Calendário de Agendamento
+   ========================= */
+
 .calendar-section {
     background-color: var(--card);
     /* Fundo do card */
@@ -1301,12 +1283,10 @@ header {
 }
 
 
-/*
-  =============================
-  HORÁRIOS (TIME SLOTS)
-  =============================
-  Estilos para seleção de horários disponíveis.
-*/
+/* =========================
+   Horários (Time Slots)
+   ========================= */
+
 .time-slots {
     margin-top: 30px;
     /* Espaço acima */
@@ -1362,12 +1342,10 @@ header {
 }
 
 
-/*
-  =============================
-  CONFIRMAÇÃO DE AGENDAMENTO
-  =============================
-  Estilos para tela de confirmação de agendamento.
-*/
+/* =========================
+   Confirmação de Agendamento
+   ========================= */
+
 .confirmation-section {
     background-color: var(--card);
     /* Fundo do card */
@@ -1444,12 +1422,10 @@ header {
 }
 
 
-/*
-  =============================
-  FOOTER (RODAPÉ)
-  =============================
-  Estilos para rodapé, links, redes sociais e responsividade.
-*/
+/* =========================
+   Footer (Rodapé)
+   ========================= */
+
 footer {
     background-color: var(--footer);
     /* Fundo do footer */
@@ -1603,12 +1579,10 @@ footer {
 }
 
 
-/*
-  =============================
-  MODAL PERSONALIZADO
-  =============================
-  Estilos para modais customizados, inputs e responsividade.
-*/
+/* =========================
+   Modal Personalizado
+   ========================= */
+
 .custom-modal {
     display: none;
     position: fixed;
@@ -1671,6 +1645,9 @@ footer {
         transform: translateY(0) scale(1);
     }
 }
+
+
+/* Modal de "Meus agendamentos" */
 
 .custom-modal-input {
     width: 100%;
@@ -2076,20 +2053,25 @@ footer {
 
 
 /* STATUS DE AGENDAMENTO */
+
 .status-confirmed {
     background: #19a519 !important;
     color: #fff !important;
 }
+
 .status-cancelled {
     background: #e74c3c !important;
     color: #fff !important;
 }
+
 .status-completed {
     background: #888 !important;
     color: #fff !important;
 }
 
+
 /* Filtro de status em meus agendamentos */
+
 .my-appointments-filter {
     display: flex;
     align-items: center;
@@ -2097,11 +2079,13 @@ footer {
     margin-bottom: 12px;
     justify-content: flex-end;
 }
+
 .my-appointments-filter label {
     font-weight: 500;
     color: var(--primary-dark);
     font-size: 1em;
 }
+
 .my-appointments-filter select {
     padding: 4px 12px;
     border-radius: 8px;
@@ -2129,12 +2113,11 @@ footer {
     }
 }
 
-/*
-  =============================
-  RESPONSIVIDADE GERAL
-  =============================
-  Ajustes para telas menores, garantindo boa visualização em qualquer dispositivo.
-*/
+
+/* =========================
+   Responsividade Geral
+   ========================= */
+
 @media (max-width: 768px) {
     .footer-content {
         grid-template-columns: 1fr;
@@ -2162,12 +2145,10 @@ footer {
 }
 
 
-/*
-  =============================
-  ANIMAÇÕES
-  =============================
-  Keyframes e classes utilitárias para animações.
-*/
+/* =========================
+   Animações
+   ========================= */
+
 .animate-fade-in {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -2213,12 +2194,10 @@ footer {
 }
 
 
-/*
-  =============================
-  RESPONSIVIDADE EXTRA
-  =============================
-  Ajustes extras para responsividade de calendário, cards e slots.
-*/
+/* =========================
+   Responsividade Extra
+   ========================= */
+
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -2247,6 +2226,7 @@ footer {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     }
 }
+
 @media screen and (max-width: 480px) {
     .service-details {
         flex-direction: column;
@@ -2357,12 +2337,10 @@ footer {
 }
 
 
-/*
-  =============================
-  ACESSIBILIDADE E TOUCH
-  =============================
-  Ajustes para navegação por toque e acessibilidade.
-*/
+/* =========================
+   Acessibilidade e Touch
+   ========================= */
+
 @media (hover: none) {
     .day:hover,
     .prev-week:hover,
@@ -2401,12 +2379,10 @@ footer {
 }
 
 
-/*
-  =============================
-  BOTÃO CONTINUAR BLOQUEADO
-  =============================
-  Estilo para botão desabilitado.
-*/
+/* =========================
+   Botão Continuar Bloqueado
+   ========================= */
+
 #phoneModalBtn:disabled {
     background: #ccc !important;
     /* Cinza bloqueado */

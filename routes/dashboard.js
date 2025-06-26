@@ -513,4 +513,16 @@ router.delete('/folgas-especiais/:id', requireLogin, async(req, res) => {
     }
 });
 
+// Rota pública para retornar as datas de folgas especiais
+router.get('/folgas-especiais-public', async(req, res) => {
+    try {
+        const rows = await db `SELECT data FROM folgas_especiais`;
+        // Retorna array de datas no formato YYYY-MM-DD
+        const datas = rows.map(r => r.data instanceof Date ? r.data.toISOString().slice(0, 10) : r.data);
+        res.json({ success: true, datas });
+    } catch (err) {
+        res.json({ success: false, error: 'Erro ao buscar folgas especiais.' });
+    }
+});
+
 module.exports = router;
