@@ -3,43 +3,23 @@ const script = document.createElement('script');
 script.src = '/js/custom-alert.js';
 document.head.appendChild(script);
 
-// Adiciona suporte a dayjs (data/hora em tempo real e timezone Brasil)
-if (typeof dayjs === 'undefined') {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js';
-    script.onload = function() {
-        if (typeof dayjs !== 'undefined') {
-            window.dayjs = dayjs;
-            // Carrega plugins de timezone
-            const scriptTz = document.createElement('script');
-            scriptTz.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/plugin/timezone.js';
-            document.head.appendChild(scriptTz);
-            const scriptUtc = document.createElement('script');
-            scriptUtc.src = 'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/plugin/utc.js';
-            document.head.appendChild(scriptUtc);
-        }
-    };
-    document.head.appendChild(script);
-}
+// Carrega utilitário de hora do servidor
+const serverTimeScript = document.createElement('script');
+serverTimeScript.src = '/js/server-time.js';
+document.head.appendChild(serverTimeScript);
 
-// Função para buscar data/hora do servidor e garantir precisão com dayjs (sempre Brasil)
-async function getServerDateTime() {
-    try {
-        const res = await fetch('/dashboard/servertime');
-        const data = await res.json();
-        if (data && data.iso && typeof dayjs !== 'undefined') {
-            if (dayjs.tz) {
-                return dayjs.tz(data.iso, 'America/Sao_Paulo');
-            }
-            return dayjs(data.iso);
-        } else if (data && data.iso) {
-            return new Date(data.iso);
-        }
-    } catch (err) {}
-    // fallback: retorna dayjs() local
-    if (typeof dayjs !== 'undefined') return dayjs();
-    return new Date();
-}
+// Aguarda sincronização da hora do servidor antes de executar o restante
+document.addEventListener('DOMContentLoaded', async function() {
+    // Aguarda o utilitário carregar e sincronizar
+    if (typeof window.startServerTimeSync === 'function') {
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    // Todas as funções que dependem de data/hora devem usar window.serverTime()
+    // Exemplo de uso:
+    // const agora = window.serverTime();
+    // ...
+    // Substitua todos os usos de dayjs(), Date.now(), new Date(), etc., por window.serverTime()
+});
 
 // Função para formatar a data no formato brasileiro (DD/MM/AAAA)
 function formatarDataBR(dataISO) {
@@ -217,6 +197,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             // Inicializar calendário
             let currentDate = getNow();
+            if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
+                currentDate = currentDate.toDate();
+            }
             renderCalendar(currentDate);
 
             // Selecionar serviço

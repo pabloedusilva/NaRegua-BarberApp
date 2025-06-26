@@ -57,6 +57,16 @@ app.get('/api/server-time', (req, res) => {
     });
 });
 
+// Adicione ANTES do app.listen:
+app.get('/dashboard/servertime', (req, res) => {
+    const now = dayjs().tz(BRAZIL_TZ);
+    res.json({
+        iso: now.toISOString(),
+        br: now.format('YYYY-MM-DD HH:mm:ss'),
+        tz: BRAZIL_TZ
+    });
+});
+
 // Iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
