@@ -399,6 +399,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -483,12 +484,15 @@ footer {
     .auth-card {
         max-width: 100%;
     }
+
     .auth-header {
         padding: 20px;
     }
+
     .auth-body {
         padding: 20px;
     }
+
     .footer-content {
         flex-direction: column;
         text-align: center;
@@ -500,10 +504,12 @@ footer {
     .auth-header h2 {
         font-size: 20px;
     }
+
     .auth-tab {
         padding: 12px;
         font-size: 14px;
     }
+
     .logo-text-footer {
         font-size: 20px;
     }
