@@ -1107,13 +1107,13 @@
     }
     
     .btn-danger {
-        background-color: var(--primary-dark);
-        color: white;
+        background-color: transparent !important;
+        color: rgb(255, 0, 0);
         border: none;
     }
     
     .btn-danger:hover {
-        background-color: #c82333;
+        background-color: #64000a;
     }
     
     .avatar-upload {
