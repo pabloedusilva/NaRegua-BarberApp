@@ -1519,9 +1519,7 @@ async function showAlertaPromoSiteModal() {
     if (!modal || !content) return;
     content.innerHTML = `
         <span class="custom-modal-close" id="alertaPromoSiteClose" title="Fechar">&times;</span>
-        <div class="promo-badge"><i class="fas fa-bullhorn"></i> ${item.titulo || 'Promoção'}</div>
         ${item.imagem ? `<div class="promo-img-cover" style="background-image:url('${item.imagem}');"></div>` : ''}
-        <div class="promo-text">${item.texto || ''}</div>
         ${item.link ? `<a href="${item.link}" target="_blank" class="promo-btn" style="margin-top:18px;"><i class="fas fa-external-link-alt"></i> Saiba mais</a>` : ''}
     `;
     modal.classList.add('active');

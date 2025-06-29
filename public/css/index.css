@@ -2508,7 +2508,7 @@ footer {
 }
 
 #alertaPromoSiteModal .promo-text {
-    color: #222;
+    color:var(--text);
     font-size: 1.08rem;
     margin-bottom: 18px;
     margin-top: 0;

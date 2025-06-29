@@ -51,6 +51,9 @@ app.use('/api/alertas-promos', alertasPromosRoutes);
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Servir arquivos estáticos do diretório favicon
+app.use('/favicon', express.static(path.join(__dirname, 'favicon')));
+
 // Exemplo de endpoint para testar o horário do servidor no fuso do Brasil
 app.get('/api/server-time', (req, res) => {
     const now = dayjs().tz(BRAZIL_TZ);
