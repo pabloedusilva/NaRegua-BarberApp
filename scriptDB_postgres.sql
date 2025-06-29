@@ -194,3 +194,14 @@ CREATE TABLE IF NOT EXISTS folgas_especiais (
     data DATE NOT NULL UNIQUE,
     motivo VARCHAR(150)
 );
+
+-- Tabela de alertas e promoções
+CREATE TABLE IF NOT EXISTS alertas_promos (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(80) NOT NULL,
+    texto VARCHAR(300) NOT NULL,
+    imagem TEXT,
+    link TEXT,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP DEFAULT NOW()
+);

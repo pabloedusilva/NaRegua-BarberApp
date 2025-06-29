@@ -4,6 +4,7 @@ const path = require('path');
 const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
 const imagensRoutes = require('./routes/imagens');
+const alertasPromosRoutes = require('./routes/alertasPromos');
 const db = require('./db/neon');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
@@ -43,6 +44,9 @@ app.use('/agendamento', agendamentoRoutes);
 
 // Rotas de imagens
 app.use('/api', imagensRoutes);
+
+// Rotas de alertas e promoções
+app.use('/api/alertas-promos', alertasPromosRoutes);
 
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));

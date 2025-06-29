@@ -2458,4 +2458,117 @@ document.getElementById('addSpecialDayOffForm').onsubmit = async function (e) {
     }
 };
 
-document.addEventListener('DOMContentLoaded', carregarFolgasEspeciais);
+async function getAlertasPromos() {
+  const res = await fetch('/api/alertas-promos', { credentials: 'same-origin' });
+  return await res.json();
+}
+async function setAlertaPromo(data, id) {
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `/api/alertas-promos/${id}` : '/api/alertas-promos';
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify(data)
+  });
+  return await res.json();
+}
+async function deleteAlertaPromo(id) {
+  await fetch(`/api/alertas-promos/${id}`, { method: 'DELETE', credentials: 'same-origin' });
+}
+
+// Renderiza lista
+async function renderAlertasPromos() {
+  const list = document.getElementById('alertasPromosList');
+  const arr = await getAlertasPromos();
+  list.innerHTML = '';
+  if (!arr.length) {
+    list.innerHTML = '<div style="color:#888;text-align:center;padding:24px 0;">Nenhum alerta/promo cadastrado.</div>';
+    return;
+  }
+  arr.forEach((item) => {
+    const div = document.createElement('div');
+    div.className = 'alerta-promo-card';
+    div.style = 'background:var(--card);border-radius:14px;padding:18px 18px 12px 18px;margin-bottom:18px;box-shadow:0 2px 12px #dac02d11;position:relative;';
+    div.innerHTML = `
+      ${item.imagem ? `<img src="${item.imagem}" alt="Banner" style="max-width:90px;max-height:90px;border-radius:10px;margin-bottom:8px;float:left;margin-right:14px;">` : ''}
+      <div style="overflow:hidden;">
+        <div style="font-weight:700;color:var(--primary-dark);font-size:1.08rem;">${item.titulo}</div>
+        <div style="color:#222;margin-bottom:6px;">${item.texto}</div>
+        ${item.link ? `<a href="${item.link}" target="_blank" style="color:var(--primary);text-decoration:underline;font-size:0.98rem;">Acessar link</a>` : ''}
+        <div style="margin-top:8px;">
+          <span class="badge" style="background:${item.ativo ? '#28a745' : '#aaa'};color:#fff;padding:2px 10px;border-radius:8px;font-size:0.92rem;">${item.ativo ? 'Ativo' : 'Inativo'}</span>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" style="position:absolute;top:12px;right:44px;" onclick="editarAlertaPromo(${item.id})"><i class="fas fa-pen"></i></button>
+      <button class="btn btn-danger btn-sm" style="position:absolute;top:12px;right:8px;" onclick="removerAlertaPromo(${item.id})"><i class="fas fa-trash"></i></button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// Abrir modal de novo/edição
+let alertaPromoEditId = null;
+document.getElementById('addAlertaPromoBtn').onclick = () => {
+  alertaPromoEditId = null;
+  abrirAlertaPromoModal();
+};
+window.editarAlertaPromo = async function(id) {
+  alertaPromoEditId = id;
+  const arr = await getAlertasPromos();
+  const data = arr.find(a => a.id === id);
+  abrirAlertaPromoModal(data);
+};
+window.removerAlertaPromo = async function(id) {
+  if (confirm('Remover este alerta/promo?')) {
+    await deleteAlertaPromo(id);
+    renderAlertasPromos();
+  }
+};
+function abrirAlertaPromoModal(data = {}) {
+  document.getElementById('alertaPromoModalTitle').textContent = data.titulo ? 'Editar Alerta/Promo' : 'Novo Alerta/Promo';
+  document.getElementById('alertaPromoTitulo').value = data.titulo || '';
+  document.getElementById('alertaPromoTexto').value = data.texto || '';
+  document.getElementById('alertaPromoImagem').value = data.imagem || '';
+  document.getElementById('alertaPromoLink').value = data.link || '';
+  document.getElementById('alertaPromoAtivo').checked = data.ativo !== false;
+  document.getElementById('alertaPromoImagemPreview').innerHTML = data.imagem ? `<img src="${data.imagem}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
+  document.getElementById('alertaPromoModal').style.display = 'flex';
+}
+
+// Preview da imagem ao colar URL ou upload
+document.getElementById('alertaPromoImagem').addEventListener('input', function () {
+  const url = this.value.trim();
+  document.getElementById('alertaPromoImagemPreview').innerHTML = url ? `<img src="${url}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
+});
+document.getElementById('alertaPromoImagemUpload').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (evt) {
+    document.getElementById('alertaPromoImagem').value = evt.target.result;
+    document.getElementById('alertaPromoImagemPreview').innerHTML = `<img src="${evt.target.result}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Fechar modal
+document.getElementById('closeAlertaPromoModal').onclick =
+document.getElementById('cancelAlertaPromo').onclick = function () {
+  document.getElementById('alertaPromoModal').style.display = 'none';
+};
+
+// Salvar alerta/promo
+document.getElementById('alertaPromoForm').onsubmit = async function (e) {
+  e.preventDefault();
+  const titulo = document.getElementById('alertaPromoTitulo').value.trim();
+  const texto = document.getElementById('alertaPromoTexto').value.trim();
+  const imagem = document.getElementById('alertaPromoImagem').value.trim();
+  const link = document.getElementById('alertaPromoLink').value.trim();
+  const ativo = document.getElementById('alertaPromoAtivo').checked;
+  if (!titulo || !texto) return;
+  await setAlertaPromo({ titulo, texto, imagem, link, ativo }, alertaPromoEditId);
+  document.getElementById('alertaPromoModal').style.display = 'none';
+  renderAlertasPromos();
+};
+renderAlertasPromos();

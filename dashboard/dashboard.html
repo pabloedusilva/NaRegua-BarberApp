@@ -551,10 +551,48 @@
         <section class="dashboard-section animate-slide-up"
             id="alertas-section" style="display:none;">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-bullhorn"></i> Alertas e Promoções
-                </h2>
+                <h2 class="section-title"><i class="fas fa-bullhorn"></i> Alertas e Promoções</h2>
+                <button id="addAlertaPromoBtn" class="btn btn-primary" style="margin-left:12px;"><i class="fas fa-plus"></i> Novo Alerta/Promo</button>
             </div>
+            <div id="alertasPromosList"></div>
         </section>
+
+        <!-- Modal de criação/edição de alerta/promo -->
+<div id="alertaPromoModal" class="modal">
+  <div class="modal-content" style="max-width:420px;">
+    <div class="modal-header">
+      <h3 class="modal-title" id="alertaPromoModalTitle"><i class="fas fa-bullhorn"></i> Novo Alerta/Promo</h3>
+      <button class="close-modal" id="closeAlertaPromoModal" type="button">&times;</button>
+    </div>
+    <form id="alertaPromoForm" autocomplete="off">
+      <div class="form-group">
+        <label for="alertaPromoTitulo">Título</label>
+        <input type="text" class="form-control" id="alertaPromoTitulo" maxlength="80" required>
+      </div>
+      <div class="form-group">
+        <label for="alertaPromoTexto">Texto</label>
+        <textarea class="form-control" id="alertaPromoTexto" maxlength="300" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="alertaPromoImagem">Imagem (URL ou upload)</label>
+        <input type="text" class="form-control" id="alertaPromoImagem" placeholder="Cole a URL da imagem">
+        <input type="file" id="alertaPromoImagemUpload" accept="image/*" style="margin-top:8px;">
+        <div id="alertaPromoImagemPreview" style="margin-top:10px;"></div>
+      </div>
+      <div class="form-group">
+        <label for="alertaPromoLink">Link externo (opcional)</label>
+        <input type="url" class="form-control" id="alertaPromoLink" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="alertaPromoAtivo" checked> Ativo (exibir no site)</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelAlertaPromo">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
 
     </main>
 
