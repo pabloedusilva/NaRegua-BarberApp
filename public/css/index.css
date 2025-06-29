@@ -2639,3 +2639,34 @@ footer {
     background: linear-gradient(90deg, var(--primary-dark) 80%, var(--primary) 100%);
     transform: scale(1.04);
 }
+
+.promo-modal-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0;
+    /* Espaço entre o X e a imagem */
+}
+
+#alertaPromoSiteModal .custom-modal-close {
+    position: static;
+    /* Remove o posicionamento absoluto */
+    font-size: 1.7rem;
+    color: var(--primary-dark);
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 3;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 0 0 0;
+    line-height: 1;
+}
+
+#alertaPromoSiteModal .custom-modal-close:hover {
+    color: var(--primary);
+}

@@ -2480,6 +2480,7 @@ async function deleteAlertaPromo(id) {
 // Renderiza lista
 async function renderAlertasPromos() {
   const list = document.getElementById('alertasPromosList');
+  if (!list) return;
   const arr = await getAlertasPromos();
   list.innerHTML = '';
   if (!arr.length) {
