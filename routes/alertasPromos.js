@@ -39,6 +39,7 @@ router.put('/:id', requireLogin, async (req, res) => {
 
 // Remover
 router.delete('/:id', requireLogin, async (req, res) => {
+    const { id } = req.params;
     await db`DELETE FROM alertas_promos WHERE id=${id}`;
     res.json({ success: true });
 });
