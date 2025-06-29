@@ -2395,3 +2395,175 @@ footer {
     border: none;
     box-shadow: none;
 }
+
+/* Modal de Promoção/Alerta */
+#alertaPromoSiteModal .custom-modal-content {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 22px;
+    padding: 38px 28px 28px 28px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: modalPopIn 0.38s cubic-bezier(.23, 1.12, .32, 1);
+    font-size: 1.08rem;
+    color: var(--primary-dark);
+    overflow: visible;
+}
+#alertaPromoSiteModal .promo-badge {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--primary) 60%, var(--primary-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 7px 26px 7px 26px;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #dac02d33;
+    letter-spacing: 1px;
+    z-index: 2;
+    display: inline-block;
+}
+#alertaPromoSiteModal .promo-img-cover {
+    width: 100%;
+    aspect-ratio: 9/16;
+    max-height: 420px;
+    min-height: 320px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 18px;
+    margin: 38px 0 18px 0;
+    box-shadow: 0 2px 18px #dac02d33;
+    border: 2.5px solid var(--primary);
+    display: block;
+}
+#alertaPromoSiteModal .promo-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+#alertaPromoSiteModal .promo-text {
+    color: #222;
+    font-size: 1.08rem;
+    margin-bottom: 18px;
+    margin-top: 0;
+    line-height: 1.5;
+    font-weight: 500;
+}
+#alertaPromoSiteModal .promo-link {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    padding: 7px 18px;
+    border-radius: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1.01rem;
+    box-shadow: 0 2px 8px #dac02d22;
+    transition: background 0.2s, color 0.2s;
+}
+#alertaPromoSiteModal .promo-link:hover {
+    background: var(--primary);
+    color: #fff;
+}
+#alertaPromoSiteModal .custom-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    font-size: 1.7rem;
+    color: var(--primary-dark);
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 3;
+    transition: color 0.2s;
+}
+#alertaPromoSiteModal .custom-modal-close:hover {
+    color: var(--primary);
+}
+#alertaPromoSiteModal .promo-btn {
+    background: linear-gradient(90deg, var(--primary) 60%, var(--primary-dark) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 12px 38px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px #dac02d22;
+    transition: background 0.2s, transform 0.18s;
+}
+#alertaPromoSiteModal .promo-btn:hover {
+    background: linear-gradient(90deg, var(--primary-dark) 80%, var(--primary) 100%);
+    transform: scale(1.04);
+}
+@media (max-width: 480px) {
+    #alertaPromoSiteModal .custom-modal-content {
+        min-width: 0;
+        padding: 18px 4vw 14px 4vw;
+        font-size: 0.98rem;
+    }
+    #alertaPromoSiteModal .promo-badge {
+        font-size: 0.98rem;
+        padding: 6px 16px;
+        top: -18px;
+    }
+    #alertaPromoSiteModal .promo-img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 12px;
+    }
+}
+
+#alertaPromoSiteModal .promo-img-cover {
+    width: 100%;
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 18px;
+    margin: 18px 0 18px 0;
+    box-shadow: 0 2px 18px #dac02d33;
+    display: block;
+}
+@media (max-width: 600px) {
+    #alertaPromoSiteModal .promo-img-cover {
+        height: 140px;
+        border-radius: 12px;
+        margin: 12px 0 12px 0;
+    }
+}
+#alertaPromoSiteModal .promo-text {
+    color: #222;
+    font-size: 1.08rem;
+    margin-bottom: 18px;
+    margin-top: 0;
+    line-height: 1.5;
+    font-weight: 500;
+    text-align: center;
+}
+#alertaPromoSiteModal .promo-btn {
+    background: linear-gradient(90deg, var(--primary) 60%, var(--primary-dark) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 12px 38px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0 auto 0 auto;
+    box-shadow: 0 2px 8px #dac02d22;
+    transition: background 0.2s, transform 0.18s;
+    display: inline-block;
+    text-decoration: none;
+}
+#alertaPromoSiteModal .promo-btn:hover {
+    background: linear-gradient(90deg, var(--primary-dark) 80%, var(--primary) 100%);
+    transform: scale(1.04);
+}

@@ -1518,17 +1518,15 @@ async function showAlertaPromoSiteModal() {
     const content = document.getElementById('alertaPromoSiteContent');
     if (!modal || !content) return;
     content.innerHTML = `
-        <span class="custom-modal-close" id="alertaPromoSiteClose" style="position:absolute;top:12px;right:18px;cursor:pointer;font-size:2rem;">&times;</span>
-        ${item.imagem ? `<div style="text-align:center;margin-bottom:12px;"><img src="${item.imagem}" alt="Banner" style="max-width:120px;max-height:120px;border-radius:12px;box-shadow:0 2px 12px #dac02d33;"></div>` : ''}
-        <div style="font-weight:700;color:#222;font-size:1.13rem;margin-bottom:8px;">${item.titulo}</div>
-        <div style="color:#222;margin-bottom:12px;">${item.texto}</div>
-        ${item.link ? `<a href="${item.link}" target="_blank" style="color:#222;text-decoration:underline;font-size:1.01rem;display:inline-block;margin-bottom:10px;">Acessar link</a>` : ''}
-        <button class="custom-modal-btn" id="alertaPromoSiteBtn">Fechar</button>
+        <span class="custom-modal-close" id="alertaPromoSiteClose" title="Fechar">&times;</span>
+        <div class="promo-badge"><i class="fas fa-bullhorn"></i> ${item.titulo || 'Promoção'}</div>
+        ${item.imagem ? `<div class="promo-img-cover" style="background-image:url('${item.imagem}');"></div>` : ''}
+        <div class="promo-text">${item.texto || ''}</div>
+        ${item.link ? `<a href="${item.link}" target="_blank" class="promo-btn" style="margin-top:18px;"><i class="fas fa-external-link-alt"></i> Saiba mais</a>` : ''}
     `;
     modal.classList.add('active');
     modal.style.display = 'flex';
-    document.getElementById('alertaPromoSiteClose').onclick =
-    document.getElementById('alertaPromoSiteBtn').onclick = function () {
+    document.getElementById('alertaPromoSiteClose').onclick = function () {
         modal.classList.remove('active');
         modal.style.display = 'none';
     };
