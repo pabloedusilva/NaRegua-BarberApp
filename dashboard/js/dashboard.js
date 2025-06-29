@@ -2489,20 +2489,25 @@ async function renderAlertasPromos() {
   arr.forEach((item) => {
     const div = document.createElement('div');
     div.className = 'alerta-promo-card';
-    div.style = 'background:var(--card);border-radius:14px;padding:18px 18px 12px 18px;margin-bottom:18px;box-shadow:0 2px 12px #dac02d11;position:relative;';
+    div.style = 'background:var(--card);border-radius:14px;padding:18px 18px 12px 18px;margin-bottom:18px;box-shadow:0 2px 12px #dac02d11;position:relative;display:flex;align-items:flex-start;gap:16px;';
     div.innerHTML = `
-      ${item.imagem ? `<img src="${item.imagem}" alt="Banner" style="max-width:90px;max-height:90px;border-radius:10px;margin-bottom:8px;float:left;margin-right:14px;">` : ''}
-      <div style="overflow:hidden;">
-        <div style="font-weight:700;color:var(--primary-dark);font-size:1.08rem;">${item.titulo}</div>
-        <div style="color:#222;margin-bottom:6px;">${item.texto}</div>
-        ${item.link ? `<a href="${item.link}" target="_blank" style="color:var(--primary);text-decoration:underline;font-size:0.98rem;">Acessar link</a>` : ''}
+      ${item.imagem ? `<img src="${item.imagem}" alt="Banner" style="width:90px;height:90px;object-fit:cover;border-radius:10px;margin-bottom:8px;">` : ''}
+      <div style="flex:1;overflow:hidden;">
+        <div style="font-weight:700;color:var(--primary-dark);font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.titulo}</div>
+        <div style="color:var(--text);margin-bottom:6px;word-break:break-word;">${item.texto}</div>
+        ${item.link ? `<a href="${item.link}" target="_blank" style="color:var(--primary);text-decoration:underline;font-size:0.98rem;display:inline-block;margin-top:6px;">Acessar link</a>` : ''}
         <div style="margin-top:8px;">
           <span class="badge" style="background:${item.ativo ? '#28a745' : '#aaa'};color:#fff;padding:2px 10px;border-radius:8px;font-size:0.92rem;">${item.ativo ? 'Ativo' : 'Inativo'}</span>
         </div>
       </div>
-      <button class="btn btn-secondary btn-sm" style="position:absolute;top:12px;right:44px;" onclick="editarAlertaPromo(${item.id})"><i class="fas fa-pen"></i></button>
-      <button class="btn btn-danger btn-sm" style="position:absolute;top:12px;right:8px;" onclick="removerAlertaPromo(${item.id})"><i class="fas fa-trash"></i></button>
+      <div class="alerta-promo-actions" style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <button class="btn btn-secondary btn-sm btn-editar-alerta" title="Editar" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm btn-remover-alerta" title="Excluir" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-trash"></i></button>
+      </div>
     `;
+    // Adiciona eventos nos botões
+    div.querySelector('.btn-editar-alerta').addEventListener('click', () => editarAlertaPromo(item.id));
+    div.querySelector('.btn-remover-alerta').addEventListener('click', () => removerAlertaPromo(item.id));
     list.appendChild(div);
   });
 }
