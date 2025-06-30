@@ -195,12 +195,29 @@ document.addEventListener('DOMContentLoaded', async function () {
         return new Date(serverNow);
     }
 
-    // Inicializar calendário
-    let currentDate = getNow();
+    // Inicializar calendário - inicia com a data atual mas permite navegação
+    let currentDate = new Date(); // Data local inicial, será atualizada conforme o usuário navegar
     if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
         currentDate = currentDate.toDate();
     }
-    renderCalendar(currentDate);
+    
+    // Atualizar com data do servidor apenas uma vez no início
+    async function initializeCalendarDate() {
+        const serverDate = getNow();
+        if (serverDate) {
+            currentDate = new Date(serverDate);
+        }
+        renderCalendar(currentDate);
+    }
+    
+    // Chamar inicialização quando a página carrega
+    if (typeof window.startServerTimeSync === 'function') {
+        window.startServerTimeSync().then(() => {
+            initializeCalendarDate();
+        });
+    } else {
+        initializeCalendarDate();
+    }
 
     // Selecionar serviço
     const bookButtons = document.querySelectorAll('.book-button');
@@ -293,6 +310,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
         ];
 
+        // Atualizar o título do mês - SEMPRE atualiza com a data passada
         monthNameElement.textContent = `${monthNames[month]} ${year}`;
 
         let days = '';
@@ -357,13 +375,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
             for (let i = firstDayIndex; i > 0; i--) {
-                const prevMonthDate = new Date(year, month - 1, prevLastDay - i + 1);
-                const dateStr = `${String(prevLastDay - i + 1).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+                const dayNum = prevLastDay - i + 1;
+                const prevMonth = month === 0 ? 12 : month;
+                const prevYear = month === 0 ? year - 1 : year;
+                const dateStr = `${String(dayNum).padStart(2, '0')}/${String(prevMonth).padStart(2, '0')}/${prevYear}`;
                 days += `<div class="day disabled prev-month-day" 
                             data-date="${dateStr}" 
-                            data-month="${month === 0 ? 12 : month}"
-                            data-year="${month === 0 ? year - 1 : year}">
-                            ${prevLastDay - i + 1}
+                            data-month="${prevMonth}"
+                            data-year="${prevYear}"
+                            data-day="${dayNum}">
+                            ${dayNum}
                         </div>`;
             }
             for (let i = 1; i <= lastDay.getDate(); i++) {
@@ -376,26 +397,25 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
                 const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
                 if (isToday) dayClass += ' today';
-                if (selectedDate) {
-                    const [sd, sm, sy] = selectedDate.split('/');
-                    if (Number(sd) === i && Number(sm) === month + 1 && Number(sy) === year) {
-                        dayClass += ' selected';
-                    }
-                }
+                
                 const dateStr = `${String(i).padStart(2, '0')}/${String(month + 1).padStart(2, '0')}/${year}`;
-                // Ao criar cada dia:
+                
+                // Verificar se este dia está selecionado
                 if (selectedDate === dateStr) {
                     dayClass += ' selected';
                 }
-                days += `<div class="${dayClass}" data-date="${dateStr}">${i}</div>`;
+                
+                days += `<div class="${dayClass}" data-date="${dateStr}" data-day="${i}" data-month="${month + 1}" data-year="${year}">${i}</div>`;
             }
             for (let i = 1; i <= nextDays; i++) {
-                const nextMonthDate = new Date(year, month + 1, i);
-                const dateStr = `${String(i).padStart(2, '0')}/${String(month + 2).padStart(2, '0')}/${month === 11 ? year + 1 : year}`;
+                const nextMonth = month === 11 ? 1 : month + 2;
+                const nextYear = month === 11 ? year + 1 : year;
+                const dateStr = `${String(i).padStart(2, '0')}/${String(nextMonth).padStart(2, '0')}/${nextYear}`;
                 days += `<div class="day disabled next-month-day" 
                             data-date="${dateStr}"
-                            data-month="${month === 11 ? 1 : month + 2}"
-                            data-year="${month === 11 ? year + 1 : year}">
+                            data-month="${nextMonth}"
+                            data-year="${nextYear}"
+                            data-day="${i}">
                             ${i}
                         </div>`;
             }
@@ -432,56 +452,127 @@ document.addEventListener('DOMContentLoaded', async function () {
             day.addEventListener('click', function () {
                 // Se for um dia do mês anterior
                 if (this.classList.contains('prev-month-day')) {
-                    currentDate.setMonth(currentDate.getMonth() - 1);
+                    const targetDate = this.getAttribute('data-date');
+                    const targetMonth = parseInt(this.getAttribute('data-month'));
+                    const targetYear = parseInt(this.getAttribute('data-year'));
+                    const targetDay = parseInt(this.getAttribute('data-day'));
+                    
+                    // Atualizar currentDate para o mês anterior preservando o dia clicado
+                    currentDate.setFullYear(targetYear, targetMonth - 1, targetDay);
+                    
+                    // Renderizar o calendário
                     renderCalendar(currentDate);
-
+                    
+                    // Aguardar render e então selecionar o dia
                     setTimeout(() => {
-                        const dayToSelect = this.textContent.trim();
-                        const newDays = document.querySelectorAll('.day:not(.disabled)');
-                        newDays.forEach(newDay => {
-                            if (newDay.textContent.trim() === dayToSelect) {
-                                newDay.click();
-                                newDay.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
+                        // Buscar especificamente o dia do mês atual (não próximo/anterior)
+                        const newDayElement = document.querySelector(`[data-date="${targetDate}"][data-day="${targetDay}"]:not(.prev-month-day):not(.next-month-day)`);
+                        if (newDayElement) {
+                            // Remover seleções anteriores
+                            document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
+                            
+                            // Selecionar o novo dia
+                            newDayElement.classList.add('selected');
+                            selectedDate = targetDate;
+                            
+                            // Atualizar confirmação e carregar horários
+                            updateConfirmationDetails();
+                            confirmationSection.style.display = 'block';
+                            
+                            // Mostrar time-slots
+                            const timeSlotsEl = document.querySelector('.time-slots');
+                            if (timeSlotsEl) timeSlotsEl.style.display = '';
+                            
+                            if (selectedService) {
+                                const [d, m, y] = targetDate.split('/');
+                                const dateObj = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+                                renderTimeSlots(getDiaSemana(dateObj));
                             }
-                        });
+                            
+                            newDayElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
                     }, 100);
                     return;
                 }
 
                 // Se for um dia do próximo mês
                 if (this.classList.contains('next-month-day')) {
-                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    const targetDate = this.getAttribute('data-date');
+                    const targetMonth = parseInt(this.getAttribute('data-month'));
+                    const targetYear = parseInt(this.getAttribute('data-year'));
+                    const targetDay = parseInt(this.getAttribute('data-day'));
+                    
+                    // Atualizar currentDate para o próximo mês preservando o dia clicado
+                    currentDate.setFullYear(targetYear, targetMonth - 1, targetDay);
+                    
+                    // Renderizar o calendário
                     renderCalendar(currentDate);
-
+                    
+                    // Aguardar render e então selecionar o dia
                     setTimeout(() => {
-                        const dayToSelect = this.textContent.trim();
-                        const newDays = document.querySelectorAll('.day:not(.disabled)');
-                        newDays.forEach(newDay => {
-                            if (newDay.textContent.trim() === dayToSelect) {
-                                newDay.click();
-                                newDay.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
+                        // Buscar especificamente o dia do mês atual (não próximo/anterior)
+                        const newDayElement = document.querySelector(`[data-date="${targetDate}"][data-day="${targetDay}"]:not(.prev-month-day):not(.next-month-day)`);
+                        if (newDayElement) {
+                            // Remover seleções anteriores
+                            document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
+                            
+                            // Selecionar o novo dia
+                            newDayElement.classList.add('selected');
+                            selectedDate = targetDate;
+                            
+                            // Atualizar confirmação e carregar horários
+                            updateConfirmationDetails();
+                            confirmationSection.style.display = 'block';
+                            
+                            // Mostrar time-slots
+                            const timeSlotsEl = document.querySelector('.time-slots');
+                            if (timeSlotsEl) timeSlotsEl.style.display = '';
+                            
+                            if (selectedService) {
+                                const [d, m, y] = targetDate.split('/');
+                                const dateObj = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+                                renderTimeSlots(getDiaSemana(dateObj));
                             }
-                        });
+                            
+                            newDayElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
                     }, 100);
                     return;
                 }
 
-                // Código existente para dias normais
-                dayElements.forEach(d => d.classList.remove('selected'));
-                this.classList.add('selected');
+                // Código para dias normais do mês atual
+                if (!this.classList.contains('disabled') && !this.classList.contains('past-day')) {
+                    // Remover seleção anterior
+                    dayElements.forEach(d => d.classList.remove('selected'));
+                    this.classList.add('selected');
 
-                const dateStr = this.getAttribute('data-date');
-                const [d, m, y] = dateStr.split('/');
-                selectedDate = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+                    const dateStr = this.getAttribute('data-date');
+                    selectedDate = dateStr;
 
-                updateConfirmationDetails();
-                confirmationSection.style.display = 'block';
+                    updateConfirmationDetails();
+                    confirmationSection.style.display = 'block';
+                    
+                    // Mostrar time-slots
+                    const timeSlotsEl = document.querySelector('.time-slots');
+                    if (timeSlotsEl) timeSlotsEl.style.display = '';
+                    
+                    // Carregar horários se um serviço já foi selecionado
+                    if (selectedService) {
+                        const [d, m, y] = dateStr.split('/');
+                        const dateObj = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+                        renderTimeSlots(getDiaSemana(dateObj));
+                    }
+                } else if (this.classList.contains('past-day')) {
+                    // Esconder time-slots para dias passados
+                    const timeSlotsEl = document.querySelector('.time-slots');
+                    if (timeSlotsEl) timeSlotsEl.style.display = 'none';
+                }
             });
         });
 
@@ -504,17 +595,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (weekDay === 0) dayEl.classList.add('sunday');
                 if (weekDay === 6) dayEl.classList.add('saturday');
             }
-        });
-
-        document.querySelectorAll('.day').forEach(dayEl => {
-            dayEl.addEventListener('click', function () {
-                if (this.classList.contains('past-day')) {
-                    document.querySelector('.time-slots').style.display = 'none';
-                    return;
-                }
-                // ...código normal para dias válidos...
-                document.querySelector('.time-slots').style.display = '';
-            });
         });
     }
 
@@ -1097,10 +1177,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             return;
         }
-        // Atualiza o calendário e outros componentes dependentes da data
-        if (typeof renderCalendar === 'function') {
-            renderCalendar(serverDate);
-        }
+        // NÃO atualiza o calendário automaticamente - apenas atualiza a data do servidor
+        // O calendário mantém a navegação do usuário
     }
 
     // Inicializa a data do servidor ao carregar a página

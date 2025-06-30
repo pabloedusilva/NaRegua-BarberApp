@@ -1945,14 +1945,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Renderiza lista de alertas/promos no painel
     function renderAlertasPromos() {
-    const lista = document.getElementById('alertasPromosList');
-    if (!lista) return; // Evita erro se o elemento não existir
-    const arr = getAlertasPromos();
-    lista.innerHTML = '';
-    arr.forEach((item, idx) => {
-        const div = document.createElement('div');
-        div.className = 'alerta-promocao-item';
-        div.innerHTML = `
+        const lista = document.getElementById('alertasPromosList');
+        if (!lista) return; // Evita erro se o elemento não existir
+        const arr = getAlertasPromos();
+        lista.innerHTML = '';
+        arr.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'alerta-promocao-item';
+            div.innerHTML = `
             ${item.imagem ? `<img src="${item.imagem}" alt="Banner">` : ''}
             <div>
                 <div style="font-weight:700;color:var(--primary-dark);">${item.titulo}</div>
@@ -1960,15 +1960,15 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <button class="alerta-promocao-remove" title="Remover" aria-label="Remover alerta">&times;</button>
         `;
-        div.querySelector('.alerta-promocao-remove').onclick = () => {
-            const arr2 = getAlertasPromos();
-            arr2.splice(idx, 1);
-            setAlertasPromos(arr2);
-            renderAlertasPromos();
-        };
-        lista.appendChild(div);
-    });
-}
+            div.querySelector('.alerta-promocao-remove').onclick = () => {
+                const arr2 = getAlertasPromos();
+                arr2.splice(idx, 1);
+                setAlertasPromos(arr2);
+                renderAlertasPromos();
+            };
+            lista.appendChild(div);
+        });
+    }
 
     // Adiciona novo alerta/promo
     if (form) {
@@ -2463,39 +2463,39 @@ document.getElementById('addSpecialDayOffForm').onsubmit = async function (e) {
 };
 
 async function getAlertasPromos() {
-  const res = await fetch('/api/alertas-promos', { credentials: 'same-origin' });
-  return await res.json();
+    const res = await fetch('/api/alertas-promos', { credentials: 'same-origin' });
+    return await res.json();
 }
 async function setAlertaPromo(data, id) {
-  const method = id ? 'PUT' : 'POST';
-  const url = id ? `/api/alertas-promos/${id}` : '/api/alertas-promos';
-  const res = await fetch(url, {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'same-origin',
-    body: JSON.stringify(data)
-  });
-  return await res.json();
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `/api/alertas-promos/${id}` : '/api/alertas-promos';
+    const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+    });
+    return await res.json();
 }
 async function deleteAlertaPromo(id) {
-  await fetch(`/api/alertas-promos/${id}`, { method: 'DELETE', credentials: 'same-origin' });
+    await fetch(`/api/alertas-promos/${id}`, { method: 'DELETE', credentials: 'same-origin' });
 }
 
 // Renderiza lista
 async function renderAlertasPromos() {
-  const list = document.getElementById('alertasPromosList');
-  if (!list) return;
-  const arr = await getAlertasPromos();
-  list.innerHTML = '';
-  if (!arr.length) {
-    list.innerHTML = '<div style="color:#888;text-align:center;padding:24px 0;">Nenhum alerta/promo cadastrado.</div>';
-    return;
-  }
-  arr.forEach((item) => {
-    const div = document.createElement('div');
-    div.className = 'alerta-promo-card';
-    div.style = 'background:var(--card);border-radius:14px;padding:18px 18px 12px 18px;margin-bottom:18px;box-shadow:0 2px 12px #dac02d11;position:relative;display:flex;align-items:flex-start;gap:16px;';
-    div.innerHTML = `
+    const list = document.getElementById('alertasPromosList');
+    if (!list) return;
+    const arr = await getAlertasPromos();
+    list.innerHTML = '';
+    if (!arr.length) {
+        list.innerHTML = '<div style="color:#888;text-align:center;padding:24px 0;">Nenhum alerta/promo cadastrado.</div>';
+        return;
+    }
+    arr.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'alerta-promo-card';
+        div.style = 'background:var(--card);border-radius:14px;padding:18px 18px 12px 18px;margin-bottom:18px;box-shadow:0 2px 12px #dac02d11;position:relative;display:flex;align-items:flex-start;gap:16px;';
+        div.innerHTML = `
       ${item.imagem ? `<img src="${item.imagem}" alt="Banner" style="width:90px;height:90px;object-fit:cover;border-radius:10px;margin-bottom:8px;">` : ''}
       <div style="flex:1;overflow:hidden;">
         <div style="font-weight:700;color:var(--primary-dark);font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.titulo}</div>
@@ -2510,83 +2510,80 @@ async function renderAlertasPromos() {
         <button class="btn btn-danger btn-sm btn-remover-alerta" title="Excluir" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-trash"></i></button>
       </div>
     `;
-    // Adiciona eventos nos botões
-    div.querySelector('.btn-editar-alerta').addEventListener('click', () => editarAlertaPromo(item.id));
-    div.querySelector('.btn-remover-alerta').addEventListener('click', () => removerAlertaPromo(item.id));
-    list.appendChild(div);
-  });
+        // Adiciona eventos nos botões
+        div.querySelector('.btn-editar-alerta').addEventListener('click', () => editarAlertaPromo(item.id));
+        div.querySelector('.btn-remover-alerta').addEventListener('click', () => removerAlertaPromo(item.id));
+        list.appendChild(div);
+    });
 }
 
 // Abrir modal de novo/edição
 let alertaPromoEditId = null;
 document.getElementById('addAlertaPromoBtn').onclick = () => {
-  alertaPromoEditId = null;
-  abrirAlertaPromoModal();
+    alertaPromoEditId = null;
+    abrirAlertaPromoModal();
 };
-window.editarAlertaPromo = async function(id) {
-  alertaPromoEditId = id;
-  const arr = await getAlertasPromos();
-  const data = arr.find(a => a.id === id);
-  abrirAlertaPromoModal(data);
+window.editarAlertaPromo = async function (id) {
+    alertaPromoEditId = id;
+    const arr = await getAlertasPromos();
+    const data = arr.find(a => a.id === id);
+    abrirAlertaPromoModal(data);
 };
-window.removerAlertaPromo = async function(id) {
-  if (confirm('Remover este alerta/promo?')) {
-    await deleteAlertaPromo(id);
-    renderAlertasPromos();
-  }
+window.removerAlertaPromo = async function (id) {
+    if (confirm('Remover este alerta/promo?')) {
+        await deleteAlertaPromo(id);
+        renderAlertasPromos();
+    }
 };
 function abrirAlertaPromoModal(data = {}) {
-  document.getElementById('alertaPromoModalTitle').textContent = data.titulo ? 'Editar Alerta/Promo' : 'Novo Alerta/Promo';
-  document.getElementById('alertaPromoTitulo').value = data.titulo || '';
-  document.getElementById('alertaPromoTexto').value = data.texto || '';
-  document.getElementById('alertaPromoImagem').value = data.imagem || '';
-  document.getElementById('alertaPromoLink').value = data.link || '';
-  document.getElementById('alertaPromoAtivo').checked = data.ativo !== false;
-  document.getElementById('alertaPromoImagemPreview').innerHTML = data.imagem ? `<img src="${data.imagem}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
-  document.getElementById('alertaPromoModal').style.display = 'flex';
+    document.getElementById('alertaPromoModalTitle').textContent = data.titulo ? 'Editar Alerta/Promo' : 'Novo Alerta/Promo';
+    document.getElementById('alertaPromoTitulo').value = data.titulo || '';
+    document.getElementById('alertaPromoTexto').value = data.texto || '';
+    document.getElementById('alertaPromoImagem').value = data.imagem || '';
+    document.getElementById('alertaPromoLink').value = data.link || '';
+    document.getElementById('alertaPromoAtivo').checked = data.ativo !== false;
+    document.getElementById('alertaPromoImagemPreview').innerHTML = data.imagem ? `<img src="${data.imagem}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
+    document.getElementById('alertaPromoModal').style.display = 'flex';
 }
 
 // Preview da imagem ao colar URL ou upload
 document.getElementById('alertaPromoImagem').addEventListener('input', function () {
-  const url = this.value.trim();
-  document.getElementById('alertaPromoImagemPreview').innerHTML = url ? `<img src="${url}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
+    const url = this.value.trim();
+    document.getElementById('alertaPromoImagemPreview').innerHTML = url ? `<img src="${url}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
 });
 document.getElementById('alertaPromoImagemUpload').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function (evt) {
-    document.getElementById('alertaPromoImagem').value = evt.target.result;
-    document.getElementById('alertaPromoImagemPreview').innerHTML = `<img src="${evt.target.result}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
-  };
-  reader.readAsDataURL(file);
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+        document.getElementById('alertaPromoImagem').value = evt.target.result;
+        document.getElementById('alertaPromoImagemPreview').innerHTML = `<img src="${evt.target.result}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
+    };
+    reader.readAsDataURL(file);
 });
 
 // Fechar modal
 document.getElementById('closeAlertaPromoModal').onclick =
-document.getElementById('cancelAlertaPromo').onclick = function () {
-  document.getElementById('alertaPromoModal').style.display = 'none';
-};
+    document.getElementById('cancelAlertaPromo').onclick = function () {
+        document.getElementById('alertaPromoModal').style.display = 'none';
+    };
 
 // Salvar alerta/promo
 document.getElementById('alertaPromoForm').onsubmit = async function (e) {
-  e.preventDefault();
-  const titulo = document.getElementById('alertaPromoTitulo').value.trim();
-  const texto = document.getElementById('alertaPromoTexto').value.trim();
-  const imagem = document.getElementById('alertaPromoImagem').value.trim();
-  const link = document.getElementById('alertaPromoLink').value.trim();
-  const ativo = document.getElementById('alertaPromoAtivo').checked;
-  if (!titulo || !texto) return;
-  await setAlertaPromo({ titulo, texto, imagem, link, ativo }, alertaPromoEditId);
-  document.getElementById('alertaPromoModal').style.display = 'none';
-  renderAlertasPromos();
+    e.preventDefault();
+    const titulo = document.getElementById('alertaPromoTitulo').value.trim();
+    const texto = document.getElementById('alertaPromoTexto').value.trim();
+    const imagem = document.getElementById('alertaPromoImagem').value.trim();
+    const link = document.getElementById('alertaPromoLink').value.trim();
+    const ativo = document.getElementById('alertaPromoAtivo').checked;
+    if (!titulo || !texto) return;
+    await setAlertaPromo({ titulo, texto, imagem, link, ativo }, alertaPromoEditId);
+    document.getElementById('alertaPromoModal').style.display = 'none';
+    renderAlertasPromos();
 };
 renderAlertasPromos();
 
 document.getElementById('downloadMonthPDF')?.addEventListener('click', function () {
-    const btn = this;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
     fetch('/dashboard/agendamentos-concluidos-mes-pdf')
         .then(res => {
             if (!res.ok) throw new Error('Erro ao gerar PDF');
@@ -2604,9 +2601,5 @@ document.getElementById('downloadMonthPDF')?.addEventListener('click', function 
         })
         .catch(() => {
             alert('Erro ao gerar PDF');
-        })
-        .finally(() => {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-file-pdf"></i> PDF';
         });
 });
