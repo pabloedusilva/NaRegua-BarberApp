@@ -2343,7 +2343,7 @@ if (deleteProfessionalBtn) {
     };
 }
 
-
+carregarFolgasEspeciais();
 async function carregarFolgasEspeciais() {
     const list = document.getElementById('specialDaysOffList');
     const empty = document.getElementById('specialDayOffEmpty');

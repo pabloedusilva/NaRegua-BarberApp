@@ -1180,6 +1180,7 @@ header {
     background: var(--card);
     border-radius: 15px;
     padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 95%;
     margin: 0 auto;
@@ -2288,14 +2289,6 @@ footer {
     .slots-container {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     }
-
-    .calendar-section.calendar-compact .container {
-        padding: 0;
-    }
-    
-    .calendar-section.calendar-compact {
-        margin: 0;
-    }
 }
 
 @media screen and (max-width: 480px) {
@@ -2323,10 +2316,9 @@ footer {
 
 @media screen and (max-width: 768px) {
     .calendar-week-view {
-        padding: 15px;
-        margin: 0 -15px;
-        max-width: calc(100% + 30px);
-        width: calc(100% + 30px);
+        padding: 20px;
+        margin: 5px;
+        max-width: 98%;
     }
 
     .week-days {
@@ -2368,15 +2360,13 @@ footer {
 
 @media screen and (max-width: 480px) {
     .calendar-week-view {
-        padding: 12px;
-        margin: 0 -15px;
-        max-width: calc(100% + 30px);
-        width: calc(100% + 30px);
-        border-radius: 0;
+        padding: 15px;
+        margin: 2px;
+        max-width: 99%;
     }
 
     .week-days {
-        gap: 6px;
+        gap: 8px;
     }
 
     .day-column {
@@ -2404,35 +2394,17 @@ footer {
     }
 }
 
-/* Modo adaptativo para telas muito pequenas */
-@media screen and (max-width: 360px) {
-    .calendar-week-view {
-        padding: 8px;
-        margin: 0 -15px;
-        max-width: calc(100% + 30px);
-        width: calc(100% + 30px);
-        border-radius: 0;
-    }
+    /* Modo adaptativo para telas muito pequenas */
+    @media screen and (max-width: 360px) {
+        .week-day-name {
+            font-size: 0.6rem;
+        }
 
-    .week-days {
-        gap: 4px;
-    }
-
-    .week-day-name {
-        font-size: 0.6rem;
-        margin-bottom: 4px;
-    }
-
-    .day {
-        width: 25px;
-        height: 25px;
-        font-size: 0.75rem;
-    }
-
-    .day-column {
-        padding: 4px 2px;
-        min-height: 50px;
-    }
+        .day {
+            width: 25px;
+            height: 25px;
+            font-size: 0.75rem;
+        }
     }
 
     /* Ajustes para paisagem em mobile */
@@ -2707,4 +2679,8 @@ footer {
     margin-bottom: 0;
     padding: 0 0 0 0;
     line-height: 1;
+}
+
+#alertaPromoSiteModal .custom-modal-close:hover {
+    color: var(--primary);
 }
