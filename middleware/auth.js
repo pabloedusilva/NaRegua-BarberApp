@@ -8,6 +8,3 @@ function requireLogin(req, res, next) {
 }
 
 module.exports = { requireLogin };
-
-// Exemplo de query adaptada:
-// const rows = await db`SELECT * FROM usuarios WHERE id = ${userId}`;

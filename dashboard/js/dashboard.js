@@ -1562,7 +1562,7 @@ async function carregarBarbeariaDashboard() {
             container.innerHTML = `
                 <div class="barbershop-photo">
                     <div class="barbershop-photo-inner">
-                        <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia">
+                        <img src="${b.foto}" alt="Foto da Barbearia">
                     </div>
                 </div>
                 <div class="barbershop-main">
@@ -1945,28 +1945,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Renderiza lista de alertas/promos no painel
     function renderAlertasPromos() {
-        const arr = getAlertasPromos();
-        lista.innerHTML = '';
-        arr.forEach((item, idx) => {
-            const div = document.createElement('div');
-            div.className = 'alerta-promocao-item';
-            div.innerHTML = `
-                ${item.imagem ? `<img src="${item.imagem}" alt="Banner">` : ''}
-                <div>
-                    <div style="font-weight:700;color:var(--primary-dark);">${item.titulo}</div>
-                    <div style="color:#222;">${item.mensagem}</div>
-                </div>
-                <button class="alerta-promocao-remove" title="Remover" aria-label="Remover alerta">&times;</button>
-            `;
-            div.querySelector('.alerta-promocao-remove').onclick = () => {
-                const arr2 = getAlertasPromos();
-                arr2.splice(idx, 1);
-                setAlertasPromos(arr2);
-                renderAlertasPromos();
-            };
-            lista.appendChild(div);
-        });
-    }
+    const lista = document.getElementById('alertasPromosList');
+    if (!lista) return; // Evita erro se o elemento não existir
+    const arr = getAlertasPromos();
+    lista.innerHTML = '';
+    arr.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'alerta-promocao-item';
+        div.innerHTML = `
+            ${item.imagem ? `<img src="${item.imagem}" alt="Banner">` : ''}
+            <div>
+                <div style="font-weight:700;color:var(--primary-dark);">${item.titulo}</div>
+                <div style="color:#222;">${item.mensagem}</div>
+            </div>
+            <button class="alerta-promocao-remove" title="Remover" aria-label="Remover alerta">&times;</button>
+        `;
+        div.querySelector('.alerta-promocao-remove').onclick = () => {
+            const arr2 = getAlertasPromos();
+            arr2.splice(idx, 1);
+            setAlertasPromos(arr2);
+            renderAlertasPromos();
+        };
+        lista.appendChild(div);
+    });
+}
 
     // Adiciona novo alerta/promo
     if (form) {
@@ -1975,9 +1977,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const titulo = document.getElementById('alertaTitulo').value.trim();
             const mensagem = document.getElementById('alertaMensagem').value.trim();
             const imagem = document.getElementById('alertaImagem').value.trim();
+            const link = document.getElementById('alertaLink').value.trim();
+            const ativo = document.getElementById('alertaAtivo').checked;
             if (!titulo || !mensagem) return;
             const arr = getAlertasPromos();
-            arr.unshift({ titulo, mensagem, imagem });
+            arr.unshift({ titulo, mensagem, imagem, link, ativo });
             setAlertasPromos(arr);
             renderAlertasPromos();
             form.reset();

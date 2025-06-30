@@ -1316,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     card.setAttribute('data-professional', prof.nome);
                     card.innerHTML = `
                         <div class="professional-img">
-                            <img src="${prof.avatar || 'img/sua-logo.png'}" alt="Avatar ${prof.nome}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" />
+                            <img src="${prof.avatar}" alt="Avatar ${prof.nome}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" />
                         </div>
                         <div class="professional-name">${prof.nome}</div>
                     `;
@@ -1410,7 +1410,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
                 container.innerHTML = `
                     <div class="profile-pic">
-                        <img src="${b.foto || 'img/sua-logo.png'}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                        <img src="${b.foto}" alt="Foto da Barbearia" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
                     </div>
                     <div class="welcome-text">Seja bem vindo(a) ao</div>
                     <h1 class="barbershop-name">${b.nome}</h1>
@@ -1521,9 +1521,7 @@ async function showAlertaPromoSiteModal() {
         <div class="promo-modal-header">
             <span class="custom-modal-close" id="alertaPromoSiteClose" title="Fechar">&times;</span>
         </div>
-        <div class="promo-badge"><i class="fas fa-bullhorn"></i> ${item.titulo || 'Promoção'}</div>
         ${item.imagem ? `<div class="promo-img-cover" style="background-image:url('${item.imagem}');"></div>` : ''}
-        <div class="promo-text">${item.texto || ''}</div>
         ${item.link ? `<a href="${item.link}" target="_blank" class="promo-btn" style="margin-top:18px;"><i class="fas fa-external-link-alt"></i> Saiba mais</a>` : ''}
     `;
     modal.classList.add('active');

@@ -2497,25 +2497,6 @@ footer {
     box-shadow: 0 2px 18px #dac02d33;
     display: block;
 }
-
-#alertaPromoSiteModal .promo-title {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--primary-dark);
-    margin-bottom: 8px;
-    margin-top: 2px;
-    letter-spacing: 0.5px;
-}
-
-#alertaPromoSiteModal .promo-text {
-    color:var(--text);
-    font-size: 1.08rem;
-    margin-bottom: 18px;
-    margin-top: 0;
-    line-height: 1.5;
-    font-weight: 500;
-}
-
 #alertaPromoSiteModal .promo-link {
     display: inline-block;
     margin-bottom: 14px;
