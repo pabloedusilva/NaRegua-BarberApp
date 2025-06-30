@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let currentSelectedButton = null;
     let calendarMode = 'month'; // Pode ser 'month' ou 'week'
     let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
+    let folgasEspeciais = []; // Array de datas de folgas especiais no formato 'YYYY-MM-DD'
 
     // Elementos da página
     const calendarSection = document.getElementById('calendar-section');
@@ -207,7 +208,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (serverDate) {
             currentDate = new Date(serverDate);
         }
-        renderCalendar(currentDate);
+        await renderCalendar(currentDate);
     }
     
     // Chamar inicialização quando a página carrega
@@ -275,18 +276,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     const prevMonthButton = document.querySelector('.prev-month');
     const nextMonthButton = document.querySelector('.next-month');
 
-    prevMonthButton.addEventListener('click', function () {
+    prevMonthButton.addEventListener('click', async function () {
         currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar(currentDate);
+        await renderCalendar(currentDate);
     });
 
-    nextMonthButton.addEventListener('click', function () {
+    nextMonthButton.addEventListener('click', async function () {
         currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar(currentDate);
+        await renderCalendar(currentDate);
     });
 
     // Alternar visualização do calendário
-    calendarToggleBtn.addEventListener('click', function () {
+    calendarToggleBtn.addEventListener('click', async function () {
         if (calendarMode === 'month') {
             calendarMode = 'week';
             calendarSection.classList.add('calendar-compact');
@@ -296,11 +297,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             calendarSection.classList.remove('calendar-compact');
             calendarToggleBtn.textContent = 'Visualização semanal';
         }
-        renderCalendar(currentDate);
+        await renderCalendar(currentDate);
     });
 
     // Renderizar calendário
-    function renderCalendar(date) {
+    async function renderCalendar(date) {
+        // Recarregar folgas especiais para garantir informação atualizada
+        await carregarFolgasEspeciais();
+        
         const year = date.getFullYear();
         const month = date.getMonth();
         const today = getNow();
@@ -349,10 +353,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                     dayClass += ' today';
                 }
 
+                // Verificar se este dia da semana é uma folga especial
+                const weekDateStr = weekDay.toLocaleDateString('pt-BR');
+                if (isFolgaEspecial(weekDateStr)) {
+                    dayClass += ' folga-especial';
+                }
+
                 // Adicione o nome do dia acima do número
                 days += `<div class="day-column">
                                     <div class="week-day-name">${weekDayNames[i]}</div>
-                                    <div class="${dayClass}" data-date="${weekDay.toLocaleDateString('pt-BR')}">${weekDay.getDate()}</div>
+                                    <div class="${dayClass}" data-date="${weekDateStr}">${weekDay.getDate()}</div>
                                 </div>`;
             }
 
@@ -379,7 +389,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const prevMonth = month === 0 ? 12 : month;
                 const prevYear = month === 0 ? year - 1 : year;
                 const dateStr = `${String(dayNum).padStart(2, '0')}/${String(prevMonth).padStart(2, '0')}/${prevYear}`;
-                days += `<div class="day disabled prev-month-day" 
+                
+                let dayClass = 'day disabled prev-month-day';
+                if (isFolgaEspecial(dateStr)) {
+                    dayClass += ' folga-especial';
+                }
+                
+                days += `<div class="${dayClass}" 
                             data-date="${dateStr}" 
                             data-month="${prevMonth}"
                             data-year="${prevYear}"
@@ -400,6 +416,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 const dateStr = `${String(i).padStart(2, '0')}/${String(month + 1).padStart(2, '0')}/${year}`;
                 
+                // Verificar se este dia é uma folga especial
+                if (isFolgaEspecial(dateStr)) {
+                    dayClass += ' folga-especial';
+                }
+                
                 // Verificar se este dia está selecionado
                 if (selectedDate === dateStr) {
                     dayClass += ' selected';
@@ -411,7 +432,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const nextMonth = month === 11 ? 1 : month + 2;
                 const nextYear = month === 11 ? year + 1 : year;
                 const dateStr = `${String(i).padStart(2, '0')}/${String(nextMonth).padStart(2, '0')}/${nextYear}`;
-                days += `<div class="day disabled next-month-day" 
+                
+                let dayClass = 'day disabled next-month-day';
+                if (isFolgaEspecial(dateStr)) {
+                    dayClass += ' folga-especial';
+                }
+                
+                days += `<div class="${dayClass}" 
                             data-date="${dateStr}"
                             data-month="${nextMonth}"
                             data-year="${nextYear}"
@@ -426,16 +453,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Adicionar event listeners para os botões de navegação semanal
         if (calendarMode === 'week') {
             document.querySelector('.prev-week').addEventListener('click', () => {
-                animateWeekTransition('right', () => {
+                animateWeekTransition('right', async () => {
                     currentDate.setDate(currentDate.getDate() - 7);
-                    renderCalendar(currentDate);
+                    await renderCalendar(currentDate);
                 });
             });
 
             document.querySelector('.next-week').addEventListener('click', () => {
-                animateWeekTransition('left', () => {
+                animateWeekTransition('left', async () => {
                     currentDate.setDate(currentDate.getDate() + 7);
-                    renderCalendar(currentDate);
+                    await renderCalendar(currentDate);
                 });
             });
 
@@ -450,6 +477,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         const dayElements = document.querySelectorAll('.day');
         dayElements.forEach(day => {
             day.addEventListener('click', function () {
+                // Se for uma folga especial ou dia passado, não fazer nada
+                if (this.classList.contains('folga-especial') || this.classList.contains('past-day')) {
+                    return;
+                }
+                
                 // Se for um dia do mês anterior
                 if (this.classList.contains('prev-month-day')) {
                     const targetDate = this.getAttribute('data-date');
@@ -547,7 +579,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 // Código para dias normais do mês atual
-                if (!this.classList.contains('disabled') && !this.classList.contains('past-day')) {
+                if (!this.classList.contains('disabled') && !this.classList.contains('past-day') && !this.classList.contains('folga-especial')) {
                     // Remover seleção anterior
                     dayElements.forEach(d => d.classList.remove('selected'));
                     this.classList.add('selected');
@@ -568,8 +600,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                         const dateObj = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
                         renderTimeSlots(getDiaSemana(dateObj));
                     }
-                } else if (this.classList.contains('past-day')) {
-                    // Esconder time-slots para dias passados
+                } else if (this.classList.contains('past-day') || this.classList.contains('folga-especial')) {
+                    // Esconder time-slots para dias passados ou folgas especiais
                     const timeSlotsEl = document.querySelector('.time-slots');
                     if (timeSlotsEl) timeSlotsEl.style.display = 'none';
                 }
@@ -1201,10 +1233,47 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    // Função para carregar folgas especiais do backend
+    async function carregarFolgasEspeciais() {
+        try {
+            const res = await fetch('/dashboard/folgas-especiais-public');
+            const data = await res.json();
+            if (data.success) {
+                folgasEspeciais = data.datas || [];
+            } else {
+                folgasEspeciais = [];
+            }
+        } catch (err) {
+            folgasEspeciais = [];
+        }
+    }
+
+    // Função auxiliar para verificar se uma data é folga especial
+    function isFolgaEspecial(dateStr) {
+        // Converte a data do formato DD/MM/YYYY para YYYY-MM-DD
+        const [day, month, year] = dateStr.split('/');
+        const isoDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        return folgasEspeciais.includes(isoDate);
+    }
+
     // Função para exibir horários disponíveis do dia selecionado
     async function renderTimeSlots(diaSemana) {
         const slotsContainer = document.querySelector('.slots-container');
         slotsContainer.innerHTML = '';
+        
+        // Verificar se o dia selecionado é uma folga especial
+        if (selectedDate && isFolgaEspecial(selectedDate)) {
+            slotsContainer.innerHTML = `
+              <div style="display:flex;justify-content:center;align-items:center;height:100px;width:100%;">
+                <div style="color:#b71c1c;border-radius:12px;padding:18px 28px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:180px;max-width:90vw;">
+                  <i class='fas fa-store-slash' style='font-size:1.5rem;color:#b71c1c;margin-bottom:2px;opacity:0.7;'></i>
+                  <span style="font-size:1.05rem;font-weight:500;letter-spacing:0.2px;">Fechado</span>
+                </div>
+              </div>
+            `;
+            return;
+        }
+        
         const turnos = turnosSemana.filter(t => t.dia_semana === diaSemana);
         if (turnos.length === 0) {
             slotsContainer.innerHTML = `
@@ -1376,8 +1445,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-    // No carregamento da página, carregue os turnos:
+    // No carregamento da página, carregue os turnos e folgas especiais:
     await carregarHorariosTurnos();
+    await carregarFolgasEspeciais();
 
     // Função para carregar profissionais do backend e renderizar os cards
     async function carregarProfissionais() {

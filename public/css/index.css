@@ -1005,6 +1005,31 @@ header {
     opacity: 0.7;
 }
 
+/* Estilo para folgas especiais - mesmo visual dos dias fechados */
+.day.folga-especial {
+    color: #b71c1c !important;
+    background: linear-gradient(135deg, rgba(183, 28, 28, 0.1), rgba(183, 28, 28, 0.05)) !important;
+    border: 1px solid rgba(183, 28, 28, 0.3) !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    opacity: 0.8;
+    position: relative;
+}
+
+.day.folga-especial::before {
+    content: "🔒";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 8px;
+    opacity: 0.7;
+}
+
+.day.folga-especial:hover {
+    background: linear-gradient(135deg, rgba(183, 28, 28, 0.15), rgba(183, 28, 28, 0.1)) !important;
+    cursor: not-allowed !important;
+}
+
 .calendar-toggle-btn {
     background: var(--primary);
     /* Dourado */
