@@ -1179,13 +1179,13 @@ header {
 .calendar-week-view {
     background: var(--card);
     border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 25px;
     width: 100%;
-    max-width: 800px;
+    max-width: 95%;
     margin: 0 auto;
     animation: fadeIn 0.3s ease;
     position: relative;
+    min-width: 320px;
 }
 
 .week-days,
@@ -1222,17 +1222,20 @@ header {
 .week-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
+    gap: 15px;
     width: 100%;
+    min-height: 80px;
 }
 
 .day-column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 4px;
-    border-radius: 10px;
+    padding: 12px 8px;
+    border-radius: 12px;
     transition: all 0.3s ease;
+    min-height: 70px;
+    justify-content: center;
 }
 
 .week-day-name {
@@ -1244,8 +1247,8 @@ header {
 }
 
 .day {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1257,6 +1260,7 @@ header {
     background: var(--card);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     color: var(--text);
+    font-size: 1rem;
 }
 
 .day:hover {
@@ -2284,6 +2288,14 @@ footer {
     .slots-container {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     }
+
+    .calendar-section.calendar-compact .container {
+        padding: 0;
+    }
+    
+    .calendar-section.calendar-compact {
+        margin: 0;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -2312,11 +2324,13 @@ footer {
 @media screen and (max-width: 768px) {
     .calendar-week-view {
         padding: 15px;
-        margin: 10px;
+        margin: 0 -15px;
+        max-width: calc(100% + 30px);
+        width: calc(100% + 30px);
     }
 
     .week-days {
-        gap: 8px;
+        gap: 12px;
     }
 
     .day-column {
@@ -2354,22 +2368,26 @@ footer {
 
 @media screen and (max-width: 480px) {
     .calendar-week-view {
-        padding: 10px;
-        margin: 5px;
+        padding: 12px;
+        margin: 0 -15px;
+        max-width: calc(100% + 30px);
+        width: calc(100% + 30px);
+        border-radius: 0;
     }
 
     .week-days {
-        gap: 4px;
+        gap: 6px;
     }
 
     .day-column {
-        padding: 3px;
+        padding: 8px 4px;
+        min-height: 60px;
     }
 
     .day {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
     }
 
     .week-day-name {
@@ -2384,18 +2402,37 @@ footer {
         font-size: 0.9rem;
         padding: 6px;
     }
+}
 
-    /* Modo adaptativo para telas muito pequenas */
-    @media screen and (max-width: 360px) {
-        .week-day-name {
-            font-size: 0.6rem;
-        }
+/* Modo adaptativo para telas muito pequenas */
+@media screen and (max-width: 360px) {
+    .calendar-week-view {
+        padding: 8px;
+        margin: 0 -15px;
+        max-width: calc(100% + 30px);
+        width: calc(100% + 30px);
+        border-radius: 0;
+    }
 
-        .day {
-            width: 25px;
-            height: 25px;
-            font-size: 0.75rem;
-        }
+    .week-days {
+        gap: 4px;
+    }
+
+    .week-day-name {
+        font-size: 0.6rem;
+        margin-bottom: 4px;
+    }
+
+    .day {
+        width: 25px;
+        height: 25px;
+        font-size: 0.75rem;
+    }
+
+    .day-column {
+        padding: 4px 2px;
+        min-height: 50px;
+    }
     }
 
     /* Ajustes para paisagem em mobile */
@@ -2413,7 +2450,6 @@ footer {
             height: 28px;
         }
     }
-}
 
 
 /* =========================
@@ -2671,8 +2707,4 @@ footer {
     margin-bottom: 0;
     padding: 0 0 0 0;
     line-height: 1;
-}
-
-#alertaPromoSiteModal .custom-modal-close:hover {
-    color: var(--primary);
 }
