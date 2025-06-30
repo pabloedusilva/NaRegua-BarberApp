@@ -533,6 +533,12 @@ router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
         const year = now.getFullYear();
         const month = now.getMonth() + 1; // 1-12
 
+        // Array de nomes dos meses
+        const monthNames = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+
         // Busca todos os agendamentos concluídos do mês atual
         const rows = await db`
             SELECT nome, telefone, servico, profissional, data, hora, preco
@@ -543,56 +549,165 @@ router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
             ORDER BY data, hora
         `;
 
-        // Cria PDF
-        const doc = new PDFDocument({ margin: 40, size: 'A4' });
+        // Busca informações da barbearia
+        const barbeariaInfo = await db`SELECT * FROM barbearia LIMIT 1`;
+        const barbearia = barbeariaInfo[0] || { nome: 'NaRégua Barbearia' };
+
+        // Criar PDF com configurações simples
+        const doc = new PDFDocument({ 
+            margin: 40, 
+            size: 'A4',
+            info: {
+                Title: `Agendamentos Concluídos - ${String(month).padStart(2, '0')}/${year}`,
+                Author: barbearia.nome || 'NaRégua Barbearia',
+                Subject: 'Relatório Mensal de Agendamentos Concluídos'
+            }
+        });
+        
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="agendamentos_concluidos_${year}_${month}.pdf"`);
+        res.setHeader('Content-Disposition', `attachment; filename="Agendamentos_${monthNames[month - 1]}_${year}.pdf"`);
 
         doc.pipe(res);
 
-        // Cabeçalho
-        doc
-            .fontSize(22)
-            .fillColor('#dac02d')
-            .text('Relatório de Agendamentos Concluídos', { align: 'center' })
-            .moveDown(0.2)
-            .fontSize(14)
-            .fillColor('#333')
-            .text(`Mês: ${String(month).padStart(2, '0')}/${year}`, { align: 'center' })
-            .moveDown(1);
+        // Cabeçalho simples
+        doc.fillColor('#1A1A1A')
+           .fontSize(18)
+           .font('Helvetica-Bold')
+           .text('AGENDAMENTOS CONCLUÍDOS', 40, 40);
 
-        // Tabela
-        doc
-            .fontSize(12)
-            .fillColor('#222')
-            .text('Nome do Cliente', 40, doc.y, { continued: true, width: 120, underline: true })
-            .text('Serviço', 170, doc.y, { continued: true, width: 100, underline: true })
-            .text('Profissional', 275, doc.y, { continued: true, width: 100, underline: true })
-            .text('Data', 380, doc.y, { continued: true, width: 60, underline: true })
-            .text('Hora', 445, doc.y, { continued: true, width: 40, underline: true })
-            .text('Preço', 490, doc.y, { width: 50, underline: true })
-            .moveDown(0.5);
+        doc.fillColor('#666666')
+           .fontSize(14)
+           .font('Helvetica')
+           .text(`Período: ${monthNames[month - 1]} de ${year}`, 40, 70);
 
-        rows.forEach(ag => {
-            doc
-                .fontSize(11)
-                .fillColor('#444')
-                .text(ag.nome, 40, doc.y, { continued: true, width: 120 })
-                .text(ag.servico, 170, doc.y, { continued: true, width: 100 })
-                .text(ag.profissional, 275, doc.y, { continued: true, width: 100 })
-                .text(new Date(ag.data).toLocaleDateString('pt-BR'), 380, doc.y, { continued: true, width: 60 })
-                .text(ag.hora, 445, doc.y, { continued: true, width: 40 })
-                .text(`R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}`, 490, doc.y, { width: 50 })
-                .moveDown(0.2);
-        });
+        doc.fillColor('#999999')
+           .fontSize(10)
+           .text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 40, 95);
 
-        if (rows.length === 0) {
-            doc.moveDown(2).fontSize(13).fillColor('#e74c3c').text('Nenhum agendamento concluído neste mês.', { align: 'center' });
+        let currentY = 130;
+
+        if (rows.length > 0) {
+            // Cabeçalho da tabela
+            const headerHeight = 30;
+            
+            doc.rect(40, currentY, 515, headerHeight)
+               .fill('#F5F5F5')
+               .stroke('#CCCCCC')
+               .lineWidth(1);
+
+            doc.fillColor('#333333')
+               .fontSize(10)
+               .font('Helvetica-Bold');
+
+            // Colunas da tabela
+            doc.text('Cliente', 50, currentY + 10);
+            doc.text('Serviço', 165, currentY + 10);
+            doc.text('Profissional', 270, currentY + 10);
+            doc.text('Data', 370, currentY + 10);
+            doc.text('Horário', 430, currentY + 10);
+            doc.text('Valor', 490, currentY + 10);
+
+            currentY += headerHeight;
+
+            // Dados da tabela
+            const rowHeight = 25;
+            let pageNumber = 1;
+
+            rows.forEach((ag, index) => {
+                // Verificar se precisa de nova página
+                if (currentY > 750) {
+                    doc.addPage();
+                    pageNumber++;
+                    currentY = 40;
+                    
+                    // Recriar cabeçalho na nova página
+                    doc.rect(40, currentY, 515, headerHeight)
+                       .fill('#F5F5F5')
+                       .stroke('#CCCCCC')
+                       .lineWidth(1);
+
+                    doc.fillColor('#333333')
+                       .fontSize(10)
+                       .font('Helvetica-Bold');
+
+                    doc.text('Cliente', 50, currentY + 10);
+                    doc.text('Serviço', 165, currentY + 10);
+                    doc.text('Profissional', 270, currentY + 10);
+                    doc.text('Data', 370, currentY + 10);
+                    doc.text('Horário', 430, currentY + 10);
+                    doc.text('Valor', 490, currentY + 10);
+
+                    currentY += headerHeight;
+                }
+                
+                // Fundo alternado das linhas
+                if (index % 2 === 1) {
+                    doc.rect(40, currentY, 515, rowHeight)
+                       .fill('#FAFAFA')
+                       .stroke('#EEEEEE')
+                       .lineWidth(0.5);
+                } else {
+                    doc.rect(40, currentY, 515, rowHeight)
+                       .stroke('#EEEEEE')
+                       .lineWidth(0.5);
+                }
+
+                // Dados da linha
+                doc.fillColor('#333333')
+                   .fontSize(9)
+                   .font('Helvetica');
+
+                // Truncar textos longos
+                const cliente = (ag.nome || 'N/A').length > 15 ? 
+                    (ag.nome || 'N/A').substring(0, 12) + '...' : (ag.nome || 'N/A');
+                
+                const servico = (ag.servico || 'N/A').length > 13 ? 
+                    (ag.servico || 'N/A').substring(0, 10) + '...' : (ag.servico || 'N/A');
+                
+                const profissional = (ag.profissional || 'N/A').length > 12 ? 
+                    (ag.profissional || 'N/A').substring(0, 9) + '...' : (ag.profissional || 'N/A');
+
+                doc.text(cliente, 50, currentY + 8);
+                doc.text(servico, 165, currentY + 8);
+                doc.text(profissional, 270, currentY + 8);
+                doc.text(new Date(ag.data).toLocaleDateString('pt-BR'), 370, currentY + 8);
+                doc.text(ag.hora || 'N/A', 430, currentY + 8);
+                doc.text(`R$ ${Number(ag.preco || 0).toFixed(2).replace('.', ',')}`, 490, currentY + 8);
+
+                currentY += rowHeight;
+            });
+
+            // Total
+            const totalFaturamento = rows.reduce((sum, ag) => sum + Number(ag.preco || 0), 0);
+            
+            currentY += 10;
+            doc.rect(40, currentY, 515, 25)
+               .fill('#E8E8E8')
+               .stroke('#CCCCCC')
+               .lineWidth(1);
+
+            doc.fillColor('#333333')
+               .fontSize(11)
+               .font('Helvetica-Bold')
+               .text(`Total de agendamentos: ${rows.length}`, 50, currentY + 8);
+
+            doc.text(`Total faturado: R$ ${totalFaturamento.toFixed(2).replace('.', ',')}`, 350, currentY + 8);
+
+        } else {
+            // Mensagem para relatório vazio
+            doc.fillColor('#666666')
+               .fontSize(14)
+               .font('Helvetica')
+               .text('Nenhum agendamento concluído encontrado para este período.', 40, currentY, {
+                   width: 515,
+                   align: 'center'
+               });
         }
 
         doc.end();
     } catch (err) {
-        res.status(500).send('Erro ao gerar PDF');
+        console.error('Erro ao gerar PDF:', err);
+        res.status(500).send('Erro interno do servidor ao gerar PDF');
     }
 });
 

@@ -205,3 +205,22 @@ CREATE TABLE IF NOT EXISTS alertas_promos (
     ativo BOOLEAN DEFAULT TRUE,
     criado_em TIMESTAMP DEFAULT NOW()
 );
+
+-- Tabela de informações da barbearia
+CREATE TABLE IF NOT EXISTS barbearia (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL DEFAULT 'NaRégua Barbearia',
+    whatsapp VARCHAR(30),
+    instagram VARCHAR(100),
+    endereco VARCHAR(255),
+    cidade_estado VARCHAR(100),
+    foto VARCHAR(255),
+    email_notificacao VARCHAR(150),
+    criado_em TIMESTAMP DEFAULT NOW(),
+    atualizado_em TIMESTAMP DEFAULT NOW()
+);
+
+-- Inserir dados padrão da barbearia
+INSERT INTO barbearia (nome, whatsapp, instagram, endereco, cidade_estado, email_notificacao) 
+VALUES ('NaRégua Barbearia', '', '', '', '', '')
+ON CONFLICT DO NOTHING;

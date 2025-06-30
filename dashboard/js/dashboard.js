@@ -1987,54 +1987,6 @@ document.addEventListener('DOMContentLoaded', function () {
             form.reset();
         };
     }
-
-    renderAlertasPromos();
-
-    // Exibe o modal de alerta/promo no início do site (apenas o mais recente)
-    function showAlertaPromoModal() {
-        const arr = getAlertasPromos();
-        if (arr.length === 0) return;
-        const item = arr[0];
-        modalTitulo.textContent = item.titulo;
-        modalMensagem.textContent = item.mensagem;
-        if (item.imagem) {
-            modalImagem.innerHTML = `<img src="${item.imagem}" alt="Banner">`;
-        } else {
-            modalImagem.innerHTML = '';
-        }
-        modal.classList.add('active');
-    }
-
-    // Só mostra o modal se não foi fechado nesta sessão
-    if (!sessionStorage.getItem('alertaPromoModalFechado')) {
-        setTimeout(showAlertaPromoModal, 600); // delay para UX
-    }
-
-    // Fecha o modal e não mostra de novo nesta sessão
-    modalClose.onclick = () => {
-        modal.classList.remove('active');
-        sessionStorage.setItem('alertaPromoModalFechado', '1');
-    };
-    modal.onclick = function (e) {
-        if (e.target === modal) {
-            modal.classList.remove('active');
-            sessionStorage.setItem('alertaPromoModalFechado', '1');
-        }
-    };
-});
-
-// Faz os labels da sidebar funcionarem como os botões
-document.querySelectorAll('.mac-sidebar-item').forEach(item => {
-    const btn = item.querySelector('.mac-sidebar-btn');
-    const label = item.querySelector('.mac-sidebar-label');
-    if (btn && label) {
-        label.style.cursor = 'pointer';
-        label.addEventListener('click', function (e) {
-            e.preventDefault();
-            btn.focus(); // foca o botão
-            btn.click(); // dispara o clique do botão
-        });
-    }
 });
 
 // Permite que o .mac-sidebar-item seja clicável como o botão interno
