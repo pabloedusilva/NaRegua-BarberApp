@@ -6,6 +6,7 @@ const path = require('path');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
+const PDFDocument = require('pdfkit');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -522,6 +523,76 @@ router.get('/folgas-especiais-public', async(req, res) => {
         res.json({ success: true, datas });
     } catch (err) {
         res.json({ success: false, error: 'Erro ao buscar folgas especiais.' });
+    }
+});
+
+// Rota para gerar PDF dos agendamentos concluídos do mês
+router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
+    try {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1; // 1-12
+
+        // Busca todos os agendamentos concluídos do mês atual
+        const rows = await db`
+            SELECT nome, telefone, servico, profissional, data, hora, preco
+            FROM agendamentos
+            WHERE status ILIKE 'concluido'
+              AND EXTRACT(YEAR FROM data) = ${year}
+              AND EXTRACT(MONTH FROM data) = ${month}
+            ORDER BY data, hora
+        `;
+
+        // Cria PDF
+        const doc = new PDFDocument({ margin: 40, size: 'A4' });
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="agendamentos_concluidos_${year}_${month}.pdf"`);
+
+        doc.pipe(res);
+
+        // Cabeçalho
+        doc
+            .fontSize(22)
+            .fillColor('#dac02d')
+            .text('Relatório de Agendamentos Concluídos', { align: 'center' })
+            .moveDown(0.2)
+            .fontSize(14)
+            .fillColor('#333')
+            .text(`Mês: ${String(month).padStart(2, '0')}/${year}`, { align: 'center' })
+            .moveDown(1);
+
+        // Tabela
+        doc
+            .fontSize(12)
+            .fillColor('#222')
+            .text('Nome do Cliente', 40, doc.y, { continued: true, width: 120, underline: true })
+            .text('Serviço', 170, doc.y, { continued: true, width: 100, underline: true })
+            .text('Profissional', 275, doc.y, { continued: true, width: 100, underline: true })
+            .text('Data', 380, doc.y, { continued: true, width: 60, underline: true })
+            .text('Hora', 445, doc.y, { continued: true, width: 40, underline: true })
+            .text('Preço', 490, doc.y, { width: 50, underline: true })
+            .moveDown(0.5);
+
+        rows.forEach(ag => {
+            doc
+                .fontSize(11)
+                .fillColor('#444')
+                .text(ag.nome, 40, doc.y, { continued: true, width: 120 })
+                .text(ag.servico, 170, doc.y, { continued: true, width: 100 })
+                .text(ag.profissional, 275, doc.y, { continued: true, width: 100 })
+                .text(new Date(ag.data).toLocaleDateString('pt-BR'), 380, doc.y, { continued: true, width: 60 })
+                .text(ag.hora, 445, doc.y, { continued: true, width: 40 })
+                .text(`R$ ${Number(ag.preco).toFixed(2).replace('.', ',')}`, 490, doc.y, { width: 50 })
+                .moveDown(0.2);
+        });
+
+        if (rows.length === 0) {
+            doc.moveDown(2).fontSize(13).fillColor('#e74c3c').text('Nenhum agendamento concluído neste mês.', { align: 'center' });
+        }
+
+        doc.end();
+    } catch (err) {
+        res.status(500).send('Erro ao gerar PDF');
     }
 });
 

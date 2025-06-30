@@ -154,15 +154,16 @@
                             <div class="stat-label">Semana</div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i
-                                class="fas fa-calendar"></i></div>
-                        <div>
-                            <div class="stat-value"
-                                id="month-appointments">0</div>
-                            <div class="stat-label">Mês</div>
-                        </div>
-                    </div>
+                    <div class="stat-card stat-card--month">
+    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+    <div>
+        <div class="stat-value" id="month-appointments">0</div>
+        <div class="stat-label">Mês</div>
+    </div>
+    <button id="downloadMonthPDF" class="btn btn-primary pdf-round-btn" title="Baixar PDF dos concluídos">
+        <i class="fas fa-file-pdf"></i>
+    </button>
+</div>
                     <div class="stat-card">
                         <div class="stat-icon"><i
                                 class="fas fa-users"></i></div>
@@ -183,7 +184,7 @@
                 </div>
             </section>
 
-            <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
+            <!-- Próximos Agendamentos -->
             <section class="dashboard-section animate-slide-up">
                 <div class="card-header">
                     <h2 class="section-title"><i
@@ -889,7 +890,6 @@
     </div>
 </div>
 
-<!-- Modal de Todos os Agendamentos -->
 <div id="allAppointmentsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">

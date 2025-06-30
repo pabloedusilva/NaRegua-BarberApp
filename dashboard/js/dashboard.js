@@ -2582,3 +2582,31 @@ document.getElementById('alertaPromoForm').onsubmit = async function (e) {
   renderAlertasPromos();
 };
 renderAlertasPromos();
+
+document.getElementById('downloadMonthPDF')?.addEventListener('click', function () {
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
+    fetch('/dashboard/agendamentos-concluidos-mes-pdf')
+        .then(res => {
+            if (!res.ok) throw new Error('Erro ao gerar PDF');
+            return res.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `agendamentos_concluidos_mes.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(() => {
+            alert('Erro ao gerar PDF');
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-file-pdf"></i> PDF';
+        });
+});

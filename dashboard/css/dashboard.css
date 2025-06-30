@@ -4088,3 +4088,33 @@
             font-size: 1em;
         }
     }
+
+    /* Botão de PDF */
+
+    .pdf-round-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px #dac02d22;
+    font-size: 1.3em;
+    padding: 0;
+    background: var(--primary, #dac02d);
+    color: #222;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+    z-index: 2;
+}
+.pdf-round-btn:hover, .pdf-round-btn:focus {
+    background: #bfa11a;
+    color: #fff;
+    outline: none;
+}
+.stat-card--month {
+    position: relative;
+}
