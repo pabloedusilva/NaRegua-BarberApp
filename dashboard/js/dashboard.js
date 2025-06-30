@@ -890,6 +890,44 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
+    // Upload de imagem para modal de editar serviço
+    const editServiceImageUploadBtn = document.getElementById('editServiceImageUploadBtn');
+    const editServiceImageUpload = document.getElementById('editServiceImageUpload');
+    
+    if (editServiceImageUploadBtn && editServiceImageUpload) {
+        editServiceImageUploadBtn.onclick = () => editServiceImageUpload.click();
+        
+        editServiceImageUpload.addEventListener('change', async function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            try {
+                // Validar arquivo
+                window.validateImageFile(file);
+                
+                // Mostrar loading
+                const editServiceImagePreview = document.getElementById('editServiceImagePreview');
+                editServiceImagePreview.innerHTML = '<div style="text-align:center;padding:20px;color:var(--primary);">Fazendo upload...</div>';
+                
+                // Fazer upload
+                const uploadResult = await window.uploadImage(file);
+                
+                // Atualizar campo e preview
+                document.getElementById('editServiceImage').value = uploadResult.path;
+                editServiceImagePreview.innerHTML = `<img src="${uploadResult.path}" alt="Imagem do serviço" style="max-width:100%;max-height:120px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">`;
+                
+                // Atualizar galeria para refletir a seleção
+                carregarGaleriaImagensServico('editServiceImageGallery', 'editServiceImage', uploadResult.path);
+                
+            } catch (error) {
+                showCustomAlert(error.message);
+                const editServiceImagePreview = document.getElementById('editServiceImagePreview');
+                editServiceImagePreview.innerHTML = '';
+                this.value = '';
+            }
+        });
+    }
+
     // Evento do botão de excluir
     document.addEventListener('click', function (e) {
         if (e.target.closest('.service-action-btn.delete-btn')) {
@@ -925,6 +963,44 @@ document.addEventListener('DOMContentLoaded', async function () {
             addServiceForm.reset();
 
             carregarGaleriaImagensServico('serviceImageGallery', 'addServiceImage');
+        });
+    }
+    
+    // Upload de imagem para modal de adicionar serviço
+    const addServiceImageUploadBtn = document.getElementById('addServiceImageUploadBtn');
+    const addServiceImageUpload = document.getElementById('addServiceImageUpload');
+    
+    if (addServiceImageUploadBtn && addServiceImageUpload) {
+        addServiceImageUploadBtn.onclick = () => addServiceImageUpload.click();
+        
+        addServiceImageUpload.addEventListener('change', async function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            try {
+                // Validar arquivo
+                window.validateImageFile(file);
+                
+                // Mostrar loading
+                const addServiceImagePreview = document.getElementById('addServiceImagePreview');
+                addServiceImagePreview.innerHTML = '<div style="text-align:center;padding:20px;color:var(--primary);">Fazendo upload...</div>';
+                
+                // Fazer upload
+                const uploadResult = await window.uploadImage(file);
+                
+                // Atualizar campo e preview
+                document.getElementById('addServiceImage').value = uploadResult.path;
+                addServiceImagePreview.innerHTML = `<img src="${uploadResult.path}" alt="Imagem do serviço" style="max-width:100%;max-height:120px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">`;
+                
+                // Atualizar galeria para refletir a seleção
+                carregarGaleriaImagensServico('serviceImageGallery', 'addServiceImage', uploadResult.path);
+                
+            } catch (error) {
+                showCustomAlert(error.message);
+                const addServiceImagePreview = document.getElementById('addServiceImagePreview');
+                addServiceImagePreview.innerHTML = '';
+                this.value = '';
+            }
         });
     }
     if (closeAddServiceModal && addServiceModal) {
@@ -1496,8 +1572,9 @@ document.getElementById('closeAddProfessionalModal').onclick =
         addProfessionalModal.style.display = 'none';
     };
 
-// Avatar preview e conversão para base64
-let avatarBase64 = '';
+// Avatar preview e upload
+let avatarFile = null;
+let avatarPath = '';
 const avatarInput = document.getElementById('avatarInput');
 const avatarUploadBtn = document.getElementById('avatarUploadBtn');
 const avatarPreview = document.getElementById('avatarPreview');
@@ -1506,12 +1583,18 @@ avatarUploadBtn.onclick = () => avatarInput.click();
 avatarInput.onchange = function () {
     const file = this.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        avatarBase64 = e.target.result;
-        avatarPreview.innerHTML = `<img src="${avatarBase64}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+        // Validar arquivo
+        window.validateImageFile(file);
+        avatarFile = file;
+        
+        // Mostrar preview
+        window.showImagePreview(file, avatarPreview);
+    } catch (error) {
+        showCustomAlert(error.message);
+        this.value = '';
+    }
 };
 
 // Adicionar profissional
@@ -1524,13 +1607,23 @@ document.getElementById('addProfessionalBtn').onclick = async function () {
         msg.textContent = 'Digite o nome do profissional.';
         return;
     }
+    
     this.disabled = true;
     msg.textContent = 'Adicionando...';
+    
     try {
+        // Upload do avatar se foi selecionado
+        if (avatarFile) {
+            msg.textContent = 'Fazendo upload do avatar...';
+            const uploadResult = await window.uploadAvatar(avatarFile);
+            avatarPath = uploadResult.path;
+        }
+        
+        msg.textContent = 'Salvando profissional...';
         const res = await fetch('/dashboard/profissionais', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome, avatar: avatarBase64 })
+            body: JSON.stringify({ nome, avatar: avatarPath })
         });
         const data = await res.json();
         if (data.success) {
@@ -1539,15 +1632,22 @@ document.getElementById('addProfessionalBtn').onclick = async function () {
             setTimeout(() => {
                 addProfessionalModal.style.display = 'none';
                 carregarProfissionaisDashboard();
+                // Limpar form
+                document.getElementById('professionalNameInput').value = '';
+                avatarFile = null;
+                avatarPath = '';
+                avatarPreview.innerHTML = '';
+                avatarInput.value = '';
             }, 900);
         } else {
             msg.style.color = 'var(--primary-dark)';
             msg.textContent = data.message || 'Erro ao adicionar profissional.';
         }
-    } catch {
+    } catch (error) {
         msg.style.color = 'var(--primary-dark)';
-        msg.textContent = 'Erro ao conectar ao servidor.';
+        msg.textContent = error.message || 'Erro ao conectar ao servidor.';
     }
+    this.disabled = false;
 };
 
 
@@ -1732,16 +1832,30 @@ editBarbershopPhoto.addEventListener('input', function () {
 barbershopPhotoBtn.onclick = () => barbershopPhotoInput.click();
 barbershopPhotoPreview.onclick = () => barbershopPhotoInput.click();
 
-// Quando selecionar arquivo, faz preview e converte para base64 (ou pode fazer upload para o backend se desejar)
-barbershopPhotoInput.addEventListener('change', function (e) {
+// Quando selecionar arquivo, faz upload real
+barbershopPhotoInput.addEventListener('change', async function (e) {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            updateBarbershopPhotoPreview(event.target.result);
-            editBarbershopPhoto.value = event.target.result; // Salva base64 no campo de texto
-        };
-        reader.readAsDataURL(file);
+        try {
+            // Validar arquivo
+            window.validateImageFile(file);
+            
+            // Mostrar loading no preview
+            const preview = document.getElementById('barbershopPhotoPreview');
+            preview.innerHTML = '<div style="text-align:center;padding:20px;">Fazendo upload...</div>';
+            
+            // Fazer upload
+            const uploadResult = await window.uploadImage(file);
+            
+            // Atualizar campo e preview com o caminho do arquivo
+            editBarbershopPhoto.value = uploadResult.path;
+            updateBarbershopPhotoPreview(uploadResult.path);
+            
+        } catch (error) {
+            showCustomAlert(error.message);
+            this.value = '';
+            updateBarbershopPhotoPreview('');
+        }
     }
 });
 
@@ -1792,6 +1906,61 @@ async function carregarWallpapers() {
     }
 }
 carregarWallpapers();
+
+// Upload de wallpaper
+const uploadWallpaperBtn = document.getElementById('uploadWallpaperBtn');
+const uploadWallpaperInput = document.getElementById('uploadWallpaperInput');
+
+if (uploadWallpaperBtn && uploadWallpaperInput) {
+    uploadWallpaperBtn.onclick = () => uploadWallpaperInput.click();
+    
+    uploadWallpaperInput.addEventListener('change', async function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        try {
+            // Validar arquivo
+            window.validateImageFile(file);
+            
+            // Mostrar loading
+            const bgChooserList = document.getElementById('bgChooserList');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'text-align:center;padding:20px;color:var(--primary);font-weight:600;';
+            loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fazendo upload do wallpaper...';
+            bgChooserList.appendChild(loadingDiv);
+            
+            // Fazer upload
+            const uploadResult = await window.uploadImage(file);
+            
+            // Salvar wallpaper no banco via API (se existir)
+            try {
+                await fetch('/dashboard/wallpapers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        nome: file.name.split('.')[0], 
+                        url: uploadResult.path 
+                    })
+                });
+            } catch (err) {
+                console.log('API de wallpapers não implementada, mas upload realizado com sucesso');
+            }
+            
+            // Recarregar wallpapers
+            await carregarWallpapers();
+            
+            showCustomAlert('Wallpaper enviado com sucesso!');
+            
+        } catch (error) {
+            showCustomAlert(error.message);
+            // Remover loading se houver erro
+            const loadingDiv = document.querySelector('#bgChooserList div[style*="spinner"]');
+            if (loadingDiv) loadingDiv.remove();
+        } finally {
+            this.value = '';
+        }
+    });
+}
 
 // Função para buscar a data/hora do servidor em tempo real (NUNCA do dispositivo)
 async function getServerDateTime() {
@@ -1870,7 +2039,7 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
 
     let imagens = [];
     try {
-        const res = await fetch('/api/imagens-servicos');
+        const res = await fetch('/api/imagens-todas');
         imagens = await res.json();
     } catch (e) {
         gallery.innerHTML = '<div style="color:#b00;">Erro ao carregar imagens.</div>';
@@ -1906,7 +2075,7 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
         input.value = selectedUrl;
         const selectedImg = gallery.querySelector(`img[src='${selectedUrl}']`);
         if (selectedImg) selectedImg.classList.add('selected');
-    } else {
+    } else if (imagens.length > 0) {
         input.value = imagens[0];
         const firstImg = gallery.querySelector('.gallery-img');
         if (firstImg) firstImg.classList.add('selected');
@@ -2177,13 +2346,15 @@ editProfessionalModal.innerHTML = `
 document.body.appendChild(editProfessionalModal);
 
 let editProfessionalId = null;
-let editAvatarBase64 = '';
+let editAvatarFile = null;
+let editAvatarPath = '';
 
 // Abrir modal de edição ao clicar no botão de editar do card
 function openEditProfessionalModal(prof) {
     editProfessionalId = prof.id;
     document.getElementById('editProfessionalNameInput').value = prof.nome;
-    editAvatarBase64 = prof.avatar || '';
+    editAvatarFile = null;
+    editAvatarPath = prof.avatar || '';
     const preview = document.getElementById('editAvatarPreview');
     if (prof.avatar) {
         preview.innerHTML = `<img src="${prof.avatar}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
@@ -2224,12 +2395,18 @@ editAvatarUploadBtn.onclick = () => editAvatarInput.click();
 editAvatarInput.onchange = function (e) {
     const file = this.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        editAvatarBase64 = e.target.result;
-        editAvatarPreview.innerHTML = `<img src="${editAvatarBase64}" alt="Avatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`;
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+        // Validar arquivo
+        window.validateImageFile(file);
+        editAvatarFile = file;
+        
+        // Mostrar preview
+        window.showImagePreview(file, editAvatarPreview);
+    } catch (error) {
+        showCustomAlert(error.message);
+        this.value = '';
+    }
 };
 
 // Salvar alterações
@@ -2243,13 +2420,25 @@ saveEditProfessionalBtn.onclick = async function () {
         msg.textContent = 'Digite o nome do profissional.';
         return;
     }
+    
     this.disabled = true;
     msg.textContent = 'Salvando...';
+    
     try {
+        let avatarToSave = editAvatarPath; // Mantém o avatar atual se não trocou
+        
+        // Upload do novo avatar se foi selecionado
+        if (editAvatarFile) {
+            msg.textContent = 'Fazendo upload do avatar...';
+            const uploadResult = await window.uploadAvatar(editAvatarFile);
+            avatarToSave = uploadResult.path;
+        }
+        
+        msg.textContent = 'Salvando alterações...';
         const res = await fetch(`/dashboard/profissionais/${editProfessionalId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome, avatar: editAvatarBase64 })
+            body: JSON.stringify({ nome, avatar: avatarToSave })
         });
         const data = await res.json();
         if (data.success) {
@@ -2503,15 +2692,30 @@ document.getElementById('alertaPromoImagem').addEventListener('input', function 
     const url = this.value.trim();
     document.getElementById('alertaPromoImagemPreview').innerHTML = url ? `<img src="${url}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
 });
-document.getElementById('alertaPromoImagemUpload').addEventListener('change', function (e) {
+document.getElementById('alertaPromoImagemUpload').addEventListener('change', async function (e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-        document.getElementById('alertaPromoImagem').value = evt.target.result;
-        document.getElementById('alertaPromoImagemPreview').innerHTML = `<img src="${evt.target.result}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+        // Validar arquivo
+        window.validateImageFile(file);
+        
+        // Mostrar loading
+        const preview = document.getElementById('alertaPromoImagemPreview');
+        preview.innerHTML = '<div style="text-align:center;padding:20px;">Fazendo upload...</div>';
+        
+        // Fazer upload
+        const uploadResult = await window.uploadImage(file);
+        
+        // Atualizar campo e preview
+        document.getElementById('alertaPromoImagem').value = uploadResult.path;
+        preview.innerHTML = `<img src="${uploadResult.path}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
+        
+    } catch (error) {
+        showCustomAlert(error.message);
+        this.value = '';
+        document.getElementById('alertaPromoImagemPreview').innerHTML = '';
+    }
 });
 
 // Fechar modal

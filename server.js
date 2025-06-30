@@ -5,6 +5,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const agendamentoRoutes = require('./routes/agendamento');
 const imagensRoutes = require('./routes/imagens');
 const alertasPromosRoutes = require('./routes/alertasPromos');
+const { upload, compressAndSaveImage, compressAndSaveAvatar } = require('./middleware/upload');
 const db = require('./db/neon');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
@@ -53,6 +54,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Servir arquivos estáticos do diretório favicon
 app.use('/favicon', express.static(path.join(__dirname, 'favicon')));
+
+// Servir arquivos da pasta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Rotas de upload de imagens
+app.post('/api/upload/image', upload.single('image'), compressAndSaveImage, (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size
+    });
+});
+
+app.post('/api/upload/avatar', upload.single('avatar'), compressAndSaveAvatar, (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhum avatar foi enviado' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size
+    });
+});
 
 // Exemplo de endpoint para testar o horário do servidor no fuso do Brasil
 app.get('/api/server-time', (req, res) => {

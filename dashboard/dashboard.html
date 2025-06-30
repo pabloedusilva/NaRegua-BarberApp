@@ -526,6 +526,12 @@
                     style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:1.08rem;">
                     Escolha o plano de fundo do agendamento:
                 </div>
+                <div style="margin-bottom: 15px; text-align: center;">
+                    <button type="button" class="btn btn-secondary" id="uploadWallpaperBtn" style="width: 100%;">
+                        <i class="fas fa-upload"></i> Fazer Upload de Wallpaper
+                    </button>
+                    <input type="file" id="uploadWallpaperInput" accept="image/*" style="display: none;">
+                </div>
                 <div class="bg-chooser-list" id="bgChooserList"></div>
             </div>
 
@@ -831,6 +837,13 @@
                 <div id="serviceImageGallery"
                     class="service-image-gallery"></div>
                 <input type="hidden" id="addServiceImage" name="imagem">
+                <div style="margin-top: 10px; text-align: center;">
+                    <button type="button" class="btn btn-secondary" id="addServiceImageUploadBtn" style="width: 100%;">
+                        <i class="fas fa-upload"></i> Fazer Upload de Imagem
+                    </button>
+                    <input type="file" id="addServiceImageUpload" accept="image/*" style="display: none;">
+                    <div id="addServiceImagePreview" style="margin-top: 10px;"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <div id="addServiceMsg"
@@ -877,6 +890,13 @@
                 <div id="editServiceImageGallery"
                     class="service-image-gallery"></div>
                 <input type="hidden" id="editServiceImage" name="imagem">
+                <div style="margin-top: 10px; text-align: center;">
+                    <button type="button" class="btn btn-secondary" id="editServiceImageUploadBtn" style="width: 100%;">
+                        <i class="fas fa-upload"></i> Fazer Upload de Imagem
+                    </button>
+                    <input type="file" id="editServiceImageUpload" accept="image/*" style="display: none;">
+                    <div id="editServiceImagePreview" style="margin-top: 10px;"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
@@ -935,6 +955,7 @@
         </div>
     </footer>
 
+    <script src="/js/upload-helper.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 
