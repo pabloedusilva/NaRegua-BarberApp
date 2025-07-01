@@ -4366,3 +4366,771 @@
     .stat-card--month {
         position: relative;
     }
+
+    /* =========================
+   Reset e Base - Modernizado com PADDING TOP para compensar header fixo
+   ========================= */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: var(--transition-slow);
+    padding-left: 74px !important;
+    padding-top: 80px !important; /* ADICIONADO: espaço para o header fixo */
+}
+
+/* =========================
+   Header Styles - Modernizado e FIXO
+   ========================= */
+
+header {
+    background: var(--header);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border);
+    position: fixed; /* MUDANÇA: sticky para fixed */
+    top: 0;
+    left: 0; /* ADICIONADO */
+    right: 0; /* ADICIONADO */
+    width: 100%; /* ADICIONADO */
+    z-index: 1000; /* AUMENTADO: era 100, agora 1000 para ficar acima de tudo */
+    transition: var(--transition-slow);
+}
+
+/* Hamburger: FIXO e sempre visível */
+.mac-sidebar-hamburger {
+    position: fixed; /* MUDANÇA: absolute para fixed */
+    top: 18px;
+    left: 18px;
+    z-index: 1100; /* AUMENTADO: era 900, agora 1100 para ficar acima do header */
+    display: none;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #dac02d22;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+/* Ajuste do main container para não ficar embaixo do header */
+main.container {
+    margin-top: 0; /* Remove margem extra se existir */
+    padding-top: 1rem; /* Pequeno espaçamento do topo */
+}
+
+/* Responsividade com ajustes de padding */
+@media (max-width: 900px) {
+    body {
+        padding-left: 56px !important;
+        padding-top: 80px !important; /* Mantém o espaço do header */
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        padding-left: 0 !important;
+        padding-top: 80px !important; /* Mantém o espaço do header */
+    }
+    
+    .mac-sidebar-hamburger {
+        display: flex; /* Mostra o hamburger em telas pequenas */
+    }
+}
+
+/* Garantir que a sidebar não interfira com o header fixo */
+.mac-sidebar {
+    width: 74px;
+    min-width: 74px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    padding-top: 90px !important; /* AUMENTADO: mais espaço para não conflitar com header */
+    background: var(--card);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 900; /* MENOR que o header e hamburger */
+    padding-bottom: 0.75rem;
+    transition: var(--transition-slow);
+}
+
+/* Ajuste específico para quando a sidebar está aberta em mobile */
+@media (max-width: 700px) {
+    .mac-sidebar {
+        left: -100vw;
+        box-shadow: none;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(6px);
+        transition: left 0.38s cubic-bezier(.23, 1.12, .32, 1), box-shadow 0.22s;
+        z-index: 850; /* Menor que o hamburger mas ainda visível */
+        padding-top: 90px !important; /* Mantém espaço do header */
+    }
+    
+    .mac-sidebar.open {
+        left: 0;
+        box-shadow: 2px 0 32px #dac02d33;
+    }
+}
+
+/* Overlay ajustado para não cobrir o header */
+.mac-sidebar-overlay {
+    display: none;
+    position: fixed;
+    z-index: 800; /* Menor que sidebar e header */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.32);
+    transition: opacity 0.3s;
+}
+
+.mac-sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* =========================
+   MODAIS PADRONIZADOS E RESPONSIVOS - 100% UNIFORMES
+   ========================= */
+
+/* Background do modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 30, 30, 0.38);
+    backdrop-filter: blur(2.5px);
+    justify-content: center;
+    align-items: center;
+    animation: modalBgFadeIn 0.35s;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+@keyframes modalBgFadeIn {
+    from {
+        background: rgba(30, 30, 30, 0.01);
+    }
+    to {
+        background: rgba(30, 30, 30, 0.38);
+    }
+}
+
+/* Container do modal - PADRONIZADO */
+.modal-content {
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 22px;
+    box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.18), 0 1.5px 8px 0 rgba(218, 192, 45, 0.07);
+    padding: 32px 28px 24px 28px;
+    max-width: 440px;
+    width: 100%;
+    min-width: 280px;
+    max-height: 90vh;
+    position: relative;
+    animation: modalPopIn 0.38s cubic-bezier(.23, 1.12, .32, 1);
+    border: 2.5px solid var(--primary-light);
+    transition: box-shadow 0.2s, border-color 0.2s;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes modalPopIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Scrollbar personalizada para modais */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Para Firefox */
+.modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light) transparent;
+}
+
+/* Header do modal - PADRONIZADO */
+.modal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1.5px solid var(--primary-light) !important;
+    padding-bottom: 12px !important;
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Botão de fechar - PADRONIZADO */
+.close-modal,
+.modal .close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    color: var(--primary);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.12s, color 0.18s;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.close-modal:hover,
+.modal .close:hover {
+    color: var(--primary-dark);
+    background: var(--hover);
+    transform: scale(1.1);
+}
+
+/* Body do modal - PADRONIZADO */
+.modal-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+/* Footer do modal - PADRONIZADO */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+/* Form groups - PADRONIZADOS */
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background-color: var(--background);
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(218, 192, 45, 0.2);
+}
+
+/* Botões - PADRONIZADOS */
+.btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+    background: linear-gradient(90deg, #f7e27c 0%, #dac02d 100%);
+}
+
+.btn-secondary {
+    background: var(--gray-light);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--hover);
+    border-color: var(--primary);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Elementos específicos de modais - PADRONIZADOS */
+
+/* Avatar upload */
+.avatar-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.avatar-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background-color: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    transition: border-color 0.2s;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-upload-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.avatar-upload-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Galerias de imagens */
+.service-image-gallery,
+.service-images-gallery {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 8px;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--gray-light);
+}
+
+.service-image-gallery::-webkit-scrollbar,
+.service-images-gallery::-webkit-scrollbar {
+    width: 6px;
+}
+
+.service-image-gallery::-webkit-scrollbar-thumb,
+.service-images-gallery::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+.gallery-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.gallery-img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-light);
+}
+
+.gallery-img.selected {
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* Toggle switches */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Mensagens de status */
+.modal-message {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-align: center;
+    display: none;
+}
+
+.modal-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.modal-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* =========================
+   RESPONSIVIDADE PARA MODAIS - TABLETS E MOBILE
+   ========================= */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        max-width: 95vw;
+        padding: 28px 20px 20px 20px;
+        border-radius: 16px;
+        max-height: 88vh;
+    }
+    
+    .modal-title {
+        font-size: 1.15rem;
+    }
+    
+    .close-modal,
+    .modal .close {
+        top: 12px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-control {
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .modal {
+        padding: 5px;
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+    
+    .modal-content {
+        max-width: 98vw;
+        width: 98vw;
+        padding: 24px 16px 16px 16px;
+        border-radius: 12px;
+        max-height: 92vh;
+        margin: 0;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem;
+        gap: 8px;
+    }
+    
+    .modal-title i {
+        font-size: 1rem;
+    }
+    
+    .close-modal,
+    .modal .close {
+        top: 8px;
+        right: 12px;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 16px;
+    }
+    
+    .form-control {
+        padding: 14px 12px;
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+    
+    .btn {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+    
+    .avatar-preview {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .gallery-img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .service-image-gallery,
+    .service-images-gallery {
+        max-height: 150px;
+        gap: 8px;
+    }
+}
+
+/* Mobile muito pequeno */
+@media (max-width: 360px) {
+    .modal-content {
+        padding: 20px 12px 12px 12px;
+        border-radius: 8px;
+    }
+    
+    .modal-title {
+        font-size: 1rem;
+    }
+    
+    .form-control {
+        padding: 12px 10px;
+    }
+    
+    .btn {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+}
+
+/* =========================
+   MODAIS ESPECÍFICOS - AJUSTES FINAIS
+   ========================= */
+
+/* Modal de notificações - lista com scroll */
+#notificationsList {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+}
+
+/* Modal de horários - altura específica */
+#horarioModal .modal-content {
+    max-height: 85vh;
+}
+
+#turnosContainer {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Modal de barbearia - campos específicos */
+#barbershopPhotoPreview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gray-light);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+#barbershopPhotoPreview:hover {
+    border-color: var(--primary);
+}
+
+/* Modal de alertas/promos */
+#alertaPromoModal textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Garantir que todos os modais tenham o mesmo comportamento */
+.modal.show,
+.modal[style*="flex"] {
+    display: flex !important;
+}
+
+/* Dark mode para modais */
+body.dark-mode .modal-content {
+    background: var(--card);
+    border-color: var(--border);
+}
+
+body.dark-mode .form-control {
+    background: var(--background);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-mode .service-image-gallery,
+body.dark-mode .service-images-gallery {
+    background: var(--background);
+    border-color: var(--border);
+}
