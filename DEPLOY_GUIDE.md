@@ -609,5 +609,5 @@ if (process.env.NODE_ENV !== 'production') {
 
 <p align="center">
   <em>Guia de Deploy - NaRégua BarberApp v1.0</em><br>
-  <em>Última atualização: Dezembro 2024</em>
+  <em>Última atualização: Junho 2025</em>
 </p>

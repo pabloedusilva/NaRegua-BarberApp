@@ -199,7 +199,7 @@ Faça backup do banco de dados e da pasta de imagens regularmente
 ## 📞 Suporte
 
 ### **Precisa de ajuda?**
-- 📧 Email: contato@pabloedusilva.dev
+- 📧 Email: pablo.silva.edu@gmail.com
 - 🐛 Reportar problemas: [GitHub Issues](https://github.com/pabloedusilva/NaRegua-BarberApp/issues)
 - 📖 Documentação completa: README.md
 

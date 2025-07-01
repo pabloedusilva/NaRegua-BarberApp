@@ -109,5 +109,5 @@ WHERE url LIKE '/img/%';
 
 ---
 
-**Desenvolvido por:** GitHub Copilot
+**Desenvolvido por:** Pablo Silva
 **Status:** ✅ Implementação Completa e Funcional

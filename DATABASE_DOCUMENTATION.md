@@ -647,5 +647,5 @@ INSERT INTO agendamentos (nome, telefone, servico, profissional, data, hora, pre
 
 <p align="center">
   <em>Documentação do Banco de Dados - NaRégua BarberApp v1.0</em><br>
-  <em>Última atualização: Dezembro 2024</em>
+  <em>Última atualização: Junho 2025</em>
 </p>
