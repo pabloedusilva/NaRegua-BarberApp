@@ -3,11 +3,22 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-// Certificar que a pasta uploads existe
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// Certificar que as pastas de upload existem
+const baseUploadsDir = path.join(__dirname, '../public/uploads');
+const uploadsSubDirs = {
+    services: path.join(baseUploadsDir, 'services'),
+    avatars: path.join(baseUploadsDir, 'avatars'),
+    wallpapers: path.join(baseUploadsDir, 'wallpapers'),
+    logos: path.join(baseUploadsDir, 'logos'),
+    promos: path.join(baseUploadsDir, 'promos')
+};
+
+// Criar todas as pastas necessárias
+Object.values(uploadsSubDirs).forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+});
 
 // Configuração do multer para armazenar em memória temporariamente
 const storage = multer.memoryStorage();
@@ -32,88 +43,81 @@ const upload = multer({
 });
 
 // Middleware para comprimir e salvar imagem
-const compressAndSaveImage = async (req, res, next) => {
-    if (!req.file) {
-        return next();
-    }
+const compressAndSaveImage = (uploadType = 'services') => {
+    return async (req, res, next) => {
+        if (!req.file) {
+            return next();
+        }
 
-    try {
-        // Gerar nome único para o arquivo
-        const timestamp = Date.now();
-        const randomNum = Math.floor(Math.random() * 1000);
-        const extension = '.webp'; // Converter tudo para webp para melhor compressão
-        const filename = `${timestamp}-${randomNum}${extension}`;
-        const filepath = path.join(uploadsDir, filename);
+        try {
+            // Determinar o diretório baseado no tipo de upload
+            const uploadDir = uploadsSubDirs[uploadType] || uploadsSubDirs.services;
+            
+            // Gerar nome único para o arquivo
+            const timestamp = Date.now();
+            const randomNum = Math.floor(Math.random() * 1000);
+            const extension = '.webp'; // Converter tudo para webp para melhor compressão
+            const filename = `${uploadType}-${timestamp}-${randomNum}${extension}`;
+            const filepath = path.join(uploadDir, filename);
 
-        // Comprimir a imagem usando Sharp
-        await sharp(req.file.buffer)
-            .resize(800, 600, { 
-                fit: 'inside', 
-                withoutEnlargement: true 
-            }) // Redimensionar mantendo proporção
-            .webp({ 
-                quality: 85, // Qualidade boa com compressão
-                effort: 6 // Máxima compressão
-            })
-            .toFile(filepath);
+            // Configurar compressão baseada no tipo
+            let resizeOptions = { fit: 'inside', withoutEnlargement: true };
+            let quality = 85;
+            
+            switch (uploadType) {
+                case 'wallpapers':
+                    resizeOptions = { width: 1920, height: 1080, fit: 'cover' };
+                    quality = 80;
+                    break;
+                case 'logos':
+                    resizeOptions = { width: 400, height: 400, fit: 'inside', withoutEnlargement: true };
+                    quality = 90;
+                    break;
+                case 'avatars':
+                    resizeOptions = { width: 200, height: 200, fit: 'cover' };
+                    quality = 90;
+                    break;
+                case 'promos':
+                    resizeOptions = { width: 800, height: 600, fit: 'inside', withoutEnlargement: true };
+                    quality = 85;
+                    break;
+                default: // services
+                    resizeOptions = { width: 800, height: 600, fit: 'inside', withoutEnlargement: true };
+                    quality = 85;
+            }
 
-        // Adicionar informações do arquivo processado ao request
-        req.processedFile = {
-            filename: filename,
-            path: `/uploads/${filename}`,
-            originalname: req.file.originalname,
-            size: fs.statSync(filepath).size
-        };
+            // Comprimir a imagem usando Sharp
+            await sharp(req.file.buffer)
+                .resize(resizeOptions)
+                .webp({ 
+                    quality: quality,
+                    effort: 6 // Máxima compressão
+                })
+                .toFile(filepath);
 
-        next();
-    } catch (error) {
-        console.error('Erro ao processar imagem:', error);
-        res.status(500).json({ error: 'Erro ao processar imagem' });
-    }
+            // Adicionar informações do arquivo processado ao request
+            req.processedFile = {
+                filename: filename,
+                path: `/uploads/${uploadType}/${filename}`,
+                originalname: req.file.originalname,
+                size: fs.statSync(filepath).size,
+                type: uploadType
+            };
+
+            next();
+        } catch (error) {
+            console.error('Erro ao processar imagem:', error);
+            res.status(500).json({ error: 'Erro ao processar imagem' });
+        }
+    };
 };
 
-// Middleware para comprimir avatar (tamanho menor)
-const compressAndSaveAvatar = async (req, res, next) => {
-    if (!req.file) {
-        return next();
-    }
-
-    try {
-        // Gerar nome único para o arquivo
-        const timestamp = Date.now();
-        const randomNum = Math.floor(Math.random() * 1000);
-        const extension = '.webp';
-        const filename = `avatar-${timestamp}-${randomNum}${extension}`;
-        const filepath = path.join(uploadsDir, filename);
-
-        // Comprimir avatar para tamanho específico
-        await sharp(req.file.buffer)
-            .resize(200, 200, { 
-                fit: 'cover' // Cortar para manter proporção quadrada
-            })
-            .webp({ 
-                quality: 90, // Qualidade alta para avatares
-                effort: 6
-            })
-            .toFile(filepath);
-
-        // Adicionar informações do arquivo processado ao request
-        req.processedFile = {
-            filename: filename,
-            path: `/uploads/${filename}`,
-            originalname: req.file.originalname,
-            size: fs.statSync(filepath).size
-        };
-
-        next();
-    } catch (error) {
-        console.error('Erro ao processar avatar:', error);
-        res.status(500).json({ error: 'Erro ao processar avatar' });
-    }
-};
+// Middleware para comprimir avatar (compatibilidade com código antigo)
+const compressAndSaveAvatar = compressAndSaveImage('avatars');
 
 module.exports = {
     upload,
     compressAndSaveImage,
-    compressAndSaveAvatar
+    compressAndSaveAvatar,
+    uploadsSubDirs
 };

@@ -116,22 +116,22 @@ CREATE TABLE IF NOT EXISTS wallpapers (
 );
 
 INSERT INTO wallpapers (nome, url, ativo) VALUES
-('Fundo 1', '/img/wallpappers/background1.jpg', TRUE),
-('Fundo 2', '/img/wallpappers/background2.png', TRUE),
-('Fundo 3', '/img/wallpappers/background3.png', TRUE),
-('Fundo 4', '/img/wallpappers/background4.png', TRUE),
-('Fundo 5', '/img/wallpappers/background5.jpg', TRUE),
-('Fundo 6', '/img/wallpappers/background6.png', TRUE),
-('Fundo 7', '/img/wallpappers/background7.png', TRUE),
-('Fundo 8', '/img/wallpappers/background8.jpg', TRUE),
-('Fundo 9', '/img/wallpappers/background9.png', TRUE),
-('Fundo 10', '/img/wallpappers/background10.png', TRUE),
-('Fundo 11', '/img/wallpappers/background11.png', TRUE),
-('Fundo 12', '/img/wallpappers/background12.png', TRUE),
-('Fundo 13', '/img/wallpappers/background13.png', TRUE),
-('Fundo 14', '/img/wallpappers/background14.png', TRUE),
-('Fundo 15', '/img/wallpappers/background15.png', TRUE),
-('Fundo 16', '/img/wallpappers/background16.png', TRUE)
+('Fundo 1', '/uploads/img/wallpappers/background1.jpg', TRUE),
+('Fundo 2', '/uploads/img/wallpappers/background2.png', TRUE),
+('Fundo 3', '/uploads/img/wallpappers/background3.png', TRUE),
+('Fundo 4', '/uploads/img/wallpappers/background4.png', TRUE),
+('Fundo 5', '/uploads/img/wallpappers/background5.jpg', TRUE),
+('Fundo 6', '/uploads/img/wallpappers/background6.png', TRUE),
+('Fundo 7', '/uploads/img/wallpappers/background7.png', TRUE),
+('Fundo 8', '/uploads/img/wallpappers/background8.jpg', TRUE),
+('Fundo 9', '/uploads/img/wallpappers/background9.png', TRUE),
+('Fundo 10', '/uploads/img/wallpappers/background10.png', TRUE),
+('Fundo 11', '/uploads/img/wallpappers/background11.png', TRUE),
+('Fundo 12', '/uploads/img/wallpappers/background12.png', TRUE),
+('Fundo 13', '/uploads/img/wallpappers/background13.png', TRUE),
+('Fundo 14', '/uploads/img/wallpappers/background14.png', TRUE),
+('Fundo 15', '/uploads/img/wallpappers/background15.png', TRUE),
+('Fundo 16', '/uploads/img/wallpappers/background16.png', TRUE)
 
 ON CONFLICT DO NOTHING;
 
@@ -147,22 +147,22 @@ CREATE TABLE IF NOT EXISTS servico_imagens (
 );
 
 INSERT INTO servico_imagens (nome, url, ativo) VALUES
-('no-imagem', '/img/servicos/no-imagem.png', TRUE),
-('americano1', '/img/servicos/americano1.png', TRUE),
-('americano2', '/img/servicos/americano2.png', TRUE),
-('barba-cabelo', '/img/servicos/barba-cabelo.png', TRUE),
-('barba_maquina', '/img/servicos/barba_maquina.png', TRUE),
-('bigodinho', '/img/servicos/bigodinho.png', TRUE),
-('colorido1', '/img/servicos/colorido1.png', TRUE),
-('colorido2', '/img/servicos/colorido2.png', TRUE),
-('corte-de-cabelo', '/img/servicos/corte-de-cabelo.png', TRUE),
-('corte-do-jaca', '/img/servicos/corte-do-jaca.png', TRUE),
-('corte-infantil', '/img/servicos/corte-infantil.png', TRUE),
-('low-fade', '/img/servicos/low-fade.png', TRUE),
-('moicano1', '/img/servicos/moicano1.png', TRUE),
-('nevou', '/img/servicos/nevou.png', TRUE),
-('pigmentacao', '/img/servicos/pigmentacao.png', TRUE),
-('reflexo', '/img/servicos/reflexo.png', TRUE)
+('no-imagem', '/uploads/img/servicos/no-imagem.png', TRUE),
+('americano1', '/uploads/img/servicos/americano1.png', TRUE),
+('americano2', '/uploads/img/servicos/americano2.png', TRUE),
+('barba-cabelo', '/uploads/img/servicos/barba-cabelo.png', TRUE),
+('barba_maquina', '/uploads/img/servicos/barba_maquina.png', TRUE),
+('bigodinho', '/uploads/img/servicos/bigodinho.png', TRUE),
+('colorido1', '/uploads/img/servicos/colorido1.png', TRUE),
+('colorido2', '/uploads/img/servicos/colorido2.png', TRUE),
+('corte-de-cabelo', '/uploads/img/servicos/corte-de-cabelo.png', TRUE),
+('corte-do-jaca', '/uploads/img/servicos/corte-do-jaca.png', TRUE),
+('corte-infantil', '/uploads/img/servicos/corte-infantil.png', TRUE),
+('low-fade', '/uploads/img/servicos/low-fade.png', TRUE),
+('moicano1', '/uploads/img/servicos/moicano1.png', TRUE),
+('nevou', '/uploads/img/servicos/nevou.png', TRUE),
+('pigmentacao', '/uploads/img/servicos/pigmentacao.png', TRUE),
+('reflexo', '/uploads/img/servicos/reflexo.png', TRUE)
 ON CONFLICT DO NOTHING;
 
 -- Tabela de profissionais
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS profissionais (
 
 -- Exemplo de profissional
 INSERT INTO profissionais (nome, avatar, ativo) VALUES
-('Pablo barber', 'img/sua-logo.png', TRUE)
+('Pablo barber', '/uploads/img/logo/sua-logo.png', TRUE)
 ON CONFLICT DO NOTHING;
 
 

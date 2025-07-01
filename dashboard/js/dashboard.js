@@ -909,8 +909,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const editServiceImagePreview = document.getElementById('editServiceImagePreview');
                 editServiceImagePreview.innerHTML = '<div style="text-align:center;padding:20px;color:var(--primary);">Fazendo upload...</div>';
                 
-                // Fazer upload
-                const uploadResult = await window.uploadImage(file);
+                // Fazer upload usando função específica para serviços
+                const uploadResult = await window.uploadService(file);
                 
                 // Atualizar campo e preview
                 document.getElementById('editServiceImage').value = uploadResult.path;
@@ -985,8 +985,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const addServiceImagePreview = document.getElementById('addServiceImagePreview');
                 addServiceImagePreview.innerHTML = '<div style="text-align:center;padding:20px;color:var(--primary);">Fazendo upload...</div>';
                 
-                // Fazer upload
-                const uploadResult = await window.uploadImage(file);
+                // Fazer upload usando função específica para serviços
+                const uploadResult = await window.uploadService(file);
                 
                 // Atualizar campo e preview
                 document.getElementById('addServiceImage').value = uploadResult.path;
@@ -1844,8 +1844,8 @@ barbershopPhotoInput.addEventListener('change', async function (e) {
             const preview = document.getElementById('barbershopPhotoPreview');
             preview.innerHTML = '<div style="text-align:center;padding:20px;">Fazendo upload...</div>';
             
-            // Fazer upload
-            const uploadResult = await window.uploadImage(file);
+            // Fazer upload usando função específica para logos/fotos da barbearia
+            const uploadResult = await window.uploadLogo(file);
             
             // Atualizar campo e preview com o caminho do arquivo
             editBarbershopPhoto.value = uploadResult.path;
@@ -1929,8 +1929,8 @@ if (uploadWallpaperBtn && uploadWallpaperInput) {
             loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fazendo upload do wallpaper...';
             bgChooserList.appendChild(loadingDiv);
             
-            // Fazer upload
-            const uploadResult = await window.uploadImage(file);
+            // Fazer upload usando função específica para wallpapers
+            const uploadResult = await window.uploadWallpaper(file);
             
             // Salvar wallpaper no banco via API (se existir)
             try {
@@ -2031,15 +2031,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Função para carregar galeria de imagens de serviço
-async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '') {
+// Função genérica para carregar galeria de imagens por tipo
+async function carregarGaleriaImagens(galleryId, inputId, selectedUrl = '', tipoImagem = 'servicos') {
     const gallery = document.getElementById(galleryId);
     const input = document.getElementById(inputId);
     if (!gallery || !input) return;
 
     let imagens = [];
     try {
-        const res = await fetch('/api/imagens-todas');
+        const res = await fetch(`/api/imagens-${tipoImagem}`);
         imagens = await res.json();
     } catch (e) {
         gallery.innerHTML = '<div style="color:#b00;">Erro ao carregar imagens.</div>';
@@ -2055,7 +2055,7 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
     imagens.forEach(url => {
         const el = document.createElement('img');
         el.src = url;
-        el.alt = 'Imagem do serviço';
+        el.alt = `Imagem ${tipoImagem}`;
         el.className = 'gallery-img' + (url === selectedUrl ? ' selected' : '');
         el.title = url.split('/').pop();
         el.onerror = function () {
@@ -2080,6 +2080,31 @@ async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '
         const firstImg = gallery.querySelector('.gallery-img');
         if (firstImg) firstImg.classList.add('selected');
     }
+}
+
+// Função específica para carregar galeria de imagens de serviço
+async function carregarGaleriaImagensServico(galleryId, inputId, selectedUrl = '') {
+    return await carregarGaleriaImagens(galleryId, inputId, selectedUrl, 'servicos');
+}
+
+// Função específica para carregar galeria de wallpapers
+async function carregarGaleriaWallpapers(galleryId, inputId, selectedUrl = '') {
+    return await carregarGaleriaImagens(galleryId, inputId, selectedUrl, 'wallpapers');
+}
+
+// Função específica para carregar galeria de logos
+async function carregarGaleriaLogos(galleryId, inputId, selectedUrl = '') {
+    return await carregarGaleriaImagens(galleryId, inputId, selectedUrl, 'logos');
+}
+
+// Função específica para carregar galeria de avatares
+async function carregarGaleriaAvatares(galleryId, inputId, selectedUrl = '') {
+    return await carregarGaleriaImagens(galleryId, inputId, selectedUrl, 'avatars');
+}
+
+// Função específica para carregar galeria de promoções
+async function carregarGaleriaPromos(galleryId, inputId, selectedUrl = '') {
+    return await carregarGaleriaImagens(galleryId, inputId, selectedUrl, 'promos');
 }
 
 // Ao abrir modal de adicionar serviço
@@ -2684,38 +2709,54 @@ function abrirAlertaPromoModal(data = {}) {
     document.getElementById('alertaPromoLink').value = data.link || '';
     document.getElementById('alertaPromoAtivo').checked = data.ativo !== false;
     document.getElementById('alertaPromoImagemPreview').innerHTML = data.imagem ? `<img src="${data.imagem}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
+    
+    // Carregar galeria de imagens de promoções
+    carregarGaleriaPromos('promoImageGallery', 'alertaPromoImagem', data.imagem || '');
+    
     document.getElementById('alertaPromoModal').style.display = 'flex';
 }
 
-// Preview da imagem ao colar URL ou upload
-document.getElementById('alertaPromoImagem').addEventListener('input', function () {
+// Upload de imagem para modal de alerta/promo
+const alertaPromoImageUploadBtn = document.getElementById('alertaPromoImageUploadBtn');
+const alertaPromoImagemUpload = document.getElementById('alertaPromoImagemUpload');
+
+if (alertaPromoImageUploadBtn && alertaPromoImagemUpload) {
+    alertaPromoImageUploadBtn.onclick = () => alertaPromoImagemUpload.click();
+    
+    alertaPromoImagemUpload.addEventListener('change', async function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        try {
+            // Validar arquivo
+            window.validateImageFile(file);
+            
+            // Mostrar loading
+            const preview = document.getElementById('alertaPromoImagemPreview');
+            preview.innerHTML = '<div style="text-align:center;padding:20px;">Fazendo upload...</div>';
+            
+            // Fazer upload usando função específica para promoções
+            const uploadResult = await window.uploadPromo(file);
+            
+            // Atualizar campo e preview
+            document.getElementById('alertaPromoImagem').value = uploadResult.path;
+            preview.innerHTML = `<img src="${uploadResult.path}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
+            
+            // Atualizar galeria para refletir a seleção
+            carregarGaleriaPromos('promoImageGallery', 'alertaPromoImagem', uploadResult.path);
+            
+        } catch (error) {
+            showCustomAlert(error.message);
+            this.value = '';
+            document.getElementById('alertaPromoImagemPreview').innerHTML = '';
+        }
+    });
+}
+
+// Preview da imagem ao selecionar na galeria
+document.getElementById('alertaPromoImagem').addEventListener('change', function () {
     const url = this.value.trim();
     document.getElementById('alertaPromoImagemPreview').innerHTML = url ? `<img src="${url}" style="max-width:120px;max-height:120px;border-radius:10px;">` : '';
-});
-document.getElementById('alertaPromoImagemUpload').addEventListener('change', async function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    try {
-        // Validar arquivo
-        window.validateImageFile(file);
-        
-        // Mostrar loading
-        const preview = document.getElementById('alertaPromoImagemPreview');
-        preview.innerHTML = '<div style="text-align:center;padding:20px;">Fazendo upload...</div>';
-        
-        // Fazer upload
-        const uploadResult = await window.uploadImage(file);
-        
-        // Atualizar campo e preview
-        document.getElementById('alertaPromoImagem').value = uploadResult.path;
-        preview.innerHTML = `<img src="${uploadResult.path}" style="max-width:120px;max-height:120px;border-radius:10px;">`;
-        
-    } catch (error) {
-        showCustomAlert(error.message);
-        this.value = '';
-        document.getElementById('alertaPromoImagemPreview').innerHTML = '';
-    }
 });
 
 // Fechar modal

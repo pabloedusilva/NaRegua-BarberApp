@@ -55,11 +55,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Servir arquivos estáticos do diretório favicon
 app.use('/favicon', express.static(path.join(__dirname, 'favicon')));
 
-// Servir arquivos da pasta uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir arquivos estáticos
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Rotas de upload de imagens
-app.post('/api/upload/image', upload.single('image'), compressAndSaveImage, (req, res) => {
+// Rotas de upload de imagens com categorização
+app.post('/api/upload/service', upload.single('image'), compressAndSaveImage('services'), (req, res) => {
     if (!req.processedFile) {
         return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
     }
@@ -69,7 +69,8 @@ app.post('/api/upload/image', upload.single('image'), compressAndSaveImage, (req
         filename: req.processedFile.filename,
         path: req.processedFile.path,
         originalname: req.processedFile.originalname,
-        size: req.processedFile.size
+        size: req.processedFile.size,
+        type: req.processedFile.type
     });
 });
 
@@ -83,7 +84,69 @@ app.post('/api/upload/avatar', upload.single('avatar'), compressAndSaveAvatar, (
         filename: req.processedFile.filename,
         path: req.processedFile.path,
         originalname: req.processedFile.originalname,
-        size: req.processedFile.size
+        size: req.processedFile.size,
+        type: req.processedFile.type
+    });
+});
+
+app.post('/api/upload/wallpaper', upload.single('image'), compressAndSaveImage('wallpapers'), (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size,
+        type: req.processedFile.type
+    });
+});
+
+app.post('/api/upload/logo', upload.single('image'), compressAndSaveImage('logos'), (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size,
+        type: req.processedFile.type
+    });
+});
+
+app.post('/api/upload/promo', upload.single('image'), compressAndSaveImage('promos'), (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size,
+        type: req.processedFile.type
+    });
+});
+
+// Rota genérica para compatibilidade (usa services por padrão)
+app.post('/api/upload/image', upload.single('image'), compressAndSaveImage('services'), (req, res) => {
+    if (!req.processedFile) {
+        return res.status(400).json({ error: 'Nenhuma imagem foi enviada' });
+    }
+    
+    res.json({
+        success: true,
+        filename: req.processedFile.filename,
+        path: req.processedFile.path,
+        originalname: req.processedFile.originalname,
+        size: req.processedFile.size,
+        type: req.processedFile.type
     });
 });
 

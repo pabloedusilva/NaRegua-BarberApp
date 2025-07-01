@@ -1,12 +1,13 @@
 // Utilitário para upload de imagens comprimidas
 (function() {
-    // Função para fazer upload de uma imagem comum
-    window.uploadImage = async function(file) {
+    // Função genérica para fazer upload com tipo específico
+    window.uploadImageByType = async function(file, type = 'service') {
         const formData = new FormData();
-        formData.append('image', file);
+        const fieldName = type === 'avatar' ? 'avatar' : 'image';
+        formData.append(fieldName, file);
 
         try {
-            const response = await fetch('/api/upload/image', {
+            const response = await fetch(`/api/upload/${type}`, {
                 method: 'POST',
                 body: formData
             });
@@ -14,38 +15,44 @@
             const result = await response.json();
             
             if (!response.ok) {
-                throw new Error(result.error || 'Erro no upload');
+                throw new Error(result.error || `Erro no upload de ${type}`);
             }
 
             return result;
         } catch (error) {
-            console.error('Erro no upload:', error);
+            console.error(`Erro no upload de ${type}:`, error);
             throw error;
         }
     };
 
+    // Função para fazer upload de uma imagem comum (compatibilidade)
+    window.uploadImage = async function(file) {
+        return await uploadImageByType(file, 'service');
+    };
+
+    // Função para fazer upload de imagem de serviço
+    window.uploadService = async function(file) {
+        return await uploadImageByType(file, 'service');
+    };
+
     // Função para fazer upload de um avatar
     window.uploadAvatar = async function(file) {
-        const formData = new FormData();
-        formData.append('avatar', file);
+        return await uploadImageByType(file, 'avatar');
+    };
 
-        try {
-            const response = await fetch('/api/upload/avatar', {
-                method: 'POST',
-                body: formData
-            });
+    // Função para fazer upload de wallpaper
+    window.uploadWallpaper = async function(file) {
+        return await uploadImageByType(file, 'wallpaper');
+    };
 
-            const result = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(result.error || 'Erro no upload do avatar');
-            }
+    // Função para fazer upload de logo
+    window.uploadLogo = async function(file) {
+        return await uploadImageByType(file, 'logo');
+    };
 
-            return result;
-        } catch (error) {
-            console.error('Erro no upload do avatar:', error);
-            throw error;
-        }
+    // Função para fazer upload de promo
+    window.uploadPromo = async function(file) {
+        return await uploadImageByType(file, 'promo');
     };
 
     // Função para mostrar preview da imagem antes do upload
