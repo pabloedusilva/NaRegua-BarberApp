@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Tabs functionality
     const tabs = document.querySelectorAll('.auth-tab');
+    const tabsContainer = document.querySelector('.auth-tabs');
+    
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
             // Remove active class from all tabs and contents
@@ -62,8 +64,33 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
             const tabId = this.getAttribute('data-tab');
             document.getElementById(`${tabId}-content`).classList.add('active');
+            
+            // Atualizar posição do indicador da aba
+            updateTabIndicator(this);
         });
     });
+    
+    // Função para atualizar o indicador da aba
+    function updateTabIndicator(activeTab) {
+        const tabsContainer = document.querySelector('.auth-tabs');
+        const tabIndex = Array.from(tabs).indexOf(activeTab);
+        
+        // Remover classes de posição anteriores
+        tabsContainer.classList.remove('tab-first', 'tab-second');
+        
+        // Adicionar classe baseada no índice da aba ativa
+        if (tabIndex === 0) {
+            tabsContainer.classList.add('tab-first');
+        } else if (tabIndex === 1) {
+            tabsContainer.classList.add('tab-second');
+        }
+    }
+    
+    // Inicializar o indicador na aba ativa
+    const activeTab = document.querySelector('.auth-tab.active');
+    if (activeTab) {
+        updateTabIndicator(activeTab);
+    }
 
     // Form submission
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
