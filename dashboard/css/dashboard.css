@@ -4471,7 +4471,7 @@ main.container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 900; /* MENOR que o header e hamburger */
+    z-index: 1000 !important;
     padding-bottom: 0.75rem;
     transition: var(--transition-slow);
 }
