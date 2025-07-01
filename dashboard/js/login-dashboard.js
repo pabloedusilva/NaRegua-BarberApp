@@ -50,47 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Tabs functionality
+    // Tabs functionality (simplified for single tab)
     const tabs = document.querySelectorAll('.auth-tab');
     const tabsContainer = document.querySelector('.auth-tabs');
     
+    // Since we only have one tab now, we can remove the complex tab switching
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
-            // Remove active class from all tabs and contents
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-content').forEach(c => c.classList.remove('active'));
-
-            // Add active class to clicked tab and corresponding content
+            // Keep the tab active (no switching needed)
             this.classList.add('active');
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(`${tabId}-content`).classList.add('active');
-            
-            // Atualizar posição do indicador da aba
-            updateTabIndicator(this);
         });
     });
-    
-    // Função para atualizar o indicador da aba
-    function updateTabIndicator(activeTab) {
-        const tabsContainer = document.querySelector('.auth-tabs');
-        const tabIndex = Array.from(tabs).indexOf(activeTab);
-        
-        // Remover classes de posição anteriores
-        tabsContainer.classList.remove('tab-first', 'tab-second');
-        
-        // Adicionar classe baseada no índice da aba ativa
-        if (tabIndex === 0) {
-            tabsContainer.classList.add('tab-first');
-        } else if (tabIndex === 1) {
-            tabsContainer.classList.add('tab-second');
-        }
-    }
-    
-    // Inicializar o indicador na aba ativa
-    const activeTab = document.querySelector('.auth-tab.active');
-    if (activeTab) {
-        updateTabIndicator(activeTab);
-    }
 
     // Form submission
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -121,47 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showCustomAlert('Erro ao conectar ao servidor.', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>' });
         }
     });
-
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Aqui você adicionaria a lógica de cadastro
-        console.log('Register submitted');
-
-        // Verificar se as senhas coincidem
-        const password = document.getElementById('register-password').value;
-        const confirmPassword = document.getElementById('register-confirm-password').value;
-
-        if (password !== confirmPassword) {
-            showCustomAlert('As senhas não coincidem!', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-exclamation-triangle" style="color:var(--primary-dark);"></i>' });
-            return;
-        }
-        // Simulação de cadastro bem-sucedido
-        showCustomAlert('Cadastro realizado com sucesso! Redirecionando para o login...', null, { type: 'alert', btnText: 'OK', icon: '<i class="fas fa-check-circle" style="color:var(--success);"></i>' });
-
-        // Mudar para a aba de login após cadastro
-        document.querySelector('.auth-tab[data-tab="login"]').click();
-    });
-
-    // Máscara para telefone
-    const phoneInput = document.getElementById('register-phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.substring(0, 11);
-
-            if (value.length > 0) {
-                value = value.replace(/^(\d{0,2})(\d{0,5})(\d{0,4})$/, function(match, g1, g2, g3) {
-                    let result = '';
-                    if (g1) result = `(${g1}`;
-                    if (g2) result += `) ${g2}`;
-                    if (g3) result += `-${g3}`;
-                    return result;
-                });
-            }
-
-            e.target.value = value;
-        });
-    }
 
     // Modal "Esqueceu sua senha?"
     const forgotLink = document.querySelector('.auth-footer a');
