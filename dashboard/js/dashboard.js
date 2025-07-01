@@ -1,5 +1,3 @@
-// Remover serverNow global
-
 // Carrega utilitário de alerta customizado
 const script = document.createElement('script');
 script.src = '/js/custom-alert.js';
@@ -7,13 +5,14 @@ document.head.appendChild(script);
 
 // Carrega utilitário de hora do servidor
 const serverTimeScript = document.createElement('script');
-serverTimeScript.src = '/dashboard/js/server-time.js';
+serverTimeScript.src = '/js/server-time.js';
 document.head.appendChild(serverTimeScript);
 
 // Aguarda sincronização da hora do servidor antes de executar o restante
 document.addEventListener('DOMContentLoaded', async function () {
-    if (typeof window.startServerTime === 'function') {
-        await new Promise(resolve => setTimeout(resolve, 500));
+    if (typeof window.startServerTimeSync === 'function') {
+        await window.startServerTimeSync();
+        console.log('Dashboard: Sistema de horário do servidor iniciado');
     }
 
     // Toggle theme
@@ -348,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         container.innerHTML = '';
                         if (data.agendamentos && data.agendamentos.length > 0) {
                             // Determina status
-                            const now = serverNow;
+                            const now = getNow();
                             ags = ags.map(ag => {
                                 let status = 'confirmed';
                                 if (ag.status && ag.status.toLowerCase() === 'cancelado') {
@@ -595,9 +594,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Helper para obter a data/hora "agora" SEMPRE do servidor
     function getNow() {
-        if (serverNow && typeof serverNow.getTime === 'function') return new Date(serverNow.getTime());
-        if (serverNow && typeof serverNow.clone === 'function') return serverNow.clone();
-        return new Date();
+        return window.serverTime ? window.serverTime() : new Date();
     }
 
     // Função utilitária para converter hora (HH:mm:ss) em minutos totais
@@ -1504,15 +1501,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 data.notificacoes.forEach(n => {
                     const item = document.createElement('div');
                     item.className = 'notification-item';
-                    // NOVO: Usa dayjs.tz para garantir fuso de Brasília
+                    // Formatação usando hora do servidor
                     let dataFormatada = '';
                     if (n.data) {
-                        if (typeof dayjs !== 'undefined' && dayjs.tz) {
-                            dataFormatada = dayjs.tz(n.data, 'America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss');
-                        } else {
-                            // fallback
+                        try {
                             const d = new Date(n.data);
                             dataFormatada = d.toLocaleString('pt-BR');
+                        } catch (e) {
+                            dataFormatada = n.data;
                         }
                     }
                     item.innerHTML = `
@@ -1962,71 +1958,10 @@ if (uploadWallpaperBtn && uploadWallpaperInput) {
     });
 }
 
-// Função para buscar a data/hora do servidor em tempo real (NUNCA do dispositivo)
-async function getServerDateTime() {
-
-    try {
-        const res = await fetch('/dashboard/servertime');
-        const data = await res.json();
-        if (data && data.iso) {
-            return new Date(data.iso);
-        }
-    } catch (err) { }
-    // fallback: retorna null, nunca usa data local
-    return null;
-}
-
-// Exemplo de uso para exibir data/hora de notificações SEMPRE do servidor
-async function renderNotificacoesComDataReal() {
-    notificationsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
-    try {
-        const res = await fetch('/dashboard/notificacoes');
-        const data = await res.json();
-        if (data.success && data.notificacoes.length > 0) {
-            notificationsList.innerHTML = '';
-            let hasUnread = false;
-            for (const n of data.notificacoes) {
-                // Busca a data/hora do servidor para cada notificação
-                let dataServidor = null;
-                if (n.data) {
-                    // Chama rota que retorna a data/hora do servidor (pode ser otimizado para batch)
-                    dataServidor = await getServerDateTime();
-                }
-                let dataFormatada = dataServidor ? dataServidor.toLocaleString('pt-BR') : 'Indisponível';
-                const item = document.createElement('div');
-                item.className = 'notification-item';
-                item.innerHTML = `
-                    <div class="notification-content">
-                        <div class="notification-title"><i class="fas fa-bell"></i> ${n.titulo}</div>
-                        <div class="notification-date">${dataFormatada}</div>
-                        <div class="notification-message">${n.mensagem}</div>
-                    </div>
-                    <button class="delete-notification-btn" data-id="${n.id}" title="Marcar como lida">
-                        <i class="fas fa-check"></i>
-                    </button>
-                `;
-                item.querySelector('.delete-notification-btn').onclick = async function () {
-                    await fetch('/dashboard/notificacoes/' + n.id, { method: 'DELETE' });
-                    item.remove();
-                    renderNotificacoesComDataReal();
-                };
-                notificationsList.appendChild(item);
-                if (!n.lida) hasUnread = true;
-            }
-            notificationDot.style.display = hasUnread ? 'block' : 'none';
-        } else {
-            notificationsList.innerHTML = '<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhuma notificação.</div>';
-            notificationDot.style.display = 'none';
-        }
-    } catch (err) {
-        notificationsList.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar notificações.</div>';
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const el = document.getElementById('dashboardTodayDate');
     if (el) {
-        const now = new Date();
+        const now = getNow();
         el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 });

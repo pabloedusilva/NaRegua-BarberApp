@@ -3,12 +3,18 @@ const router = express.Router();
 const db = require('../db/neon');
 const { requireLogin } = require('../middleware/auth');
 const path = require('path');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
 const PDFDocument = require('pdfkit');
-dayjs.extend(utc);
-dayjs.extend(timezone);
+
+// Função para obter a data/hora do Brasil
+function getBrazilDateTime() {
+    const now = new Date();
+    const brazilTime = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+    return {
+        date: brazilTime.toISOString().slice(0, 10), // YYYY-MM-DD
+        datetime: brazilTime.toISOString().slice(0, 19).replace('T', ' '), // YYYY-MM-DD HH:mm:ss
+        dateObject: brazilTime
+    };
+}
 
 // Login (POST)
 router.post('/login', async(req, res) => {
@@ -62,7 +68,8 @@ router.get('/total-agendamentos', requireLogin, async(req, res) => {
 // Rota para buscar total de agendamentos do mês atual
 router.get('/total-agendamentos-mes', requireLogin, async(req, res) => {
     try {
-        const hoje = new Date();
+        const brazilTime = getBrazilDateTime();
+        const hoje = brazilTime.dateObject;
         const ano = hoje.getFullYear();
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
         // Corrige o último dia do mês
@@ -83,11 +90,8 @@ router.get('/total-agendamentos-mes', requireLogin, async(req, res) => {
 // Rota para buscar agendamentos do dia atual
 router.get('/agendamentos-hoje', requireLogin, async(req, res) => {
     try {
-        const hoje = new Date();
-        const ano = hoje.getFullYear();
-        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-        const dia = String(hoje.getDate()).padStart(2, '0');
-        const dataHoje = `${ano}-${mes}-${dia}`;
+        const brazilTime = getBrazilDateTime();
+        const dataHoje = brazilTime.date; // YYYY-MM-DD
         const rows = await db `
             SELECT * FROM agendamentos
             WHERE data = ${dataHoje}
@@ -135,7 +139,8 @@ router.post('/alterar-senha', requireLogin, async(req, res) => {
 // Atualiza o contador de agendamentos da semana (segunda a domingo da semana atual)
 router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
     try {
-        const hoje = new Date();
+        const brazilTime = getBrazilDateTime();
+        const hoje = brazilTime.dateObject;
         // Pega o dia da semana (0=domingo, 1=segunda, ...)
         const diaSemana = hoje.getDay();
         // Calcula o primeiro dia da semana (segunda-feira)
@@ -162,7 +167,8 @@ router.get('/total-agendamentos-semana', requireLogin, async(req, res) => {
 // Agendamentos da semana atual (segunda a domingo da semana corrente)
 router.get('/agendamentos-semana', requireLogin, async(req, res) => {
     try {
-        const hoje = new Date();
+        const brazilTime = getBrazilDateTime();
+        const hoje = brazilTime.dateObject;
         // Pega o dia da semana (0=domingo, 1=segunda, ...)
         const diaSemana = hoje.getDay();
         // Calcula o primeiro dia da semana (segunda-feira)
@@ -189,7 +195,8 @@ router.get('/agendamentos-semana', requireLogin, async(req, res) => {
 // Agendamentos do mês atual
 router.get('/agendamentos-mes', requireLogin, async(req, res) => {
     try {
-        const hoje = new Date();
+        const brazilTime = getBrazilDateTime();
+        const hoje = brazilTime.dateObject;
         const ano = hoje.getFullYear();
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
         // Corrige o último dia do mês
@@ -379,15 +386,6 @@ router.post('/barbearia', async(req, res) => {
     }
 });
 
-// Rota para fornecer data/hora do servidor em tempo real (corrigida para horário do Brasil)
-router.get('/servertime', (req, res) => {
-    const nowBrazil = dayjs().tz('America/Sao_Paulo');
-    res.json({
-        iso: nowBrazil.format(), // ISO já no fuso do Brasil
-        br: nowBrazil.format('YYYY-MM-DD HH:mm:ss')
-    });
-});
-
 // Rota para buscar total de clientes
 router.get('/total-clientes', requireLogin, async(req, res) => {
     try {
@@ -529,7 +527,8 @@ router.get('/folgas-especiais-public', async(req, res) => {
 // Rota para gerar PDF dos agendamentos concluídos do mês
 router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
     try {
-        const now = new Date();
+        const brazilTime = getBrazilDateTime();
+        const now = brazilTime.dateObject;
         const year = now.getFullYear();
         const month = now.getMonth() + 1; // 1-12
 
@@ -582,7 +581,7 @@ router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
 
         doc.fillColor('#999999')
            .fontSize(10)
-           .text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 40, 95);
+           .text(`Gerado em: ${getBrazilDateTime().dateObject.toLocaleDateString('pt-BR')}`, 40, 95);
 
         let currentY = 130;
 

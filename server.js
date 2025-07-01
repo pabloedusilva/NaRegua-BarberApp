@@ -7,13 +7,15 @@ const imagensRoutes = require('./routes/imagens');
 const alertasPromosRoutes = require('./routes/alertasPromos');
 const { upload, compressAndSaveImage, compressAndSaveAvatar } = require('./middleware/upload');
 const db = require('./db/neon');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const BRAZIL_TZ = 'America/Sao_Paulo';
 require('./utils/cron');
+
+// Função para obter data/hora do Brasil (UTC-3)
+function getBrazilDateTime() {
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const brazilTime = new Date(utc + (-3 * 3600000));
+    return brazilTime;
+}
 
 const app = express();
 const port = 3000;
@@ -150,24 +152,29 @@ app.post('/api/upload/image', upload.single('image'), compressAndSaveImage('serv
     });
 });
 
-// Exemplo de endpoint para testar o horário do servidor no fuso do Brasil
-app.get('/api/server-time', (req, res) => {
-    const now = dayjs().tz(BRAZIL_TZ);
+// Rota centralizada para data/hora do servidor (somente formato brasileiro)
+app.get('/servertime', (req, res) => {
+    const brazilTime = getBrazilDateTime();
+    const year = brazilTime.getFullYear();
+    const month = String(brazilTime.getMonth() + 1).padStart(2, '0');
+    const day = String(brazilTime.getDate()).padStart(2, '0');
+    const hours = String(brazilTime.getHours()).padStart(2, '0');
+    const minutes = String(brazilTime.getMinutes()).padStart(2, '0');
+    const seconds = String(brazilTime.getSeconds()).padStart(2, '0');
+    
     res.json({
-        iso: now.toISOString(),
-        br: now.format('YYYY-MM-DD HH:mm:ss'),
-        tz: BRAZIL_TZ
+        br: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
     });
 });
 
-// Adicione ANTES do app.listen:
-app.get('/dashboard/servertime', (req, res) => {
-    const now = dayjs().tz(BRAZIL_TZ);
-    res.json({
-        iso: now.toISOString(),
-        br: now.format('YYYY-MM-DD HH:mm:ss'),
-        tz: BRAZIL_TZ
-    });
+// Servir o arquivo server-time.js centralizado da pasta /servertime
+app.get('/js/server-time.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'servertime', 'server-time.js'));
+});
+
+// Servir o arquivo server-time.js centralizado para o dashboard também
+app.get('/dashboard/js/server-time.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'servertime', 'server-time.js'));
 });
 
 // Iniciar servidor

@@ -3,6 +3,11 @@ const script = document.createElement('script');
 script.src = '/js/custom-alert.js';
 document.head.appendChild(script);
 
+// Carrega utilitário de hora do servidor
+const serverTimeScript = document.createElement('script');
+serverTimeScript.src = '/js/server-time.js';
+document.head.appendChild(serverTimeScript);
+
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle theme
     let themeToggle = document.getElementById('themeToggle');

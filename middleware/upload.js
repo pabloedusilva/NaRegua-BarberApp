@@ -3,6 +3,14 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
+// Função para obter data/hora do Brasil (UTC-3)
+function getBrazilDateTime() {
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const brazilTime = new Date(utc + (-3 * 3600000));
+    return brazilTime;
+}
+
 // Certificar que as pastas de upload existem
 const baseUploadsDir = path.join(__dirname, '../public/uploads');
 const uploadsSubDirs = {
@@ -54,7 +62,7 @@ const compressAndSaveImage = (uploadType = 'services') => {
             const uploadDir = uploadsSubDirs[uploadType] || uploadsSubDirs.services;
             
             // Gerar nome único para o arquivo
-            const timestamp = Date.now();
+            const timestamp = getBrazilDateTime().getTime();
             const randomNum = Math.floor(Math.random() * 1000);
             const extension = '.webp'; // Converter tudo para webp para melhor compressão
             const filename = `${uploadType}-${timestamp}-${randomNum}${extension}`;

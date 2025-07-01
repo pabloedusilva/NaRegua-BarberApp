@@ -12,13 +12,11 @@ document.head.appendChild(serverTimeScript);
 document.addEventListener('DOMContentLoaded', async function () {
     // Aguarda o utilitário carregar e sincronizar
     if (typeof window.startServerTimeSync === 'function') {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await window.startServerTimeSync();
+        console.log('Sistema de horário do servidor iniciado');
     }
-    // Todas as funções que dependem de data/hora devem usar window.serverTime()
-    // Exemplo de uso:
-    // const agora = window.serverTime();
-    // ...
-    // Substitua todos os usos de dayjs(), Date.now(), new Date(), etc., por window.serverTime()
+    
+    // Todas as funções que dependem de data/hora usam window.serverTime()
 });
 
 // Função para formatar a data no formato brasileiro (DD/MM/AAAA)
@@ -29,15 +27,19 @@ function formatarDataBR(dataISO) {
         const [ano, mes, dia] = dataISO.split('-');
         return `${dia}/${mes}/${ano}`;
     }
-    // Se vier no formato ISO completo (ex: 2025-05-26T03:00:00.000Z)
-    const data = new Date(dataISO);
-    if (!isNaN(data.getTime())) {
-        const dia = String(data.getDate()).padStart(2, '0');
-        const mes = String(data.getMonth() + 1).padStart(2, '0');
-        const ano = data.getFullYear();
-        return `${dia}/${mes}/${ano}`;
+    // Se vier no formato ISO completo, converte usando servidor
+    try {
+        const serverDate = window.serverTime();
+        const data = new Date(dataISO);
+        if (!isNaN(data.getTime())) {
+            const dia = String(data.getDate()).padStart(2, '0');
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const ano = data.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+    } catch (e) {
+        console.warn('Erro ao formatar data:', e);
     }
-    // Se não conseguir converter, retorna original
     return dataISO;
 }
 
@@ -159,59 +161,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         '25/12': 'Natal'
     };
 
-    // =========================
-    // DATA/HORA GLOBAL DO SERVIDOR (padronizado com dashboard)
-    // =========================
-    let serverNow = null;
-
-    async function fetchServerNow() {
-        try {
-            const res = await fetch('/dashboard/servertime');
-            const data = await res.json();
-            if (data && data.iso && typeof dayjs !== 'undefined' && dayjs.tz) {
-                return dayjs.tz(data.iso, 'America/Sao_Paulo');
-            } else if (data && data.iso && typeof dayjs !== 'undefined') {
-                return dayjs(data.iso);
-            } else if (data && data.iso) {
-                return new Date(data.iso);
-            }
-        } catch (err) { }
-        if (typeof dayjs !== 'undefined') return dayjs();
-        return new Date();
-    }
-
-    async function atualizarServerNow() {
-        serverNow = await fetchServerNow();
-    }
-
-    // Atualiza ao carregar e a cada 30s
-    window.addEventListener('DOMContentLoaded', atualizarServerNow);
-    setInterval(atualizarServerNow, 30000);
-
-    // Helper para obter a data/hora "agora" SEMPRE do servidor
-    function getNow() {
-        if (!serverNow) return new Date();
-        if (typeof serverNow === 'function') return serverNow();
-        if (serverNow.clone) return serverNow.clone();
-        return new Date(serverNow);
-    }
-
-    // Inicializar calendário - inicia com a data atual mas permite navegação
-    let currentDate = new Date(); // Data local inicial, será atualizada conforme o usuário navegar
+    // Inicializar calendário com data do servidor
+    let currentDate = window.serverTime ? window.serverTime() : new Date();
     if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
         currentDate = currentDate.toDate();
     }
     
-    // Atualizar com data do servidor apenas uma vez no início
+    // Inicialização do calendário usando servidor
     async function initializeCalendarDate() {
-        const serverDate = getNow();
-        if (serverDate) {
-            currentDate = new Date(serverDate);
+        if (typeof window.serverTime === 'function') {
+            currentDate = window.serverTime();
         }
         await renderCalendar(currentDate);
     }
     
-    // Chamar inicialização quando a página carrega
+    // Chamar inicialização
     if (typeof window.startServerTimeSync === 'function') {
         window.startServerTimeSync().then(() => {
             initializeCalendarDate();
@@ -307,7 +271,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         const year = date.getFullYear();
         const month = date.getMonth();
-        const today = getNow();
+        const today = window.serverTime ? window.serverTime() : new Date();
         today.setHours(0, 0, 0, 0);
 
         const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -332,7 +296,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             days += '<div class="week-days">';
 
             // Gerar os 7 dias da semana
-            const today = getNow();
+            const today = window.serverTime ? window.serverTime() : new Date();
             today.setHours(0, 0, 0, 0);
 
             const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -381,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const lastDayIndex = lastDay.getDay();
             const nextDays = 7 - lastDayIndex - 1;
 
-            const today = getNow();
+            const today = window.serverTime ? window.serverTime() : new Date();
             today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
             for (let i = firstDayIndex; i > 0; i--) {
@@ -1176,48 +1140,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
-    // =========================
-    // BLOCO: Data/hora do servidor SEMPRE (ignora dispositivo)
-    // =========================
-
-    // Função para buscar a data/hora do servidor (UTC) via backend
-    async function getServerDateTime() {
-        try {
-            const res = await fetch('/dashboard/servertime');
-            const data = await res.json();
-            if (data && data.iso && typeof dayjs !== 'undefined') {
-                return dayjs.tz(data.iso, 'America/Sao_Paulo');
-            } else if (data && data.iso) {
-                return new Date(data.iso);
-            }
-        } catch (err) { }
-        // fallback: retorna dayjs() local
-        if (typeof dayjs !== 'undefined') return dayjs();
-        return new Date();
-    }
-
-    // Variável global para data/hora do servidor
-    let serverDate = null;
-
-    // Função para atualizar a data/hora do servidor periodicamente (ex: a cada 30s)
-    async function atualizarDataServidor() {
-        serverDate = await getServerDateTime();
-        if (!serverDate) {
-            // fallback: mostra mensagem de erro
-            if (window.showCustomAlert) {
-                showCustomAlert('Erro ao obter data/hora do servidor. Atualize a página.');
-            }
-            return;
-        }
-        // NÃO atualiza o calendário automaticamente - apenas atualiza a data do servidor
-        // O calendário mantém a navegação do usuário
-    }
-
-    // Inicializa a data do servidor ao carregar a página
-    window.addEventListener('DOMContentLoaded', atualizarDataServidor);
-    // Atualiza a cada 30 segundos para garantir precisão
-    setInterval(atualizarDataServidor, 30000);
-
     // Função para carregar turnos do backend
     async function carregarHorariosTurnos() {
         try {
@@ -1434,10 +1356,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             const dateStr = e.target.getAttribute('data-date');
             selectedDate = dateStr;
             updateConfirmationDetails();
-            // Aguarda atualização do horário do servidor antes de renderizar os horários
-            if (typeof atualizarDataServidor === 'function') {
-                await atualizarDataServidor();
-            }
             // Chame renderTimeSlots com o dia da semana do dia selecionado
             renderTimeSlots(getDiaSemana(dateStr));
             // Mostre a seção de confirmação se quiser

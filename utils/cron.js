@@ -1,19 +1,24 @@
 const db = require('../db/neon');
 const { sendReminderEmail } = require('./mailer');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const BRAZIL_TZ = 'America/Sao_Paulo';
+
+// Função para obter a data/hora do Brasil
+function getBrazilDateTime() {
+    const now = new Date();
+    const brazilTime = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+    return {
+        date: brazilTime.toISOString().slice(0, 10), // YYYY-MM-DD
+        time: brazilTime.toISOString().slice(11, 19), // HH:mm:ss
+        datetime: brazilTime.toISOString().slice(0, 19).replace('T', ' ') // YYYY-MM-DD HH:mm:ss
+    };
+}
 
 // Função para atualizar status dos agendamentos
 async function atualizarStatusAgendamentos() {
     try {
         // Pega data/hora do Brasil
-        const now = dayjs().tz(BRAZIL_TZ);
-        const dataHoje = now.format('YYYY-MM-DD');
-        const horaAgora = now.format('HH:mm:ss');
+        const brazilTime = getBrazilDateTime();
+        const dataHoje = brazilTime.date;
+        const horaAgora = brazilTime.time;
         // Marca como concluído apenas se a data é menor OU (data igual e hora menor ou igual ao horário atual)
         await db `
             UPDATE agendamentos
@@ -42,9 +47,9 @@ async function atualizarStatusAgendamentos() {
 // Função para enviar lembrete 1h antes do agendamento (baseado em diferença de minutos)
 async function enviarLembretesAgendamentos() {
     try {
-        const now = dayjs().tz(BRAZIL_TZ);
-        const dataHoje = now.format('YYYY-MM-DD');
-        const horaAgora = now.format('HH:mm:ss');
+        const brazilTime = getBrazilDateTime();
+        const dataHoje = brazilTime.date;
+        const horaAgora = brazilTime.time;
         // Busca agendamentos para daqui a 1 hora (tolerância de 1 minuto)
         const rows = await db `
             SELECT a.*, c.email as cliente_email FROM agendamentos a

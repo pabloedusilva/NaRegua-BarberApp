@@ -2,12 +2,16 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/neon');
 const { sendConfirmationEmail, sendBarberNotification } = require('../utils/mailer');
-const dayjs = require('dayjs');
-const timezone = require('dayjs/plugin/timezone');
-const utc = require('dayjs/plugin/utc');
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const BRAZIL_TZ = 'America/Sao_Paulo';
+
+// Função para obter a data/hora do Brasil
+function getBrazilDateTime() {
+    const now = new Date();
+    const brazilTime = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+    return {
+        date: brazilTime.toISOString().slice(0, 10), // YYYY-MM-DD
+        datetime: brazilTime.toISOString().slice(0, 19).replace('T', ' ') // YYYY-MM-DD HH:mm:ss
+    };
+}
 
 // Criar novo agendamento
 router.post('/novo', async(req, res) => {
@@ -57,7 +61,7 @@ router.post('/novo', async(req, res) => {
                 await sendConfirmationEmail({
                     to: emailParaEnviar,
                     nome,
-                    data: new Date(data).toLocaleDateString('pt-BR'),
+                    data: getBrazilDateTime().date.split('-').reverse().join('/'), // DD/MM/YYYY
                     hora,
                     profissional,
                     servico
@@ -74,7 +78,7 @@ router.post('/novo', async(req, res) => {
                 telefone,
                 servico,
                 profissional,
-                data: new Date(data).toLocaleDateString('pt-BR'),
+                data: getBrazilDateTime().date.split('-').reverse().join('/'), // DD/MM/YYYY
                 hora,
                 preco,
                 email
@@ -82,16 +86,15 @@ router.post('/novo', async(req, res) => {
         } catch (err) {
             console.error('Erro ao enviar e-mail para o barbeiro:', err);
         }
-        // Cria notificação para dashboard (data UTC, mensagem curta)
+        // Cria notificação para dashboard
+        const brazilDate = getBrazilDateTime();
         const titulo = 'Novo agendamento';
-        const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${
-            dayjs.tz(data, BRAZIL_TZ).format('DD/MM/YYYY')
-        } às ${hora}.`;
-        // Use data/hora do Brasil
-        const nowBrazil = dayjs().tz(BRAZIL_TZ).format('YYYY-MM-DD HH:mm:ss');
+        const dataFormatada = brazilDate.date.split('-').reverse().join('/'); // DD/MM/YYYY
+        const msg = `Novo agendamento para ${servico?.toString().slice(0,40)} com ${profissional?.toString().slice(0,40)} em ${dataFormatada} às ${hora}.`;
+        
         await db `
             INSERT INTO notificacoes (titulo, mensagem, data)
-            VALUES (${titulo}, ${msg}, ${nowBrazil})
+            VALUES (${titulo}, ${msg}, ${brazilDate.datetime})
         `;
         // Salva a subscription (evita duplicidade)
         if (subscription && subscription.endpoint) {
