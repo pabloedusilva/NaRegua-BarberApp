@@ -1658,12 +1658,12 @@ async function carregarBarbeariaDashboard() {
             container.innerHTML = `
                 <div class="barbershop-photo">
                     <div class="barbershop-photo-inner">
-                        <img src="${b.foto}" alt="Foto da Barbearia">
+                        <img src="${b.foto}" alt="Foto da Barbearia" onerror="this.src='/public/uploads/img/logo/Logo.png'">
                     </div>
                 </div>
                 <div class="barbershop-main">
                     <div class="barbershop-title-row">
-                        <span class="barbershop-title">${b.nome}</span>
+                        <h3 class="barbershop-title">${b.nome}</h3>
                     </div>
                     <div class="barbershop-address-row">
                         <i class="fas fa-map-marker-alt"></i>
@@ -1671,23 +1671,34 @@ async function carregarBarbeariaDashboard() {
                     </div>
                     <div class="barbershop-whatsapp-row">
                         <i class="fab fa-whatsapp"></i>
-                        <a href="https://wa.me/${b.whatsapp}" target="_blank">
-                            (${b.whatsapp.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')})
+                        <a href="https://wa.me/${b.whatsapp}" target="_blank" rel="noopener noreferrer">
+                            ${b.whatsapp.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')}
                         </a>
                     </div>
                     <div class="barbershop-instagram-row">
                         <i class="fab fa-instagram"></i>
-                        <a href="https://instagram.com/${b.instagram}" target="_blank">
+                        <a href="https://instagram.com/${b.instagram}" target="_blank" rel="noopener noreferrer">
                             @${b.instagram}
                         </a>
                     </div>
                 </div>
             `;
         } else {
-            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
+            container.innerHTML = `
+                <div style="color:var(--primary-dark);padding:32px 0;text-align:center;font-size:1.1rem;opacity:0.8;">
+                    <i class="fas fa-store" style="font-size:2rem;margin-bottom:12px;color:var(--primary);"></i><br>
+                    Informações da barbearia não cadastradas.
+                </div>
+            `;
         }
     } catch (err) {
-        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
+        console.error('Erro ao carregar informações da barbearia:', err);
+        container.innerHTML = `
+            <div style="color:var(--primary-dark);padding:32px 0;text-align:center;font-size:1.1rem;opacity:0.8;">
+                <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:12px;color:#e74c3c;"></i><br>
+                Erro ao carregar informações.
+            </div>
+        `;
     }
 }
 carregarBarbeariaDashboard();
