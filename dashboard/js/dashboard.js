@@ -731,38 +731,39 @@ document.addEventListener('DOMContentLoaded', async function () {
                     html += `
                 <div class="service-card-modern" data-id="${servico.id}">
                     <div class="service-card-header">
+                        <div class="service-image">
+                            <img src="${imagemServico}" alt="${servico.nome}" onerror="this.src='/uploads/img/servicos/no-imagem.png'">
+                        </div>
                         <div class="service-card-info">
-                            <div class="service-image">
-                                <img src="${imagemServico}" alt="${servico.nome}" onerror="this.src='/uploads/img/servicos/no-imagem.png'">
-                            </div>
                             <h3 class="service-name">${servico.nome}</h3>
                             <div class="service-price">R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</div>
-                        </div>
-                        <div class="service-actions">
-                            <button class="action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
-                                <i class="fas fa-pen"></i>
-                            </button>
-                            <button class="action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            ${servico.descricao ? `<div class="service-description">${servico.descricao}</div>` : ''}
                         </div>
                     </div>
                     
-                    <div class="service-duration">
-                        <i class="far fa-clock"></i> ${servico.tempo}
+                    <div class="service-details">
+                        <div class="service-duration">
+                            <i class="far fa-clock"></i> ${servico.tempo}
+                        </div>
+                        
+                        <div class="service-status">
+                            <span class="service-status-label">Status:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
                     </div>
                     
                     <div class="service-divider"></div>
                     
-                    <div class="service-status">
-                        <span class="service-status-label">Status:</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
-                            <span class="slider"></span>
-                        </label>
-                        <span style="margin-left:5px;font-size:0.85rem;color:var(--text-secondary);">
-                            ${servico.ativo ? 'Ativo' : 'Inativo'}
-                        </span>
+                    <div class="service-actions">
+                        <button class="action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
                 `;
