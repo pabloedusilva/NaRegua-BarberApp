@@ -725,30 +725,46 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
                 let html = '';
                 data.servicos.forEach(servico => {
+                    // Imagem padrão se não tiver uma específica
+                    const imagemServico = servico.imagem ? servico.imagem : '/uploads/img/servicos/no-imagem.png';
+                    
                     html += `
-                <div class="service-card" data-id="${servico.id}">
-    <div class="service-card-header">
-        <div class="service-switch-title">
-            <label class="toggle-switch" style="margin-right:10px;">
-                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
-                <span class="slider"></span>
-            </label>
-            <span class="service-card-name">${servico.nome}</span>
-        </div>
-        <div class="service-actions">
-            <button class="service-action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
-                <i class="fas fa-pen"></i>
-            </button>
-            <button class="service-action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-    </div>
-    <div class="service-card-details">
-        <span><i class="far fa-clock"></i> ${servico.tempo}</span>
-        <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
-    </div>
-</div>
+                <div class="service-card-modern" data-id="${servico.id}">
+                    <div class="service-card-header">
+                        <div class="service-card-info">
+                            <div class="service-image">
+                                <img src="${imagemServico}" alt="${servico.nome}" onerror="this.src='/uploads/img/servicos/no-imagem.png'">
+                            </div>
+                            <h3 class="service-name">${servico.nome}</h3>
+                            <div class="service-price">R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="service-actions">
+                            <button class="action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button class="action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="service-duration">
+                        <i class="far fa-clock"></i> ${servico.tempo}
+                    </div>
+                    
+                    <div class="service-divider"></div>
+                    
+                    <div class="service-status">
+                        <span class="service-status-label">Status:</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+                            <span class="slider"></span>
+                        </label>
+                        <span style="margin-left:5px;font-size:0.85rem;color:var(--text-secondary);">
+                            ${servico.ativo ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </div>
+                </div>
                 `;
                 });
                 container.innerHTML = html;
@@ -767,7 +783,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
 
                 // Eventos dos botões de editar e deletar
-                container.querySelectorAll('.service-action-btn.edit-btn').forEach(btn => {
+                container.querySelectorAll('.action-btn.edit-btn').forEach(btn => {
                     btn.addEventListener('click', function () {
                         openEditServiceModal({
                             id: btn.dataset.id,
@@ -778,7 +794,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         });
                     });
                 });
-                container.querySelectorAll('.service-action-btn.delete-btn').forEach(btn => {
+                container.querySelectorAll('.action-btn.delete-btn').forEach(btn => {
                     btn.addEventListener('click', function () {
                         const id = this.getAttribute('data-id');
                         if (confirm('Tem certeza que deseja excluir este serviço?')) {
@@ -837,8 +853,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Evento do botão de editar
     document.addEventListener('click', function (e) {
-        if (e.target.closest('.service-action-btn.edit-btn')) {
-            const btn = e.target.closest('.service-action-btn.edit-btn');
+        if (e.target.closest('.action-btn.edit-btn')) {
+            const btn = e.target.closest('.action-btn.edit-btn');
             openEditServiceModal({
                 id: btn.dataset.id,
                 nome: btn.dataset.nome,
@@ -1658,7 +1674,7 @@ async function carregarBarbeariaDashboard() {
             container.innerHTML = `
                 <div class="barbershop-photo">
                     <div class="barbershop-photo-inner">
-                        <img src="${b.foto}" alt="Foto da Barbearia" onerror="this.src='/public/uploads/img/logo/Logo.png'">
+                        <img src="${b.foto}" alt="Foto da Barbearia" onerror="this.src=''">
                     </div>
                 </div>
                 <div class="barbershop-main">

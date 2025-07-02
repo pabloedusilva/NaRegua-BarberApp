@@ -11,6 +11,7 @@
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link rel="stylesheet" href="css/dashboard.css">
+        <link rel="stylesheet" href="css/service-modern.css">
         <link rel="icon" type="image/x-icon" href="/favicon/favicon.png">
     </head>
 
@@ -224,16 +225,18 @@
 
             <section class="dashboard-section animate-slide-up"
                 id="services-section">
-                <div
-                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-                    <h2 class="section-title"><i class="fas fa-cut"></i>
-                        Serviços oferecidos</h2>
-                    <button id="addServiceBtn" class="edit-btn"
-                        style="margin-left:12px;">
-                        <i class="fas fa-plus"></i>
+                <div class="card-header">
+                    <h2 class="section-title"><i class="fas fa-cut"></i> Serviços oferecidos</h2>
+                    <button id="addServiceBtn" class="edit-btn" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);transition:all 0.3s ease;" title="Adicionar serviço">
+                        <i class="fas fa-plus" style="color:#FFD700;font-size:1.1rem;"></i>
                     </button>
                 </div>
-                <div id="servicesContainer" class="services-container"></div>
+                
+                <!-- Novo design moderno para serviços -->
+                <div class="services-section-modern">
+                    <p class="services-description">Gerencie os serviços disponíveis para agendamento pelos seus clientes.</p>
+                    <div id="servicesContainer" class="services-container-modern"></div>
+                </div>
             </section>
 
             <section class="dashboard-section animate-slide-up">
