@@ -15,6 +15,19 @@
     </head>
 
     <body>
+        <!-- Loading Page -->
+        <div id="loadingPage" class="loading-page">
+            <div class="loading-content">
+                <div class="loading-logo">
+                    <img src="public/uploads/img/logo/Logo.png" alt="Logo">
+                </div>
+                <div class="loading-text">
+                    <h1>NA<span class="highlight">RÉGUA</span></h1>
+                    <p class="loading-subtitle">AGENDAMENTOS</p>
+                </div>
+            </div>
+        </div>
+
         <header>
             <div class="container">
                 <nav class="navbar">
@@ -265,6 +278,18 @@
         </footer>
 
         <script src="js/index.js"></script>
+        <script>
+            // Executar loading após todos os recursos estarem carregados
+            window.addEventListener('load', function() {
+                // Aguardar um pouco para garantir que tudo foi carregado
+                setTimeout(function() {
+                    // Verificar se o loading ainda está ativo
+                    if (typeof completeLoadingTask === 'function') {
+                        completeLoadingTask('data-loaded');
+                    }
+                }, 1000);
+            });
+        </script>
     </body>
 
 </html>

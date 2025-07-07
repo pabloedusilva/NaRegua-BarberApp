@@ -1,3 +1,174 @@
+// =========================
+// Loading Page Controller
+// =========================
+
+// Variáveis do loading
+let loadingProgress = 0;
+let loadingComplete = false;
+let loadingTasks = [];
+
+// Função para atualizar o progresso do loading
+function updateLoadingProgress(percentage) {
+    const progressFill = document.getElementById('loadingBarFill');
+    const progressText = document.getElementById('loadingPercentage');
+    
+    if (progressFill) {
+        progressFill.style.width = percentage + '%';
+    }
+    
+    if (progressText) {
+        progressText.textContent = Math.round(percentage) + '%';
+    }
+    
+    // Atualizar variável global
+    loadingProgress = percentage;
+}
+
+// Função para adicionar tarefa de loading
+function addLoadingTask(taskName) {
+    loadingTasks.push({ name: taskName, completed: false });
+    console.log(`Loading task added: ${taskName}`);
+}
+
+// Função para marcar tarefa como completa
+function completeLoadingTask(taskName) {
+    const task = loadingTasks.find(t => t.name === taskName);
+    if (task && !task.completed) {
+        task.completed = true;
+        console.log(`Loading task completed: ${taskName}`);
+        updateLoadingDisplay();
+    }
+}
+
+// Função para atualizar o display do loading
+function updateLoadingDisplay() {
+    const completedTasks = loadingTasks.filter(t => t.completed).length;
+    const totalTasks = loadingTasks.length;
+    
+    if (totalTasks > 0) {
+        const targetPercentage = (completedTasks / totalTasks) * 100;
+        
+        // Animar progresso suavemente
+        animateProgress(loadingProgress, targetPercentage, 800);
+        
+        if (targetPercentage >= 100 && !loadingComplete) {
+            loadingComplete = true;
+            setTimeout(hideLoadingPage, 1200);
+        }
+    }
+}
+
+// Função para animar o progresso suavemente
+function animateProgress(from, to, duration) {
+    const startTime = performance.now();
+    const difference = to - from;
+    
+    function animate(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Usar easing para animação suave
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const currentValue = from + (difference * easeProgress);
+        
+        updateLoadingProgress(currentValue);
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+    
+    requestAnimationFrame(animate);
+}
+
+// Função para esconder o loading page
+function hideLoadingPage() {
+    const loadingPage = document.getElementById('loadingPage');
+    if (loadingPage) {
+        // Completar a barra de progresso
+        updateLoadingProgress(100);
+        
+        // Aguardar um pouco antes de esconder
+        setTimeout(() => {
+            loadingPage.classList.add('hidden');
+            setTimeout(() => {
+                loadingPage.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 1000); // Tempo da transição CSS
+        }, 400);
+    }
+}
+
+// Função para mostrar loading page (caso necessário)
+function showLoadingPage() {
+    const loadingPage = document.getElementById('loadingPage');
+    if (loadingPage) {
+        loadingPage.style.display = 'flex';
+        loadingPage.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Inicializar loading page
+document.addEventListener('DOMContentLoaded', function() {
+    // Bloquear scroll durante loading
+    document.body.style.overflow = 'hidden';
+    
+    // Aplicar tema do loading se houver preferência salva
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Adicionar tarefas essenciais apenas
+    addLoadingTask('dom-ready');
+    addLoadingTask('resources-loaded');
+    addLoadingTask('data-loaded');
+    
+    // Marcar DOM como ready
+    completeLoadingTask('dom-ready');
+    
+    // Marcar recursos como carregados após verificações
+    setTimeout(() => {
+        completeLoadingTask('resources-loaded');
+    }, 800);
+});
+
+// Verificar conexão com API (simplificado)
+async function checkApiConnection() {
+    try {
+        // Simular verificação rápida
+        await new Promise(resolve => setTimeout(resolve, 500));
+        completeLoadingTask('data-loaded');
+        return true;
+    } catch (error) {
+        console.warn('API check skipped');
+        completeLoadingTask('data-loaded');
+        return false;
+    }
+}
+
+// Verificar se todos os recursos críticos foram carregados (simplificado)
+function checkCriticalResources() {
+    // Aguardar um tempo mínimo para garantir carregamento
+    setTimeout(() => {
+        checkApiConnection();
+    }, 1000);
+}
+
+// Timeout de segurança reduzido
+setTimeout(() => {
+    if (!loadingComplete) {
+        console.warn('Loading timeout reached, forcing completion');
+        loadingTasks.forEach(task => {
+            if (!task.completed) {
+                task.completed = true;
+            }
+        });
+        updateLoadingDisplay();
+    }
+}, 5000); // 5 segundos máximo
+
 // Carrega utilitário de alerta customizado
 const script = document.createElement('script');
 script.src = '/js/custom-alert.js';
@@ -10,10 +181,19 @@ document.head.appendChild(serverTimeScript);
 
 // Aguarda sincronização da hora do servidor antes de executar o restante
 document.addEventListener('DOMContentLoaded', async function () {
+    // Verificar recursos críticos
+    checkCriticalResources();
+    
+    // Verificar conexão com API
+    await checkApiConnection();
+    
     // Aguarda o utilitário carregar e sincronizar
     if (typeof window.startServerTimeSync === 'function') {
         await window.startServerTimeSync();
         console.log('Sistema de horário do servidor iniciado');
+        completeLoadingTask('server-time-synced');
+    } else {
+        completeLoadingTask('server-time-synced');
     }
     
     // Todas as funções que dependem de data/hora usam window.serverTime()
@@ -62,6 +242,9 @@ function animateWeekTransition(direction, callback) {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Adicionar tarefa de carregamento para serviços
+    addLoadingTask('services-loaded');
+    
     // Carregar serviços do backend
     const servicesSection = document.querySelector('.services-section');
     if (servicesSection) {
@@ -95,12 +278,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
                 html += `</div>`;
                 servicesSection.innerHTML = html;
+                
+                // Marcar serviços como carregados (não afeta loading principal)
+                console.log('Serviços carregados com sucesso');
             } else {
                 servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
             }
         } catch (err) {
             servicesSection.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
         }
+    } else {
+        console.log('Seção de serviços não encontrada');
     }
 
     // Variáveis para armazenar as seleções
@@ -1401,6 +1589,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Define o primeiro como selecionado por padrão
                 selectedProfessional = data.profissionais[0].nome;
                 updateConfirmationDetails();
+                
+                // Profissionais carregados
+                console.log('Profissionais carregados com sucesso');
             } else {
                 container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum profissional cadastrado.</div>';
             }
@@ -1516,6 +1707,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
                     });
                 }
+                
+                // Informações da barbearia carregadas
+                console.log('Informações da barbearia carregadas');
             } else {
                 container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Informações da barbearia não cadastradas.</div>';
             }
@@ -1523,6 +1717,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar informações.</div>';
         }
     }
+    
+    // Adicionar tarefa para carregamento dos dados da barbearia
     carregarBarbearia();
 
     document.addEventListener('DOMContentLoaded', function () {

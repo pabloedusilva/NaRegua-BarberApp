@@ -26,10 +26,10 @@ UPDATE barbearia
 SET foto = REPLACE(foto, '/img/', '/uploads/img/') 
 WHERE foto LIKE '/img/%';
 
--- Atualizar possíveis imagens de alertas/promos se existir a tabela
--- UPDATE alertas_promos 
--- SET imagem = REPLACE(imagem, '/img/', '/uploads/img/') 
--- WHERE imagem LIKE '/img/%';
+-- Atualizar possíveis imagens de alertas/promos
+UPDATE alertas_promos 
+SET imagem = REPLACE(imagem, '/img/', '/uploads/img/') 
+WHERE imagem LIKE '/img/%';
 
 -- Verificar se as atualizações foram feitas corretamente
 SELECT 'Wallpapers atualizados:' as tipo, COUNT(*) as total FROM wallpapers WHERE url LIKE '/uploads/img/%'
