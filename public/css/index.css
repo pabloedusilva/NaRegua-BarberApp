@@ -32,18 +32,22 @@
 }
 
 .loading-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
     overflow: hidden;
-    animation: logoFloat 3s ease-in-out infinite;
+    animation: logoEntrance 1s ease-out, logoFloat 4s ease-in-out 1s infinite;
+    box-shadow: 0 0 30px rgba(218, 192, 45, 0.4),
+                0 0 60px rgba(218, 192, 45, 0.2),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
 .loading-logo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 20px;
 }
 
 .loading-text h1 {
@@ -81,10 +85,26 @@
 
 @keyframes logoFloat {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
     50% {
-        transform: translateY(-8px);
+        transform: translateY(-8px) scale(1.02);
+    }
+}
+
+/* Animação de entrada suave para a logo */
+@keyframes logoEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
@@ -100,8 +120,9 @@
     }
     
     .loading-logo {
-        width: 70px;
-        height: 70px;
+        width: 100px;
+        height: 100px;
+        border-radius: 18px;
     }
     
     .loading-text h1 {
@@ -116,8 +137,9 @@
     }
     
     .loading-logo {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
+        border-radius: 16px;
     }
     
     .loading-text h1 {
@@ -241,23 +263,21 @@
 }
 
 .loading-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, 
-        var(--primary) 0%, 
-        #f4d03f 50%, 
-        var(--primary-light) 100%);
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    background: none;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 
         0 0 40px rgba(218, 192, 45, 0.4),
         0 0 80px rgba(218, 192, 45, 0.2),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
+        0 10px 30px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 3;
-    animation: logoFloat 4s ease-in-out infinite;
+    animation: logoEntrance 1s ease-out, logoFloat 4s ease-in-out 1s infinite;
+    overflow: hidden;
 }
 
 .logo-glow {
@@ -275,13 +295,13 @@
 }
 
 .loading-logo img {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 50%;
-    background: var(--background);
-    padding: 8px;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
 }
 
 .loading-rings {
@@ -550,13 +570,18 @@
 
 @keyframes logoFloat {
     0%, 100% {
-        transform: translateY(0) rotate(0deg);
+        transform: translateY(0) scale(1);
+        box-shadow: 
+            0 0 40px rgba(218, 192, 45, 0.4),
+            0 0 80px rgba(218, 192, 45, 0.2),
+            0 10px 30px rgba(0, 0, 0, 0.3);
     }
-    33% {
-        transform: translateY(-15px) rotate(2deg);
-    }
-    66% {
-        transform: translateY(5px) rotate(-2deg);
+    50% {
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 
+            0 0 50px rgba(218, 192, 45, 0.5),
+            0 0 100px rgba(218, 192, 45, 0.3),
+            0 15px 40px rgba(0, 0, 0, 0.4);
     }
 }
 
@@ -674,13 +699,15 @@
     }
     
     .loading-logo {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
+        border-radius: 18px;
     }
     
     .loading-logo img {
-        width: 56px;
-        height: 56px;
+        width: 100%;
+        height: 100%;
+        border-radius: 18px;
     }
     
     .ring-1 {
@@ -745,13 +772,15 @@
     }
     
     .loading-logo {
-        width: 70px;
-        height: 70px;
+        width: 90px;
+        height: 90px;
+        border-radius: 16px;
     }
     
     .loading-logo img {
-        width: 50px;
-        height: 50px;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
     }
     
     .loading-brand-text h1 {
@@ -853,13 +882,15 @@
     }
     
     .loading-logo {
-        width: 70px;
-        height: 70px;
+        width: 100px;
+        height: 100px;
+        border-radius: 18px;
     }
     
     .loading-logo img {
-        width: 50px;
-        height: 50px;
+        width: 100%;
+        height: 100%;
+        border-radius: 18px;
     }
     
     .ring-1 {
@@ -899,13 +930,15 @@
     }
     
     .loading-logo {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
+        border-radius: 16px;
     }
     
     .loading-logo img {
-        width: 40px;
-        height: 40px;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
     }
     
     .ring-1 {
