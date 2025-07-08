@@ -15,6 +15,43 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log('Dashboard: Sistema de horário do servidor iniciado');
     }
 
+    // Função para atualizar data e hora em tempo real
+    function updateDateTime() {
+        const now = window.serverTime ? window.serverTime() : new Date();
+        const dateTimeElement = document.getElementById('dashboardDateTime');
+        
+        if (dateTimeElement) {
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZone: 'America/Sao_Paulo'
+            };
+            
+            const formattedDateTime = now.toLocaleDateString('pt-BR', options);
+            dateTimeElement.textContent = formattedDateTime;
+        }
+    }
+
+    // Atualiza imediatamente
+    updateDateTime();
+    
+    // Atualiza a cada segundo
+    setInterval(updateDateTime, 1000);
+
+    // Remove o código antigo da data fixa
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const el = document.getElementById('dashboardTodayDate');
+    //     if (el) {
+    //         const now = getNow();
+    //         el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+    //     }
+    // });
+
     // Toggle theme
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -1660,7 +1697,6 @@ document.getElementById('addProfessionalBtn').onclick = async function () {
         msg.style.color = 'var(--primary-dark)';
         msg.textContent = error.message || 'Erro ao conectar ao servidor.';
     }
-    this.disabled = false;
 };
 
 
@@ -1986,13 +2022,6 @@ if (uploadWallpaperBtn && uploadWallpaperInput) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const el = document.getElementById('dashboardTodayDate');
-    if (el) {
-        const now = getNow();
-        el.textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-});
 
 // Função genérica para carregar galeria de imagens por tipo
 async function carregarGaleriaImagens(galleryId, inputId, selectedUrl = '', tipoImagem = 'servicos') {
