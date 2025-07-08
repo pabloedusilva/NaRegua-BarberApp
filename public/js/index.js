@@ -5,19 +5,26 @@
 // Sincronizar tema imediatamente ao carregar
 (function() {
     const savedTheme = localStorage.getItem('theme');
-    const loadingPage = document.getElementById('loadingPage');
     
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
-        if (loadingPage) {
-            loadingPage.classList.add('dark-mode');
-        }
+        document.documentElement.classList.add('dark-mode');
     } else {
         document.body.classList.remove('dark-mode');
-        if (loadingPage) {
-            loadingPage.classList.remove('dark-mode');
-        }
+        document.documentElement.classList.remove('dark-mode');
     }
+    
+    // Aplicar tema ao loading page quando disponível
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadingPage = document.getElementById('loadingPage');
+        if (loadingPage) {
+            if (savedTheme === 'dark') {
+                loadingPage.classList.add('dark-mode');
+            } else {
+                loadingPage.classList.remove('dark-mode');
+            }
+        }
+    });
 })();
 
 // Variáveis do loading
