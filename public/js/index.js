@@ -2,6 +2,24 @@
 // Loading Page Controller
 // =========================
 
+// Sincronizar tema imediatamente ao carregar
+(function() {
+    const savedTheme = localStorage.getItem('theme');
+    const loadingPage = document.getElementById('loadingPage');
+    
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.add('dark-mode');
+        }
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.remove('dark-mode');
+        }
+    }
+})();
+
 // Variáveis do loading
 let loadingProgress = 0;
 let loadingComplete = false;
@@ -81,6 +99,24 @@ function animateProgress(from, to, duration) {
     requestAnimationFrame(animate);
 }
 
+// Função para sincronizar tema entre loading page e body
+function syncTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const loadingPage = document.getElementById('loadingPage');
+    
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.add('dark-mode');
+        }
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.remove('dark-mode');
+        }
+    }
+}
+
 // Função para esconder o loading page
 function hideLoadingPage() {
     const loadingPage = document.getElementById('loadingPage');
@@ -94,6 +130,7 @@ function hideLoadingPage() {
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 document.body.style.overflow = 'auto';
+                loadingComplete = true;
             }, 1000); // Tempo da transição CSS
         }, 400);
     }
@@ -116,8 +153,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Aplicar tema do loading se houver preferência salva
     const savedTheme = localStorage.getItem('theme');
+    const loadingPage = document.getElementById('loadingPage');
+    
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.add('dark-mode');
+        }
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (loadingPage) {
+            loadingPage.classList.remove('dark-mode');
+        }
     }
     
     // Adicionar tarefas essenciais apenas
@@ -325,6 +372,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Alternar tema
     themeToggle.addEventListener('click', function () {
         document.body.classList.toggle('dark-mode');
+        
+        // Aplicar tema ao loading page também
+        const loadingPage = document.getElementById('loadingPage');
+        if (loadingPage) {
+            loadingPage.classList.toggle('dark-mode');
+        }
 
         if (document.body.classList.contains('dark-mode')) {
             themeIcon.classList.remove('fa-moon');
