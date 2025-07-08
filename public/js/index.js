@@ -4,7 +4,7 @@
 
 // Sincronizar tema imediatamente ao carregar
 (function() {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme') || 'light';
     
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
@@ -15,7 +15,7 @@
     }
     
     // Aplicar tema ao loading page quando disponível
-    document.addEventListener('DOMContentLoaded', function() {
+    function applyLoadingTheme() {
         const loadingPage = document.getElementById('loadingPage');
         if (loadingPage) {
             if (savedTheme === 'dark') {
@@ -24,7 +24,17 @@
                 loadingPage.classList.remove('dark-mode');
             }
         }
-    });
+    }
+    
+    // Tentar aplicar imediatamente
+    applyLoadingTheme();
+    
+    // Tentar novamente quando o DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyLoadingTheme);
+    } else {
+        applyLoadingTheme();
+    }
 })();
 
 // Variáveis do loading
@@ -108,16 +118,18 @@ function animateProgress(from, to, duration) {
 
 // Função para sincronizar tema entre loading page e body
 function syncTheme() {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme') || 'light';
     const loadingPage = document.getElementById('loadingPage');
     
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('dark-mode');
         if (loadingPage) {
             loadingPage.classList.add('dark-mode');
         }
     } else {
         document.body.classList.remove('dark-mode');
+        document.documentElement.classList.remove('dark-mode');
         if (loadingPage) {
             loadingPage.classList.remove('dark-mode');
         }
@@ -158,21 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bloquear scroll durante loading
     document.body.style.overflow = 'hidden';
     
-    // Aplicar tema do loading se houver preferência salva
-    const savedTheme = localStorage.getItem('theme');
-    const loadingPage = document.getElementById('loadingPage');
-    
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        if (loadingPage) {
-            loadingPage.classList.add('dark-mode');
-        }
-    } else {
-        document.body.classList.remove('dark-mode');
-        if (loadingPage) {
-            loadingPage.classList.remove('dark-mode');
-        }
-    }
+    // Sincronizar tema
+    syncTheme();
     
     // Adicionar tarefas essenciais apenas
     addLoadingTask('dom-ready');
@@ -366,36 +365,54 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Elementos do tema
     const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('i');
+    const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
 
-    // Verificar preferência de tema no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-    }
-
-    // Alternar tema
-    themeToggle.addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-        
-        // Aplicar tema ao loading page também
+    // Função para aplicar tema
+    function applyTheme(theme) {
         const loadingPage = document.getElementById('loadingPage');
-        if (loadingPage) {
-            loadingPage.classList.toggle('dark-mode');
-        }
-
-        if (document.body.classList.contains('dark-mode')) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+        
+        console.log('Aplicando tema:', theme);
+        
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.documentElement.classList.add('dark-mode');
+            if (loadingPage) {
+                loadingPage.classList.add('dark-mode');
+            }
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
             localStorage.setItem('theme', 'dark');
         } else {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
+            document.body.classList.remove('dark-mode');
+            document.documentElement.classList.remove('dark-mode');
+            if (loadingPage) {
+                loadingPage.classList.remove('dark-mode');
+            }
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
             localStorage.setItem('theme', 'light');
         }
-    });
+    }
+
+    // Verificar preferência de tema no localStorage e aplicar
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(currentTheme);
+
+    // Alternar tema - só adicionar listener se o botão existir
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            console.log('Botão clicado, mudando tema para:', newTheme);
+            applyTheme(newTheme);
+        });
+    } else {
+        console.warn('Botão de tema não encontrado');
+    }
 
     // Feriados (pode ser expandido)
     const holidays = {
