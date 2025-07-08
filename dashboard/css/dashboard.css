@@ -5657,36 +5657,77 @@
     }
 
     /* Botão de PDF */
-    .pdf-round-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 8px #dac02d22;
-        font-size: 1.3em;
-        padding: 0;
-        background: var(--primary, #dac02d);
-        color: #222;
-        border: none;
-        transition: background 0.2s, color 0.2s;
-        z-index: 2;
-    }
-    
-    .pdf-round-btn:hover, 
-    .pdf-round-btn:focus {
-        background: #bfa11a;
-        color: #fff;
-        outline: none;
-    }
-    
-    .stat-card--month {
-        position: relative;
-    }
+   .pdf-round-btn {
+    position: absolute !important;
+    top: 50% !important;
+    right: 0.75rem !important;
+    transform: translateY(-50%) !important;
+    background: #dc3545 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 20% !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    z-index: 2 !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Remove todas as animações e efeitos extras */
+.pdf-round-btn::before,
+.pdf-round-btn::after {
+    display: none !important;
+}
+
+/* Hover simples */
+.pdf-round-btn:hover {
+    background: #c82333 !important;
+    transform: translateY(-50%) !important;
+}
+
+.pdf-round-btn:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+.pdf-round-btn:active {
+    background: #a71e2a !important;
+    transform: translateY(-50%) !important;
+}
+
+/* Ajuste do container */
+.stat-card {
+    position: relative !important;
+    padding-right: 3.5rem !important;
+}
+
+/* Garante que o ícone não seja distorcido */
+.pdf-round-btn i {
+    font-size: inherit !important;
+    line-height: 1 !important;
+}
+
+/* Dark mode */
+body.dark-mode .pdf-round-btn {
+    background: #dc3545 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .pdf-round-btn:hover {
+    background: #c82333 !important;
+}
 
     /* =========================
    Reset e Base - Modernizado com PADDING TOP para compensar header fixo

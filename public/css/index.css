@@ -273,10 +273,6 @@
                     0 0 50px rgba(218, 192, 45, 0.2),
                     0 8px 25px rgba(0, 0, 0, 0.4);
     }
-    
-    .dark-mode .loading-page::before {
-        background-size: 120px 60px;
-    }
 }
 
 .loading-page {
