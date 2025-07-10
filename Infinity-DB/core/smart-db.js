@@ -11,31 +11,44 @@ async function ensureDependencies() {
     
     const infinityDbPath = path.join(__dirname, '..');
     const setupFlagPath = path.join(infinityDbPath, '.setup-complete');
+    const nodeModulesPath = path.join(infinityDbPath, 'node_modules');
     
-    // Se setup já foi executado, verificar apenas dependências críticas
-    if (fs.existsSync(setupFlagPath)) {
-        const nodeModulesPath = path.join(infinityDbPath, 'node_modules');
-        return fs.existsSync(nodeModulesPath);
+    // Verificar se dependências críticas existem
+    const criticalModules = ['@neondatabase/serverless', 'express', 'node-cron'];
+    let hasAllDeps = fs.existsSync(nodeModulesPath);
+    
+    if (hasAllDeps) {
+        for (const mod of criticalModules) {
+            const modPath = path.join(nodeModulesPath, mod);
+            if (!fs.existsSync(modPath)) {
+                hasAllDeps = false;
+                break;
+            }
+        }
     }
     
-    // Executar auto-setup na primeira vez
-    console.log('🔧 Infinity-DB: Primeira execução detectada. Executando setup automático...');
+    // Se todas as dependências existem, verificar flag de setup
+    if (hasAllDeps && fs.existsSync(setupFlagPath)) {
+        return true;
+    }
+    
+    // Executar auto-setup se necessário
+    console.log('🔧 Infinity-DB: Configurando dependências automaticamente...');
     
     try {
         const autoSetup = require('../scripts/auto-setup');
         const success = await autoSetup();
         
         if (success) {
-            console.log('✅ Infinity-DB: Setup automático concluído com sucesso!');
+            console.log('✅ Infinity-DB: Configuração automática concluída!');
             return true;
         } else {
-            console.log('⚠️ Infinity-DB: Setup automático falhou. Continuando com configuração manual...');
-            return false;
+            console.log('⚠️ Infinity-DB: Configuração automática falhou. Verificando dependências mínimas...');
+            return hasAllDeps;
         }
     } catch (error) {
-        console.error('❌ Infinity-DB: Erro no setup automático:', error.message);
-        console.log('💡 Execute manualmente: cd Infinity-DB && npm install');
-        return false;
+        console.log('⚠️ Infinity-DB: Erro na configuração automática, continuando...');
+        return hasAllDeps;
     }
 }
 

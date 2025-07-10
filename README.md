@@ -6,8 +6,110 @@
 
 <p align="center">
   <strong>Sistema completo de agendamento online para barbearias</strong><br>
-  Dashboard administrativa • Notificações push • Personalização visual • Interface moderna
+  Dashboard administrativa • Backup automático • Personalização visual • Interface moderna
 </p>
+
+## 🚀 Instalação Rápida (100% Automática)
+
+**1. Clone e instale automaticamente:**
+```bash
+git clone https://github.com/pabloedusilva/NaRegua-BarberApp.git
+cd NaRegua-BarberApp
+npm install  # ← Instala TUDO automaticamente, incluindo Infinity-DB!
+```
+
+**2. Configure suas URLs de banco no `.env`:**
+```bash
+DATABASE_URL='postgresql://seu_usuario:senha@host1.neon.tech/database1'
+DATABASE_URL_BACKUP='postgresql://seu_usuario:senha@host2.neon.tech/database2'
+```
+
+**3. Inicialize o sistema de backup:**
+```bash
+npm run infinity-db:init-simple
+```
+
+**4. Inicie a aplicação:**
+```bash
+npm start
+```
+
+## ✨ O que o `npm install` faz automaticamente:
+
+- ✅ **Instala todas as dependências** do projeto principal
+- ✅ **Instala todas as dependências** do sistema Infinity-DB  
+- ✅ **Configura automaticamente** o sistema de backup
+- ✅ **Cria os diretórios** necessários (data/, temp-backups/)
+- ✅ **Prepara o arquivo .env** com template
+- ✅ **Zero configuração manual** necessária!
+
+## 🌐 Acessos
+
+- **🏠 Página Principal:** http://localhost:3000
+- **⚙️ Dashboard Admin:** http://localhost:3000/dashboard/dashboard  
+- **📊 Infinity-DB Dashboard:** http://localhost:3000/infinity-db/ui/dashboard
+
+## 🔄 Sistema Infinity-DB (Backup Automático)
+
+Sistema inteligente que elimina preocupações com limites de bancos:
+
+- 🔄 **Backup automático** nos dias 24-25 de cada mês
+- 🔀 **Alternância inteligente** entre bancos Neon
+- 🛡️ **Fallback transparente** em caso de falhas  
+- 📈 **Monitoramento completo** com dashboards
+- ⚡ **Zero preocupação** com limites de horas do Neon
+- 🎯 **100% transparente** - sua aplicação não percebe a diferença!
+
+## 📋 Comandos Úteis
+
+```bash
+# Status do sistema de backup
+npm run infinity-db:status
+
+# Forçar backup manual  
+npm run infinity-db:backup
+
+# Testar sistema completo
+npm run infinity-db:test
+
+# Modo desenvolvimento
+npm run dev
+```
+
+## 🔧 Solução de Problemas Comuns
+
+### ❌ Erro: `Cannot find module 'server.js'`
+**Causa:** Executando `node server.js` dentro da pasta `Infinity-DB/`  
+**✅ Solução:** Execute sempre da raiz do projeto:
+
+```bash
+# ❌ Errado
+cd Infinity-DB
+node server.js  # ← server.js não existe aqui!
+
+# ✅ Correto  
+cd NaRegua-BarberApp  # ← Raiz do projeto
+npm start            # ← Comando correto
+```
+
+### ❌ Módulos não encontrados
+**✅ Solução:** O comando mágico que resolve tudo:
+
+```bash
+npm install  # ← Instala TUDO automaticamente!
+```
+
+### ❌ Backup com erros
+**✅ Solução:** Configuração passo-a-passo:
+
+```bash
+# 1. Verificar se .env está configurado com URLs reais
+# 2. Inicializar banco secundário
+npm run infinity-db:init-simple
+
+# 3. Testar sistema
+npm run infinity-db:test
+```
 
 <p align="center">
   <a href="#-funcionalidades">Funcionalidades</a> •

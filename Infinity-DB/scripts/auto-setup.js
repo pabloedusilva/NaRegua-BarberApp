@@ -21,13 +21,20 @@ async function autoSetup() {
         const nodeModulesPath = path.join(infinityDbPath, 'node_modules');
         const setupFlagPath = path.join(infinityDbPath, '.setup-complete');
         
-        // Verificar se setup já foi executado
+        // Verificar se setup já foi executado recentemente (últimas 24h)
         if (fs.existsSync(setupFlagPath)) {
-            console.log('✅ Setup já foi executado anteriormente');
-            return true;
+            const setupTime = fs.readFileSync(setupFlagPath, 'utf8');
+            const setupDate = new Date(setupTime);
+            const now = new Date();
+            const hoursDiff = (now - setupDate) / (1000 * 60 * 60);
+            
+            if (hoursDiff < 24) {
+                console.log('✅ Setup executado recentemente, pulando...');
+                return true;
+            }
         }
         
-        console.log('📋 Verificando dependências...');
+        console.log('📋 Verificando dependências do Infinity-DB...');
         
         // Verificar se package.json existe
         if (!fs.existsSync(packageJsonPath)) {
@@ -35,18 +42,52 @@ async function autoSetup() {
             return false;
         }
         
-        // Instalar dependências se node_modules não existir
-        if (!fs.existsSync(nodeModulesPath)) {
-            console.log('📦 Instalando dependências do Infinity-DB...');
+        // Instalar dependências se node_modules não existir ou estiver incompleto
+        const criticalModules = ['@neondatabase/serverless', 'express', 'node-cron', 'dotenv'];
+        let needsInstall = !fs.existsSync(nodeModulesPath);
+        
+        if (!needsInstall) {
+            // Verificar se módulos críticos existem
+            for (const mod of criticalModules) {
+                const modPath = path.join(nodeModulesPath, mod);
+                if (!fs.existsSync(modPath)) {
+                    needsInstall = true;
+                    break;
+                }
+            }
+        }
+        
+        if (needsInstall) {
+            console.log('📦 Instalando/Atualizando dependências do Infinity-DB...');
             
-            await execAsync('npm install', { 
-                cwd: infinityDbPath,
-                stdio: 'inherit'
-            });
-            
-            console.log('✅ Dependências instaladas!');
+            try {
+                await execAsync('npm install', { 
+                    cwd: infinityDbPath,
+                    stdio: 'inherit'
+                });
+                console.log('✅ Dependências instaladas!');
+            } catch (error) {
+                console.error('❌ Erro ao instalar dependências:', error.message);
+                console.log('💡 Tente executar manualmente: cd Infinity-DB && npm install');
+                return false;
+            }
         } else {
             console.log('✅ Dependências já instaladas');
+        }
+        
+        // Criar diretórios necessários se não existirem
+        console.log('\n📁 Verificando estrutura de diretórios...');
+        const dataDir = path.join(infinityDbPath, 'data');
+        const tempDir = path.join(infinityDbPath, 'temp-backups');
+        
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+            console.log('✅ Diretório data/ criado');
+        }
+        
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+            console.log('✅ Diretório temp-backups/ criado');
         }
         
         // Verificar variáveis de ambiente

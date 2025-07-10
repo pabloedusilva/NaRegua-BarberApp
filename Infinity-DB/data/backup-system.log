@@ -115,3 +115,5 @@
 [2025-07-10T10:05:57.259Z] ✅ Banco alternado para secondary
 [2025-07-10T10:05:57.260Z] 🔄 Sistema NaRégua: Banco alternado para SECONDARY {"timestamp":"2025-07-10T10:05:57.260Z","previousDb":"primary","currentDb":"secondary","systemType":"date-based"}
 [2025-07-10T10:05:57.269Z] ✅ Troca forçada concluída
+[2025-07-10T10:17:52.150Z] ✅ Conexões com bancos inicializadas
+[2025-07-10T10:17:52.159Z] 📊 Dados de uso carregados
