@@ -1,0 +1,117 @@
+[2025-07-10T10:02:54.202Z] 🔧 BACKUP FORÇADO INICIADO
+[2025-07-10T10:02:54.424Z] 📦 Iniciando backup completo...
+[2025-07-10T10:02:55.391Z] 📋 Backup: primary → secondary
+[2025-07-10T10:02:56.265Z] 📋 Fazendo backup da tabela: usuarios
+[2025-07-10T10:02:58.564Z] ✅ Backup de usuarios concluído (1 registros)
+[2025-07-10T10:03:00.338Z] 📋 Fazendo backup da tabela: agendamentos
+[2025-07-10T10:03:03.661Z] ✅ Backup de agendamentos concluído (30 registros)
+[2025-07-10T10:03:03.982Z] 📋 Fazendo backup da tabela: clientes
+[2025-07-10T10:03:04.312Z] ✅ Backup de clientes concluído (2 registros)
+[2025-07-10T10:03:05.082Z] 📋 Fazendo backup da tabela: servicos
+[2025-07-10T10:03:06.819Z] ✅ Backup de servicos concluído (9 registros)
+[2025-07-10T10:03:07.276Z] 📋 Fazendo backup da tabela: profissionais
+[2025-07-10T10:03:07.558Z] ✅ Backup de profissionais concluído (1 registros)
+[2025-07-10T10:03:07.590Z] 📋 Fazendo backup da tabela: barbearia
+[2025-07-10T10:03:07.832Z] ✅ Backup de barbearia concluído (1 registros)
+[2025-07-10T10:03:07.838Z] 📋 Fazendo backup da tabela: horarios_turnos
+[2025-07-10T10:03:08.206Z] ✅ Backup de horarios_turnos concluído (3 registros)
+[2025-07-10T10:03:08.237Z] 📋 Fazendo backup da tabela: notificacoes
+[2025-07-10T10:03:08.702Z] ✅ Backup de notificacoes concluído (5 registros)
+[2025-07-10T10:03:08.703Z] 📋 Fazendo backup da tabela: wallpapers
+[2025-07-10T10:03:09.899Z] ✅ Backup de wallpapers concluído (16 registros)
+[2025-07-10T10:03:09.900Z] 📋 Fazendo backup da tabela: servico_imagens
+[2025-07-10T10:03:12.234Z] ✅ Backup de servico_imagens concluído (32 registros)
+[2025-07-10T10:03:12.252Z] 📋 Fazendo backup da tabela: alertas_promos
+[2025-07-10T10:03:12.602Z] ✅ Backup de alertas_promos concluído (3 registros)
+[2025-07-10T10:03:12.604Z] ✅ Backup completo finalizado
+[2025-07-10T10:03:12.605Z] ✅ Backup forçado concluído
+[2025-07-10T10:04:10.374Z] 🔧 TROCA FORÇADA DE BANCO INICIADA
+[2025-07-10T10:04:10.423Z] 🔄 Alternando de primary para secondary
+[2025-07-10T10:04:10.425Z] 📦 Iniciando backup completo...
+[2025-07-10T10:04:10.437Z] 📋 Backup: primary → secondary
+[2025-07-10T10:04:10.438Z] 📋 Fazendo backup da tabela: usuarios
+[2025-07-10T10:04:11.655Z] ✅ Backup de usuarios concluído (1 registros)
+[2025-07-10T10:04:11.657Z] 📋 Fazendo backup da tabela: agendamentos
+[2025-07-10T10:04:15.698Z] 📋 Fazendo backup da tabela: clientes
+[2025-07-10T10:04:15.696Z] ✅ Backup de agendamentos concluído (30 registros)
+[2025-07-10T10:04:17.151Z] ✅ Backup de clientes concluído (2 registros)
+[2025-07-10T10:04:17.218Z] 📋 Fazendo backup da tabela: servicos
+[2025-07-10T10:04:19.685Z] ✅ Backup de servicos concluído (9 registros)
+[2025-07-10T10:04:19.765Z] 📋 Fazendo backup da tabela: profissionais
+[2025-07-10T10:04:20.518Z] ✅ Backup de profissionais concluído (1 registros)
+[2025-07-10T10:04:20.557Z] 📋 Fazendo backup da tabela: barbearia
+[2025-07-10T10:04:20.795Z] ✅ Backup de barbearia concluído (1 registros)
+[2025-07-10T10:04:21.305Z] 📋 Fazendo backup da tabela: horarios_turnos
+[2025-07-10T10:04:23.519Z] ✅ Backup de horarios_turnos concluído (3 registros)
+[2025-07-10T10:04:23.772Z] 📋 Fazendo backup da tabela: notificacoes
+[2025-07-10T10:04:24.375Z] ✅ Backup de notificacoes concluído (5 registros)
+[2025-07-10T10:04:24.443Z] 📋 Fazendo backup da tabela: wallpapers
+[2025-07-10T10:04:27.145Z] ✅ Backup de wallpapers concluído (16 registros)
+[2025-07-10T10:04:27.150Z] 📋 Fazendo backup da tabela: servico_imagens
+[2025-07-10T10:04:31.795Z] ✅ Backup de servico_imagens concluído (32 registros)
+[2025-07-10T10:04:31.799Z] 📋 Fazendo backup da tabela: alertas_promos
+[2025-07-10T10:04:32.916Z] ✅ Backup de alertas_promos concluído (3 registros)
+[2025-07-10T10:04:32.942Z] ✅ Backup completo finalizado
+[2025-07-10T10:04:32.945Z] ✅ Banco alternado para secondary
+[2025-07-10T10:04:32.961Z] 🔄 Sistema NaRégua: Banco alternado para SECONDARY {"timestamp":"2025-07-10T10:04:32.961Z","previousDb":"primary","currentDb":"secondary","systemType":"date-based"}
+[2025-07-10T10:04:33.126Z] ✅ Troca forçada concluída
+[2025-07-10T10:04:35.626Z] 🔧 TROCA FORÇADA DE BANCO INICIADA
+[2025-07-10T10:04:35.630Z] 🔄 Alternando de secondary para primary
+[2025-07-10T10:04:35.634Z] 📦 Iniciando backup completo...
+[2025-07-10T10:04:35.649Z] 📋 Backup: secondary → primary
+[2025-07-10T10:04:35.650Z] 📋 Fazendo backup da tabela: usuarios
+[2025-07-10T10:04:36.192Z] ✅ Backup de usuarios concluído (1 registros)
+[2025-07-10T10:04:36.266Z] 📋 Fazendo backup da tabela: agendamentos
+[2025-07-10T10:04:42.269Z] ✅ Backup de agendamentos concluído (30 registros)
+[2025-07-10T10:04:42.325Z] 📋 Fazendo backup da tabela: clientes
+[2025-07-10T10:04:42.797Z] ✅ Backup de clientes concluído (2 registros)
+[2025-07-10T10:04:42.827Z] 📋 Fazendo backup da tabela: servicos
+[2025-07-10T10:04:47.017Z] ✅ Backup de servicos concluído (9 registros)
+[2025-07-10T10:04:47.216Z] 📋 Fazendo backup da tabela: profissionais
+[2025-07-10T10:04:47.930Z] ✅ Backup de profissionais concluído (1 registros)
+[2025-07-10T10:04:48.538Z] 📋 Fazendo backup da tabela: barbearia
+[2025-07-10T10:04:48.927Z] ✅ Backup de barbearia concluído (1 registros)
+[2025-07-10T10:04:49.681Z] 📋 Fazendo backup da tabela: horarios_turnos
+[2025-07-10T10:04:51.242Z] ✅ Backup de horarios_turnos concluído (3 registros)
+[2025-07-10T10:04:51.331Z] 📋 Fazendo backup da tabela: notificacoes
+[2025-07-10T10:04:53.442Z] ✅ Backup de notificacoes concluído (5 registros)
+[2025-07-10T10:04:53.561Z] 📋 Fazendo backup da tabela: wallpapers
+[2025-07-10T10:04:55.874Z] ✅ Backup de wallpapers concluído (16 registros)
+[2025-07-10T10:04:57.421Z] 📋 Fazendo backup da tabela: servico_imagens
+[2025-07-10T10:05:01.914Z] ✅ Backup de servico_imagens concluído (32 registros)
+[2025-07-10T10:05:02.067Z] 📋 Fazendo backup da tabela: alertas_promos
+[2025-07-10T10:05:02.750Z] ✅ Backup de alertas_promos concluído (3 registros)
+[2025-07-10T10:05:02.813Z] ✅ Backup completo finalizado
+[2025-07-10T10:05:02.832Z] ✅ Banco alternado para primary
+[2025-07-10T10:05:02.834Z] 🔄 Sistema NaRégua: Banco alternado para PRIMARY {"timestamp":"2025-07-10T10:05:02.833Z","previousDb":"secondary","currentDb":"primary","systemType":"date-based"}
+[2025-07-10T10:05:02.840Z] ✅ Troca forçada concluída
+[2025-07-10T10:05:35.876Z] 🔧 TROCA FORÇADA DE BANCO INICIADA
+[2025-07-10T10:05:35.922Z] 🔄 Alternando de primary para secondary
+[2025-07-10T10:05:35.936Z] 📦 Iniciando backup completo...
+[2025-07-10T10:05:35.937Z] 📋 Backup: primary → secondary
+[2025-07-10T10:05:35.939Z] 📋 Fazendo backup da tabela: usuarios
+[2025-07-10T10:05:37.717Z] ✅ Backup de usuarios concluído (1 registros)
+[2025-07-10T10:05:37.722Z] 📋 Fazendo backup da tabela: agendamentos
+[2025-07-10T10:05:40.717Z] ✅ Backup de agendamentos concluído (30 registros)
+[2025-07-10T10:05:40.878Z] 📋 Fazendo backup da tabela: clientes
+[2025-07-10T10:05:45.981Z] ✅ Backup de clientes concluído (2 registros)
+[2025-07-10T10:05:46.528Z] 📋 Fazendo backup da tabela: servicos
+[2025-07-10T10:05:47.436Z] ✅ Backup de servicos concluído (9 registros)
+[2025-07-10T10:05:47.712Z] 📋 Fazendo backup da tabela: profissionais
+[2025-07-10T10:05:48.021Z] ✅ Backup de profissionais concluído (1 registros)
+[2025-07-10T10:05:48.227Z] 📋 Fazendo backup da tabela: barbearia
+[2025-07-10T10:05:48.994Z] 📋 Fazendo backup da tabela: horarios_turnos
+[2025-07-10T10:05:48.743Z] ✅ Backup de barbearia concluído (1 registros)
+[2025-07-10T10:05:49.567Z] ✅ Backup de horarios_turnos concluído (3 registros)
+[2025-07-10T10:05:49.677Z] 📋 Fazendo backup da tabela: notificacoes
+[2025-07-10T10:05:50.417Z] ✅ Backup de notificacoes concluído (5 registros)
+[2025-07-10T10:05:51.072Z] 📋 Fazendo backup da tabela: wallpapers
+[2025-07-10T10:05:53.636Z] ✅ Backup de wallpapers concluído (16 registros)
+[2025-07-10T10:05:53.784Z] 📋 Fazendo backup da tabela: servico_imagens
+[2025-07-10T10:05:56.896Z] ✅ Backup de servico_imagens concluído (32 registros)
+[2025-07-10T10:05:56.902Z] 📋 Fazendo backup da tabela: alertas_promos
+[2025-07-10T10:05:57.242Z] ✅ Backup de alertas_promos concluído (3 registros)
+[2025-07-10T10:05:57.251Z] ✅ Backup completo finalizado
+[2025-07-10T10:05:57.259Z] ✅ Banco alternado para secondary
+[2025-07-10T10:05:57.260Z] 🔄 Sistema NaRégua: Banco alternado para SECONDARY {"timestamp":"2025-07-10T10:05:57.260Z","previousDb":"primary","currentDb":"secondary","systemType":"date-based"}
+[2025-07-10T10:05:57.269Z] ✅ Troca forçada concluída

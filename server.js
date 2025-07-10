@@ -51,6 +51,25 @@ app.use('/api', imagensRoutes);
 // Rotas de alertas e promoções
 app.use('/api/alertas-promos', alertasPromosRoutes);
 
+// ========================================
+// 🔄 INFINITY-DB - SISTEMA DE BACKUP
+// ========================================
+try {
+    const backupRoutes = require('./Infinity-DB/api/api-routes');
+    app.use('/api/backup', backupRoutes);
+    console.log('🌐 Infinity-DB: API de controle disponível em /api/backup/*');
+} catch (error) {
+    console.log('⚠️ Infinity-DB: API de controle não carregada');
+}
+
+// Rota para dashboard do Infinity-DB sem extensão (deve vir antes da rota estática)
+app.get('/infinity-db/ui/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Infinity-DB', 'ui', 'dashboard.html'));
+});
+
+// Servir arquivos estáticos do Infinity-DB Dashboard
+app.use('/infinity-db', express.static(path.join(__dirname, 'Infinity-DB')));
+
 // Servir arquivos estáticos (exceto dashboard)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -182,4 +201,5 @@ app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
     console.log(`Página inicial:        http://localhost:${port}/index`);
     console.log(`Dashboard:             http://localhost:${port}/dashboard/dashboard`);
+    console.log(`Infinity-DB Dashboard: http://localhost:${port}/infinity-db/ui/dashboard`);
 });

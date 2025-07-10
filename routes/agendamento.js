@@ -96,14 +96,9 @@ router.post('/novo', async(req, res) => {
             INSERT INTO notificacoes (titulo, mensagem, data)
             VALUES (${titulo}, ${msg}, ${brazilDate.datetime})
         `;
-        // Salva a subscription (evita duplicidade)
-        if (subscription && subscription.endpoint) {
-            await db `DELETE FROM subscriptions WHERE endpoint = ${subscription.endpoint}`;
-            await db `
-                INSERT INTO subscriptions (agendamento_id, endpoint, p256dh, auth)
-                VALUES (currval('agendamentos_id_seq'), ${subscription.endpoint}, ${subscription.keys.p256dh}, ${subscription.keys.auth})
-            `;
-        }
+        
+        // Sistema de notificações push removido - tabela subscriptions foi descontinuada
+        
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });

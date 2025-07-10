@@ -4,7 +4,15 @@
   "description": "Sistema de agendamento para barbearia",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "setup": "npm install && cd Infinity-DB && npm install && node scripts/auto-setup.js && cd .. && echo \"✅ Setup completo! Execute 'npm start' para iniciar o servidor.\"",
+    "infinity-db:setup": "cd Infinity-DB && npm install && node scripts/auto-setup.js",
+    "infinity-db:init": "cd Infinity-DB && npm install && node scripts/initialize.js",
+    "infinity-db:init-simple": "cd Infinity-DB && npm install && node scripts/init-simple.js",
+    "infinity-db:status": "cd Infinity-DB && node -e \"const Scheduler = require('./core/scheduler'); const s = new Scheduler(); s.getSystemReport().then(console.log)\"",
+    "infinity-db:backup": "cd Infinity-DB && node -e \"const Scheduler = require('./core/scheduler'); const s = new Scheduler(); s.forceBackup().then(r => console.log(r ? '✅ Backup OK' : '❌ Erro'))\"",
+    "infinity-db:test": "cd Infinity-DB && npm install && node tests/test-complete.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +36,10 @@
     "nodemailer": "^7.0.3",
     "pdfkit": "^0.17.1",
     "sharp": "^0.34.2",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4"
   },
   "type": "commonjs"
 }
