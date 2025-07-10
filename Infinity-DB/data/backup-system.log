@@ -117,3 +117,16 @@
 [2025-07-10T10:05:57.269Z] ✅ Troca forçada concluída
 [2025-07-10T10:17:52.150Z] ✅ Conexões com bancos inicializadas
 [2025-07-10T10:17:52.159Z] 📊 Dados de uso carregados
+[2025-07-10T10:21:37.216Z] ✅ Conexões com bancos inicializadas
+[2025-07-10T10:21:39.311Z] 📊 Dados de uso carregados
+[2025-07-10T10:21:39.312Z] 📊 Dados de uso carregados
+[2025-07-10T10:21:42.170Z] ✅ Conexões com bancos inicializadas
+[2025-07-10T10:21:42.191Z] 📊 Dados de uso carregados
+[2025-07-10T10:21:58.246Z] ✅ Conexões com bancos inicializadas
+[2025-07-10T10:22:01.520Z] 📊 Dados de uso carregados
+[2025-07-10T10:22:03.476Z] � Verificação de saúde do sistema
+[2025-07-10T10:22:04.226Z] ✅ PRIMARY: Conectado - 208ms
+[2025-07-10T10:22:04.234Z] ✅ SECONDARY: Conectado - 540ms
+[2025-07-10T10:22:04.237Z] 📅 Próximo backup: dia 24 às 3h
+[2025-07-10T10:22:04.239Z] 🔄 Próxima alternância: dia 25 às 23h
+[2025-07-10T10:22:04.241Z] � Banco ativo atual: PRIMARY
