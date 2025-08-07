@@ -9,6 +9,13 @@
   Dashboard administrativa • Backup automático • Personalização visual • Interface moderna
 </p>
 
+### 🔗 Links Úteis
+- **Demo Live**: [https://naregua-barberapp.onrender.com](https://naregua-barberapp.onrender.com)
+- **Dashboard Demo**: [https://naregua-barberapp.onrender.com/dashboard/login](https://naregua-barberapp.onrender.com/dashboard/login)
+- **Repositório**: [https://github.com/pabloedusilva/NaRegua-BarberApp](https://github.com/pabloedusilva/NaRegua-BarberApp)
+- **Issues**: [https://github.com/pabloedusilva/NaRegua-BarberApp/issues](https://github.com/pabloedusilva/NaRegua-BarberApp/issues)
+
+
 ## 🚀 Instalação Rápida (100% Automática)
 
 **1. Clone e instale automaticamente:**
@@ -696,25 +703,29 @@ Este projeto está licenciado sob a **Licença ISC** - veja o arquivo [LICENSE](
 ---
 
 ## 📞 Suporte e Contato
+**Pablo Eduardo Silva**  
+*Desenvolvedor Full Stack*
 
-### 🔗 Links Úteis
-- **Demo Live**: [https://naregua-barberapp.onrender.com](https://naregua-barberapp.onrender.com)
-- **Dashboard Demo**: [https://naregua-barberapp.onrender.com/dashboard/login](https://naregua-barberapp.onrender.com/dashboard/login)
-- **Repositório**: [https://github.com/pabloedusilva/NaRegua-BarberApp](https://github.com/pabloedusilva/NaRegua-BarberApp)
-- **Issues**: [https://github.com/pabloedusilva/NaRegua-BarberApp/issues](https://github.com/pabloedusilva/NaRegua-BarberApp/issues)
-
-### 👨‍💻 Desenvolvedor
-**Pablo Eduardo Silva**
-- GitHub: [@pabloedusilva](https://github.com/pabloedusilva)
-- Email: [contato@pabloedusilva.dev](mailto:contato@pabloedusilva.dev)
+- **GitHub**: [https://github.com/pabloedusilva](https://github.com/pabloedusilva)
+- **Email**: [pablo.silva.edu@gmail.com](mailto:pablo.silva.edu@gmail.com)
+- **LinkedIn**: [https://www.linkedin.com/in/pabloedusilva](https://www.linkedin.com/in/pabloedusilva)
 
 ---
 
-<p align="center">
-  <strong>⭐ Se este projeto foi útil, deixe uma estrela no GitHub! ⭐</strong>
-</p>
+### Suporte ao Projeto
 
-<p align="center">
-  Feito com ❤️ por <a href="https://github.com/pabloedusilva">Pablo Eduardo Silva</a>
-</p>
+Se este projeto foi útil para você, considere:
+
+- ⭐ Dar uma estrela no repositório
+- 🐛 Reportar bugs e sugerir melhorias
+- 🔀 Contribuir com código
+- 📢 Compartilhar com outros desenvolvedores
+
+---
+
+**Última atualização**: 2025
+
+**NaRegua-BarberApp** - Desenvolvido com dedicação por Pablo Eduardo Silva
+---
+
 
