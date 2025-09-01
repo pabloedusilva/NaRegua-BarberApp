@@ -42,7 +42,7 @@ Execute sempre os comandos a partir da RAIZ do projeto (onde está package.json)
 
 Criar `.env` com:
 ```
-DATABASE_URL=...
+DATABASE_URL=postgresql://postgres:<senha>@<host>:<porta>/<db>
 SMTP_HOST=...
 SMTP_PORT=465
 SMTP_USER=...
@@ -59,6 +59,18 @@ Uploads são salvos em `frontend/public/uploads/<categoria>` e servidos via `/up
 1. Mover pastas de frontend para dentro de `frontend/` (se ainda não moveu).
 2. Rodar `npm run dev`.
 3. Acessar http://localhost:3000/index e http://localhost:3000/dashboard/login.
+
+## Migrations (node-pg-migrate)
+
+Scripts:
+```
+npm run migrate:create -- nome_da_migration
+npm run migrate:up      # aplica
+npm run migrate:down    # reverte último lote
+```
+Ao instalar (postinstall) o projeto tenta rodar migrate up automaticamente.
+
+Banco Railway: Ajuste `DATABASE_URL` com a URL fornecida (Postgres). Em produção, garanta que a variável esteja definida antes do start.
 
 ## Licença
 

@@ -36,6 +36,14 @@ app.use(session({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Middleware de disponibilidade do banco (evita 500 ruidosos)
+app.use((req, res, next) => {
+    if (!db.ready && !req.path.startsWith('/servertime')) {
+        return res.status(503).json({ success: false, message: 'Serviço temporariamente indisponível. Banco desconectado.' });
+    }
+    next();
+});
+
 // Rota para index sem extensão
 app.get(['/', '/index'], (req, res) => {
     res.sendFile(path.join(PUBLIC_DIR, 'index.html'));

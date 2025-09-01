@@ -23,6 +23,7 @@ async function retry(fn, { attempts = 3, delay = 300 } = {}) {
 }
 
 async function atualizarStatusAgendamentos() {
+    if (!db.ready) return; // pula se DB não conectado
     const brazilTime = getBrazilDateTime(); // agora fixo no boot, mantido igual nesta chamada
     const dataHoje = brazilTime.date;
     const horaAgora = brazilTime.time;
@@ -33,6 +34,7 @@ async function atualizarStatusAgendamentos() {
 }
 
 async function enviarLembretesAgendamentos() {
+    if (!db.ready) return; // pula se DB não conectado
     const brazilTime = getBrazilDateTime();
     const dataHoje = brazilTime.date;
     const horaAgora = brazilTime.time;
