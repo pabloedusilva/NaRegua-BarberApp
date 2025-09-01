@@ -1598,20 +1598,29 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Ao selecionar um dia, busque os turnos do banco e exiba os horários
-    function getDiaSemana(dateStr) {
-        // dateStr: 'dd/mm/yyyy'
-        const [d, m, y] = dateStr.split('/');
-        // Corrija o mês para 0-based
-        const date = new Date(y, Number(m) - 1, d);
-        const dias = [
-            'domingo', // 0
-            'segunda', // 1
-            'terca', // 2
-            'quarta', // 3
-            'quinta', // 4
-            'sexta', // 5
-            'sabado' // 6
-        ];
+    function getDiaSemana(dateInput) {
+        // Aceita Date ou string nos formatos 'dd/mm/yyyy' ou 'yyyy-mm-dd'
+        let date;
+        if (dateInput instanceof Date) {
+            date = new Date(dateInput.getFullYear(), dateInput.getMonth(), dateInput.getDate());
+        } else if (typeof dateInput === 'string') {
+            if (dateInput.includes('/')) {
+                const parts = dateInput.split('/');
+                if (parts.length === 3) {
+                    const [d, m, y] = parts;
+                    date = new Date(Number(y), Number(m) - 1, Number(d));
+                }
+            } else if (dateInput.includes('-')) {
+                // yyyy-mm-dd
+                const parts = dateInput.split('-');
+                if (parts.length === 3) {
+                    const [y, m, d] = parts;
+                    date = new Date(Number(y), Number(m) - 1, Number(d));
+                }
+            }
+        }
+        if (!date || isNaN(date.getTime())) return null; // fallback
+        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
         return dias[date.getDay()];
     }
 

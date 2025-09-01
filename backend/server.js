@@ -19,7 +19,7 @@ const FAVICON_DIR = path.join(FRONTEND_ROOT, 'favicon');
 // (hora do Brasil centralizada em utils/time.js)
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 // Arquivos estáticos
 app.use('/dashboard', express.static(DASHBOARD_DIR));
@@ -110,8 +110,16 @@ app.get('/dashboard/js/server-time.js', (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
     console.log(`Página inicial: http://localhost:${port}/index`);
     console.log(`Dashboard:      http://localhost:${port}/dashboard/dashboard`);
+});
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Porta ${port} já está em uso. Defina outra porta em PORT no ambiente (.env) ou finalize o processo que está usando a porta.`);
+    } else {
+        console.error('Erro ao iniciar servidor:', err);
+    }
 });
