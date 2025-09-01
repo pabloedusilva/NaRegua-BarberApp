@@ -6,7 +6,7 @@ const agendamentoRoutes = require('./routes/agendamento');
 const imagensRoutes = require('./routes/imagens');
 const alertasPromosRoutes = require('./routes/alertasPromos');
 const { upload, compressAndSaveImage, compressAndSaveAvatar } = require('./middleware/upload');
-const db = require('./db/neon');
+const db = require('./db/database');
 require('./utils/cron');
 const { getBrazilNow, setBrazilVirtualNow } = require('./utils/time');
 

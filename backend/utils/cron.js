@@ -1,4 +1,4 @@
-const db = require('../db/neon');
+const db = require('../db/database');
 const { sendReminderEmail } = require('./mailer');
 const { getBrazilNow } = require('./time');
 

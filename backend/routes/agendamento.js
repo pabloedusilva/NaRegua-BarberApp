@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/neon');
+const db = require('../db/database');
 const { sendConfirmationEmail, sendBarberNotification } = require('../utils/mailer');
 const { getBrazilDateTimeParts } = require('../utils/time');
 

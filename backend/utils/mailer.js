@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const db = require('../db/neon');
+const db = require('../db/database');
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
