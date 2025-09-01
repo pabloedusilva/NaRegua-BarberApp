@@ -32,8 +32,11 @@ O backend já aponta para `../frontend/...` para servir os arquivos. As rotas es
 ```
 npm install
 npm run dev   # nodemon backend/server.js
+npm run dev:watch # alternativa usando node --watch (sem nodemon)
 npm start     # node backend/server.js
 ```
+
+Execute sempre os comandos a partir da RAIZ do projeto (onde está package.json). Não execute `node backend/server.js` estando dentro da pasta `backend/` ou causará erro do tipo "Cannot find module '.../backend\\backend/server.js'".
 
 ## Variáveis de Ambiente
 
