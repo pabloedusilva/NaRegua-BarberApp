@@ -23,7 +23,7 @@ async function retry(fn, { attempts = 3, delay = 300 } = {}) {
 }
 
 async function atualizarStatusAgendamentos() {
-    const brazilTime = getBrazilDateTime();
+    const brazilTime = getBrazilDateTime(); // agora fixo no boot, mantido igual nesta chamada
     const dataHoje = brazilTime.date;
     const horaAgora = brazilTime.time;
     try {

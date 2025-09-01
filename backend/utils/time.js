@@ -1,7 +1,14 @@
+// FONTE ÚNICA E FIXA DE DATA/HORA PARA TODA A APLICAÇÃO
+// Congelada no momento do boot do servidor.
+
+const _systemNow = new Date();
+// Ajusta para horário de Brasília (UTC-3) ignorando possível horário de verão
+const _utcMillis = _systemNow.getTime() + _systemNow.getTimezoneOffset() * 60000;
+const _brazilFixedDate = new Date(_utcMillis + -3 * 3600000);
+
 function getBrazilNow() {
-  const now = new Date();
-  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  return new Date(utc + -3 * 3600000);
+  // Sempre retorna uma CÓPIA da data/hora fixa (não avança)
+  return new Date(_brazilFixedDate.getTime());
 }
 
 function getBrazilDateTimeParts() {
@@ -15,4 +22,4 @@ function getBrazilDateTimeParts() {
   };
 }
 
-module.exports = { getBrazilNow, getBrazilDateTimeParts };
+module.exports = { getBrazilNow, getBrazilDateTimeParts, BRAZIL_FIXED_DATE: getBrazilNow() };

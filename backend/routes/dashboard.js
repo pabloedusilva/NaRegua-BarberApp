@@ -42,11 +42,11 @@ router.get('/total-agendamentos', requireLogin, async (req, res) => {
 
 router.get('/total-agendamentos-mes', requireLogin, async (req, res) => {
 	try {
-		const bt = getBrazilDateTimeParts();
-		const hoje = bt.dateObject;
-		const ano = hoje.getFullYear();
-		const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-		const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
+	const bt = getBrazilDateTimeParts();
+	const hoje = bt.dateObject; // fixo
+	const ano = hoje.getFullYear();
+	const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+	const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate(); // calculado a partir do fixo
 		const dataInicio = `${ano}-${mes}-01`;
 		const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
 		const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
@@ -80,13 +80,12 @@ router.post('/alterar-senha', requireLogin, async (req, res) => {
 
 router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
 	try {
-		const hoje = getBrazilDateTimeParts().dateObject;
-		const diaSemana = hoje.getDay();
-		const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
-		const inicioSemana = new Date(hoje.setHours(0, 0, 0, 0));
-		inicioSemana.setDate(diff);
-		const fimSemana = new Date(inicioSemana);
-		fimSemana.setDate(inicioSemana.getDate() + 6);
+	const hoje = getBrazilDateTimeParts().dateObject; // fixo
+	const diaSemana = hoje.getDay();
+	const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
+	const inicioSemana = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+	inicioSemana.setDate(diff);
+	const fimSemana = new Date(inicioSemana.getFullYear(), inicioSemana.getMonth(), inicioSemana.getDate() + 6);
 		const dataInicio = inicioSemana.toISOString().slice(0, 10);
 		const dataFim = fimSemana.toISOString().slice(0, 10);
 		const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
@@ -96,13 +95,12 @@ router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
 
 router.get('/agendamentos-semana', requireLogin, async (req, res) => {
 	try {
-		const hoje = getBrazilDateTimeParts().dateObject;
-		const diaSemana = hoje.getDay();
-		const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
-		const inicioSemana = new Date(hoje.setHours(0, 0, 0, 0));
-		inicioSemana.setDate(diff);
-		const fimSemana = new Date(inicioSemana);
-		fimSemana.setDate(inicioSemana.getDate() + 6);
+	const hoje = getBrazilDateTimeParts().dateObject; // fixo
+	const diaSemana = hoje.getDay();
+	const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
+	const inicioSemana = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+	inicioSemana.setDate(diff);
+	const fimSemana = new Date(inicioSemana.getFullYear(), inicioSemana.getMonth(), inicioSemana.getDate() + 6);
 		const dataInicio = inicioSemana.toISOString().slice(0, 10);
 		const dataFim = fimSemana.toISOString().slice(0, 10);
 		const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;
@@ -112,10 +110,10 @@ router.get('/agendamentos-semana', requireLogin, async (req, res) => {
 
 router.get('/agendamentos-mes', requireLogin, async (req, res) => {
 	try {
-		const hoje = getBrazilDateTimeParts().dateObject;
-		const ano = hoje.getFullYear();
-		const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-		const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
+	const hoje = getBrazilDateTimeParts().dateObject; // fixo
+	const ano = hoje.getFullYear();
+	const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+	const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
 		const dataInicio = `${ano}-${mes}-01`;
 		const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
 		const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;

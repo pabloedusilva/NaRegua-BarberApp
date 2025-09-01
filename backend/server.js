@@ -91,7 +91,7 @@ app.post('/api/upload/image', upload.single('image'), compressAndSaveImage('serv
 
 // Rota centralizada para data/hora do servidor (somente formato brasileiro)
 app.get('/servertime', (req, res) => {
-    const brazilTime = getBrazilNow();
+    const brazilTime = getBrazilNow(); // agora fixo
     const year = brazilTime.getFullYear();
     const month = String(brazilTime.getMonth() + 1).padStart(2, '0');
     const day = String(brazilTime.getDate()).padStart(2, '0');
