@@ -250,6 +250,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     
     // Todas as funções que dependem de data/hora usam window.serverTime()
+    // Atualização de textos de UI dependentes do tempo (caso clock seja alterado via admin)
+    window.updateTimeTexts = function() {
+        const now = typeof window.serverTime === 'function' ? window.serverTime() : null;
+        if (!now) return;
+        // Exemplos: elementos com data dinâmica
+        document.querySelectorAll('[data-datetime-fixed]').forEach(el => {
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            el.textContent = `${d}/${m}/${y} ${hh}:${mm}`;
+        });
+    };
+    window.updateTimeTexts();
 });
 
 // Função para formatar a data no formato brasileiro (DD/MM/AAAA)
@@ -427,16 +442,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     // Inicializar calendário com data do servidor
-    let currentDate = window.serverTime ? window.serverTime() : new Date();
+    let currentDate = window.serverTime ? window.serverTime() : null;
     if (typeof currentDate === 'object' && typeof currentDate.toDate === 'function') {
         currentDate = currentDate.toDate();
     }
     
     // Inicialização do calendário usando servidor
     async function initializeCalendarDate() {
-        if (typeof window.serverTime === 'function') {
-            currentDate = window.serverTime();
-        }
+    if (typeof window.serverTime === 'function') currentDate = window.serverTime();
         await renderCalendar(currentDate);
     }
     
@@ -536,7 +549,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         const year = date.getFullYear();
         const month = date.getMonth();
-        const today = window.serverTime ? window.serverTime() : new Date();
+    const today = window.serverTime();
         today.setHours(0, 0, 0, 0);
 
         const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -561,7 +574,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             days += '<div class="week-days">';
 
             // Gerar os 7 dias da semana
-            const today = window.serverTime ? window.serverTime() : new Date();
+            const today = window.serverTime();
             today.setHours(0, 0, 0, 0);
 
             const weekDayNames = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -610,7 +623,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const lastDayIndex = lastDay.getDay();
             const nextDays = 7 - lastDayIndex - 1;
 
-            const today = window.serverTime ? window.serverTime() : new Date();
+            const today = window.serverTime();
             today.setHours(0, 0, 0, 0); // Garante comparação só por data
 
             for (let i = firstDayIndex; i > 0; i--) {
