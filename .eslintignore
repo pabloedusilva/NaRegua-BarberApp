@@ -1,0 +1,4 @@
+node_modules
+frontend/public/uploads
+frontend/public/**/*.min.js
+backend/servertime/server-time.js
