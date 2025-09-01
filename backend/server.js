@@ -8,7 +8,7 @@ const alertasPromosRoutes = require('./routes/alertasPromos');
 const { upload, compressAndSaveImage, compressAndSaveAvatar } = require('./middleware/upload');
 const db = require('./db/neon');
 require('./utils/cron');
-const { getBrazilNow } = require('./utils/time');
+const { getBrazilNow, setBrazilVirtualNow } = require('./utils/time');
 
 // Diretórios frontend
 const FRONTEND_ROOT = path.join(__dirname, '..', 'frontend');
@@ -107,6 +107,43 @@ app.get('/js/server-time.js', (req, res) => {
 });
 app.get('/dashboard/js/server-time.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'servertime', 'server-time.js'));
+});
+
+// Endpoint administrativo para alterar o clock virtual (requer sessão admin)
+app.post('/admin/set-time', async (req, res) => {
+    try {
+        if (!req.session || !req.session.user || req.session.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Acesso negado' });
+        }
+        const { datetime } = req.body; // esperado: YYYY-MM-DD HH:mm:ss
+        const newDate = setBrazilVirtualNow(datetime);
+        res.json({ success: true, newTime: newDate.toISOString() });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+});
+
+// Opcional: avançar minutos
+app.post('/admin/advance-minutes', (req, res) => {
+    try {
+        if (!req.session || !req.session.user || req.session.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Acesso negado' });
+        }
+        const { minutes = 0 } = req.body;
+        const base = getBrazilNow();
+        const advanced = new Date(base.getTime() + Number(minutes) * 60000);
+        const y = advanced.getFullYear();
+        const m = String(advanced.getMonth() + 1).padStart(2, '0');
+        const d = String(advanced.getDate()).padStart(2, '0');
+        const hh = String(advanced.getHours()).padStart(2, '0');
+        const mm = String(advanced.getMinutes()).padStart(2, '0');
+        const ss = String(advanced.getSeconds()).padStart(2, '0');
+        const isoLike = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+        setBrazilVirtualNow(isoLike);
+        res.json({ success: true, newTime: isoLike });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
 });
 
 // Iniciar servidor

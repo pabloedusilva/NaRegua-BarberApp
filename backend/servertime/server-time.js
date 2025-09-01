@@ -6,7 +6,8 @@
 	// Espera-se que o servidor sirva sempre a mesma resposta /servertime coerente com o boot.
 	let fixedDate = null;
 
-	async function fetchFixedServerTime() {
+		async function fetchFixedServerTime(force = false) {
+			if (fixedDate && !force) return fixedDate;
 		try {
 			const res = await fetch('/servertime');
 			const data = await res.json();
@@ -21,6 +22,7 @@
 			// fallback: se falhar, cria uma data fixa local (não ideal, mas evita quebra)
 			if (!fixedDate) fixedDate = new Date();
 		}
+			return fixedDate;
 	}
 
 	window.startServerTimeSync = async function() {
@@ -28,8 +30,14 @@
 		return fixedDate;
 	};
 
-	window.serverTime = function() {
+		window.serverTime = function() {
 		// Retorna cópia para evitar mutações externas
 		return fixedDate ? new Date(fixedDate.getTime()) : new Date();
 	};
+
+		// Forçar reload (utilizado pela UI após alteração administrativa)
+		window.refreshServerTime = async function() {
+			await fetchFixedServerTime(true);
+			return window.serverTime();
+		};
 })();

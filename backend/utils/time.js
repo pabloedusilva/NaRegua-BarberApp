@@ -1,14 +1,39 @@
-// FONTE ÚNICA E FIXA DE DATA/HORA PARA TODA A APLICAÇÃO
-// Congelada no momento do boot do servidor.
+// FONTE ÚNICA E CONTROLÁVEL DE DATA/HORA (VIRTUAL) PARA TODA A APLICAÇÃO
+// Pode ser inicializada por variável de ambiente VIRTUAL_TIME="YYYY-MM-DD HH:mm:ss" (horário de Brasília)
+// e alterada em runtime via endpoint administrativo.
 
-const _systemNow = new Date();
-// Ajusta para horário de Brasília (UTC-3) ignorando possível horário de verão
-const _utcMillis = _systemNow.getTime() + _systemNow.getTimezoneOffset() * 60000;
-const _brazilFixedDate = new Date(_utcMillis + -3 * 3600000);
+let _brazilVirtualDate = initVirtualDate();
+
+function parseEnvVirtual(str) {
+  if (!str) return null;
+  // Aceita formatos: YYYY-MM-DD HH:mm:ss ou YYYY-MM-DDTHH:mm:ss
+  const norm = str.trim().replace('T', ' ');
+  const m = norm.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})(?::(\d{2}))?$/);
+  if (!m) return null;
+  const [ , y, mo, d, h, mi, s ] = m;
+  // Construir como horário de Brasília (UTC-3)
+  const dateUtc = Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h) + 3, Number(mi), Number(s || '0'));
+  return new Date(dateUtc - 3 * 3600000); // volta para representação local Brasil
+}
+
+function initVirtualDate() {
+  const envDate = parseEnvVirtual(process.env.VIRTUAL_TIME || process.env.FIXED_TIME);
+  if (envDate) return envDate;
+  // fallback: captura uma vez e fixa
+  const sys = new Date();
+  const utcMillis = sys.getTime() + sys.getTimezoneOffset() * 60000;
+  return new Date(utcMillis + -3 * 3600000);
+}
 
 function getBrazilNow() {
-  // Sempre retorna uma CÓPIA da data/hora fixa (não avança)
-  return new Date(_brazilFixedDate.getTime());
+  return new Date(_brazilVirtualDate.getTime());
+}
+
+function setBrazilVirtualNow(isoLike) {
+  const parsed = parseEnvVirtual(isoLike);
+  if (!parsed) throw new Error('Formato inválido. Use YYYY-MM-DD HH:mm:ss');
+  _brazilVirtualDate = parsed;
+  return getBrazilNow();
 }
 
 function getBrazilDateTimeParts() {
@@ -22,4 +47,4 @@ function getBrazilDateTimeParts() {
   };
 }
 
-module.exports = { getBrazilNow, getBrazilDateTimeParts, BRAZIL_FIXED_DATE: getBrazilNow() };
+module.exports = { getBrazilNow, getBrazilDateTimeParts, setBrazilVirtualNow };
