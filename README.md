@@ -72,6 +72,25 @@ Ao instalar (postinstall) o projeto tenta rodar migrate up automaticamente.
 
 Banco Railway: Ajuste `DATABASE_URL` com a URL fornecida (Postgres). Em produção, garanta que a variável esteja definida antes do start.
 
+### Deploy Railway (Postgres)
+
+1. Crie o projeto no Railway e adicione um Postgres.
+2. Copie a variável `DATABASE_URL` gerada (geralmente já vem com parâmetros). Caso não inclua `sslmode`, a aplicação detecta Railway e ativa automaticamente SSL em modo `no-verify` para evitar o erro de certificado autoassinado.
+3. (Opcional) Para controlar manualmente:
+	- `DB_SSL=false` desliga SSL.
+	- `DB_SSL=true` força SSL com verificação (`rejectUnauthorized=true`).
+	- `DB_SSLMODE=no-verify|require|disable|allow|prefer` sobrescreve a lógica automática.
+4. Adicione as variáveis SMTP se for usar envio de e‑mail.
+5. Configure o comando de start no Railway: `npm start` (ele fará build + start). Para rodar migrations no painel: `npm run migrate:up` (uma vez). Você também pode criar um serviço (Deploy Hook) que execute migrations antes do start.
+6. Se aparecer erro `SELF_SIGNED_CERT_IN_CHAIN`, verifique se não forçou `DB_SSLMODE=require` erroneamente. Remova ou mude para `no-verify`.
+
+Exemplo de variáveis no Railway:
+```
+DATABASE_URL=postgresql://usuario:senha@host:5432/db
+DB_SSLMODE=no-verify  # (opcional)
+PORT=8080             # Railway normalmente injeta PORT automaticamente
+```
+
 ## Licença
 
 Ver arquivo LICENSE.

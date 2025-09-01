@@ -1,9 +1,51 @@
 require('dotenv').config();
 const { Pool } = require('pg');
+
 const dbUrl = process.env.DATABASE_URL;
 if (!dbUrl) throw new Error('DATABASE_URL não definida');
-const ssl = /sslmode=require|sslmode=no-verify/i.test(dbUrl) ? { rejectUnauthorized: !/sslmode=no-verify/i.test(dbUrl) } : false;
-const pool = new Pool({ connectionString: dbUrl, max: 10, idleTimeoutMillis: 10_000, connectionTimeoutMillis: 8000, ssl });
+
+/**
+ * Estratégia SSL:
+ * 1. Se a URL contiver ?sslmode=... usamos isso.
+ * 2. Caso esteja em ambiente Railway (variáveis RAILWAY_*) e a URL não possua sslmode,
+ *    forçamos SSL com rejectUnauthorized=false (equivalente a no-verify) para evitar
+ *    erro SELF_SIGNED_CERT_IN_CHAIN.
+ * 3. Variáveis manuais:
+ *    - DB_SSL=false (desliga SSL explicitamente)
+ *    - DB_SSL=true  (força SSL com verificação)
+ *    - DB_SSLMODE=no-verify|require (prioridade sobre a query string)
+ */
+
+function resolveSSL(url) {
+	if (process.env.DB_SSL === 'false' || process.env.DB_SSL === '0') return false;
+
+	const urlHasMode = /sslmode=([a-z-]+)/i.exec(url);
+	const explicitMode = (process.env.DB_SSLMODE || '').toLowerCase();
+	let mode = explicitMode || (urlHasMode ? urlHasMode[1].toLowerCase() : '');
+
+	const inRailway = !!(process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID);
+
+	if (!mode) {
+		if (process.env.DB_SSL === 'true' || process.env.DB_SSL === '1') mode = 'require';
+		else if (inRailway) mode = 'no-verify'; // fallback seguro para evitar erro de certificado
+	}
+
+	if (!mode) return false; // permanece sem SSL
+
+	if (mode === 'disable' || mode === 'off') return false;
+	const noVerify = mode === 'no-verify' || mode === 'allow' || mode === 'prefer';
+	return { rejectUnauthorized: !noVerify };
+}
+
+const ssl = resolveSSL(dbUrl);
+
+const pool = new Pool({
+	connectionString: dbUrl,
+	max: Number(process.env.DB_POOL_MAX) || 10,
+	idleTimeoutMillis: Number(process.env.DB_IDLE_TIMEOUT_MS) || 10_000,
+	connectionTimeoutMillis: Number(process.env.DB_CONN_TIMEOUT_MS) || 8_000,
+	ssl
+});
 
 let ready = false;
 let lastCheck = 0;
@@ -13,10 +55,23 @@ async function checkConnection(force = false) {
 	if (!force && now - lastCheck < 5000) return ready; // evita flood
 	lastCheck = now;
 	try {
-		await pool.query('SELECT 1');
+			await pool.query('SELECT 1');
 		if (!ready) console.log('[DB] Conectado com sucesso.');
 		ready = true; return true;
 	} catch (e) {
+			// Se falhou por self-signed e ainda não tentamos modo no-verify implicitamente
+			if (e && e.code === 'SELF_SIGNED_CERT_IN_CHAIN' && ssl && ssl.rejectUnauthorized) {
+				console.warn('[DB] Erro de certificado autoassinado. Re-tentando com rejectUnauthorized=false (modo no-verify).');
+				try {
+					// Criar novo pool relaxando SSL
+					pool.options.ssl.rejectUnauthorized = false; // ajuste direto
+					await pool.query('SELECT 1');
+					if (!ready) console.log('[DB] Conectado com sucesso (SSL no-verify).');
+					ready = true; return true;
+				} catch (e2) {
+					if (ready) console.error('[DB] Perda de conexão (retry no-verify falhou):', e2.message);
+				}
+			}
 		if (ready) console.error('[DB] Perda de conexão:', e.message);
 		ready = false; return false;
 	}
