@@ -2315,7 +2315,7 @@ async function carregarProfissionaisDashboard() {
                 card.setAttribute('data-id', prof.id);
                 card.innerHTML = `
                     <div class="professional-avatar">
-                        ${prof.avatar ? `<img src="${prof.avatar}" alt="Avatar ${prof.nome}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />` : `<i class='fas fa-user' style='font-size: 32px; color: #aaa;'></i>`}
+                        ${prof.avatar ? `<img src="${prof.avatar}" alt="Avatar ${prof.nome}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;" />` : `<i class='fas fa-user' style='font-size: 32px; color: #aaa;'></i>`}
                     </div>
                     <div class="professional-name" style="text-align:center;">${prof.nome}</div>
                     <div class="professional-actions" style="display:flex;justify-content:center;gap:16px;margin-top:10px;">
