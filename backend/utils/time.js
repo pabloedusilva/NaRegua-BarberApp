@@ -2,7 +2,11 @@
 // Pode ser inicializada por variável de ambiente VIRTUAL_TIME="YYYY-MM-DD HH:mm:ss" (horário de Brasília)
 // e alterada em runtime via endpoint administrativo.
 
+// _brazilVirtualDate: data base fixa (Brasil) capturada ou definida.
+// Em modo FIXO ela nunca avança; em modo LIVE ela avança proporcionalmente ao tempo real decorrido.
 let _brazilVirtualDate = initVirtualDate();
+let _baseRealMillis = Date.now(); // marca o momento real em que a base foi definida
+const _isLiveMode = /^(live|1|true)$/i.test(process.env.VIRTUAL_MODE || '');
 
 function parseEnvVirtual(str) {
   if (!str) return null;
@@ -26,6 +30,10 @@ function initVirtualDate() {
 }
 
 function getBrazilNow() {
+  if (_isLiveMode) {
+    const elapsed = Date.now() - _baseRealMillis;
+    return new Date(_brazilVirtualDate.getTime() + elapsed);
+  }
   return new Date(_brazilVirtualDate.getTime());
 }
 
@@ -33,6 +41,7 @@ function setBrazilVirtualNow(isoLike) {
   const parsed = parseEnvVirtual(isoLike);
   if (!parsed) throw new Error('Formato inválido. Use YYYY-MM-DD HH:mm:ss');
   _brazilVirtualDate = parsed;
+  _baseRealMillis = Date.now(); // reseta referência para modo live
   return getBrazilNow();
 }
 
@@ -47,4 +56,4 @@ function getBrazilDateTimeParts() {
   };
 }
 
-module.exports = { getBrazilNow, getBrazilDateTimeParts, setBrazilVirtualNow };
+module.exports = { getBrazilNow, getBrazilDateTimeParts, setBrazilVirtualNow, __isLiveMode: _isLiveMode };

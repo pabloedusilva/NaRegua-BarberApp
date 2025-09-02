@@ -8,7 +8,7 @@ const alertasPromosRoutes = require('./routes/alertasPromos');
 const { upload, compressAndSaveImage, compressAndSaveAvatar } = require('./middleware/upload');
 const db = require('./db/database');
 require('./utils/cron');
-const { getBrazilNow, setBrazilVirtualNow } = require('./utils/time');
+const { nowBrazilParts, setVirtual, advanceMinutes, mode } = require('./utils/clock');
 
 // Diretórios frontend
 const FRONTEND_ROOT = path.join(__dirname, '..', 'frontend');
@@ -16,7 +16,7 @@ const PUBLIC_DIR = path.join(FRONTEND_ROOT, 'public');
 const DASHBOARD_DIR = path.join(FRONTEND_ROOT, 'dashboard');
 const FAVICON_DIR = path.join(FRONTEND_ROOT, 'favicon');
 
-// (hora do Brasil centralizada em utils/time.js)
+// (hora do Brasil centralizada em utils/clock.js)
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -97,16 +97,11 @@ app.post('/api/upload/image', upload.single('image'), compressAndSaveImage('serv
     res.json({ success: true, ...req.processedFile });
 });
 
-// Rota centralizada para data/hora do servidor (somente formato brasileiro)
+// Rota centralizada para data/hora do servidor (adiciona modo: live ou fixed)
+// clock mode via novo módulo clock
 app.get('/servertime', (req, res) => {
-    const brazilTime = getBrazilNow(); // agora fixo
-    const year = brazilTime.getFullYear();
-    const month = String(brazilTime.getMonth() + 1).padStart(2, '0');
-    const day = String(brazilTime.getDate()).padStart(2, '0');
-    const hours = String(brazilTime.getHours()).padStart(2, '0');
-    const minutes = String(brazilTime.getMinutes()).padStart(2, '0');
-    const seconds = String(brazilTime.getSeconds()).padStart(2, '0');
-    res.json({ br: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}` });
+    const p = nowBrazilParts();
+    res.json({ br: p.datetime, mode: p.mode, epoch: p.epoch });
 });
 
 // Servir o arquivo server-time.js centralizado da pasta /servertime
@@ -124,8 +119,13 @@ app.post('/admin/set-time', async (req, res) => {
             return res.status(403).json({ success: false, message: 'Acesso negado' });
         }
         const { datetime } = req.body; // esperado: YYYY-MM-DD HH:mm:ss
-        const newDate = setBrazilVirtualNow(datetime);
-        res.json({ success: true, newTime: newDate.toISOString() });
+        if(!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(datetime||'')) {
+            return res.status(400).json({ success:false, message:'Formato inválido. Use YYYY-MM-DD HH:mm:ss' });
+        }
+        const before = nowBrazilParts();
+        const after = setVirtual(datetime);
+        console.log(`[CLOCK] Alteração manual por admin ${req.session.user.username}: ${before.datetime} -> ${after.datetime} (${after.mode})`);
+        res.json({ success: true, newTime: after.datetime, mode: after.mode, epoch: after.epoch });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
@@ -138,20 +138,22 @@ app.post('/admin/advance-minutes', (req, res) => {
             return res.status(403).json({ success: false, message: 'Acesso negado' });
         }
         const { minutes = 0 } = req.body;
-        const base = getBrazilNow();
-        const advanced = new Date(base.getTime() + Number(minutes) * 60000);
-        const y = advanced.getFullYear();
-        const m = String(advanced.getMonth() + 1).padStart(2, '0');
-        const d = String(advanced.getDate()).padStart(2, '0');
-        const hh = String(advanced.getHours()).padStart(2, '0');
-        const mm = String(advanced.getMinutes()).padStart(2, '0');
-        const ss = String(advanced.getSeconds()).padStart(2, '0');
-        const isoLike = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
-        setBrazilVirtualNow(isoLike);
-        res.json({ success: true, newTime: isoLike });
+        const before = nowBrazilParts();
+        const after = advanceMinutes(minutes);
+        console.log(`[CLOCK] Avanço manual (+${minutes}m) por admin ${req.session.user.username}: ${before.datetime} -> ${after.datetime}`);
+        res.json({ success: true, newTime: after.datetime, mode: after.mode, epoch: after.epoch });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
+});
+
+// Endpoint para consultar estado atual do clock
+app.get('/admin/get-time', (req, res) => {
+    if (!req.session || !req.session.user || req.session.user.role !== 'admin') {
+        return res.status(403).json({ success: false, message: 'Acesso negado' });
+    }
+    const p = nowBrazilParts();
+    res.json({ success:true, time: p.datetime, epoch: p.epoch, mode: p.mode });
 });
 
 // Iniciar servidor

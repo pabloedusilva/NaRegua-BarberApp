@@ -15,12 +15,43 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log('Dashboard: Sistema de horário do servidor iniciado');
     }
 
-    // Função para atualizar data e hora em tempo real
+    // Badge de modo (inject se não existir)
+    function ensureClockBadge() {
+        let badge = document.getElementById('clockModeBadge');
+        if(!badge) {
+            badge = document.createElement('div');
+            badge.id = 'clockModeBadge';
+            badge.style.position = 'fixed';
+            badge.style.bottom = '6px';
+            badge.style.right = '8px';
+            badge.style.padding = '4px 10px';
+            badge.style.borderRadius = '16px';
+            badge.style.background = 'var(--primary-dark)';
+            badge.style.color = '#fff';
+            badge.style.fontSize = '12px';
+            badge.style.fontWeight = '600';
+            badge.style.zIndex = '9999';
+            document.body.appendChild(badge);
+        }
+        return badge;
+    }
+
+    let lastMode = null;
+    function updateBadge(mode){
+        const badge = ensureClockBadge();
+        if(mode !== lastMode) {
+            badge.textContent = mode === 'live' ? 'LIVE' : 'FIXED';
+            badge.style.background = mode === 'live' ? 'var(--success)' : 'var(--primary-dark)';
+            lastMode = mode;
+        }
+    }
+
+    // Função para atualizar data e hora em tempo real (suporta modo live/fixed)
     function updateDateTime() {
-        const now = window.serverTime ? window.serverTime() : new Date();
+        const now = (typeof window.serverTime === 'function') ? window.serverTime() : new Date();
         const dateTimeElement = document.getElementById('dashboardDateTime');
         
-        if (dateTimeElement) {
+    if (dateTimeElement) {
             const options = {
                 weekday: 'long',
                 year: 'numeric',
@@ -37,11 +68,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Atualiza imediatamente
+    // Atualiza imediatamente e depois a cada segundo (se live avançará, se fixed mostrará constante)
     updateDateTime();
-    
-    // Atualiza a cada segundo
     setInterval(updateDateTime, 1000);
+
+    // Quando relógio virtual for atualizado remotamente
+    window.addEventListener('server-time-updated', (e)=>{
+        if(e && e.detail && e.detail.br){
+            // mode vem do polling fetch -> parse em server-time.js (adapte se incluir depois)
+        }
+        // Fetch para /servertime para saber modo atualizado
+        fetch('/servertime',{cache:'no-store'}).then(r=>r.json()).then(data=>{ if(data.mode) updateBadge(data.mode); });
+        updateDateTime();
+    });
+    // Inicial fetch para badge
+    fetch('/servertime',{cache:'no-store'}).then(r=>r.json()).then(data=>{ if(data.mode) updateBadge(data.mode); });
 
     // Remove o código antigo da data fixa
     // document.addEventListener('DOMContentLoaded', function () {

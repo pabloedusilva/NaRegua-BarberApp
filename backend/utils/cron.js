@@ -1,14 +1,10 @@
 const db = require('../db/database');
 const { sendReminderEmail } = require('./mailer');
-const { getBrazilNow } = require('./time');
+const { nowBrazilParts } = require('./clock');
 
 function getBrazilDateTime() {
-    const now = getBrazilNow();
-    return {
-        date: now.toISOString().slice(0, 10),
-        time: now.toISOString().slice(11, 19),
-        datetime: now.toISOString().slice(0, 19).replace('T', ' ')
-    };
+    const p = nowBrazilParts();
+    return { date: p.date, time: p.time, datetime: p.datetime };
 }
 
 function isTransient(err) {

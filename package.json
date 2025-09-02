@@ -42,7 +42,8 @@
     "pg": "^8.11.5",
     "node-pg-migrate": "^7.0.0",
     "sharp": "^0.34.2",
-    "web-push": "^3.6.7"
+  "web-push": "^3.6.7",
+  "luxon": "^3.4.4"
   },
   "type": "commonjs"
 }

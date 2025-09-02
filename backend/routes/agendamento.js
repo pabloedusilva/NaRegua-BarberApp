@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 const { sendConfirmationEmail, sendBarberNotification } = require('../utils/mailer');
-const { getBrazilDateTimeParts } = require('../utils/time');
+const { nowBrazilParts } = require('../utils/clock');
 
 // Criar novo agendamento
 router.post('/novo', async (req, res) => {
@@ -36,7 +36,7 @@ router.post('/novo', async (req, res) => {
 				await sendConfirmationEmail({
 					to: emailParaEnviar,
 					nome,
-					data: getBrazilDateTimeParts().date.split('-').reverse().join('/'),
+					data: nowBrazilParts().date.split('-').reverse().join('/'),
 					hora,
 					profissional,
 					servico
@@ -51,7 +51,7 @@ router.post('/novo', async (req, res) => {
 				telefone,
 				servico,
 				profissional,
-				data: getBrazilDateTimeParts().date.split('-').reverse().join('/'),
+				data: nowBrazilParts().date.split('-').reverse().join('/'),
 				hora,
 				preco,
 				email
@@ -59,7 +59,7 @@ router.post('/novo', async (req, res) => {
 		} catch (err) {
 			console.error('Erro ao enviar e-mail para o barbeiro:', err);
 		}
-		const brazilDate = getBrazilDateTimeParts();
+		const brazilDate = nowBrazilParts();
 		const titulo = 'Novo agendamento';
 		const dataFormatada = brazilDate.date.split('-').reverse().join('/');
 		const msg = `Novo agendamento para ${servico?.toString().slice(0, 40)} com ${profissional?.toString().slice(0, 40)} em ${dataFormatada} às ${hora}.`;

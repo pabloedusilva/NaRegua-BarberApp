@@ -270,25 +270,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 // Função para formatar a data no formato brasileiro (DD/MM/AAAA)
 function formatarDataBR(dataISO) {
     if (!dataISO) return '';
-    // Se vier só a data (ex: 2025-05-26)
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dataISO)) {
-        const [ano, mes, dia] = dataISO.split('-');
+    // Normaliza se vier com tempo: pega só a parte da data antes de espaço ou 'T'
+    const pure = dataISO.split('T')[0].split(' ')[0];
+    if (/^\d{4}-\d{2}-\d{2}$/.test(pure)) {
+        const [ano, mes, dia] = pure.split('-');
         return `${dia}/${mes}/${ano}`;
     }
-    // Se vier no formato ISO completo, converte usando servidor
-    try {
-        const serverDate = window.serverTime();
-        const data = new Date(dataISO);
-        if (!isNaN(data.getTime())) {
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0');
-            const ano = data.getFullYear();
-            return `${dia}/${mes}/${ano}`;
-        }
-    } catch (e) {
-        console.warn('Erro ao formatar data:', e);
-    }
-    return dataISO;
+    return pure;
 }
 
 // Adicione esta função antes de renderCalendar ou logo no início do <script>

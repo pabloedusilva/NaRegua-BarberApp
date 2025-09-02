@@ -2,7 +2,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
-const { getBrazilNow } = require('../utils/time');
+const { nowUtc } = require('../utils/clock');
 
 // Base uploads agora dentro de frontend/public/uploads
 const baseUploadsDir = path.join(__dirname, '../../frontend/public/uploads');
@@ -32,7 +32,7 @@ const compressAndSaveImage = (uploadType = 'services') => async (req, res, next)
     if (!req.file) return next();
     try {
         const uploadDir = uploadsSubDirs[uploadType] || uploadsSubDirs.services;
-    const timestamp = getBrazilNow().getTime();
+    const timestamp = nowUtc().getTime();
         const randomNum = Math.floor(Math.random() * 1000);
         const filename = `${uploadType}-${timestamp}-${randomNum}.webp`;
         const filepath = path.join(uploadDir, filename);

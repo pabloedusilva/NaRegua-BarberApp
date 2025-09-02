@@ -4,7 +4,7 @@ const db = require('../db/database');
 const { requireLogin } = require('../middleware/auth');
 const path = require('path');
 const PDFDocument = require('pdfkit');
-const { getBrazilDateTimeParts } = require('../utils/time');
+const { nowBrazilParts } = require('../utils/clock');
 
 // Login (POST)
 router.post('/login', async (req, res) => {
@@ -41,22 +41,20 @@ router.get('/total-agendamentos', requireLogin, async (req, res) => {
 });
 
 router.get('/total-agendamentos-mes', requireLogin, async (req, res) => {
-	try {
-	const bt = getBrazilDateTimeParts();
-	const hoje = bt.dateObject; // fixo
-	const ano = hoje.getFullYear();
-	const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-	const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate(); // calculado a partir do fixo
-		const dataInicio = `${ano}-${mes}-01`;
-		const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
-		const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
-		res.json({ total: rows[0].total });
-	} catch { res.status(500).json({ message: 'Erro ao buscar total de agendamentos do mês.' }); }
+		try {
+	const bt = nowBrazilParts();
+	const [ano, mes] = bt.date.split('-');
+	const ultimoDia = new Date(Number(ano), Number(mes), 0).getDate();
+	const dataInicio = `${ano}-${mes}-01`;
+	const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
+	const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
+	res.json({ total: rows[0].total });
+ } catch { res.status(500).json({ message: 'Erro ao buscar total de agendamentos do mês.' }); }
 });
 
 router.get('/agendamentos-hoje', requireLogin, async (req, res) => {
-	try {
-		const bt = getBrazilDateTimeParts();
+		try {
+		const bt = nowBrazilParts();
 		const rows = await db`SELECT * FROM agendamentos WHERE data = ${bt.date} ORDER BY hora ASC`;
 		res.json({ agendamentos: rows });
 	} catch { res.status(500).json({ message: 'Erro ao buscar agendamentos de hoje.' }); }
@@ -79,46 +77,49 @@ router.post('/alterar-senha', requireLogin, async (req, res) => {
 });
 
 router.get('/total-agendamentos-semana', requireLogin, async (req, res) => {
-	try {
-	const hoje = getBrazilDateTimeParts().dateObject; // fixo
+		try {
+	const bt = nowBrazilParts();
+	const [y,m,d] = bt.date.split('-').map(Number);
+	const hoje = new Date(y,m-1,d);
 	const diaSemana = hoje.getDay();
 	const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
 	const inicioSemana = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
 	inicioSemana.setDate(diff);
 	const fimSemana = new Date(inicioSemana.getFullYear(), inicioSemana.getMonth(), inicioSemana.getDate() + 6);
-		const dataInicio = inicioSemana.toISOString().slice(0, 10);
-		const dataFim = fimSemana.toISOString().slice(0, 10);
-		const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
-		res.json({ total: rows[0].total });
-	} catch { res.status(500).json({ message: 'Erro ao buscar total de agendamentos da semana.' }); }
+	const dataInicio = inicioSemana.toISOString().slice(0, 10);
+	const dataFim = fimSemana.toISOString().slice(0, 10);
+	const rows = await db`SELECT COUNT(*) AS total FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim}`;
+	res.json({ total: rows[0].total });
+ } catch { res.status(500).json({ message: 'Erro ao buscar total de agendamentos da semana.' }); }
 });
 
 router.get('/agendamentos-semana', requireLogin, async (req, res) => {
-	try {
-	const hoje = getBrazilDateTimeParts().dateObject; // fixo
+		try {
+	const bt = nowBrazilParts();
+	const [y,m,d] = bt.date.split('-').map(Number);
+	const hoje = new Date(y,m-1,d);
 	const diaSemana = hoje.getDay();
 	const diff = hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
 	const inicioSemana = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
 	inicioSemana.setDate(diff);
 	const fimSemana = new Date(inicioSemana.getFullYear(), inicioSemana.getMonth(), inicioSemana.getDate() + 6);
-		const dataInicio = inicioSemana.toISOString().slice(0, 10);
-		const dataFim = fimSemana.toISOString().slice(0, 10);
-		const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;
-		res.json({ agendamentos: rows });
-	} catch { res.status(500).json({ message: 'Erro ao buscar agendamentos da semana.' }); }
+	const dataInicio = inicioSemana.toISOString().slice(0, 10);
+	const dataFim = fimSemana.toISOString().slice(0, 10);
+	const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;
+	res.json({ agendamentos: rows });
+ } catch { res.status(500).json({ message: 'Erro ao buscar agendamentos da semana.' }); }
 });
 
 router.get('/agendamentos-mes', requireLogin, async (req, res) => {
-	try {
-	const hoje = getBrazilDateTimeParts().dateObject; // fixo
-	const ano = hoje.getFullYear();
-	const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-	const ultimoDia = new Date(ano, hoje.getMonth() + 1, 0).getDate();
-		const dataInicio = `${ano}-${mes}-01`;
-		const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
-		const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;
-		res.json({ agendamentos: rows });
-	} catch { res.status(500).json({ message: 'Erro ao buscar agendamentos do mês.' }); }
+		try {
+	const bt = nowBrazilParts();
+	const [ano, mes] = bt.date.split('-');
+	const ultimoDia = new Date(Number(ano), Number(mes), 0).getDate();
+	const dataInicio = `${ano}-${mes}-01`;
+	const dataFim = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
+	const rows = await db`SELECT * FROM agendamentos WHERE data >= ${dataInicio} AND data <= ${dataFim} ORDER BY data ASC, hora ASC`;
+	res.json({ agendamentos: rows });
+ } catch { res.status(500).json({ message: 'Erro ao buscar agendamentos do mês.' }); }
 });
 
 router.get('/servicos-admin', requireLogin, async (req, res) => {
@@ -273,11 +274,11 @@ router.get('/folgas-especiais-public', async (req, res) => {
 });
 
 router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
-	try {
-		const bt = getBrazilDateTimeParts();
-		const now = bt.dateObject;
-		const year = now.getFullYear();
-		const month = now.getMonth() + 1;
+    try {
+		const bt = nowBrazilParts();
+		const [yearStr, monthStr] = bt.date.split('-');
+		const year = Number(yearStr);
+		const month = Number(monthStr);
 		const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 		const rows = await db`SELECT nome, telefone, servico, profissional, data, hora, preco FROM agendamentos WHERE status ILIKE 'concluido' AND EXTRACT(YEAR FROM data) = ${year} AND EXTRACT(MONTH FROM data) = ${month} ORDER BY data, hora`;
 		const barbeariaInfo = await db`SELECT * FROM barbearia LIMIT 1`;
@@ -288,7 +289,7 @@ router.get('/agendamentos-concluidos-mes-pdf', async (req, res) => {
 		doc.pipe(res);
 		doc.fillColor('#1A1A1A').fontSize(18).font('Helvetica-Bold').text('AGENDAMENTOS CONCLUÍDOS', 40, 40);
 		doc.fillColor('#666666').fontSize(14).font('Helvetica').text(`Período: ${monthNames[month - 1]} de ${year}`, 40, 70);
-		doc.fillColor('#999999').fontSize(10).text(`Gerado em: ${getBrazilDateTimeParts().dateObject.toLocaleDateString('pt-BR')}`, 40, 95);
+		doc.fillColor('#999999').fontSize(10).text(`Gerado em: ${bt.date.split('-').reverse().join('/')}`, 40, 95);
 		let currentY = 130;
 		if (rows.length > 0) {
 			const headerHeight = 30;
